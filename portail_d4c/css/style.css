@@ -1,0 +1,667 @@
+/*@font-face{
+    font-family:"DroidSans";
+    src:url("../fonts/DroidSans.ttf")format("ttf");vvvvvvvv
+    src:url("../fonts/DroidSans.eot")format("eot");
+}*/
+
+@font-face {
+  font-family: DroidSans;
+  src:  url('../fonts/DroidSans-webfont.eot?') format("eot"),
+        url('../fonts/DroidSans-webfont.woff') format("woff"),
+        url('../fonts/DroidSans-webfont.ttf') format("truetype"),
+        url('../fonts/DroidSans-webfont.svg#OpenSans-Light') format("svg");
+}
+
+@font-face {
+  font-family: DroidSansBold;
+  src:  url('../fonts/DroidSans-Bold-webfont.eot?') format("eot"),
+        url('../fonts/DroidSans-Bold-webfont.woff') format("woff"),
+        url('../fonts/DroidSans-Bold-webfont.ttf') format("truetype"),
+        url('../fonts/DroidSans-Bold-webfont.svg#OpenSans-Semibold') format("svg");
+}
+
+.page-header {
+    color: #007ABC;
+    margin: auto;
+    width: 100%;
+    margin-top: 40px;
+    font-family: "Open Sans",serif;
+    text-align: center;
+    font-size: 30px;
+    padding-top: 20px;
+}
+
+/***********************************************************/
+
+#main .form-group {
+    padding-right: 10px;
+}
+
+#main.widget-opendata
+{
+	margin-top: 20px;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    overflow-x: hidden;
+	padding: 10px;
+}
+#main.widget-opendata #search{
+	padding: 50px 0;
+    background-color: #007ABC;
+    color: white;
+    margin-bottom: 20px;
+}
+#main.widget-opendata #datasets
+{
+	display: flex;
+	flex-direction: row;
+    flex-wrap: wrap;
+}
+	
+#main.widget-opendata #datasets h2
+{
+	color: #06504F ;/*#007ABC;*/
+	margin-top: 2px;
+	cursor: pointer;
+	font-size : 20px;
+}
+#main.widget-opendata #reuses h2
+{
+	color: #06504F ;
+	margin-top: 5px;
+	font-size : 20px;
+}
+#main.widget-opendata #datasets p
+{
+	font-size : 10px;
+}
+#main.widget-opendata .dataset
+{
+	margin-bottom: 1%;
+	padding-left: 10px;
+	height: auto;
+	display: inline-block;
+	/*max-height: 250px;*/
+	/*overflow : hidden;*/
+	/*transition: border 1s ease;*/
+	border-radius: 3px;
+	border : 1px solid black;
+	background-color: white;
+	width: 49%;
+	margin-left : 1%;
+}
+
+#main.widget-opendata .dataset:hover
+{
+	border-left : 3px solid #e42529;
+	padding-left: 8px;
+}
+
+#main.widget-opendata #pagination
+{
+	width : 100%;
+	text-align: center;
+}
+
+#main.widget-opendata #pagination .pagination
+{
+	margin-top: 20px;
+	margin-bottom: 20px;
+	width: auto;
+
+}
+#main.widget-opendata .hide
+{
+	display : none;
+}
+#main.widget-opendata .dataset p
+{
+	color: #070606;
+}
+
+#main.widget-opendata .dataset .inner
+{
+	padding-top: 5px;
+    padding-bottom: 5px;
+}
+#main.widget-opendata .dataset ul
+{
+	padding-left: 0px;
+    margin: 0;
+    margin-bottom: 2px;
+}
+#main.widget-opendata ul
+{
+	list-style: none;
+	font-size : 13px;
+}
+#main.widget-opendata .dataset li
+{
+	display: inline-block;
+}
+#main.widget-opendata .dataset h2:hover{
+	text-decoration: underline;
+}
+#main.widget-opendata .infos
+{
+	font-size: 14px;
+}
+#main.widget-opendata .titre
+{
+	color: black;
+	font-weight: bold;
+}
+#main.widget-opendata .info
+{
+	float: right;
+	margin-right: 3%;
+}
+#main.widget-opendata .jetons li
+{
+    background-color: #e42529;
+    font-family: DroidSans, "Open Sans", Arial, sans-serif;
+    color: white;
+    border: solid 1px #e42529;
+    border-radius: 5px;
+    padding: 2px 4px 2px 4px;
+    font-size: 0.85em; /*10px;*/
+    margin-right: 5px;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+/**************** widget *************/
+#main.widget-opendata #tags li
+{
+	background-color: rgba(35,135,171,0.7);
+    color: white;
+    border: solid 1px rgba(35,135,171,0.7);
+    border-radius: 5px;
+    padding: 2px 4px 2px 4px;
+    font-size: 12px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+#main.widget-opendata #tags .clicked
+{
+	border: solid 1px rgba(35,135,171,1);
+	background-color: rgba(35,135,171,1);
+}
+
+#main.widget-opendata .tag:hover
+{
+	cursor: pointer;
+}
+#main.widget-opendata .tag
+{
+	white-space: nowrap;
+	display: inline-block;
+}
+#main.widget-opendata #jeuxDeDonnes
+{
+	background-color: rgb(35,135,171);
+    color: white;
+    margin-top: 0px;
+    padding: 5px 5px 5px 5px;
+}
+ /************ widget ***************/
+
+
+#main.widget-opendata .format
+{
+	background-color: black;
+	border-radius: 5px;
+	padding: 2px 4px;
+	margin-right: 5px;
+	display: inline-block;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 14px;
+    color: rgb(255, 255, 255);
+    vertical-align: baseline;
+    white-space: nowrap;
+    text-shadow: rgba(0, 0, 0, 0.25) 0px -1px 0px;
+}
+#main.widget-opendata #filter .jetons
+{
+		padding-left: 0px;
+		margin-top: 10px;
+}
+#main.widget-opendata filter .jetons li
+{
+	display: inline;
+}
+#main.widget-opendata #filter
+{
+	padding-bottom: 15px;
+	padding-left: 0px;
+	padding-right: 0px;
+	margin-bottom: 2%;
+	border-radius: 3px;
+	padding-left: 10px;
+}
+#main.widget-opendata #filter h1
+{
+	background-color: #575656;
+	color: white;
+	margin-top: 0px;
+	padding: 5px 5px 5px 5px;
+	border-radius : 3px;
+}
+#main .form-control{
+    font-size: 0.85em !important;
+    
+}
+#main.widget-opendata #filter h2 #reset-filters
+{
+	color : white;
+	float : right;
+	font-size : 0.8em;
+    font-family: DroidSans, "Open Sans", Arial, sans-serif;
+    font-weight: 600;
+	position : absolute;
+	bottom : 5px;
+	right : 5px;
+}
+.navbar-default+div>div{
+    margin-right: -15px !important; 
+    margin-left: -15px!important; 
+}
+
+#main.widget-opendata #filter h2 #reset-filters:hover
+{
+	cursor : pointer;
+	color : #ffc9a2;
+}
+
+#main.widget-opendata #filter h2
+{
+	color: white;
+	background-color: #575656;
+	padding: 5px 5px 5px 5px;
+	border-radius : 3px;
+	position : relative;
+}
+
+#main.widget-opendata h2 img
+{
+	height: 8%;
+	width: 8%;
+	padding-bottom: 2px;
+}
+
+#main.widget-opendata form
+{
+	margin-left: 15px;
+	margin-right: 15px;
+	margin-bottom : 10px;
+}
+#main.widget-opendata .list-group
+{
+	overflow-y: auto;
+	height: auto;
+	max-height: 172px;
+}
+#main.widget-opendata #filter .list-group
+{
+	margin-bottom : 0px;
+}
+#main.widget-opendata #filter .list-item {
+ 
+    padding: 6px 10px;
+    border-left: solid 2px #dcdcdc;
+    font-size: 12px;
+}
+
+#main.widget-opendata #filter .list-item:hover
+{
+	color : #007ABC;
+	border-color : #007ABC;
+	cursor : pointer;
+}
+#main.widget-opendata #filter .number_element
+{
+	float : right;
+}
+
+/*#main.widget-opendata #list-producteur
+{
+	max-height: initial;
+}*/
+#main.widget-opendata .download
+{
+	float: right;
+    display: block;
+}
+#main.widget-opendata #search input{
+	font-size: 20px;
+	border: 0;
+    box-shadow: none;
+    height: 60px;
+    padding: 1rem 0.6rem;
+    width: 100%;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+    font-family: 'Roboto Condensed', sans-serif;
+    box-sizing: border-box;
+    color: #0a0a0a;
+    background-color: #fefefe;
+    line-height: normal;
+}
+#main.widget-opendata #search button{
+	background: none;
+    background-color: #23ab8b;
+    border: none;
+    height: 60px;
+    width: 60px;
+}
+#main.widget-opendata #search .glyphicon{
+	color: white;
+    font-size: 20px;
+}
+#main.widget-opendata h1 {
+	font-size: 1.3em;
+    font-family: DroidSansBold, "Open Sans", Arial, sans-serif;
+
+}
+#main.widget-opendata #filter h2 {
+	font-size: 1.3em;
+    font-family: DroidSansBold, "Open Sans", Arial, sans-serif;
+
+}
+
+#main.widget-opendata #filter h3{
+	font-size: 18px;
+	color: #06504F;
+	margin-bottom: 5px;
+    font-family: DroidSansBold, "Open Sans", Arial, sans-serif;
+}
+
+
+#main.widget-opendata .format[data-format="json"], 
+#main.widget-opendata .format[data-format*="json"] {
+    background-color: rgb(239, 113, 0);
+}
+#main.widget-opendata format[data-format="html"], 
+#main.widget-opendata .format[data-format*="html"] {
+    background-color: rgb(85, 161, 206);
+}
+#main.widget-opendata format[data-format="xls"], 
+#main.widget-opendata .format[data-format*="xls"] {
+    background-color: rgb(45, 181, 93);
+}
+#main.widget-opendata format[data-format="csv"], 
+#main.widget-opendata .format[data-format*="csv"] {
+    background-color: rgb(223, 177, 0);
+}
+#main.widget-opendata format[data-format="wfs"] {
+    background-color: rgb(122, 174, 61);
+}
+#main.widget-opendata format[data-format="geojson"] {
+    background-color: rgb(152, 85, 224);
+}
+#main.widget-opendata format[data-format="xml"], 
+#main.widget-opendata .format[data-format*="xml"] {
+    background-color: rgb(50, 50, 50);
+}
+#main.widget-opendata format[data-format="shp"], 
+#main.widget-opendata .format[data-format*="shp"] {
+    background-color: rgb(216, 52, 23);
+}
+
+#main.widget-opendata .hidden-filter{
+	visibility: hidden;
+	height: 0;
+	width: 0;
+}
+
+#main.widget-opendata .glyphicon-remove{
+	cursor: pointer;
+}
+
+
+.li-most-popular-dataset::before {
+    content: "";
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.div-most-popular-theme{
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.link-most-popular-theme{
+    content: "";
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    vertical-align: middle;
+}
+#main.widget-opendata
+{
+	margin-top: 20px;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    overflow-x: hidden;
+}
+#main.widget-opendata #search{
+	padding: 50px 0;
+    background-color: #007ABC;
+    color: white;
+    margin-bottom: 20px;
+}
+#main.widget-opendata #datasets
+{
+	display: flex;
+	flex-direction: row;
+    flex-wrap: wrap;
+}
+	
+#main.widget-opendata #datasets h2
+{
+	color: #06504F ;/*#007ABC;*/
+	margin-top: 5px;
+	cursor: pointer;
+	font-size : 20px;
+}
+#main.widget-opendata #datasets p
+{
+	font-size : 13px;
+}
+#main.widget-opendata .dataset
+{
+	margin-bottom: 1%;
+	padding-left: 10px;
+	height: auto;
+	/*display: inline-block;*/
+	/*max-height: 250px;*/
+	/*overflow : hidden;*/
+	/*transition: border 1s ease;*/
+	border-radius: 3px;
+  
+	border : 1px solid rgba(124, 121, 121, 0.27);
+    width: 49%;
+	margin-left : 1%;
+    display: flex;
+    align-items: stretch;
+    
+}
+
+
+
+
+#main.widget-opendata .dataset .box_1
+{
+    flex: 8.8;
+    order: 1;
+    
+}
+
+#main.widget-opendata .dataset .box_2
+{
+
+    flex: 2.4;
+    order: 3;
+    border-width: 0 0 0 1px;
+    border-style: solid; 
+    padding-left: 10px;
+    padding-top: 10px;
+    border-color: rgba(124, 121, 121, 0.27);
+    
+}
+
+#main.widget-opendata .dataset .box_3
+{
+    flex: 0.8;
+    order: 1;
+    
+}
+
+#main.widget-opendata .dataset .box_4
+{
+    flex: 8;
+    order: 2;
+    margin-right: 5px;
+    
+}
+
+#main .box_2 p > a > i, #list-visu i, .jetons i, #list-cat i{
+     padding-right: 5px;
+}
+
+
+#main .box_2 p > a {
+    color: #050505 !important;
+    font-size: 0.9em;  
+    
+}
+
+#main .box_3 p {
+    margin-top: -9px !important; 
+    
+}
+
+.d4c-app-explore-dataset{
+	max-width: none!important;
+	padding: 0 30px!important;
+}
+
+.li-most-popular-dataset.theme-administration-gouvernement-finances-publiques-citoyennete::before {
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-administration-gouvernement-finances-publiques-citoyennete.svg);
+}
+.li-most-popular-dataset.theme-amenagement-du-territoire-urbanisme-batiments-equipements-logement::before {
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-amenagement-du-territoire-urbanisme-batiments-equipements-logement.svg);
+}
+.li-most-popular-dataset.theme-culture-patrimoine::before {
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-culture-patrimoine.svg);
+}
+.li-most-popular-dataset.theme-default::before {
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-default.png);
+}
+.li-most-popular-dataset.theme-economie-business-pme-developpement-economique-emploi::before {
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-economie-business-pme-developpement-economique-emploi.svg);
+}
+.li-most-popular-dataset.theme-education-formation-recherche-enseignement::before {
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-education-formation-recherche-enseignement.svg);
+}
+.li-most-popular-dataset.theme-environnement::before {
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-environnement.svg);
+}
+.li-most-popular-dataset.theme-services-social::before {
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-services-social.svg);
+}
+.li-most-popular-dataset.theme-transports-deplacements::before {
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-transports-deplacements.svg);
+}
+.link-most-popular-theme.theme-administration-gouvernement-finances-publiques-citoyennete{
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-administration-gouvernement-finances-publiques-citoyennete.svg);
+}
+.link-most-popular-theme.theme-amenagement-du-territoire-urbanisme-batiments-equipements-logement{
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-amenagement-du-territoire-urbanisme-batiments-equipements-logement.svg);
+}
+.link-most-popular-theme.theme-culture-patrimoine{
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-culture-patrimoine.svg);
+}
+.link-most-popular-theme.theme-default{
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-default.png);
+}
+.link-most-popular-theme.theme-economie-business-pme-developpement-economique-emploi{
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-economie-business-pme-developpement-economique-emploi.svg);
+}
+.link-most-popular-theme.theme-education-formation-recherche-enseignement{
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-education-formation-recherche-enseignement.svg);
+}
+.link-most-popular-theme.theme-environnement{
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-environnement.svg);
+}
+.link-most-popular-theme.theme-services-social{
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-services-social.svg);
+}
+.link-most-popular-theme.theme-transports-deplacements{
+    background-image: url(/sites/default/files/api/portail_d4c/img/theme-transports-deplacements.svg);
+}
+
+.d4cwidget-spinner {
+    position: absolute;
+    font-size: 5rem;
+    top: 100px;
+    left: 50%;
+    margin-left: -.5em;
+	display:block;
+}
+.d4cwidget-spinner.d4cwidget-spinner--svg {
+	height: 60px!important;
+}
+
+.d4cwidget-spinner.hidden, #pagination.hidden{
+	display:none;
+}
+
+@-webkit-keyframes d4cwidget-spinner__diagonal-11-33-animation {    0% {        opacity: 1    }    31.25% {        opacity: 1    }    37.5% {        opacity: .5    }    43.75% {        opacity: .5    }    50% {        opacity: 0    }    62.5% {        opacity: 0    }    68.75% {        opacity: 1    }    100% {        opacity: 1    }}@keyframes d4cwidget-spinner__diagonal-11-33-animation {    0% {        opacity: 1    }    31.25% {        opacity: 1    }    37.5% {        opacity: .5    }    43.75% {        opacity: .5    }    50% {        opacity: 0    }    62.5% {        opacity: 0    }    68.75% {        opacity: 1    }    100% {        opacity: 1    }}@-webkit-keyframes d4cwidget-spinner__diagonal-12-23-animation {    0% {        opacity: 1    }    37.5% {        opacity: 1    }    43.75% {        opacity: .5    }    50% {        opacity: .5    }    56.25% {        opacity: 0    }    68.75% {        opacity: 0    }    75% {        opacity: 1    }    100% {        opacity: 1    }}@keyframes d4cwidget-spinner__diagonal-12-23-animation {    0% {        opacity: 1    }    37.5% {        opacity: 1    }    43.75% {        opacity: .5    }    50% {        opacity: .5    }    56.25% {        opacity: 0    }    68.75% {        opacity: 0    }    75% {        opacity: 1    }    100% {        opacity: 1    }}@-webkit-keyframes d4cwidget-spinner__diagonal-21-32-animation {    0% {        opacity: 1    }    6.25% {        opacity: .5    }    12.5% {        opacity: 1    }    18.75% {        opacity: .5    }    25% {        opacity: 1    }    31.25% {        opacity: .5    }    37.5% {        opacity: .5    }    43.75% {        opacity: 0    }    56.25% {        opacity: 0    }    62.5% {        opacity: 1    }    100% {        opacity: 1    }}@keyframes d4cwidget-spinner__diagonal-21-32-animation {    0% {        opacity: 1    }    6.25% {        opacity: .5    }    12.5% {        opacity: 1    }    18.75% {        opacity: .5    }    25% {        opacity: 1    }    31.25% {        opacity: .5    }    37.5% {        opacity: .5    }    43.75% {        opacity: 0    }    56.25% {        opacity: 0    }    62.5% {        opacity: 1    }    100% {        opacity: 1    }}@-webkit-keyframes d4cwidget-spinner__diagonal-31-animation {    0% {        opacity: 1    }    6.25% {        opacity: .5    }    12.5% {        opacity: 1    }    18.75% {        opacity: .5    }    25% {        opacity: 1    }    31.25% {        opacity: .5    }    37.5% {        opacity: 0    }    50% {        opacity: 0    }    56.25% {        opacity: 1    }    81.25% {        opacity: 1    }    87.5% {        opacity: .5    }    93.75% {        opacity: .5    }    100% {        opacity: 1    }}@keyframes d4cwidget-spinner__diagonal-31-animation {    0% {        opacity: 1    }    6.25% {        opacity: .5    }    12.5% {        opacity: 1    }    18.75% {        opacity: .5    }    25% {        opacity: 1    }    31.25% {        opacity: .5    }    37.5% {        opacity: 0    }    50% {        opacity: 0    }    56.25% {        opacity: 1    }    81.25% {        opacity: 1    }    87.5% {        opacity: .5    }    93.75% {        opacity: .5    }    100% {        opacity: 1    }}@-webkit-keyframes d4cwidget-spinner__diagonal-13-animation {    0% {        opacity: 1    }    43.75% {        opacity: 1    }    50% {        opacity: .5    }    56.25% {        opacity: .5    }    62.5% {        opacity: 0    }    75% {        opacity: 0    }    81.25% {        opacity: 1    }    100% {        opacity: 1    }}@keyframes d4cwidget-spinner__diagonal-13-animation {    0% {        opacity: 1    }    43.75% {        opacity: 1    }    50% {        opacity: .5    }    56.25% {        opacity: .5    }    62.5% {        opacity: 0    }    75% {        opacity: 0    }    81.25% {        opacity: 1    }    100% {        opacity: 1    }}.d4cwidget-spinner__cell-11,.d4cwidget-spinner__cell-22,.d4cwidget-spinner__cell-33 {    -webkit-animation: 2s d4cwidget-spinner__diagonal-11-33-animation infinite;    animation: 2s d4cwidget-spinner__diagonal-11-33-animation infinite}.d4cwidget-spinner__cell-12,.d4cwidget-spinner__cell-23 {    -webkit-animation: 2s d4cwidget-spinner__diagonal-12-23-animation infinite;    animation: 2s d4cwidget-spinner__diagonal-12-23-animation infinite}.d4cwidget-spinner__cell-21,.d4cwidget-spinner__cell-32 {    -webkit-animation: 2s d4cwidget-spinner__diagonal-21-32-animation infinite;    animation: 2s d4cwidget-spinner__diagonal-21-32-animation infinite}.d4cwidget-spinner__cell-13 {    -webkit-animation: 2s d4cwidget-spinner__diagonal-13-animation infinite;    animation: 2s d4cwidget-spinner__diagonal-13-animation infinite}.d4cwidget-spinner__cell-31 {    -webkit-animation: 2s d4cwidget-spinner__diagonal-31-animation infinite;    animation: 2s d4cwidget-spinner__diagonal-31-animation infinite}
+
+.reuse {
+	display: inline-block;
+    clear: both;
+}
+.thumbnail img {
+	max-height: 200px;
+}
+.thumbnail .caption {
+	width: 100%;
+}
+.thumbnail p {
+	margin: 0 0 5px 0!important;
+	font-size: 12px;
+}
+.thumbnail span.titre, .thumbnail span.info {
+	display: inline-block;
+}
+.thumbnail .data-desc {
+	text-align: justify;
+    word-break: break-all;
+}
+.thumbnail span.info {
+	margin-right: 0!important;
+	text-overflow: ellipsis;
+    max-width: 270px;
+    overflow: hidden;
+	white-space: nowrap;
+}
+
+div[role="main"] .row{
+	margin-left:0!important;
+	margin-right:0!important;
+}
+body{
+	overflow-x: initial!important;
+}

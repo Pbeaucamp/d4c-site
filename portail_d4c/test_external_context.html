@@ -1,0 +1,92 @@
+﻿<!--
+This file uses a library under MIT Licence :
+
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+--><html lang="fr">
+	<head>
+		
+	</head>
+	<body>
+
+<div class="parcel-search-widget ng-scope" ng-app="d4c.frontend">
+
+<div class="d4c-dataset-selection-list__records" d4c-external-context="" context="externalcontext" externalcontext-type="d4c" externalcontext-id="election-presidentielle-2017-resultats-par-bureaux-de-vote-tour-2" externalcontext-url="https://infocom94.data4citizen.com/" externalcontext-parameters="" ng-init="showMapFilter=true;filteringEnabled=true">
+            
+        </div>
+</div>
+		<script src="/sites/default/files/api/portail_d4c/js/jquery-3.2.1.js"></script>
+        <script type="text/javascript" src="/sites/default/files/api/portail_d4c/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/sites/default/files/api/portail_d4c/js/libraries.js"></script>
+        <script type="text/javascript" src="/sites/default/files/api/portail_d4c/js/angular-core.js"></script>
+        <script type="text/javascript">
+        	 var app = angular.module('d4c.core.config', []);
+
+            
+            app.factory("domainConfig", [function() {
+                return {"languages": ["fr"], "explore.reuse": null, "explore.dataset_catalog_separate_languages": null, "explore.disable_analyze": null, "explore.enable_api_tab": false};
+            }]);
+            
+
+            app.factory("config", [function() {
+                return {
+                    DATASET_ID: '',
+                    LANGUAGE: 'fr',
+                    AVAILABLE_LANGUAGES: ["fr"],
+                    USER: null,
+                    
+                    DOMAIN_ID: 'cda',
+                    FEEDBACK: true,
+                    RECORDS_COUNTER_ENABLED: true,
+                    DOWNLOAD_COUNTER_ENABLED: false,
+                    RESOURCE_DOWNLOAD_CONDITIONS: false,
+                    PARENT_DOMAIN: false,
+                    PAGES_SECURITY_ENABLED: false,
+                    
+                    MINUTE_LEVEL_SCHEDULING: false,
+                
+                    CENTRALSTORE: true,
+                    FORCE_DEBUG_LOGGER: false,
+                    RECAPTCHA_PUBLIC_KEY: '6Le5we4SAAAAAFcLvTHIJWu_Kf2b6LZOiaFOpdtP',
+                    REQUEST_ID: '8d06256c05153d3075e11d75849fcae7',
+                    CSRF_TOKEN: "<input type='hidden' name='csrfmiddlewaretoken' value='kYfpcjsycXF6w4FyMypjYYeFvItgzxX7OSHr6GZi89H70mqeDQuw6OjhNgtEOqgJ' />"
+                }
+            }]);
+        </script>
+        <script type="text/javascript" src="/sites/default/files/api/portail_d4c/js/i18n.js"></script>
+        <script type="text/javascript" src="/sites/default/files/api/portail_d4c/js/angular-carto.js"></script>
+	<script>
+			$("head").append("<link href=\"/sites/default/files/api/portail_d4c/css/visualisation.css\" rel=\"stylesheet\">");
+			$("head").append("<link href=\"/sites/default/files/api/portail_d4c/css/normalize.css\" rel=\"stylesheet\">");
+			$("head").append("<link href=\"/sites/default/files/api/portail_d4c/css/d4cui.css\" rel=\"stylesheet\">");
+			$("head").append("<link href=\"/sites/default/files/api/portail_d4c/css/font-awesome.min.css\" rel=\"stylesheet\">");
+			//$("head").append("<link href=\"/sites/default/files/api/portail_d4c/css/bootstrap.min.css\" rel=\"stylesheet\">");
+			//$("head").append("<link href=\"/sites/default/files/api/portail_d4c/css/cda.css\" rel=\"stylesheet\">");
+			$("head").append("<base href=\"/\">");
+			
+			
+			selectDataset = function(datasetid, parameters){
+				console.log(parameters);
+			}
+		</script>
+
+	</body>
+</html>

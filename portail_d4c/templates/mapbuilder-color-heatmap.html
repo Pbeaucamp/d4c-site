@@ -1,0 +1,63 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-mapbuilder__color-heatmap">
+
+    <button type="button" class="d4c-button d4c-mapbuilder__color-heatmap__button" ng-click="showColorHeatmapModal()" translate>Edit palette</button>
+
+    <d4c-modal name="colorHeatmapModal" title="Heatmap palette" translate="title" title-icon="d4cui-configuration">
+        <d4c-modal-body ng-init="initModal()">
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <label class="d4c-form__label "  translate>Gradient Style</label>
+                <div class="d4c-form__vertical-controls">
+                    <select class="d4c-form__control"
+                            ng-change="displayGradient()"
+                            ng-model="colorConfiguration.gradient"
+                            ng-options="gradient as gradient.label for gradient in gradients track by gradient.name" autofocus>
+                    </select>
+                </div>
+            </div>
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <label class="d4c-form__label" translate>Number of colors</label>
+                <div class="d4c-form__vertical-controls">
+                    <input ng-readonly="colorConfiguration.gradient.name !== 'custom' "
+                           min="2" max="10"
+                           type="number"
+                           ng-model="colorConfiguration.gradient.length"
+                           ng-change="updateCustomGradient()"
+                           class="d4c-form__control">
+                </div>
+            </div>
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <label class="d4c-form__label" translate>Colors</label>
+                <div class="d4c-form__vertical-controls">
+                    <div class="d4c-mapbuilder__color-heatmap__color" ng-repeat="step in colorConfiguration.steps|keys|orderBy:stepParser">
+                        <d4c-colorpicker ng-readonly="colorConfiguration.gradient.name !== 'custom' "
+                                         required="true"
+                                         ng-model="colorConfiguration.steps[step]"></d4c-colorpicker>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <label class="d4c-form__label" translate>Preview</label>
+                <div class="d4c-form__vertical-controls">
+                    <d4c-mapbuilder-gradient-preview steps="colorConfiguration.steps"></d4c-mapbuilder-gradient-preview>
+                </div>
+            </div>
+        </d4c-modal-body>
+        <div class="d4c-modal__actions">
+            <button class="d4c-button d4c-button--link d4c-modal__action"
+                    type="button"
+                    ng-click="hideColorHeatmapModal()" translate>Cancel</button>
+            <button class="d4c-button d4c-button--primary d4c-modal__action"
+                    type="button"
+                    ng-click="apply()">
+                <i class="d4cui-valid"></i>
+                <span translate>Apply</span>
+            </button>
+        </div>
+    </d4c-modal>
+</div>

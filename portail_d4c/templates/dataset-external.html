@@ -1,0 +1,58 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div><div class="row">
+	<div class="one col-xs-12">
+		<div class="d4c-dataset-selection-list__records-selector">
+			<h1 class="d4c-dataset-selection-list__records-title">
+				<img ng-if="externalcontext.dataset &amp;&amp; source === &#39;central&#39;" class="d4c-dataset-selection-list__records-portal-icon" ng-src="//{{ externalcontext.dataset.metas.source_domain_address }}/favicon.ico" d4c-tooltip="{{ externalcontext.dataset.metas.source_domain_title }}">
+				<!-- No way right now to fetch a specific domain's title yet :/ so no tooltip in that case -->
+				<img ng-if="externalcontext.dataset &amp;&amp; source === &#39;custom&#39;" class="d4c-dataset-selection-list__records-portal-icon" ng-src="{{ externalcontext.domainUrl }}/favicon.ico">
+				<img ng-if="externalcontext.dataset &amp;&amp; source === &#39;&#39;" class="d4c-dataset-selection-list__records-portal-icon" ng-src="/favicon.ico" d4c-tooltip="{{ PORTAL_TITLE }}">
+				{{ externalcontext.dataset.metas.title }}
+
+				<button type='button' class="btn btn-primary d4c-dataset-selection-list__select-records-button d4c-button d4c-button--danger" ng-click="cancel()">
+					<i class="icon-ok fa fa-close"></i>
+					<span translate="">Cancel</span>
+				</button>
+				<button type='button' class="btn btn-primary d4c-dataset-selection-list__select-records-button d4c-button d4c-button--primary" ng-show="externalcontext.nhits &gt;= 0" ng-click="selectDataset(externalcontext.dataset, externalcontext.parameters, externalcontext.nhits)">
+					<i class="icon-ok fa fa-check"></i>
+					<span translate="">Select</span>
+					<span class="d4c-dataset-selection-list__records-count">{{ externalcontext.nhits | number }}</span>
+					<span translate="" translate-n="externalcontext.nhits" translate-plural="records">record</span>
+				</button>
+				
+			</h1>
+			<div class="d4c-dataset-selection-list__records-filter-summary" ng-show="filteringEnabled">
+				<div class="d4c-dataset-selection-list__records-filter-summary-title">
+					<strong translate="">Active filters</strong> <br>
+					<d4c-clear-all-filters context="externalcontext" ng-show="externalcontext.getActiveFilters().length"></d4c-clear-all-filters>
+				</div>
+				<div class="d4c-dataset-selection-list__records-filter-summary-content">
+					<d4c-filter-summary context="externalcontext" clear-all-button="false"></d4c-filter-summary>
+					<div ng-hide="externalcontext.getActiveFilters().length" translate="">No active filters</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<div class="row">
+	<div class="third col-sm-4">
+		<h2 translate="">Filters</h2>
+
+		<d4c-text-search ng-if="externalcontext.dataset.has_records" class="d4c-dataset-selection-list__records-search-section" context="externalcontext"></d4c-text-search>
+		<d4c-map ng-if="externalcontext.dataset.features.indexOf(&#39;geo&#39;) &gt; -1" context="externalcontext" scroll-wheel-zoom="true"></d4c-map>
+		<d4c-facets context="externalcontext" ng-if="externalcontext.dataset.has_records"></d4c-facets>
+	</div>
+	<div class="two-thirds col-sm-8 table-double">
+		<h2 translate="">Data preview</h2>
+
+		<div ng-if="!externalcontext.dataset.has_records" translate="">This dataset only has metadata.</div>
+		<div ng-if="externalcontext.nhits == 0" translate="">No results</div>
+		<d4c-table context="externalcontext"></d4c-table>
+	</div>
+</div></div>

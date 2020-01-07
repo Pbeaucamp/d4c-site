@@ -1,0 +1,79 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div>
+
+    <div class="d4c-form__addon-wrapper">
+        <input class="d4c-form__control"
+               ng-value="layer.color.field"
+               ng-readonly="true" aria-label="{{ layer.color.field }}">
+        <button class="d4c-button d4c-form__addon"
+                ng-click="showColorCategoriesModal()" aria-label="Open categories palette modal" translate="aria-label">
+            <i class="fa fa-paint-brush" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <d4c-modal name="colorCategoriesModal" title="Categories palette" translate="title"
+               title-icon="d4cui-configuration">
+        <d4c-modal-body ng-init="initModal()">
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <label class="d4c-form__label" translate>Field</label>
+                <div class="d4c-form__vertical-controls">
+                    <select class="d4c-form__control"
+                            ng-options="field as field.label for field in textFields"
+                            ng-model="field"
+                            ng-change="updateCategories(field)" autofocus></select>
+                    <span ng-show="valuesCount > 20" translate>(More than 20 values, only the first 20 will be used)</span>
+                    <span ng-hide="valuesCount > 20" translate translate-n="valuesCount" translate-plural="({{ $count }} different values)">({{ $count }} value)</span>
+                </div>
+            </div>
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <div class="d4c-form__label" translate>Other values</div>
+                <div class="d4c-form__check-line">
+                    <label class="d4c-form__check-label">
+                        <input type="checkbox"
+                               class="d4c-form__control-check"
+                               ng-model="enabledOthers"
+                               ng-change="enableOthersChange(colorConfiguration, enabledOthers)">
+                        <span translate>Enable an additional value for other values</span>
+                    </label>
+                </div>
+            </div>
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <label class="d4c-form__label" translate>Set colors</label>
+                <ul class="d4c-mapbuilder__color-categories__categories">
+                    <li ng-repeat="(value, color) in colorConfiguration.categories"
+                        class="d4c-mapbuilder__color-categories__categories__item">
+                        <span class="d4c-mapbuilder__color-categories__categories__value"
+                              title="{{ value }}">{{ value }}</span>
+                        <d4c-colorpicker class="d4c-mapbuilder__color-categories__categories__color"
+                                         required="true"
+                                         ng-model="colorConfiguration.categories[value]"></d4c-colorpicker>
+                    </li>
+                    <li class="d4c-mapbuilder__color-categories__categories__item d4c-mapbuilder__color-categories__categories__item-other"
+                        ng-if="colorConfiguration.otherCategories">
+                        <span class="d4c-mapbuilder__color-categories__categories__value" translate>Others</span>
+                        <d4c-colorpicker class="d4c-mapbuilder__color-categories__categories__color"
+                                         required="true"
+                                         ng-model="colorConfiguration.otherCategories"></d4c-colorpicker>
+                    </li>
+                </ul>
+            </div>
+        </d4c-modal-body>
+
+        <div class="d4c-modal__actions">
+            <button class="d4c-button d4c-button--link d4c-modal__action"
+                    type="button"
+                    ng-click="hideColorCategoriesModal()" translate>Cancel
+            </button>
+            <button class="d4c-button d4c-button--primary d4c-modal__action"
+                    type="button"
+                    ng-click="apply()">
+                <i class="d4cui-valid"></i>
+                <span translate>Apply</span>
+            </button>
+        </div>
+    </d4c-modal>
+</div>

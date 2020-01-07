@@ -1,0 +1,106 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-mapbuilder__layer-configuration d4c-mapbuilder__layer-configuration-heatmap">
+    <div class="d4c-form">
+        <div class="d4c-mapbuilder__layer-configuration__section">
+            <h2 class="d4c-mapbuilder__layer-configuration__section-title" translate>Aggregation operations</h2>
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <label class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration"
+                       for="AggregationOperation"
+                       translate>Operation</label>
+                <select ng-model="layer.func"
+                        class="d4c-form__control"
+                        ng-options="o.name as o.label for o in operations"
+                        id="AggregationOperation"></select>
+            </div>
+            <div class="d4c-form__group d4c-form__group--horizontal" ng-if="layer.func !== 'COUNT'">
+                <label class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" for="AggregationField"
+                       translate>Field</label>
+                <select ng-model="layer.expr"
+                        class="d4c-form__control"
+                        ng-options="f.name as f.label for f in numFields"
+                        id="AggregationField"></select>
+            </div>
+        </div>
+    </div>
+
+    <div class="d4c-mapbuilder__layer-configuration__section">
+        <h2 class="d4c-mapbuilder__layer-configuration__section-title" translate>Computing</h2>
+        <fieldset>
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration"
+                        id="computingProgressionLabel"
+                        translate>Progression
+                </legend>
+                <div class="d4c-form__vertical-controls" role="radiogroup">
+                    <div class="d4c-form__check-line">
+                        <label class="d4c-form__check-label">
+                            <input type="radio"
+                                   aria-labelledby="computingProgressionLabel"
+                                   class="d4c-form__control-check"
+                                   name="sizeFunction"
+                                   ng-model="layer.sizeFunction"
+                                   value="linear"
+                                   id="computingProgression">
+                            <span translate>Linear</span>
+                            <i translate="d4c-tooltip"
+                               d4c-tooltip="For values evenly spread from the min to the max"
+                               d4c-tooltip-direction="bottom"
+                               class="fa fa-question-circle"></i>
+                        </label>
+                    </div>
+                    <div class="d4c-form__check-line">
+                        <label class="d4c-form__check-label">
+                            <input type="radio"
+                                   aria-labelledby="computingProgressionLabel"
+                                   class="d4c-form__control-check"
+                                   name="sizeFunction"
+                                   ng-model="layer.sizeFunction"
+                                   value="log">
+                            <span translate>Logarithmic</span>
+                            <i translate="d4c-tooltip"
+                               d4c-tooltip="For value that are spread from a very large spectrum"
+                               d4c-tooltip-direction="bottom"
+                               class="fa fa-question-circle"></i>
+                        </label>
+                    </div>
+                </div>
+
+
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration"
+                        translate>Size</legend>
+                <div class="d4c-form__vertical-controls">
+                    <d4c-range-input min="1" max="10" step="1" ng-model="layer.radius" editable-value="true"
+                                     icon-min="d4cui-dot_size_small" icon-max="d4cui-dot_size_big" aria-Label="Cluster size"></d4c-range-input>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="d4c-mapbuilder__layer-configuration__section">
+        <h2 class="d4c-mapbuilder__layer-configuration__section-title" translate>Colors</h2>
+
+        <div class="d4c-form__group d4c-form__group--horizontal">
+            <span class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Palette</span>
+            <div class="d4c-form__vertical-controls">
+                <d4c-mapbuilder-color-heatmap layer="layer"></d4c-mapbuilder-color-heatmap>
+            </div>
+        </div>
+
+        <div class="d4c-form__group d4c-form__group--horizontal">
+            <span class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Preview</span>
+            <div class="d4c-form__vertical-controls">
+                <d4c-mapbuilder-gradient-preview steps="layer.color.steps"></d4c-mapbuilder-gradient-preview>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>

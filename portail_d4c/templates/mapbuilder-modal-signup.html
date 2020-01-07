@@ -1,0 +1,232 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<d4c-modal name="signupModal" title="{{ 'Save your map'|translate }}" title-icon="d4cui-user">
+    <div ng-switch="signupStep" class="d4c-modal__inner">
+        <div ng-switch-when="create_success" class="d4c-modal__inner">
+            <d4c-modal-body>
+            <div class="d4c-mapbuilder-modal-signup__disclaimer">
+                <i class="fa fa-check d4c-mapbuilder-modal-signup__disclaimer-icon" aria-hidden="true"></i>
+                <p>
+                    <span translate>Thank you!</span> <br>
+                    <span translate>Your account has been created, and your map has been saved and attached to your new account.</span>
+                </p>
+            </div>
+            <p>
+                <span translate>We just sent you an email containing a link to activate your account and log in.</span>
+            </p>
+            <p>
+                <span translate>In the meantime, you can continue to edit this map even before you log in for the first time.</span>
+            </p>
+
+            <p>
+                <em translate>We work hard to avoid the spam filters, but if you didn't receive an email, check your spam folder.</em>
+            </p>
+            </d4c-modal-body>
+            <div class="d4c-modal__actions">
+                <button class="d4c-button d4c-button--primary d4c-modal__action"
+                        ng-click="hideSignupModal()"
+                        type="button">
+                    <span translate>Return to map edition</span>
+                </button>
+            </div>
+        </div>
+
+        <div ng-switch-when="intro" class="d4c-modal__inner">
+            <form name="identityForm" class="d4c-modal__inner" ng-submit="checkIdentity(identityForm)">
+                <d4c-modal-body>
+                    <d4c-mapbuilder-modal-signup-disclaimer></d4c-mapbuilder-modal-signup-disclaimer>
+                <div class="d4c-form__group"
+                     ng-class="{'d4c-form__group--danger': identityForm.identity.$dirty && identityForm.identity.$invalid}">
+                    <label for="identity"
+                           class="d4c-form__label d4c-form__label--mandatory">
+                        <span translate>Email or username</span>
+                    </label>
+                    <div class="d4c-form__horizontal-controls">
+                        <input type="text"
+                               id="identity"
+                               name="identity"
+                               ng-pattern="/^[^\s]+$/"
+                               ng-model="identity"
+                               ng-disabled="loading"
+                               autofocus
+                               required
+                               class="d4c-form__control d4c-form__control--large">
+                        <div class="d4c-form__message"
+                             ng-if="identityForm.identity.$error.isValid" translate>This is neither a valid email nor a
+                            known username
+                        </div>
+
+                    </div>
+                    <p class="d4c-form__help-text" translate>We won't sell your information to anyone and we don't
+                        spam.</p>
+                </div>
+                </d4c-modal-body>
+
+                <div class="d4c-modal__actions">
+                    <button class="d4c-button d4c-button--link d4c-modal__action"
+                            type="button"
+                            ng-click="hideSignupModal()">
+                        <span translate>Cancel</span>
+                    </button>
+                    <button class="d4c-button d4c-button--primary d4c-modal__action"
+                            ng-disabled="loading"
+                            type="submit">
+                        <d4c-spinner ng-show="loading"></d4c-spinner>
+                        <span translate>Next</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div ng-switch-when="login_account" class="d4c-modal__inner">
+            <form class="d4c-modal__inner" name="loginForm" ng-submit="loginUser(loginForm)">
+                <d4c-modal-body>
+                    <d4c-mapbuilder-modal-signup-disclaimer></d4c-mapbuilder-modal-signup-disclaimer>
+                <div class="d4c-form__group u-d4c-nomargin">
+                    <label class="d4c-form__label d4c-form__label--disabled" for="identityLogin">
+                        <span translate>Email or username</span>
+                    </label>
+                    <input type="text"
+                           id="identityLogin"
+                           readonly
+                           value="{{ identity }}"
+                           class="d4c-form__control d4c-form__control--large">
+                    <p class="d4c-form__help-text" translate>We won't sell your information to anyone and we don't
+                        spam.</p>
+                </div>
+
+                <div class="d4c-form__group"
+                     ng-class="{'d4c-form__group--danger': loginForm.password.$dirty && loginForm.password.$invalid}">
+                    <label class="d4c-form__label d4c-form__label--mandatory"
+                           for="password" translate>
+                        Password
+                    </label>
+                    <div class="d4c-form__horizontal-controls">
+                        <input type="password"
+                               id="password"
+                               name="password"
+                               required
+                               ng-disabled="loading"
+                               autofocus
+                               ng-model="password"
+                               class="d4c-form__control d4c-form__control--large">
+                        <div class="d4c-form__message" ng-if="loginForm.password.$error.isValid">Invalid password or this user has not been activated</div>
+                    </div>
+                    <p class="d4c-form__help-text">
+                        <a href="#" target="_blank" translate>Forgot password?</a>
+                    </p>
+                </div>
+                </d4c-modal-body>
+
+                <div class="d4c-modal__actions">
+                    <button class="d4c-button d4c-button--link d4c-modal__action"
+                            type="button"
+                            ng-disabled="loading"
+                            ng-click="goto('intro')">
+                        <span translate>Change email address / username</span>
+                    </button>
+                    <button class="d4c-button d4c-button--primary d4c-modal__action"
+                            ng-disabled="loading"
+                            type="submit">
+                        <d4c-spinner ng-show="loading"></d4c-spinner>
+                        <span translate>Login and save map</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div ng-switch-when="create_account" class="d4c-modal__inner">
+            <form class="d4c-modal__inner" name="createAccountForm" ng-submit="createAccount(createAccountForm)">
+                <d4c-modal-body>
+                    <d4c-mapbuilder-modal-signup-disclaimer></d4c-mapbuilder-modal-signup-disclaimer>
+                <div class="d4c-form__group">
+                    <label class="d4c-form__label d4c-form__label--disabled" for="identitySignin">
+                        <span translate>Email or username</span>
+                    </label>
+                    <input type="text"
+                           id="identitySignin"
+                           readonly
+                           value="{{ identity }}"
+                           class="d4c-form__control d4c-form__control--large">
+                    <p class="d4c-form__help-text" translate>We won't sell your information to anyone and we don't
+                        spam.</p>
+                </div>
+
+                <div class="d4c-form__group"
+                     ng-class="{'d4c-form__group--danger': createAccountForm.password.$dirty && createAccountForm.password.$invalid}">
+                    <label for="password"
+                           class="d4c-form__label d4c-form__label--mandatory"
+                           translate>
+                        Choose a password
+                    </label>
+                    <div class="d4c-form__horizontal-controls">
+                        <input type="password"
+                               name="password"
+                               id="password"
+                               ng-model="password"
+                               ng-disabled="loading"
+                               autofocus
+                               required
+                               class="d4c-form__control d4c-form__control--large">
+                        <div class="d4c-form__message" ng-show="createAccountForm.password.$error.short" translate>
+                            Too short
+                        </div>
+                        <div class="d4c-form__message" ng-show="createAccountForm.password.$error.long" translate>
+                            Too long
+                        </div>
+                        <div class="d4c-form__message" ng-show="createAccountForm.password.$error.chars" translate>
+                            Must contain at least a letter and a number
+                        </div>
+                    </div>
+                    <p class="d4c-form__help-text">
+                        It must contain at least a letter, at least a number, be at least 8 chars long and at most 256
+                        chars long.
+                    </p>
+                </div>
+
+                <div class="d4c-form__group"
+                     ng-class="{'d4c-form__group--danger': createAccountForm.confirm_password.$dirty && createAccountForm.confirm_password.$invalid}">
+                    <label for="confirm_password"
+                           class="d4c-form__label d4c-form__label--mandatory"
+                           translate>
+                        Confirm password
+                    </label>
+                    <div class="d4c-form__horizontal-controls">
+                        <input type="password"
+                               id="confirm_password"
+                               name="confirm_password"
+                               ng-model="confirm_password"
+                               ng-disabled="loading"
+                               required
+                               class="d4c-form__control d4c-form__control--large">
+                        <div class="d4c-form__message"
+                             ng-show="createAccountForm.confirm_password.$error.isValid"
+                             translate>
+                            It doesn't match your password
+                        </div>
+                    </div>
+                    <p class="d4c-form__help-text">It must match your password</p>
+                </div>
+                </d4c-modal-body>
+
+                <div class="d4c-modal__actions">
+                    <button class="d4c-button d4c-button--link d4c-modal__action"
+                            type="button"
+                            ng-disabled="loading"
+                            ng-click="goto('intro')">
+                        <span translate>Change email address / username</span>
+                    </button>
+                    <button class="d4c-button d4c-button--primary d4c-modal__action"
+                            ng-disabled="loading"
+                            type="submit">
+                        <d4c-spinner ng-show="loading"></d4c-spinner>
+                        <span translate>Create my account</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</d4c-modal>

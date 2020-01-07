@@ -1,0 +1,165 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-mapbuilder__layer-edition">
+    <div class="d4c-mapbuilder__layer-edition__header">
+        <button ng-click="zoomToLayer(layer)" class="d4c-mapbuilder__layer-edition__header-item d4c-mapbuilder__layer-edition__layer-button"
+                aria-label="Zoom to layer" translate="aria-label">
+            <i class="d4cui-dataset d4c-mapbuilder__layer-edition__layer-button-icon" aria-hidden="true"></i>
+            <i class="d4cui-move d4c-mapbuilder__layer-edition__layer-button-zoom-icon" aria-hidden="true"></i>
+        </button>
+        <d4c-map-picto ng-if="layer.pictoIcon"
+                       class="d4c-mapbuilder__layer-edition__header-item d4c-mapbuilder__datasets-panel__group-picto"
+                       name="{{ layer.captionPictoIcon }}"
+                       color="{{ layer.captionPictoColor }}"></d4c-map-picto>
+        <div class="d4c-mapbuilder__layer-edition__header-title">{{ layer.title || layer.context.dataset.metas.title }}</div>
+        <a href="#"
+           class="d4c-mapbuilder__layer-edition__header-item d4c-mapbuilder__layer-edition__header-filters"
+           ng-if="layer.context.dataset !== null"
+           d4c-dataset-selection
+           d4c-dataset-selection-presets="datasetSelectionPresets()"
+           d4c-dataset-selection-callback="datasetSelectionCallback(selection)"
+           d4c-dataset-selection-centralstore-disabled="false"
+           d4c-dataset-selection-related-domains-disabled="true"
+           d4c-dataset-selection-filtering-enabled="true"
+           d4c-dataset-selection-prevent-dataset-change="true">
+            <span translate>Change filter</span>
+        </a>
+        <a class="d4c-mapbuilder__layer-edition__header-item d4c-mapbuilder__layer-edition__header-back" href="#" ng-click="closeLayerEdition()">
+            <span translate>Back</span>
+        </a>
+    </div>
+
+    <div class="d4c-mapbuilder__layer-edition__top-buttons-bar">
+        <!--
+        <button class="d4c-mapbuilder__layer-edition__top-button" ng-click="selectPanel('description')" title="Description" ng-class="{'d4c-mapbuilder__layer-edition__top-button--active': activePanel === 'description'}">
+            <i class="d4cui-description" aria-hidden="true"></i> Description
+        </button>
+        -->
+        <button ng-if="layer.context.dataset !== null" 
+                class="d4c-mapbuilder__layer-edition__top-button" 
+                ng-click="selectPanel('layers')" 
+                title="Layers" 
+                ng-class="{'d4c-mapbuilder__layer-edition__top-button--active': activePanel === 'layers'}"
+                translate="title">
+            <i class="d4cui-style" aria-hidden="true"></i>
+            <span translate>Display</span>
+        </button>
+        <button ng-if="layer.context.dataset !== null" class="d4c-mapbuilder__layer-edition__top-button"
+                ng-click="selectPanel('caption')"
+                title="Caption"
+                ng-class="{'d4c-mapbuilder__layer-edition__top-button--active': activePanel === 'caption'}"
+                translate="title">
+            <i class="fa fa-info" aria-hidden="true"></i>
+            <span translate>Information</span>
+        </button>
+
+        <button class="d4c-mapbuilder__layer-edition__top-button d4c-mapbuilder__layer-edition__top-button--remove"
+                ng-if="layer.context.dataset !== null"
+                ng-click="selectPanel('remove')"
+                title="{{'Description'|translate}}"
+                ng-class="{'d4c-mapbuilder__layer-edition__top-button--active': activePanel === 'remove'}"
+                aria-label="Remove layer"
+                translate="aria-label">
+            <i class="d4cui-remove" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <div ng-switch="activePanel" class="d4c-mapbuilder__layer-edition__content">
+        <!--
+        <div ng-switch-when="description">
+            description
+        </div>
+        -->
+        <div ng-switch-when="layers" class="d4c-mapbuilder__layer-edition__configuration-container">
+            <d4c-mapbuilder-displaymodes-list ng-if="layerStatistics.aggregatedShapes|isDefined" layer="layer" layer-statistics="layerStatistics"></d4c-mapbuilder-displaymodes-list>
+
+            <div ng-switch="layer.display">
+                <div ng-switch-when="auto">
+                    <d4c-mapbuilder-layer-configuration-auto layer="layer" layer-statistics="layerStatistics"></d4c-mapbuilder-layer-configuration-auto>
+                </div>
+                <div ng-switch-when="clusters">
+                    <d4c-mapbuilder-layer-configuration-clusters layer="layer"></d4c-mapbuilder-layer-configuration-clusters>
+                </div>
+                <div ng-switch-when="choropleth">
+                    <d4c-mapbuilder-layer-configuration-choropleth layer="layer" layer-statistics="layerStatistics"></d4c-mapbuilder-layer-configuration-choropleth>
+                </div>
+                <div ng-switch-when="categories">
+                    <d4c-mapbuilder-layer-configuration-categories layer="layer" layer-statistics="layerStatistics"></d4c-mapbuilder-layer-configuration-categories>
+                </div>
+                <div ng-switch-when="heatmap">
+                    <d4c-mapbuilder-layer-configuration-heatmap layer="layer"></d4c-mapbuilder-layer-configuration-heatmap>
+                </div>
+                <div ng-switch-default>
+                    <div class="d4c-mapbuilder__layer-edition__unsupported-display-message-container">
+                        <div class="d4c-message-box" translate>This layer has been imported from an older version of Mapbuilder, and its display
+                        mode isn't supported anymore in Mapbuilder's edition mode. You can delete this layer if you want to migrate it to another display mode.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="d4c-mapbuilder__layer-configuration">
+                <div class="d4c-form">
+                    <div class="d4c-mapbuilder__layer-configuration__section">
+                        <h2 class="d4c-mapbuilder__layer-configuration__section-title">
+                            <span translate>Visibility</span>
+                            <i translate="d4c-tooltip"
+                               d4c-tooltip="Define at which zoom levels the layer should be visible."
+                               d4c-tooltip-direction="bottom"
+                               class="fa fa-question-circle"></i>
+                        </h2>
+                        <div class="d4c-form__group">
+                            <div class="d4c-form__check-line">
+                                <label class="d4c-form__check-label"><input type="checkbox" class="d4c-form__control-check" ng-click="layerZoomVisibility()" ng-checked="zoomVisibility"><span translate>Display only in select zoom levels</span></label>
+                            </div>
+                        </div>
+                        <div ng-if="zoomVisibility">
+                            <div class="d4c-form__group d4c-form__group--horizontal">
+                                <label class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Min zoom</label>
+                                <div class="d4c-form__vertical-controls">
+                                    <d4c-range-input ng-model="layer.showZoomMin"
+                                                     ng-model-options="{ debounce: 300 }"
+                                                     min="minZoomLevel"
+                                                     max="maxZoomLevel"
+                                                     step="1"
+                                                     max-value-position="layer.showZoomMax"
+                                                     icon-min="fa fa-globe"
+                                                     icon-max="fa fa-tree"
+                                                     icon-min-title="{{ 'World view' | translate }}"
+                                                     icon-max-title="{{ 'Street level' | translate }}"
+                                                     aria-label-text="{{ 'Minimum layer zoom visibility.' | translate }}"></d4c-range-input>
+                                </div>
+                            </div>
+                            <div class="d4c-form__group d4c-form__group--horizontal">
+                                <label class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Max zoom</label>
+                                <div class="d4c-form__vertical-controls">
+                                    <d4c-range-input ng-model="layer.showZoomMax"
+                                                     ng-model-options="{ debounce: 300 }"
+                                                     min="minZoomLevel"
+                                                     max="maxZoomLevel"
+                                                     step="1"
+                                                     min-value-position="layer.showZoomMin"
+                                                     icon-min="fa fa-globe"
+                                                     icon-max="fa fa-tree"
+                                                     icon-min-title="{{ 'World view'| translate }}"
+                                                     icon-max-title="{{ 'Street level' | translate }}"
+                                                     aria-label-text="{{ 'Maximum layer zoom visibility.' | translate }}"></d4c-range-input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-switch-when="caption">
+            <d4c-mapbuilder-layer-configuration-caption layer="layer" group="group"></d4c-mapbuilder-layer-configuration-caption>
+        </div>
+        <div ng-switch-when="remove" class="d4c-mapbuilder__layer-edition__remove-panel">
+            <button class="d4c-button d4c-button--danger d4c-mapbuilder__layer-edition__remove-panel-button" ng-click="removeLayer()"
+                    aria-label="Remove layer" translate="aria-label">
+                <span translate>Remove dataset from the map</span>
+            </button>
+        </div>
+    </div>
+</div>

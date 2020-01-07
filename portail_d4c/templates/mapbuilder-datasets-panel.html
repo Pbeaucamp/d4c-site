@@ -1,0 +1,104 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-mapbuilder__datasets-panel">
+
+    <!-- There are already configured dataset -->
+    <div ng-if="mapConfig.value.groups.length > 0 && !editing"
+         class="d4c-mapbuilder__datasets-panel__groups">
+        <div>
+            <div ng-repeat="group in mapConfig.value.groups"
+                 ng-class="['d4c-mapbuilder__datasets-panel__group-container', {'d4c-mapbuilder__datasets-panel__group-container--multiple-items': group.layers.length > 1}]"
+                 ng-model="mapConfig.value.groups"
+                 ng-change="updateBackupGroups()">
+                <div ng-if="group.layers.length > 1"
+                     class="d4c-mapbuilder__datasets-panel__group">
+                    <i ng-class=" group.layers.length > 1 ? 'd4cui-dataset_group' : 'd4cui-dataset' "
+                       class="d4c-mapbuilder__datasets-panel__group-icon" aria-hidden="true"></i>
+                    <d4c-map-picto
+                        ng-if="group.pictoIcon"
+                        class="d4c-mapbuilder__datasets-panel__group-picto"
+                        name="{{ group.pictoIcon }}"
+                        color="{{ group.pictoColor }}"></d4c-map-picto>
+                    <span class="d4c-mapbuilder__datasets-panel__layer-name"
+                          title="{{ group.title || group.layers[0].title || group.layers[0].context.dataset.metas.title}}"
+                          ng-bind="group.title || group.layers[0].title || group.layers[0].context.dataset.metas.title"></span>
+                    <a class="d4c-mapbuilder__datasets-panel__layer-edit d4c-mapbuilder__link-button"
+                       href="#"
+                       ng-click="editGroup(group)" translate>Edit</a>
+                </div>
+                <div d4c-mapbuilder-layer
+                     ng-repeat="layer in group.layers"
+                     class="d4c-mapbuilder__datasets-panel__layer">
+                    <button ng-click="zoomToLayer(layer)"
+                            class="d4c-mapbuilder__datasets-panel__layer-button"
+                            aria-label="Zoom to layer" translate="aria-label"
+                            ng-if="layer.context.dataset !== null">
+                        <i class="d4cui-dataset d4c-mapbuilder__datasets-panel__layer-button-icon"
+                           aria-hidden="true"></i>
+                        <i class="d4cui-move d4c-mapbuilder__datasets-panel__layer-button-zoom-icon"
+                           aria-hidden="true"></i>
+                    </button>
+                    <i class="fa fa-exclamation-triangle d4c-mapbuilder__datasets-panel__layer--error" ng-if="layer.context.dataset === null"></i>
+                    <d4c-map-picto
+                        ng-if="layer.pictoIcon && layer.context.dataset !== null"
+                        class="d4c-mapbuilder__datasets-panel__group-picto"
+                        name="{{ layer.captionPictoIcon }}"
+                        color="{{ layer.captionPictoColor }}"></d4c-map-picto>
+                    <span class="d4c-mapbuilder__datasets-panel__layer-name"
+                          ng-class="{'d4c-mapbuilder__datasets-panel__layer-name--error' : layer.context.dataset === null }"
+                          d4c-tooltip
+                          d4c-tooltip-template="getLayerTooltip(layer)"
+                          title="{{ layer.title || layer.context.dataset.metas.title}}"
+                          ng-bind="layer.title || layer.context.dataset.metas.title"></span>
+                    <a class="d4c-mapbuilder__datasets-panel__layer-edit d4c-mapbuilder__link-button"
+                       ng-if="layer.context.dataset !== null"
+                       href="#"
+                       ng-click="editLayer(layer, group)" translate>Edit</a>
+                    <a class="d4c-mapbuilder__datasets-panel__layer-edit d4c-mapbuilder__link-button"
+                       ng-if="layer.context.dataset === null"
+                       href="#"
+                       ng-click="editLayer(layer, group)" translate>Delete</a>
+                </div>
+            </div>
+        </div>
+
+        <button class="d4c-mapbuilder__datasets-panel__add-dataset d4c-mapbuilder__link-button"
+                d4c-dataset-selection
+                d4c-dataset-selection-presets="datasetSelectionPresets()"
+                d4c-dataset-selection-callback="datasetSelectionCallback(selection)"
+                d4c-dataset-selection-centralstore-disabled="false"
+                d4c-dataset-selection-related-domains-disabled="true"
+                d4c-dataset-selection-filtering-enabled="true">
+            <d4c-picto url="'/sites/default/files/api/portail_d4c/img/add_dataset_to_basemap.svg'"
+                       classes="'d4c-mapbuilder__datasets-panel__add-dataset-icon'"></d4c-picto>
+            <span translate>Add a dataset to this map</span>
+        </button>
+
+    </div>
+
+    <div ng-if="editingLayer" class="d4c-mapbuilder__datasets-panel__layer-edition-container">
+        <d4c-mapbuilder-layer-edition layer="editingLayer" group="group"></d4c-mapbuilder-layer-edition>
+    </div>
+    <div ng-if="editingGroup" class="d4c-mapbuilder__datasets-panel__layer-edition-container">
+        <d4c-mapbuilder-group-edition group="editingGroup"></d4c-mapbuilder-group-edition>
+    </div>
+
+    <!-- When there is no dataset yet -->
+    <div ng-if="mapConfig.value.groups.length === 0"
+         class="d4c-mapbuilder__datasets-panel__add-first-dataset">
+        <button class="d4c-button d4c-button--primary d4c-mapbuilder__add-first-dataset-button"
+                d4c-dataset-selection
+                d4c-dataset-selection-presets="datasetSelectionPresets()"
+                d4c-dataset-selection-callback="datasetSelectionCallback(selection)"
+                d4c-dataset-selection-centralstore-disabled="false"
+                d4c-dataset-selection-related-domains-disabled="true"
+                d4c-dataset-selection-filtering-enabled="true">
+            <d4c-picto url="'/sites/default/files/api/portail_d4c/img/add_dataset_to_basemap.svg'"
+                       classes="'d4c-mapbuilder__add-first-dataset-button__image'"></d4c-picto>
+            <span translate>Add a dataset to this map</span>
+        </button>
+    </div>
+</div>

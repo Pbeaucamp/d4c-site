@@ -1,0 +1,212 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<d4c-modal name="shareModal" title="{{ 'Share'|translate }}" title-icon="d4cui-share">
+    <d4c-modal-body>
+
+        <div ng-if="mapStorage.isPersisted() && loggedIn">
+
+            <h2 translate>
+                Direct link
+            </h2>
+            <label for="directLink">
+                URL
+            </label>
+            <d4c-clipboard-input value="directLink"
+                                 input-width="fluid"
+                                 id="directLink"
+                                 type="url"
+                                 d4c-autofocus="true">
+            </d4c-clipboard-input>
+            <p class="d4c-form__help-text" translate>
+                Use this URL to share your map or post it on social networks.
+            </p>
+
+
+            <h2 translate>
+                Embed map
+            </h2>
+            <form name="forms.embedSizeForm">
+                <div class="d4c-form__group">
+                    <label class="d4c-form__label" for="embedSize" translate>
+                        Map size (in pixels)
+                    </label>
+                    <div class="d4c-form__horizontal-controls">
+                        <select id="embedSize"
+                                class="d4c-form__control d4c-mapbuilder-modal-share__select"
+                                ng-model="size"
+                                ng-options="s as s.label for s in sizes"
+                                ng-change="changeSize(size)">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="d4c-form__group">
+                    <div class="d4c-form__label" translate>
+                        Options
+                    </div>
+                    <div class="d4c-form__check-line">
+                        <label class="d4c-form__check-label">
+                            <input type="checkbox"
+                                   ng-model="options.static"
+                                   class="d4c-form__control-check" />
+                            <span translate>
+                                Lock map's zoom and position
+                            </span>
+                        </label>
+                    </div>
+                    <div class="d4c-form__check-line">
+                        <label class="d4c-form__check-label">
+                            <input type="checkbox"
+                                   ng-model="options.scrollWheelZoom"
+                                   class="d4c-form__control-check" />
+                            <span translate>
+                                Enable zooming in and out with the mouse wheel
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="d4c-form__vertical-controls" ng-show="size.name === 'custom'">
+                    <div class="d4c-form__horizontal-controls d4c-mapbuilder-modal-share__inputs">
+                        <div class="d4c-form__group"
+                             ng-class="{'d4c-form__group--danger' : forms.embedSizeForm.width.$error.min || forms.embedSizeForm.width.$error.required  }">
+                            <label class="d4c-form__label" for="embedWidth"
+                                   translate>Width</label>
+                            <div class="d4c-form__horizontal-controls">
+                                <input type="number" min="100" ng-model="customSize.width" name="width"
+                                       ng-change="checkSize()" required
+                                       class="d4c-form__control d4c-mapbuilder-modal-share__size-input"
+                                       id="embedWidth" />
+                            </div>
+                        </div>
+
+                        <span class="d4c-mapbuilder-modal-share__input-separator">
+                            x
+                        </span>
+
+                        <div class="d4c-form__group"
+                             ng-class="{'d4c-form__group--danger' : forms.embedSizeForm.height.$error.min || forms.embedSizeForm.height.$error.required  }">
+                            <label class="d4c-form__label" for="embedHeight" translate>
+                                Height
+                            </label>
+                            <div class="d4c-form__horizontal-controls">
+                                <input type="number" min="100" ng-model="customSize.height" name="height"
+                                       ng-change="checkSize()" required
+                                       class="d4c-form__control d4c-mapbuilder-modal-share__size-input"
+                                       id="embedHeight" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="forms.embedSizeForm.$invalid" class="d4c-mapbuilder-modal-share__error-messages d4c-form__group d4c-form__group--danger">
+                        <div class="d4c-form__horizontal-controls">
+                            <div class="d4c-form__message"
+                                 ng-show="forms.embedSizeForm.width.$error.min"
+                                 translate>
+                                Width must be at least 100px.
+                            </div>
+                            <div class="d4c-form__message"
+                                 ng-show="forms.embedSizeForm.width.$error.required"
+                                 translate>
+                                Width is required.
+                            </div>
+                            <div class="d4c-form__message"
+                                 ng-show="forms.embedSizeForm.height.$error.min"
+                                 translate>
+                                Height must be at least 100px.
+                            </div>
+                            <div class="d4c-form__message"
+                                 ng-show="forms.embedSizeForm.height.$error.required"
+                                 translate>
+                                Height is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d4c-form__group">
+                    <label class="d4c-form__label" for="iframeCode" translate>
+                        iFrame code
+                    </label>
+                    <d4c-clipboard-input id="iframeCode" value="embedCode" input-width="fluid" type="url">
+                    </d4c-clipboard-input>
+                    <p class="d4c-form__help-text" translate>
+                        Paste this code in a webpage to embed your map
+                    </p>
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <h2 translate>Use map as widget</h2>
+        <div class="d4c-form__group"  ng-if="!hasUnknownDataset">
+            <label for="widgetCode" class="d4c-form__label" translate>
+                Widget code
+            </label>
+            <d4c-clipboard-textarea value="widgetCode" readonly="readonly" id="widgetCode"
+                                    d4c-autofocus="!mapStorage.isPersisted() || !loggedIn"
+                                    class="d4c-mapbuilder__modal-share__widget-code">
+            </d4c-clipboard-textarea>
+            <p translate class="d4c-form__help-text">
+                Paste this code in an Data4Citizen webpage or anywhere</a>.
+            </p>
+        </div>
+
+        <d4c-flash-message is-dismissible="false" type="'danger'" ng-if="hasUnknownDataset">
+            <span translate>
+                One or more datasets used in this map are not available.
+                Check if they are not deleted, unpublished or restricted to use this map as a widget.
+                You can also delete the associated layers in the mapbuilder edit mode.
+            </span>
+        </d4c-flash-message>
+
+
+        <div ng-if="!mapStorage.isPersisted()">
+            <h2 class="d4c-mapbuilder-modal-share__title" translate>
+                Direct link and embed
+            </h2>
+
+            <d4c-flash-message is-dismissible="false" type="'info'">
+                <span translate>
+                    To share this map, you need to give it a name and save it first.
+                </span>
+            </d4c-flash-message>
+
+            <div class="d4c-mapbuilder-modal-share__disclaimer">
+                <i class="fa fa-info-circle d4c-mapbuilder-modal-share__disclaimer-icon" aria-hidden="true"></i>
+                <p translate>
+                    Your maps are stored locally in your browser, in order to save or share them, you need to setup an
+                    account so we can store them in there.
+                </p>
+            </div>
+        </div>
+
+
+        <div ng-if="mapStorage.isPersisted() && !loggedIn && activationPending">
+            <h2 class="d4c-mapbuilder-modal-share__title" translate>
+                Direct link and embed
+            </h2>
+            <p translate>
+                To share this map, you need to activate your account first.
+            </p>
+            <div class="d4c-mapbuilder-modal-share__disclaimer">
+                <i class="fa fa-info-circle d4c-mapbuilder-modal-share__disclaimer-icon" aria-hidden="true"></i>
+                <p translate>
+                    We sent you an email with a link to activate your account and log in. <br>
+                    <em>
+                        We work hard to avoid the spam filters, but if you didn't receive an email, check your spam
+                        folder.
+                    </em>
+                </p>
+            </div>
+        </div>
+
+
+    </d4c-modal-body>
+</d4c-modal>
+

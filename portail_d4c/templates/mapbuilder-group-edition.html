@@ -1,0 +1,41 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-mapbuilder__group-edition">
+    <div class="d4c-mapbuilder__group-edition__header">
+        <i class="d4cui-dataset_group d4c-mapbuilder__datasets-panel__group-icon"
+           aria-hidden="true"></i>
+        <d4c-map-picto ng-if="group.pictoIcon"
+                class="d4c-mapbuilder__datasets-panel__group-picto"
+                name="{{ group.pictoIcon }}"
+                color="{{ group.pictoColor }}"></d4c-map-picto>
+        <div class="d4c-mapbuilder__group-edition__header-title" title="{{ group.title || group.layers[0].title || group.context.dataset.metas.title }}"
+             ng-bind="group.title || group.layers[0].title || group.layers[0].context.dataset.metas.title"></div>
+        <a class="d4c-mapbuilder__group-edition__header-back" href="#" ng-click="closeGroupEdition()">
+            <span translate>Back</span>
+        </a>
+    </div>
+
+    <div class="d4c-mapbuilder__group-edition__top-buttons-bar">
+        <!--
+        <button class="d4c-mapbuilder__group-edition__top-button" ng-click="selectPanel('description')" title="Description" ng-class="{'d4c-mapbuilder__group-edition__top-button--active': activePanel === 'description'}">
+            <i class="d4cui-description" aria-hidden="true"></i> Description
+        </button>
+        -->
+        <button class="d4c-mapbuilder__group-edition__top-button"
+                ng-click="selectPanel('informations')"
+                title="Information"
+                ng-class="{'d4c-mapbuilder__group-edition__top-button--active': activePanel === 'informations'}">
+            <i class="fa fa-info" aria-hidden="true"></i>
+            <span translate>Information</span>
+        </button>
+    </div>
+
+    <div ng-switch="activePanel" class="d4c-mapbuilder__group-edition__content">
+        <div ng-switch-when="informations">
+            <d4c-mapbuilder-group-configuration-informations group="group"></d4c-mapbuilder-group-configuration-informations>
+        </div>
+    </div>
+</div>

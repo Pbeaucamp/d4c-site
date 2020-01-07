@@ -1,0 +1,40 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-dataset-selection-with-permissions__spinner-container">
+    <d4c-spinner ng-show="loading" class="d4c-dataset-selection-with-permissions__spinner"></d4c-spinner>
+</div>
+<div class="selection" ng-hide="loading" ng-cloak="">
+    <img ng-if="selection.datasetId" ng-src="//{{ selection.domainId }}.{{ BRAND_HOSTNAME }}/favicon.ico">
+    <span>{{ selection.domainId }}</span>
+    <div ng-if="error" ng-bind="error"></div>
+    <div ng-if="selection.datasetId" ng-bind="selection_details.metas.title" class="dataset-title"></div>
+    <button class="btn" ng-if="!selection.subdomain" ng-class="{&#39;btn-small&#39;: selection.datasetId}" d4c-dataset-selection="" d4c-dataset-selection-custom-sources="{{ customSources }}" d4c-dataset-selection-presets="presets()" d4c-dataset-selection-filtering-enabled="filteringEnabled" d4c-dataset-selection-callback="setSelection(selection)" d4c-dataset-selection-prevent-dataset-change="preventDatasetChange &amp;&amp; selection.datasetId">
+        <span ng-hide="selection.datasetId" translate="">Select a source dataset</span>
+        <span ng-show="selection.datasetId"><i class="icon-pencil"></i> <span translate="">Edit</span></span>
+    </button>
+</div>
+<div ng-show="selection.datasetId" ng-if="!selection.subdomain" class="permissions">
+    <span translate="">Using permissions from:</span>
+
+    <div ng-show="selection.userId">
+        <div class="user-access">
+            <img ng-if="selection.userId" ng-src="/avatar/{{ selection.userId }}/16/">
+            <span>{{ selection.userId }}</span>
+            <span ng-show="selection.userId == USER" translate="">(yourself)</span>
+            <button ng-hide="selection.userId == USER" class="btn btn-small" ng-click="setSelection({userId: USER})" translate="">Your permissions</button>
+            <button class="btn btn-small" ng-click="setSelection({userId: null})" translate="">No permissions</button>
+        </div>
+    </div>
+    <div ng-hide="selection.userId">
+        <div class="user-access">
+            <span translate="">No permissions</span>
+            <button class="btn btn-small" ng-click="setSelection({userId: USER})" translate="">Your permissions</button>
+        </div>
+    </div>
+</div>
+<div ng-if="selection.subdomain">
+    <span translate="">This dataset has been distributed by your parent domain. You cannot modify its source.</span>
+</div>

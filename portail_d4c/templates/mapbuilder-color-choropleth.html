@@ -1,0 +1,39 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-mapbuilder__color-choropleth">
+
+    <div class="d4c-form__addon-wrapper">
+        <input class="d4c-form__control"
+               ng-value="layer.color.field || (layer.func === 'COUNT' ? translate('Count') : layer.expr)"
+               ng-readonly="true" aria-label="{{ layer.color.field || (layer.func === 'COUNT' ? translate('Count') : layer.expr) }}">
+        <button class="d4c-button d4c-form__addon"
+                ng-click="showColorChoroplethModal()" fields="fields" aria-label="Open choropleth configuration modal"
+                translate="aria-label">
+            <i class="fa fa-paint-brush" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <d4c-modal name="colorChoroplethModal" title="{{ 'Choropleth palette'|translate }}"
+               title-icon="d4cui-configuration">
+        <d4c-modal-body>
+            <d4c-mapbuilder-color-choropleth-form layer="layer" fields="fields"
+                                                  form="choroplethForm" ></d4c-mapbuilder-color-choropleth-form>
+        </d4c-modal-body>
+        <div class="d4c-modal__actions">
+            <button class="d4c-button d4c-button--link d4c-modal__action"
+                    type="button"
+                    ng-click="hideColorChoroplethModal()" translate>Cancel
+            </button>
+            <button class="d4c-button d4c-button--primary d4c-modal__action"
+                    type="button"
+                    ng-click="apply()"
+                    ng-disabled="!isFormValid()">
+                <i class="d4cui-valid"></i>
+                <span translate>Apply</span>
+            </button>
+        </div>
+    </d4c-modal>
+</div>

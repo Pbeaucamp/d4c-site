@@ -1,0 +1,185 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-dataset-selection-list">
+    <d4c-catalog-context context="catalogcontext" catalogcontext-domain="{{ domainid }}" catalogcontext-parameters="catalogParameters" catalogcontext-apikey="{{ apiKey }}">
+        <div class="d4c-dataset-selection-list__catalog" ng-if="!exploredDatasetID">
+            <div class="row">
+                <div class="third col-sm-4">
+                    <div class="d4c-dataset-selection-list__sources" ng-if="CENTRALSTORE &amp;&amp; !centralstoreDisabled || customSources === &#39;true&#39;">
+                        <h1 class="d4c-filters__filters" translate="">Source</h1>
+
+                        <div class="d4cwidget-facet">
+
+                            <ul class="d4cwidget-facet__category-list">
+                                <div class="d4c-dataset-selection-list__sources-group">
+                                    <li class="d4cwidget-facet__category-container">
+                                        <a class="d4cwidget-facet__category" ng-click="changeSource(&#39;&#39;)" href="" ng-class="{&#39;d4cwidget-facet__category--refined&#39;: source === &#39;&#39;}" ng-bind-html="PORTAL_TITLE"></a>
+                                    </li>
+                                    <li class="d4cwidget-facet__category-container" ng-if="CENTRALSTORE &amp;&amp; !centralstoreDisabled">
+                                        <a class="d4cwidget-facet__category" ng-click="changeSource(&#39;central&#39;)" href="" ng-class="{&#39;d4cwidget-facet__category--refined&#39;: source === &#39;central&#39;}" translate="">All available data</a>
+                                    </li>
+                                    <li class="d4cwidget-facet__category-container" ng-if="PARENT_DOMAIN &amp;&amp; HAS_RELATED_DOMAINS &amp;&amp; CENTRALSTORE &amp;&amp; !centralstoreDisabled &amp;&amp; !relatedDomainsDisabled">
+                                        <a class="d4cwidget-facet__category" ng-click="changeSource(&#39;subdomains&#39;)" href="" ng-class="{&#39;d4cwidget-facet__category--refined&#39;: source === &#39;subdomains&#39;}" translate="">All subdomains</a>
+                                    </li>
+                                </div>
+
+                                <div ng-if="HAS_RELATED_DOMAINS &amp;&amp; !relatedDomainsDisabled" class="d4c-dataset-selection-list__sources-group">
+                                    <p>All domains of your network</p>
+                                    <li class="d4cwidget-facet__category-container" ng-repeat="relatedDomain in relatedDomains">
+                                        <a class="d4cwidget-facet__category" ng-click="changeSource(&#39;related@&#39;+relatedDomain.domain_id)" href="" ng-hide="relatedDomain.domain_id === DOMAIN_ID" ng-class="{&#39;d4cwidget-facet__category--refined&#39;: source === &#39;related@&#39;+relatedDomain.domain_id}">
+                                            <span>
+                                                <i ng-if="relatedDomain.restricted" d4c-tooltip="This domain is restricted and only accessible to authorized users." translate="d4c-tooltip" class="fa fa-lock icon-lock"></i>
+                                                <span ng-bind-html="relatedDomain.name || relatedDomain.domain_id|capitalize"></span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                </div>
+
+                                <div class="d4c-dataset-selection-list__sources-group">
+                                    <li class="d4cwidget-facet__category-container" ng-if="customSources === &#39;true&#39;">
+                                        <a class="d4cwidget-facet__category" ng-click="changeSource(&#39;custom&#39;)" href="" ng-class="{&#39;d4cwidget-facet__category--refined&#39;: source === &#39;custom&#39;}" translate="">Specific
+                                            domain</a>
+                                    </li>
+                                </div>
+                            </ul>
+                            <div ng-show="source === &#39;custom&#39;" class="custom-source">
+                                <input type="text" ng-model="domainid" translate="placeholder" placeholder="Domain">
+                                <input type="text" ng-model="apiKey" translate="placeholder" placeholder="API key">
+                                <button class="btn" ng-click="refreshCustomSource(domainid, apiKey)">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d4c-dataset-selection-list__facets">
+                        <h1 class="d4c-filters__count">
+                            <span class="counter">{{ catalogcontext.nhits | number }}</span>
+                            <span translate="" translate-n="catalogcontext.nhits" translate-plural="datasets">dataset</span>
+                        </h1>
+                        <d4c-facets context="catalogcontext">
+                            <d4c-facet name="source_domain_title" title="{{ &#39;Domain&#39;|translate }}"></d4c-facet>
+                            <d4c-facet name="modified" title="{{ &#39;Modified&#39;|translate }}"></d4c-facet>
+                            <d4c-facet name="publisher" title="{{ &#39;Publisher&#39;|translate }}"></d4c-facet>
+                            <d4c-facet name="keyword" title="{{ &#39;Keyword&#39;|translate }}"></d4c-facet>
+                            <d4c-facet name="theme" title="{{ &#39;Theme&#39;|translate }}"></d4c-facet>
+                        </d4c-facets>
+                    </div>
+                </div>
+                <div class="two-thirds col-sm-8">
+                    <div class="">
+                        <d4c-text-search context="catalogcontext" class="d4c-dataset-selection-list__catalog-search" placeholder="Find a dataset..."></d4c-text-search>
+                        <div class="d4c-dataset-selection-list__catalog-sort">
+                            <i class="icon-sort-by-attributes fa fa-sort-amount-desc"></i>
+                            <select ng-model="catalogcontext.parameters.sort" class="d4c-dataset-selection-list__catalog-sort-selector">
+                                <option value="modified" translate="">Last modification</option>
+                                <option value="title" translate="">Title</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d4c-dataset-selection-list__items" d4c-results="items" d4c-results-context="catalogcontext" d4c-results-max="10">
+                        <div class="d4c-dataset-selection-list__spinner" ng-show="loading">
+                            <d4c-spinner class="d4c-dataset-selection-list__spinner-icon"></d4c-spinner>
+                        </div>
+                        <div class="d4c-dataset-selection-list__item" ng-repeat="dataset in items">
+                            <div class="d4c-dataset-selection-list__item-header" ng-class="{&#39;d4c-dataset-selection-list__item-header--has-records&#39;: dataset.has_records}" ng-click="dataset.expanded=!dataset.expanded">
+                                <i ng-hide="dataset.expanded" class="d4c-dataset-selection-list__expand-control icon-chevron-down fa fa-angle-down"></i>
+                                <i ng-show="dataset.expanded" class="d4c-dataset-selection-list__expand-control icon-chevron-up fa fa-angle-up"></i>
+                                <img ng-if="source === &#39;central&#39;" class="d4c-dataset-selection-list__dataset-portal-icon" ng-src="//{{ dataset.metas.source_domain_address }}/favicon.ico" d4c-tooltip="{{ dataset.metas.source_domain_title }}">
+                                <strong>{{ dataset.metas.title }}</strong>
+                            </div>
+                            <div class="d4c-dataset-selection-list__item-actions">
+                                <button class="btn btn-small d4c-button d4c-button--small" ng-click="exploreDataset(dataset.datasetid)" ng-show="dataset.has_records">
+                                    <span ng-show="filteringEnabled">
+                                        <i class="icon-filter fa fa-filter"></i>
+                                        <span translate="">Filter data</span>
+                                    </span>
+                                    <span ng-hide="filteringEnabled">
+                                        <i class="icon-eye-open fa fa-eye"></i>
+                                        <span translate="">Preview data</span>
+                                    </span>
+                                </button>
+                                <button class="btn btn-small btn-primary d4c-button d4c-button--small d4c-button--primary" ng-click="selectDataset(dataset)">
+                                    <i class="icon-ok fa fa-check"></i>
+                                    <span translate="">Select</span></button>
+                            </div>
+                            <div class="d4c-dataset-selection-list__item-details" ng-show="dataset.expanded">
+                                <p ng-bind-html="dataset.metas.description|shortSummary|prettyText"></p>
+                                <dl class="d4c-dataset-selection-list__item-details-list">
+                                    <dt class="d4c-dataset-selection-list__item-details-title" translate="">Identifier</dt>
+                                    <dd class="d4c-dataset-selection-list__item-details-value">
+                                        {{ dataset.metas.source_dataset || dataset.datasetid}}</dd>
+                                    <dt class="d4c-dataset-selection-list__item-details-title" translate="" ng-show="dataset.metas.source_domain_title">Source
+                                    </dt>
+                                    <dd class="d4c-dataset-selection-list__item-details-value">{{ dataset.metas.source_domain_title }}</dd>
+                                    <dt class="d4c-dataset-selection-list__item-details-title" translate="" ng-show="dataset.metas.license">License
+                                    </dt>
+                                    <dd class="d4c-dataset-selection-list__item-details-value">{{ dataset.metas.license }}</dd>
+                                    <dt class="d4c-dataset-selection-list__item-details-title" ng-show="dataset.metas.records_count &gt; 0" translate="">Records
+                                    </dt>
+                                    <dd class="d4c-dataset-selection-list__item-details-value" ng-show="dataset.metas.records_count &gt; 0">{{ dataset.metas.records_count }}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <d4c-pagination-block per-page="10" context="catalogcontext" container-identifier="d4c-dataset-selection__interface-container"></d4c-pagination-block>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d4c-dataset-selection-list__records" ng-if="exploredDatasetID" d4c-dataset-context="" context="datasetcontext" datasetcontext-domain="{{ domainid }}" datasetcontext-dataset="{{ exploredDatasetID }}" datasetcontext-source="{{ source }}" datasetcontext-parameters="datasetParameters" datasetcontext-apikey="{{ apiKey }}" ng-init="showMapFilter=false">
+            <div class="row">
+                <div class="one col-xs-12">
+                    <a href="" ng-click="exploreCatalog()" ng-if="!preventDatasetChange">
+                        <i class="icon-chevron-left fa fa-angle-left"></i>
+                        <span translate="">Back to catalog</span>
+                    </a>
+
+                    <div class="d4c-dataset-selection-list__records-selector">
+                        <h1 class="d4c-dataset-selection-list__records-title">
+                            <img ng-if="datasetcontext.dataset &amp;&amp; source === &#39;central&#39;" class="d4c-dataset-selection-list__records-portal-icon" ng-src="//{{ datasetcontext.dataset.metas.source_domain_address }}/favicon.ico" d4c-tooltip="{{ datasetcontext.dataset.metas.source_domain_title }}">
+                            <!-- No way right now to fetch a specific domain's title yet :/ so no tooltip in that case -->
+                            <img ng-if="datasetcontext.dataset &amp;&amp; source === &#39;custom&#39;" class="d4c-dataset-selection-list__records-portal-icon" ng-src="{{ datasetcontext.domainUrl }}/favicon.ico">
+                            <img ng-if="datasetcontext.dataset &amp;&amp; source === &#39;&#39;" class="d4c-dataset-selection-list__records-portal-icon" ng-src="/favicon.ico" d4c-tooltip="{{ PORTAL_TITLE }}">
+                            {{ datasetcontext.dataset.metas.title }}
+
+                            <button class="btn btn-primary d4c-dataset-selection-list__select-records-button d4c-button d4c-button--primary" ng-show="datasetcontext.nhits &gt;= 0" ng-click="selectDataset(datasetcontext.dataset, datasetcontext.parameters)">
+                                <i class="icon-ok fa fa-check"></i>
+                                <span translate="">Select</span>
+                                <span class="d4c-dataset-selection-list__records-count">{{ datasetcontext.nhits | number }}</span>
+                                <span translate="" translate-n="datasetcontext.nhits" translate-plural="records">record</span>
+                            </button>
+                        </h1>
+                        <div class="d4c-dataset-selection-list__records-filter-summary" ng-show="filteringEnabled">
+                            <div class="d4c-dataset-selection-list__records-filter-summary-title">
+                                <strong translate="">Active filters</strong> <br>
+                                <d4c-clear-all-filters context="datasetcontext" ng-show="datasetcontext.getActiveFilters().length"></d4c-clear-all-filters>
+                            </div>
+                            <div class="d4c-dataset-selection-list__records-filter-summary-content">
+                                <d4c-filter-summary context="datasetcontext" clear-all-button="false"></d4c-filter-summary>
+                                <div ng-hide="datasetcontext.getActiveFilters().length" translate="">No active filters</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="third col-sm-4" ng-show="filteringEnabled">
+                    <h2 translate="">Filters</h2>
+
+                    <d4c-text-search ng-if="datasetcontext.dataset.has_records" class="d4c-dataset-selection-list__records-search-section" context="datasetcontext"></d4c-text-search>
+                    <d4c-map ng-if="datasetcontext.dataset.features.indexOf(&#39;geo&#39;) &gt; -1" context="datasetcontext" scroll-wheel-zoom="false"></d4c-map>
+                    <d4c-facets context="datasetcontext" ng-if="datasetcontext.dataset.has_records"></d4c-facets>
+                </div>
+                <div ng-class="{&#39;two-thirds&#39;: filteringEnabled,  &#39;col-sm-8&#39;: filteringEnabled, &#39;one&#39;: !filteringEnabled, &#39;col-xs-12&#39;: !filteringEnabled }">
+                    <h2 translate="">Data preview</h2>
+
+                    <div ng-if="!datasetcontext.dataset.has_records" translate="">This dataset only has metadata.</div>
+                    <div ng-if="datasetcontext.nhits == 0" translate="">No results</div>
+                    <d4c-table context="datasetcontext"></d4c-table>
+                </div>
+            </div>
+        </div>
+    </d4c-catalog-context>
+</div>

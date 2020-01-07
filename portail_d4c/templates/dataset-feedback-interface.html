@@ -1,0 +1,55 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4cwidget-dataset-feedback__user-form">
+    <h1 class="d4cwidget-dataset-feedback__heading" translate="">Send feedback</h1>
+    <p ng-show="record" class="explanations" translate="">You can suggest changes to the record you selected by sending feedback to the publisher; you can also submit new values for each field.</p>
+    <p ng-hide="record" class="explanations" translate="">You can suggest a new record by sending feedback to the publisher; you can also directly submit values for this new record.</p>
+    <h2 class="d4cwidget-dataset-feedback__comments-heading" translate="">Your comments</h2>
+    <div class="d4cwidget-dataset-feedback__comment-box-container">
+        <textarea class="d4cwidget-dataset-feedback__comment-box" ng-model="userComment"></textarea>
+    </div>
+    <h2 class="d4cwidget-dataset-feedback__suggest-heading" ng-click="expandedChanges = !expandedChanges">
+        <span ng-show="record" translate="">Suggest new values (optional)</span>
+        <span ng-hide="record" translate="">Suggest values for the new record (optional)</span>
+        <i class="fa fa-chevron-down" aria-hidden="true" ng-hide="expandedChanges"></i>
+        <i class="fa fa-chevron-up" aria-hidden="true" ng-show="expandedChanges"></i>
+    </h2>
+    <div class="d4cwidget-dataset-feedback__fields" ng-if="expandedChanges">
+        <div class="d4cwidget-dataset-feedback__field" ng-repeat="field in feedbackFields track by field.name">
+            <div class="d4cwidget-dataset-feedback__field-header" title="{{field.name}}">
+                <div class="d4cwidget-dataset-feedback__field-label" ng-bind="field.label"></div>
+                <div class="d4cwidget-dataset-feedback__field-type" ng-bind="field.type|translate"></div>
+            </div>
+            <div ng-class="{&#39;d4cwidget-dataset-feedback__field-value&#39;: true, &#39;d4cwidget-dataset-feedback__field-value--new-record&#39;: !record}">
+                <div ng-if="record" class="d4cwidget-dataset-feedback__field-old-value" ng-hide="isGeoField(field)" ng-bind="record.fields[field.name]"></div>
+                <div class="d4cwidget-dataset-feedback__field-new-value" ng-class="{&#39;changed&#39;: !record || hasNewValue(field)}">
+                    <div ng-switch="field.type">
+                        <d4c-datetime-picker ng-class="{&#39;d4cwidget-dataset-feedback__field-datebox&#39;: true, &#39;d4cwidget-dataset-feedback__field-datebox--changed&#39;: !record || hasNewValue(field)}" ng-model="newValues[field.name]" ng-switch-when="datetime" format="yyyy-MM-dd HH:mm:ss"></d4c-datetime-picker>
+                        <d4c-datetime-picker ng-class="{&#39;d4cwidget-dataset-feedback__field-datebox&#39;: true, &#39;d4cwidget-dataset-feedback__field-datebox--changed&#39;: !record || hasNewValue(field)}" ng-model="newValues[field.name]" ng-switch-when="date" format="yyyy-MM-dd"></d4c-datetime-picker>
+                        <div ng-switch-when="geo_point_2d" class="d4cwidget-dataset-feedback__map-container">
+                            <d4c-point-selector is-blank="record" invalidate-size="expandedChanges" ng-model="newValues[field.name]"></d4c-point-selector>
+                        </div>
+                        <div ng-switch-when="geo_shape" class="d4cwidget-dataset-feedback__map-container">
+                            <d4c-draw-map is-blank="record" invalidate-size="expandedChanges" ng-model="newValues[field.name]"></d4c-draw-map>
+                        </div>
+                        <textarea ng-class="{&#39;d4cwidget-dataset-feedback__field-textbox&#39;: true, &#39;d4cwidget-dataset-feedback__field-textbox--changed&#39;: !record || hasNewValue(field)}" msd-elastic="" ng-switch-default="" ng-model="newValues[field.name]"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d4cwidget-dataset-feedback__actions">
+    <button ng-if="!sent" class="d4c-button d4c-button--primary" ng-click="send()" ng-disabled="working || !userComment" d4c-disabled-tooltip="!userComment" d4c-disabled-tooltip-text="You need to submit at least a comment." translate="d4c-disabled-tooltip-text">
+        <i class="fa fa-envelope" aria-hidden="true" ng-if="!working &amp;&amp; !sent"></i>
+        <d4c-spinner ng-if="working &amp;&amp; !sent"></d4c-spinner>
+            <span translate="">Send your feedback</span>
+    </button>
+    <button ng-if="sent" class="d4c-button d4c-button--success" ng-click="send()" ng-disabled="true">
+        <i class="fa fa-check" aria-hidden="true"></i>
+            <span translate="">Feedback sent!</span>
+    </button>
+    </div>
+</div>

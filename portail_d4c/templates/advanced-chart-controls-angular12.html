@@ -1,0 +1,66 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-advanced-chart-controls-angular12">
+    <debug data="localChartContext.dataChart"></debug>
+    <form ng-if="!noControls" class="form-inline" ng-model="localChartContext.dataChart.queries">
+        <button ng-if="advanced" class="btn btn-primary pull-right ng-cloak" ng-click="addQuery()"><i class="icon-plus"></i> <span translate="">Add dataset</span></button>
+        <h1 ng-if="advanced" translate="">Advanced Charts</h1>
+
+        <div ng-if="advanced" class="ng-cloak chart-controls">
+            <div ng-if="graphMode === &#39;timeserie&#39;">
+                <label>
+                    <span translate="">Global Precision</span>
+                    <select ng-model="localChartContext.dataChart.timescale" ng-options="scale.name as scale.label for scale in allTimescales"></select>
+                </label>
+            </div>
+            <div>
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="localChartContext.dataChart.singleAxis">
+                    <span translate="">Merge Y axes</span>
+                </label>
+            </div>
+            <div ng-show="localChartContext.dataChart.singleAxis">
+                <div class="group shift-right">
+                    <label class="checkbox">
+                        <input type="text" ng-model="localChartContext.dataChart.singleAxisLabel" translate="placeholder" d4c-delay="800" placeholder="Label">
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" ng-model="localChartContext.dataChart.singleAxisScale" ng-true-value="logarithmic" ng-false-value="linear">
+                        <span translate="">Log scale</span>
+                    </label>
+                </div>
+            </div>
+            <div ng-show="localChartContext.dataChart.singleAxis">
+                <div class="group shift-right">
+                    <label>
+                        <span translate="">Min value on axis</span>
+                        <input type="text" ng-model="localChartContext.dataChart.yRangeMin" d4c-delay="500" size="2">
+                    </label>
+                    <label>
+                        <span translate="">Max value on axis</span>
+                        <input type="text" ng-model="localChartContext.dataChart.yRangeMax" d4c-delay="500" size="2">
+                    </label>
+                </div>
+            </div>
+        </div>
+        <ul class="queries unstyled" ng-model="localChartContext.dataChart.queries">
+            <li ng-repeat="query in localChartContext.dataChart.queries track by $index" class="query">
+                <h2 ng-if="advanced">
+                    <!-- <span ng-show="dataChart.queries.length > 1" class="handleQuery"><i class="icon-reorder"></i></span> -->
+                    <span class="pull-left" ng-click="editQuery(query)"><i class="icon-pencil"></i></span>
+                    <span class="pull-right" ng-click="removeQuery(query)"><i class="icon-remove"></i></span>
+                    <span class="title">{{ context.datasets[query.config.dataset].dataset.metas.title }}</span>
+                    <div class="refines">
+                        <small ng-repeat="(refine,value) in query.config.options|displayedRefines">
+                            {{ refine }}: <strong>{{ value }}</strong>
+                        </small>
+                    </div>
+                </h2>
+                <div chart-controls="" advanced="advanced" context="context.datasets[query.config.dataset]" query="query" datachart="localChartContext.dataChart" index="$index"></div>
+            </li>
+        </ul>
+    </form>
+</div></div>

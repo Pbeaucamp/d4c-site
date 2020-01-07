@@ -1,0 +1,212 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<form class="d4c-form" ng-init="initForm()" name="choroplethForm">
+    <div class="d4c-form__group d4c-form__group--horizontal">
+        <label class="d4c-form__label" translate>Base shape color on</label>
+        <div class="d4c-form__vertical-controls">
+            <div class="d4c-form__check-line">
+                <label class="d4c-form__check-label">
+                    <input class="d4c-form__control-check" type="radio" name="aggregationMode"
+                           ng-model="isAggregation"
+                           ng-change="onColorModeChange()"
+                           ng-value="false"
+                           ng-disabled="colorConfiguration.computing === 'custom'" autofocus>
+                    <span translate>Value of a field</span>
+                </label>
+            </div>
+            <div class="d4c-form__check-line">
+                <label class="d4c-form__check-label">
+                    <input class="d4c-form__control-check" type="radio" name="aggregationMode"
+                           ng-model="isAggregation"
+                           ng-change="onColorModeChange()"
+                           ng-value="true"
+                           ng-disabled="colorConfiguration.computing === 'custom'">
+                    <span translate>Aggregation on a field</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="d4c-form__group d4c-form__group--horizontal"
+         ng-show="!isAggregation">
+        <label class="d4c-form__label" translate>Field</label>
+        <div class="d4c-form__vertical-controls">
+            <div class="d4c-form__horizontal-controls">
+                <select ng-options="field as field.label for field in fields" ng-model="field"
+                        ng-change="updateField()"
+                        class="d4c-form__control"
+                        ng-disabled="colorConfiguration.computing === 'custom'"></select>
+            </div>
+        </div>
+    </div>
+
+    <div class="d4c-form__group d4c-form__group--horizontal"
+        ng-show="isAggregation">
+        <label class="d4c-form__label" translate>Aggregation operation</label>
+
+        <div class="d4c-form__vertical-controls">
+            <div class="d4c-form__horizontal-controls">
+                <select ng-model="aggregationFunction"
+                        class="d4c-form__control"
+                        ng-change="updateAggregationFunction()"
+                        ng-disabled="colorConfiguration.computing === 'custom'"
+                        ng-options="o.name as o.label for o in operations"></select>
+                <span class="d4c-mapbuilder__color-choropleth__ranges__value-separator">&mdash;</span>
+                <select ng-options="field as field.label for field in fields"
+                        ng-model="field"
+                        ng-change="updateField()"
+                        ng-disabled="aggregationFunction === 'COUNT'"
+                        class="d4c-form__control"></select>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="d4c-form__group d4c-form__group--horizontal" ng-class="{ 'd4c-form__group--danger' : choroplethForm['min-value'].$invalid || choroplethForm['max-value'].$invalid }">
+        <label class="d4c-form__label" translate>Values range</label>
+        <div class="d4c-form__vertical-controls">
+            <div class="d4c-form__horizontal-controls">
+                <input class="d4c-form__control"
+                       ng-max="maxValue"
+                       type="number" ng-model="minValue" name="min-value" ng-change="checkEquality()" min="colorConfiguration.computing === 'log' ? 0 : '' ">
+                <span class="d4c-mapbuilder__color-choropleth__ranges__value-separator">&mdash;</span>
+                <input class="d4c-form__control"
+                       ng-min="minValue"
+                       type="number" ng-model="maxValue" name="max-value" ng-change="checkEquality()">
+            </div>
+            <div class="d4c-form__message" ng-show="choroplethForm['min-value'].$error.max" translate>Min value must be lower than max value.</div>
+            <div class="d4c-form__message" ng-show="choroplethForm['min-value'].$error.equal" translate>Min can't be equal to max.</div>
+            <div class="d4c-form__message" ng-show="choroplethForm['max-value'].$error.min" translate>Max value must be higher than min value.</div>
+        </div>
+    </div>
+
+    <div class="d4c-form__group d4c-form__group--horizontal" ng-class="{ 'd4c-form__group--danger' : choroplethForm.tiers.$invalid  }">
+        <label class="d4c-form__label" translate>Tiers</label>
+        <div class="d4c-form__vertical-controls">
+            <div class="d4c-form__horizontal-controls">
+                <input class="d4c-form__control"
+                       type="number"
+                       name="tiers"
+                       min="2"
+                       max="10"
+                       ng-model="rangeSettings.tiers"
+                       ng-change="colorConfiguration.computing !== 'custom' ? updateTiers() : addCustomRange()">
+                <div class="d4c-form__message" ng-show="choroplethForm['tiers'].$error.min" translate>2 tiers minimum.</div>
+                <div class="d4c-form__message" ng-show="choroplethForm['tiers'].$error.max" translate>10 tiers maximum.</div>
+            </div>
+            <p class="d4c-form__help-text" translate>There can be between 2 and 10 tiers.</p>
+        </div>
+    </div>
+
+
+    <div class="d4c-form__group d4c-form__group--horizontal">
+        <label class="d4c-form__label" translate>Computing mode</label>
+        <div class="d4c-form__vertical-controls">
+            <div class="d4c-form__check-line">
+                <label class="d4c-form__check-label">
+                    <input class="d4c-form__control-check" type="radio" name="computing"
+                           ng-model="colorConfiguration.computing"
+                           value="linear"
+                           ng-change="regenerateRanges()">
+                    <span translate>Linear</span>
+                </label>
+            </div>
+            <div class="d4c-form__check-line">
+                <label class="d4c-form__check-label">
+                    <input class="d4c-form__control-check" type="radio" name="computing"
+                           ng-model="colorConfiguration.computing"
+                           value="log"
+                           ng-change="regenerateRanges()">
+                    <span translate>Logarithmic</span>
+                </label>
+            </div>
+            <div class="d4c-form__check-line">
+                <label class="d4c-form__check-label">
+                    <input class="d4c-form__control-check" type="radio" name="computing"
+                           ng-model="colorConfiguration.computing"
+                           value="custom">
+                    <span translate>Custom</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="d4c-form__group d4c-form__group--horizontal">
+        <label class="d4c-form__label" translate>Colors range</label>
+        <d4c-colorpicker ng-model="rangeSettings.colors[0]"
+                         required="true"
+                         default-color="{{ defaultRangeColors[0] }}"
+                         ng-change="regenerateRanges()"
+                         ng-readonly="colorConfiguration.computing === 'custom'"></d4c-colorpicker>
+        <span class="d4c-mapbuilder__color-choropleth__ranges__value-separator">&mdash;</span>
+        <d4c-colorpicker ng-model="rangeSettings.colors[1]"
+                         required="true"
+                         ng-change="regenerateRanges()"
+                         default-color="{{ defaultRangeColors[1] }}"
+                         ng-readonly="colorConfiguration.computing === 'custom'"></d4c-colorpicker>
+    </div>
+
+    <div class="d4c-form__group d4c-form__group--horizontal">
+        <label class="d4c-form__label" translate>Gradient type</label>
+        <select class="d4c-form__control"
+                ng-model="rangeSettings.gradientType" ng-options="g.name as g.label for g in gradientTypes"
+                ng-change="updateGradientType()"
+                ng-disabled="colorConfiguration.computing === 'custom'"></select>
+    </div>
+    <div class="d4c-form__group d4c-form__group--horizontal">
+        <label class="d4c-form__label" translate>Preview</label>
+        <div class="d4c-form__vertical-controls">
+            <div class="d4c-mapbuilder__color-choropleth__ranges">
+                <div ng-repeat="upperBound in sortedBoundsArray track by $index"
+                     class="d4c-mapbuilder__color-choropleth__ranges__item">
+                        <span class="d4c-mapbuilder__color-choropleth__ranges__value"
+                              title="{{ upperBound[0] }} - {{ upperBound[1] }}">
+                            <span class="d4c-mapbuilder__color-choropleth__ranges__value-start">{{ $first ? minValue :  (sortedBoundsArray[$index - 1][1] | incrementBound:sortedBoundsArray[$index - 1][1]) }}</span>
+                            <span class="d4c-mapbuilder__color-choropleth__ranges__value-separator">&mdash;</span>
+                            <span class="d4c-mapbuilder__color-choropleth__ranges__value-end">
+                                <input class="d4c-form__control d4c-mapbuilder__color-choropleth__ranges__value-end-input"
+                                       type="number"
+                                       step="any"
+                                       ng-min="(sortedBoundsArray[$index - 1][1] | incrementBound:sortedBoundsArray[$index - 1][1]) || minValue"
+                                       ng-max="maxValue || sortedBoundsArray[$index + 1][1]"
+                                       ng-change="checkLastBound((upperBound[1] | incrementBound:upperBound[1]), maxValue, $index)"
+                                       ng-model="upperBound[1]"
+                                       ng-model-options="{updateOn: 'change blur'}"
+                                       ng-readonly="colorConfiguration.computing === 'linear' || colorConfiguration.computing === 'log' || $last"
+                                       name="choroplethBound-{{$index}}">
+                            </span>
+                        </span>
+                    <d4c-colorpicker class="d4c-mapbuilder__color-choropleth_ranges__color"
+                                     required="true"
+                                     ng-readonly="colorConfiguration.computing === 'linear' || colorConfiguration.computing === 'log'"
+                                     ng-model="upperBound[2]"></d4c-colorpicker>
+                    <!-- FIXME  error message layout -->
+                    <p ng-if="equals(choroplethForm['choroplethBound-' + $index].$error, {})">error</p>
+                    <div class="d4c-form__message" ng-show="choroplethForm['choroplethBound-' + $index].$error.min" translate>Bound value can't be lower than previous top bound value or min value.</div>
+                    <div class="d4c-form__message" ng-show="choroplethForm['choroplethBound-' + $index].$error.max" translate>Bound value can't be higher than next top bound value or max value.</div>
+                    <div class="d4c-form__message" ng-show="choroplethForm['choroplethBound-' + $index].$error.maxLast" translate>This value is invalid, please check if your last bound is correct.</div>
+                </div>
+            </div>
+            <div class="d4c-mapbuilder__color-choropleth__ranges">
+                <div class="d4c-mapbuilder__color-choropleth__ranges__item">
+                    <span class="d4c-mapbuilder__color-choropleth__ranges__extra" translate>Out of bounds values</span>
+                    <d4c-colorpicker class="d4c-mapbuilder__color-choropleth_ranges__color"
+                                     required="true"
+                                     default-color="{{ defaultOutOfBoundsColor }}"
+                                     ng-model="colorConfiguration.outOfBoundsColor"></d4c-colorpicker>
+                </div>
+                <div class="d4c-mapbuilder__color-choropleth__ranges__item" ng-if="!isAggregation">
+                    <span class="d4c-mapbuilder__color-choropleth__ranges__extra" translate>Undefined values</span>
+                    <d4c-colorpicker class="d4c-mapbuilder__color-choropleth_ranges__color"
+                                     required="true"
+                                     default-color="{{ defaultUndefinedColor }}"
+                                     ng-model="colorConfiguration.undefinedColor"></d4c-colorpicker>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

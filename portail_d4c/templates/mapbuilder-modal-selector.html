@@ -1,0 +1,106 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div ng-hide="loggedIn"
+     class="d4c-message-box d4c-message-box--info d4c-message-box--icon">
+    <span class="fa-stack">
+        <i class="fa fa-info fa-stack-1x"></i>
+        <i class="fa fa-circle-thin fa-stack-2x"></i>
+    </span>
+    <div>
+        <span translate>You need to be logged in to see your saved maps.</span> <br>
+        <a href="/user/login">
+            <i class="fa fa-sign-in" aria-hidden="true"></i>
+            <span translate>Login</span>
+        </a>
+    </div>
+</div>
+<div class="d4c-mapbuilder__modal-selector__header">
+    <d4c-search-input width="large"
+                      ng-model="search"></d4c-search-input>
+    <a class="d4c-button d4c-button--primary"
+       href="/{{ appRoot }}"
+       target="_self"
+       autofocus>
+        <i class="fa fa-plus" aria-hidden="true"></i>
+        <span translate>New map</span>
+    </a>
+</div>
+
+<div class="d4c-table-list">
+    <div class="d4c-table-list__row">
+        <div class="d4c-table-list__header-cell">
+            <div class="d4c-table-list__header-cell-content" translate>Map</div>
+        </div>
+        <div class="d4c-table-list__header-cell">
+            <div class="d4c-table-list__header-cell-content" translate>Last modification</div>
+        </div>
+        <div class="d4c-table-list__header-cell"></div>
+        <div class="d4c-table-list__header-cell"></div>
+    </div>
+    <div class="d4c-table-list__body">
+        <div class="d4c-table-list__row"
+             ng-repeat="map in mapsTable">
+            <div class="d4c-table-list__cell">
+                <a ng-href="/{{ appRoot }}/{{ map.persist_id }}/edit/" target="_self">
+                    <span ng-show="map.title">{{ map.title }}</span>
+                    <span ng-hide="map.title"
+                          class="d4c-mapbuilder__modal-selector__untitled"
+                          translate>Untitled map</span>
+                </a>
+                <span ng-if="map.draft" class="d4c-mapbuilder__modal-selector__draft">- <span
+                        translate>draft</span></span>
+                <div class="d4c-mapbuilder__modal-selector__map-slug">
+                    /{{ appRoot }}/{{ map.persist_id }}</div>
+                <div class="d4c-mapbuilder__modal-selector__details" ng-if="map.empty">
+                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    <span translate>Empty</span>
+                </div>
+            </div>
+            <div class="d4c-table-list__cell">
+                <span d4c-tooltip="{{ map.last_modification | moment:'LLL' }}"
+                      d4c-tooltip-direction="top">
+                    {{ map.last_modification|timesince }}
+                </span>
+            </div>
+            <div class="d4c-table-list__cell d4c-table-list__cell--tiny-width d4c-table-list__cell--fully-centered">
+                <button class="d4c-button d4c-button--small u-d4c-nowrap d4c-button--primary d4c-button--outline"
+                        ng-click="duplicateMap(map)">
+                    <i class="fa fa-copy" aria-hidden="true"></i>
+                    <span translate>Duplicate</span>
+                </button>
+            </div>
+            <div class="d4c-table-list__cell d4c-table-list__cell--tiny-width d4c-table-list__cell--fully-centered">
+                <button tabindex="0"
+                        class="d4c-button d4c-button--small d4c-button--danger d4c-button--outline"
+                        d4c-confirm-click
+                        d4c-confirm-click-type="danger"
+                        d4c-confirm-click-action="deleteMap(map)"
+                        d4c-confirm-click-title="{{ 'Delete map?'| translate }}"
+                        d4c-confirm-click-message="{{ 'Do you really want to delete this map?'| translate }}"
+                        d4c-confirm-click-button-label="{{ 'Delete map'| translate }}"
+                        aria-labelledby="d4c-confirm-click-button-label">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="d4c-table-list__caption d4c-table-list__caption--bottom"
+         ng-hide="mapsTable.length">
+        <div ng-hide="search" translate>No maps</div>
+        <div ng-show="search">
+            <span translate>No map found.</span>
+            <button class="d4c-button d4c-button--link"
+                    ng-click="search = ''"
+                    translate>Reset search
+            </button>
+        </div>
+    </div>
+</div>
+
+<d4c-pagination current-page="currentPage"
+                ng-show="mapsTable.length"
+                last-page="lastPage"
+                load-page-callback="selectPage(page)"></d4c-pagination>

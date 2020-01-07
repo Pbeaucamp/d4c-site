@@ -1,0 +1,88 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-api-console">
+    <div class="">
+        <div class="col-sm-12 col-md-6">
+            <form ng-submit="sendCall()">
+                <div class="d4c-form__group d4c-form__group--horizontal" ng-repeat="param in service.urlParameters">
+                    <label class="d4c-form__label"
+                           for="{{ service.id }}-url-{{ param.name }}">
+                        {{ param.name }}
+                    </label>
+                    <div class="d4c-form__vertical-controls">
+                        <input type="text" id="{{ service.id }}-url-{{ param.name }}"
+                               delayed-apply-model="api.urlParameters[param.name]"
+                               placeholder="{{ param.default }}"
+                               ng-readonly="param.readonly"
+                               class="d4c-form__control">
+                        <span class="d4c-form__help-text" ng-show="param.helptext">{{ param.helptext }}</span>
+                    </div>
+                </div>
+
+                <div class="d4c-form__group d4c-form__group--horizontal" ng-repeat="param in service.parameters">
+                    <label for="{{ service.id }}-{{ param.name }}"
+                           class="d4c-form__label">
+                        {{ param.name }}
+                    </label>
+                    <div class="d4c-form__vertical-controls">
+                        <div ng-switch on="param.type" class="d4c-form__vertical-controls">
+                            <input ng-switch-when="integer"
+                                   type="number"
+                                   id="{{ service.id }}-{{ param.name }}"
+                                   delayed-apply-model="api.parameters[param.name]"
+                                   placeholder="{{ param.default }}"
+                                   ng-readonly="param.readonly"
+                                   class="d4c-form__control d4c-form__control--small">
+                            <hierarchical-field ng-switch-when="hierarchical"
+                                                id="{{ service.id }}-{{ param.name }}"
+                                                ng-model="api.parameters[param.name]"
+                                                hierarchy="param.hierarchy"
+                                                ng-readonly="param.readonly">
+                            </hierarchical-field>
+
+                            <div ng-switch-default ng-switch on="param.multiple" class="d4c-form__vertical-controls">
+                                <multiple-field ng-switch-when="true"
+                                                id="{{ service.id }}-{{ param.name }}"
+                                                ng-model="api.parameters[param.name]"
+                                                ng-readonly="param.readonly">
+                                </multiple-field>
+                                <input ng-switch-default
+                                       type="text"
+                                       id="{{ service.id }}-{{ param.name }}"
+                                       delayed-apply-model="api.parameters[param.name]"
+                                       placeholder="{{ param.default }}"
+                                       ng-readonly="param.readonly"
+                                       class="d4c-form__control d4c-form__control--fluid">
+                            </div>
+                        </div>
+                        <span class="d4c-form__help-text" ng-show="param.helptext">{{ param.helptext }}</span>
+                    </div>
+                </div>
+
+                <datalist id="autocomplete-facet">
+                    <option ng-repeat="item in autocompleteFacet" value="{{ item }}"></option>
+                </datalist>
+
+                <div class="d4c-form__group d4c-form__group--horizontal">
+                    <label class="d4c-form__label"></label>
+                    <button type="submit" class="d4c-button d4c-button--primary" translate>Submit</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div d4c-json-formatter="results" ng-show="results" class="d4c-api-console-page__service-result"></div>
+            <div class="d4c-message-box d4c-message-box--error" ng-show="errors">
+                {{ errors }}
+            </div>
+        </div>
+    </div>
+
+    <code class="d4c-api-console-page__service-url">
+        <a href="{{ computeURL() }}" target="_blank">
+            <i class="fa fa-link"></i> {{ computeURL() }}
+        </a>
+    </code>
+</div>

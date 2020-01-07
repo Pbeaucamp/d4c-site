@@ -1,0 +1,277 @@
+/*--- flouthoc ----*/
+/*-- http://github.com/flouthoc --*/
+/*-- flouthoc@gmail.com --*/
+
+div.timenil-vertical-line {
+    position: absolute;
+    width: 5px;
+    
+    background-color: #1d0f31;
+    
+    height: 85%;
+    
+    left: 64%;
+    
+    transform: translate(-50%);
+    * z-index: 1;
+    display: table-cell;
+}
+div.timenil-node {
+    
+    z-index: 0;
+    margin-top: 5%;
+}
+div.timenil-node:before,
+
+div.timenil-node:after {
+    content: '';
+    display: table;
+}
+div.timenil-node:after {
+    clear: both;
+}
+div.timenil-node {
+    display: inline-block;
+}
+
+
+div.timenil-node {
+    display: block;
+}
+
+
+div.timenil-node-child-left {
+    position: relative;
+    width: 43%;
+    margin-left: 0%;
+    float: left;
+    text-align: right;
+    z-index: 1;
+}
+
+
+div.timenil-node-child-right {
+    position: relative;
+    text-align: left;
+    float: right;
+    text-align: left;
+    margin-right: -4%;
+    width: 43%;
+ 
+}
+
+
+
+
+@media(min-width:500px) {
+    div.timenil-node-center {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+    }
+    
+    div.timenil-node-separator{
+    	padding: 5px;
+    	width:100px;
+    	height:30px;
+    	line-height: 30px;
+    	font-size:20px;
+    }
+}
+@media(max-width:499px) {
+    div.timenil-node-center {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+    }
+    
+    div.timenil-node-separator{
+    	padding: 5px;
+    	width:70px;
+    	height:20px;
+    	font-size:15px;
+    }
+}
+
+
+div.timenil-node-center{
+    width: 30px;
+    height: 30px;
+    background: white;
+    border: 5px #1d0f31 solid;
+    border-radius: 50%;
+    position: absolute;
+    left: 64%;
+    margin-top: 35px;
+    margin-left: -15px;
+    z-index: 2;
+}
+div.timenil-node-separator {
+    width: 30px;
+    height: 30px;
+    background: white;
+    border: 5px #1d0f31 solid;
+    border-radius: 50%;
+    position: absolute;
+    left: 64%;
+    margin-top: 35px;
+    margin-left: -15px;
+    z-index: 2;
+}
+
+div.timenil-node-trace {
+    position: absolute;
+    display: inline-block;
+    left: 64%;
+    width: 10%;
+    height: 1px;
+    text-align: center;
+    
+    /*padding: 1em;
+    text-align: left;
+    line-height: 1.5em;*/
+    
+    z-index: 0;
+    transform: translate(-50%);
+    border-bottom: 4px dotted #1d0f31;
+    margin-top: 50px;
+}
+
+.timenil-content-box {
+/*
+    margin:0;
+	display: inline-block;
+	position: relative;
+	width: 100%;
+	height: auto;
+	  
+*/
+    padding: 5%;
+    line-height: 1.5em;
+    color: #7f8c8d;
+}
+.timenil-content-text {
+    line-height: 1.5em;
+    
+}
+
+
+
+
+
+/*---------------ALL THE CLASSES RELATED TO THEME-------------------------------------------
+--------------You can edit these to get your own custome theme----------------------------*/
+
+div.timenil-node-child-right-theme {
+    background: radial-gradient(center, ellipse cover, #FAFAFA 35%, #F7F7F7 60%);
+    background: -moz-radial-gradient(center, ellipse cover, #FAFAFA 35%, #F7F7F7 60%);
+    background: -webkit-radial-gradient(center, ellipse cover, #FAFAFA 35%, #F7F7F7 60%);
+    background: -o-radial-gradient(center, ellipse cover, #FAFAFA 35%, #F7F7F7 60%);
+    box-shadow: 1px 3px 3px -2px #242424;
+    -webkit-box-shadow: 1px 3px 3px -2px #242424;
+    -moz-box-shadow: 1px 3px 3px -2px #242424;
+    -o-box-shadow: 1px 3px 3px -2px #242424;
+    border-radius: 1%;
+    border: 1px solid #b2b2b2;
+   
+}
+
+div.timenil-node-child-left-theme {
+    background: radial-gradient(center, ellipse cover, #FAFAFA 35%, #F7F7F7 60%);
+    background: -moz-radial-gradient(center, ellipse cover, #FAFAFA 35%, #F7F7F7 60%);
+    background: -webkit-radial-gradient(center, ellipse cover, #FAFAFA 35%, #F7F7F7 60%);
+    background: -o-radial-gradient(center, ellipse cover, #FAFAFA 35%, #F7F7F7 60%);
+    box-shadow: 1px 3px 3px -2px #242424;
+    -webkit-box-shadow: 1px 3px 3px -2px #242424;
+    -moz-box-shadow: 1px 3px 3px -2px #242424;
+    -o-box-shadow: 1px 3px 3px -2px #242424;
+    border-radius: 1%;
+    text-align: left;
+    border: 1px solid #b2b2b2;
+    margin: -1em;
+   
+}
+
+
+/*@media(min-width:500px) {
+    div.timenil-node-child-left:after, div.timenil-node-child-left:before {
+        left: 100%;
+        top: 20px;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+    div.timenil-node-child-left:after {
+        border-color: rgba(136, 183, 213, 0);
+        border-left-color: #F7F7F7;
+        border-width: 20px;
+    }
+    div.timenil-node-child-left:before {
+        border-color: rgba(194, 225, 245, 0);
+        border-left-color: #b2b2b2;
+        border-width: 21px;
+        margin-top: -1px;
+    }
+}
+@media(min-width:500px) {
+    div.timenil-node-child-right:after, div.timenil-node-child-right:before {
+        right: 100%;
+        top: 20px;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+    div.timenil-node-child-right:after {
+        border-color: rgba(136, 183, 213, 0);
+        border-right-color: #F7F7F7;
+        border-width: 20px;
+    }
+    div.timenil-node-child-right:before {
+        border-color: rgba(194, 225, 245, 0);
+        border-right-color: #b2b2b2;
+        border-width: 21px;
+        margin-top: -1px;
+    }
+}*/
+	
+
+
+.timeline-img-header {
+    height: 12em;
+    position: relative;
+    margin-bottom: 20px;
+}
+.timeline-img-header h2 {
+    color: white;
+    position: absolute;
+    bottom: -0.3em;
+    left: 0.3em;
+}
+
+a.bnt-more {
+    background: #1C0F31;
+    color: white;
+    padding: 8px 20px;
+    text-transform: uppercase;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-left: 21%;
+    margin-bottom: 5px;
+    display: inline-block;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px -1px rgba(0, 0, 0, .6);
+}
+
+a.bnt-more:hover, a.bnt-more:active, a.bnt-more:focus {
+    background: white;
+    color: #1C0F31;
+    text-decoration: none;
+}
+		
+

@@ -1,0 +1,21 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="quota-block">
+        <div class="quota-rates D4CFormItem">
+            <label ng-if="!label" class="D4CFormLabel" translate="">Max requests :</label>
+            <label ng-if="label" class="D4CFormLabel" ng-bind="label"></label>
+            <div class="D4CFormControls">
+                <input min="1" type="number" ng-model="quota.limit" placeholder="quota" translate="placeholder">
+                <span translate="">per</span>
+
+                <select ng-if="!restrictUnit" ng-model="quota.unit" ng-options="units[val] for val in orderUnits">{{quota.unit}}</select>
+                <span ng-if="restrictUnit">{{units[restrictUnit]}}</span>
+            </div>
+        </div>
+    </div>
+
+    <debug data="quota"></debug>
+</div>

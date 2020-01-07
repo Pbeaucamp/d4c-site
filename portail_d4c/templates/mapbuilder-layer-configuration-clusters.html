@@ -1,0 +1,149 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-mapbuilder__layer-configuration d4c-mapbuilder__layer-configuration-clusters">
+    <div class="d4c-form">
+        <div class="d4c-mapbuilder__layer-configuration__section">
+            <h2 class="d4c-mapbuilder__layer-configuration__section-title" translate>Cluster style</h2>
+            <fieldset>
+                <div class="d4c-form__group d4c-form__group--horizontal">
+                    <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Min
+                        size
+                    </legend>
+                    <div class="d4c-form__vertical-controls">
+                        <d4c-range-input ng-model="layer.minSize" min="1" max="10" editable-value="true"
+                                         icon-min="d4cui-dot_size_small"
+                                         icon-max="d4cui-dot_size_medium"></d4c-range-input>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="d4c-form__group d4c-form__group--horizontal">
+                    <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Max
+                        size
+                    </legend>
+                    <div class="d4c-form__vertical-controls">
+                        <d4c-range-input ng-model="layer.maxSize" selectable-min="layer.minSize" min="1" max="10"
+                                         editable-value="true" icon-min="d4cui-dot_size_medium"
+                                         icon-max="d4cui-dot_size_big"></d4c-range-input>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="d4c-form__group d4c-form__group--horizontal">
+                    <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Opacity
+                    </legend>
+                    <div class="d4c-form__vertical-controls">
+                        <d4c-range-input ng-model="layer.pointOpacity" min="0" max="1" step="0.1" editable-value="true"
+                                         icon-min="d4cui-dot_opacity_mini"
+                                         icon-max="d4cui-dot_opacity_max"></d4c-range-input>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="d4c-form__group d4c-form__group--horizontal">
+                    <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Color</legend>
+                    <d4c-colorpicker ng-model="layer.color"
+                                     required="true"
+                                     aria-label-text="Cluster color"
+                                     translate="aria-label-text"></d4c-colorpicker>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <div class="d4c-mapbuilder__layer-configuration__section">
+        <h2 class="d4c-mapbuilder__layer-configuration__section-title" translate>Cluster border</h2>
+        <fieldset>
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration"
+                        translate>Thickness
+                </legend>
+                <div class="d4c-form__vertical-controls">
+                    <d4c-range-input ng-model="layer.borderSize" min="0" max="5" editable-value="true"
+                                     icon-min="d4cui-dot_thickness_mini"
+                                     icon-max="d4cui-dot_thickness_max"></d4c-range-input>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Opacity
+                </legend>
+                <div class="d4c-form__vertical-controls">
+                    <d4c-range-input ng-model="layer.borderOpacity" min="0" max="1" step="0.1" editable-value="true"
+                                     icon-min="d4cui-dot_border_opacity_mini"
+                                     icon-max="d4cui-dot_border_opacity_max"></d4c-range-input>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Color</legend>
+                <d4c-colorpicker ng-model="layer.borderColor"
+                                 required="true"
+                                 aria-label-text="Cluster border color"
+                                 translate="aria-label-text"></d4c-colorpicker>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="d4c-mapbuilder__layer-configuration__section" ng-if="numFields.length">
+        <h2 class="d4c-mapbuilder__layer-configuration__section-title" translate>Aggregation operations</h2>
+        <div class="d4c-form__group d4c-form__group--horizontal">
+            <label class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration"
+                   for="aggregationOperation" translate>Operation</label>
+            <select ng-model="layer.func"
+                    id="aggregationOperation"
+                    class="d4c-form__control"
+                    ng-options="o.name as o.label for o in operations"></select>
+
+        </div>
+        <div class="d4c-form__group d4c-form__group--horizontal" ng-if="layer.func !== 'COUNT'">
+            <label class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration"
+                   for="aggregationField"translate>Field</label>
+            <select ng-model="layer.expr"
+                    id="aggregationField"
+                    class="d4c-form__control"
+                    ng-options="f.name as f.label for f in numFields"></select>
+        </div>
+    </div>
+
+    <div class="d4c-mapbuilder__layer-configuration__section">
+        <h2 class="d4c-mapbuilder__layer-configuration__section-title" translate>Computing</h2>
+
+        <fieldset>
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Cluster size calculation
+                </legend>
+                <div class="d4c-form__vertical-controls" role="radiogroup">
+                    <div class="d4c-form__check-line">
+                        <label class="d4c-form__check-label">
+                            <input class="d4c-form__control-check" type="radio" name="sizeFunction"
+                                   ng-model="layer.sizeFunction" value="linear"/>
+                            <span translate>Linear</span>
+                            <i translate="d4c-tooltip"
+                               d4c-tooltip="For values evenly spread from the min to the max"
+                               d4c-tooltip-direction="bottom"
+                               class="fa fa-question-circle"></i>
+                        </label>
+                    </div>
+                    <div class="d4c-form__check-line">
+                        <label class="d4c-form__check-label">
+                            <input class="d4c-form__control-check" type="radio" name="sizeFunction"
+                                   ng-model="layer.sizeFunction" value="log"/>
+                            <span translate>Logarithmic</span>
+                            <i translate="d4c-tooltip"
+                               d4c-tooltip="For value that are spread from a very large spectrum"
+                               d4c-tooltip-direction="bottom"
+                               class="fa fa-question-circle"></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+</div>

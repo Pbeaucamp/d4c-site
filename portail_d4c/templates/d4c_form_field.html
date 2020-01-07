@@ -1,0 +1,88 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="D4CFormItem">
+    <label class="D4CFormLabel" for="{{ id }}" ng-class="{&#39;overridden&#39;: isOverridden(), &#39;listlabel&#39;: !isOverriden() &amp;&amp; field.type === &#39;objectlist&#39;}" ng-if="(field.type === &#39;boolean&#39;) || field.label || isOverridable()">
+        <input ng-if="field.type === &#39;boolean&#39;" id="{{ id }}" ng-model="model[field.name]" type="checkbox" ng-required="field.is_mandatory">
+        {{ field.label|translate }}
+        <a ng-if="!isOverriden() &amp;&amp; (field.type === &#39;objectlist&#39; || field.type === &#39;unconfiguredobject&#39;)" ng-click="addEntry()" class="addentry" translate="">Add an entry</a>
+        <p class="override-toggle" ng-if="isOverridable()">
+            <a ng-click="override(field); $event.preventDefault()" ng-if="!isOverridden()" translate="">Override</a>
+            <a ng-click="cancelOverride(field); $event.preventDefault()" ng-if="isOverridden()" translate="">Return to original value</a>
+        </p>
+    </label>
+
+    <div class="D4CFormControls">
+        <ng-switch on="field.type" ng-if="field.type !== &#39;boolean&#39;">
+            <select ng-switch-when="enum" id="{{ id }}" ng-model="model[field.name]" ng-options="prepareMetaForEnum(meta).value as prepareMetaForEnum(meta).label for meta in field.choices" ng-required="field.is_mandatory"></select>
+
+            <span ng-switch-when="combo">
+                <select ng-model="model[field.name]" ng-options="meta.value as meta.label for meta in field.choices">
+                    <option value="" translate="">Input text</option>
+                </select>
+                <input type="text" ng-model="model[field.name]" ng-model-onchange="" ng-required="field.is_mandatory" ng-hide="field.choices.map(mapValues).indexOf(model[field.name]) &gt; -1" ng-trim="false">
+            </span>
+            <date-time-picker ng-switch-when="date" d4c-disabled="d4cDisabled" id="{{field.name}}" ng-model="model[field.name]" format="yyyy-MM-dd" ng-required="field.is_mandatory"></date-time-picker>
+            <date-time-picker ng-switch-when="datetime" d4c-disabled="d4cDisabled" id="{{field.name}}" ng-model="model[field.name]" format="yyyy-MM-dd hh:mm:ss" ng-required="field.is_mandatory"></date-time-picker>
+
+            <div ng-switch-when="list">
+                <ng-switch on="field.name">
+                    <div ng-switch-when="keyword">
+                        <div id="{{ id }}" d4c-disabled="d4cDisabled" ng-model="model[field.name]" tag-field="" tag-field-help="field.help_text|translate" suggestions-tag="d4cFormSuggestions(q, field.suggest_url)"></div>
+                    </div>
+                    <div ng-switch-default="">
+                        <multiple-field d4c-disabled="d4cDisabled" ng-model="model[field.name]" values="field.choices" values-language="valuesLanguage" ng-required="field.is_mandatory"></multiple-field>
+                    </div>
+                </ng-switch>
+            </div>
+
+            <div ng-switch-when="object">
+                <div ng-include="&#39;d4c_form.html&#39;" onload="formDefinition = field.objectmodel; model = model[field.name]"></div>
+            </div>
+
+            <div ng-switch-when="objectlist" class="list">
+                <div ng-repeat="objectmodel in model[field.name]" d4c-collapsible-fixme="field.collapsible" d4c-collapsible-head="objectmodel[field.collapsiblehead]" class="subform"><i ng-click="removeObject($index)" class="button icon-minus-sign"></i><h3 d4c-collapse="" ng-if="field.collapsiblehead">{{ objectmodel[field.collapsiblehead] }}</h3><div d4c-collapse-panel=""><ng-include src="&#39;d4c_form.html&#39;" onload="formDefinition = field.objectmodel; model = objectmodel;"></ng-include></div></div>
+<!--                <multiple-object-field object-display="field.display" object-collapsible="field.collapsible" object-collapsible-head="field.collapsiblehead" object-model="model[field.name]" object-definition="field.objectmodel"></multiple-object-field>-->
+            </div>
+
+            <!-- TODO: Support for required= -->
+            <enum-list ng-switch-when="enumlist" ng-model="model[field.name]" values="field.choices" unique-values="false"></enum-list>
+
+            <div ng-switch-when="longstring">
+                <d4c-redactor-direction ng-if="!d4cDisabled" lang="context &amp;&amp; context.metas &amp;&amp; context.metas.default ? context.metas.default.language : &#39;&#39;" apply-on-blur="true" id="{{ id }}" name="{{ field.name }}" ng-model="model[field.name]"></d4c-redactor-direction>
+                <div ng-if="d4cDisabled" class="disabled-redactor" ng-bind-html="model[field.name]"></div>
+            </div>
+
+            <div ng-switch-when="unconfiguredobject">
+                <div class="d4c-key-value" ng-repeat="objectmodel in model[field.name]"><d4c-key-value ng-disabled="d4cDisabled" id="{{ id }}" ng-required="field.is_mandatory" ng-model="objectmodel"></d4c-key-value><i ng-click="removeObject($index)" class="button icon-minus-sign"></i></div>
+            </div>
+
+            <div ng-switch-when="expression" class="d4cExpression">
+                <input ng-disabled="d4cDisabled" d4c-expression="" id="{{ id }}" type="text" ng-required="field.is_mandatory" ng-model="model[field.name]" ng-model-onchange="" ng-trim="false">
+            </div>
+
+            <input ng-switch-when="int" ng-disabled="d4cDisabled" id="{{ id }}" type="number" ng-required="field.is_mandatory" ng-model="model[field.name]">
+
+            <oauth2 ng-switch-when="oauth2" model="model[field.name]" authconfig="model"></oauth2>
+
+            <input ng-switch-when="password" ng-model-onchange="" ng-disabled="d4cDisabled" id="{{ id }}" type="password" ng-required="field.is_mandatory" ng-model="model[field.name]">
+            <input ng-switch-when="readonly" readonly="" ng-model="model[field.name]">
+
+            <div ng-switch-when="dataset">
+                <d4c-dataset-selection-with-permissions custom-sources="field.areCustomSourcesEnabled()" presets="field.getDatasetPresets()" filtering-enabled="false" selection-callback="field.datasetSelectionCallback(selection)" prevent-dataset-change="false">
+                </d4c-dataset-selection-with-permissions>
+            </div>
+
+            <div ng-switch-default="">
+                <textarea ng-if="field.widget === &#39;textarea&#39;" id="{{ id }}" ng-disabled="d4cDisabled" ng-required="field.is_mandatory" ng-model="model[field.name]"></textarea>
+                <d4c-suggestions ng-if="field.suggest_url &amp;&amp; field.widget !== &#39;textarea&#39;" d4c-disabled="d4cDisabled" id="{{ id }}" autofocus="false" ng-model="model[field.name]" source-callback="d4cFormSuggestions(q, field.suggest_url)" selection-callback="setValue(value, field)"></d4c-suggestions>
+                <input ng-disabled="d4cDisabled" ng-if="!field.suggest_url &amp;&amp; field.widget !== &#39;textarea&#39;" id="{{ id }}" type="text" ng-required="field.is_mandatory" ng-model="model[field.name]" datalist-values="field.choices" datalist-values-language="valuesLanguage" ng-model-onchange="">
+            </div>
+        </ng-switch>
+
+        <div class="helpText" ng-show="field.name !== &#39;keyword&#39; &amp;&amp; field.help_text">{{ field.help_text|translate }}</div>
+        <div class="errorMessage" ng-show="errors[field.name]">{{ errors[field.name]|translate }}</div>
+    </div>
+</div>

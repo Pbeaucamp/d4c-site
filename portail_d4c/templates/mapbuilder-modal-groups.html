@@ -1,0 +1,105 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<d4c-modal name="groupsModal" title="{{ 'Orders and groups'|translate }}" title-icon="d4cui-bars">
+    <d4c-modal-body>
+    <div class="d4c-mapbuilder__modal-groups__actions">
+        <div class="d4c-mapbuilder__modal-groups__bulk-actions">
+            <button ng-disabled="selectedGroups.length <= 1"
+                    ng-class="{ 'd4c-button--primary' : selectedGroups.length > 1 }  "
+                    class="d4c-button"
+                    ng-click="fusionGroups()"
+                    aria-label="Group layers"
+                    translate="aria-label">
+                <span translate translate-context="mapbuilder">Group</span>
+                <span ng-if="selectedGroups.length > 1">({{ selection.length }})</span>
+            </button>
+            <button ng-disabled="selectedGroups.length != 1 || selectedGroups.length == 0 || ( selectedGroups.length == 1 && selection.length == 1 )"
+                    ng-class="{ 'd4c-button--primary' : selectedGroups.length == 1 && selection.length != 1 }  "
+                    class="d4c-button"
+                    ng-click="splitGroups()"
+                    aria-label="Split group"
+                    translate="aria-label">
+                <span translate>Split</span>
+                <span ng-if="selectedGroups.length == 1 && selection.length != 1">({{ selection.length }})</span>
+            </button>
+
+        </div>
+        <div class="d4c-mapbuilder__modal-groups__layers-toggle">
+            <d4c-toggle left-label="{{ 'Monolayer'|translate }}"
+                        right-label="{{ 'Multilayer'|translate }}"
+                        left-tooltip="{{ 'Only one layer displayed at a time'|translate }}"
+                        right-tooltip="{{ 'Several layers displayed at a time'|translate }}"
+                        left-value="true"
+                        right-value="false"
+                        default-value="singleLayer"
+                        ng-model="singleLayer"
+                        ng-change="setVisibilityMode()">
+            </d4c-toggle>
+        </div>
+    </div>
+    <ul ng-sortable="{'handle': '.d4cui-move'}" class="d4c-mapbuilder__modal-groups__groups-list"
+        ng-init="initModal()">
+        <li ng-repeat="group in backupGroups track by $index" class="d4c-mapbuilder__modal-groups__group">
+            <div>
+                <input role="checkbox"
+                       type="checkbox"
+                       tabindex="0"
+                       ng-model="group.selected"
+                       ng-click="toggleSelection(group)"
+                       d4c-autofocus="$first"
+                       id="{{ (group.title || group.layers[0].title || group.layers[0].context.dataset.metas.title) + '-' + $index }}"/>
+                <span>
+                    <i ng-class="group.layers.length > 1 ? 'd4cui-dataset_group' : 'd4cui-dataset' " aria-hidden="true"></i>
+                    <d4c-map-picto
+                            ng-if="group.pictoIcon || group.layers.length > 1"
+                            class="d4c-mapbuilder__modal-groups__group-icon"
+                            name="{{ group.pictoIcon }}"
+                            color="{{ group.pictoColor }}"></d4c-map-picto>
+                    <d4c-map-picto
+                            ng-if="group.layers[0].pictoIcon && group.layers.length === 1"
+                            class="d4c-mapbuilder__modal-groups__group-icon"
+                            name="{{ group.layers[0].captionPictoIcon }}"
+                            color="{{ group.layers[0].captionPictoColor }}"></d4c-map-picto>
+                    <label ng-bind="group.title || group.layers[0].title || group.layers[0].context.dataset.metas.title"
+                           for="{{ (group.title || group.layers[0].title || group.layers[0].context.dataset.metas.title) + '-' + $index }}"></label>
+                    <ul ng-repeat-end ng-repeat="layer in group.layers track by $index" ng-if="group.layers.length > 1">
+                        <li>
+                            <i class="d4cui-dataset" aria-hidden="true"></i>
+                            <d4c-map-picto
+                                    ng-if="layer.pictoIcon"
+                                    class="d4c-mapbuilder__modal-groups__group-icon"
+                                    name="{{ layer.captionPictoIcon }}"
+                                    color="{{ layer.captionPictoColor }}"></d4c-map-picto>
+                            <span ng-bind="layer.title || layer.context.dataset.metas.title"></span>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+            <div class="d4c-mapbuilder__modal-groups__group__actions">
+                <i ng-class=" group.displayed ? 'd4cui-visibility_on' : 'd4cui-visibility_off' "
+                   d4c-tooltip="{{ 'Hide or display layer'|translate }}"
+                   aria-hidden="true"
+                   ng-click="setGroupVisibility(group)"></i>
+                <i class="d4cui-move d4c-mapbuilder__modal-groups__group__actions-move"
+                   d4c-tooltip="{{ 'Drag and drop to reorder layers'|translate }}"
+                   aria-hidden="true"></i>
+            </div>
+        </li>
+    </ul>
+    </d4c-modal-body>
+    <div class="d4c-modal__actions">
+        <button class="d4c-button d4c-button--link d4c-modal__action"
+                type="button"
+                ng-click="hideGroupsModal()" translate>Cancel
+        </button>
+        <button class="d4c-button d4c-button--primary d4c-modal__action"
+                type="button"
+                ng-click="apply()">
+            <i class="d4cui-valid"></i>
+            <span translate>Apply</span>
+        </button>
+    </div>
+</d4c-modal>

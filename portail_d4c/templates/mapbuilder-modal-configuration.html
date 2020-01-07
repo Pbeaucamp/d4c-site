@@ -1,0 +1,68 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<d4c-modal name="configurationModal"
+           title="{{ 'Configuration'|translate }}"
+           title-icon="d4cui-configuration">
+    <d4c-modal-body>
+            <div class="d4c-form__group">
+                <div class="d4c-form__check-line">
+                    <label class="d4c-form__check-label">
+                        <input type="checkbox"
+                               class="d4c-form__control-check"
+                               ng-model="mapConfiguration.searchBox" autofocus>
+                        <span translate>Display search box</span>
+                    </label>
+                </div>
+                <div class="d4c-form__check-line">
+                    <label class="d4c-form__check-label">
+                        <input type="checkbox"
+                               class="d4c-form__control-check"
+                               ng-model="mapConfiguration.toolbarFullscreen"/>
+                        <span translate>Display fullscreen in view mode</span>
+                    </label>
+                </div>
+                <div class="d4c-form__check-line">
+                    <label class="d4c-form__check-label">
+                        <input type="checkbox"
+                               class="d4c-form__control-check"
+                               ng-model="mapConfiguration.toolbarGeolocation"/>
+                        <span translate>Geolocation</span>
+                    </label>
+                    <div class="d4c-form__group">
+                        <div class="d4c-form__check-line">
+                            <label class="d4c-form__check-label">
+                                <input type="checkbox"
+                                       class="d4c-form__control-check"
+                                       ng-model="mapConfiguration.autoGeolocation"
+                                       ng-disabled="!mapConfiguration.toolbarGeolocation"/>
+                                <span translate>Auto-geolocation</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="d4c-form__check-line">
+                    <label class="d4c-form__check-label">
+                        <input type="checkbox"
+                               class="d4c-form__control-check"
+                               ng-model="mapConfiguration.layerSelection">
+                        <span translate>Display layers and groups visibility control</span>
+                    </label>
+                </div>
+            </div>
+    </d4c-modal-body>
+
+    <div class="d4c-modal__actions">
+        <button class="d4c-button d4c-button--link d4c-modal__action"
+                type="button"
+                ng-click="hideConfigurationModal()" translate>Cancel</button>
+        <button class="d4c-button d4c-button--primary d4c-modal__action"
+                type="button"
+                ng-click="saveMapConfiguration()">
+            <i class="d4cui-valid"></i>
+            <span translate>Apply</span>
+        </button>
+    </div>
+</d4c-modal>

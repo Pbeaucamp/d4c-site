@@ -1,0 +1,124 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<span class="chart-controls">
+    <div>
+        <span class="group">
+            <select required="" ng-model="serie.type" ng-options="serie.type as serie.label for serie in availableChartTypes"></select>
+        </span>
+        <span class="group">
+            <span d4c-color-chooser="" color="serie.color" allowedcolors="allowedcolors"></span>
+        </span>
+        <span class="group" ng-if="serie.type == &#39;pie&#39;">
+            <select required="" ng-model="serie.position" ng-options="translate(p) for p in pieChartPositions"></select>
+        </span>
+
+        <span d4c-chart-control-serie-function="" serie="serie" context="context" advanced="advanced"></span>
+
+        <div ng-show="isRangeChart(serie.type)" class="group">
+            <div>
+                <label translate="">Lower boundary:</label>
+                <span d4c-chart-control-serie-function="" serie="serie.charts[0]" subserie="" context="context" advanced="advanced"></span>
+            </div>
+            <div>
+                <label translate="">Upper boundary:</label>
+                <span d4c-chart-control-serie-function="" serie="serie.charts[1]" subserie="" context="context" advanced="advanced"></span>
+            </div>
+        </div>
+    </div>
+    <div class="configuration-tabs" ng-show="advanced">
+        &gt; <span translate="" style="font-weight: bold">Configuration :</span> 
+
+        <span ng-show="!singleAxis"><span translate="" ng-click="display=&#39;yaxis&#39;" ng-style="{&#39;font-weight&#39;: display === &#39;yaxis&#39; ? &#39;bold&#39;: &#39;normal&#39;}">Y Axis</span> - </span>
+        
+        <span ng-show="serie.type !== &#39;treemap&#39;"><span translate="" ng-click="display=&#39;appearance&#39;" ng-style="{&#39;font-weight&#39;: display === &#39;appearance&#39; ? &#39;bold&#39;: &#39;normal&#39;}">Appearance</span> - </span>
+
+        <span><span translate="" ng-click="display=&#39;label&#39;" ng-style="{&#39;font-weight&#39;: display === &#39;label&#39; ? &#39;bold&#39;: &#39;normal&#39;}">Label</span> - </span>
+
+        <span translate="" ng-show="advanced" ng-click="display=&#39;data&#39;" ng-style="{&#39;font-weight&#39;: display === &#39;data&#39; ? &#39;bold&#39;: &#39;normal&#39;}">Data</span>
+
+        <span ng-show="allowThresholds(serie.type)"> - <span translate="" ng-show="allowThresholds(serie.type)" ng-click="display=&#39;thresholds&#39;" ng-style="{&#39;font-weight&#39;: display === &#39;thresholds&#39; ? &#39;bold&#39;: &#39;normal&#39;}">Color thresholds</span></span>
+    </div>
+    <div ng-show="display==&#39;data&#39;" ng-if="advanced">
+        <div class="group shift-right">
+            <label class="checkbox">
+                <input type="checkbox" ng-model="serie.cumulative">
+                <span translate="">Cumulative</span>
+            </label>
+        </div>
+        <div class="group" ng-if="serie.func !== &#39;COUNT&#39;">
+            <label>
+                <span translate="">Value multiplier</span>
+            </label>
+            <input type="text" ng-model="serie.multiplier" d4c-delay="800" class="small">
+        </div>
+    </div>
+    <div ng-show="display==&#39;appearance&#39;">
+        <div class="group" ng-if="serie.type == &#39;pie&#39;">
+            <label translate="">Inner circle size:</label>
+            <input type="text" class="small" ng-model="serie.innersize" size="2">
+        </div>
+        <div class="group" ng-if="serie.type == &#39;pie&#39;">
+            <label translate="">Labels position:</label>
+            <select ng-model="serie.labelsposition">
+                <option value="" translate="">outside</option>
+                <option value="inside" translate="">inside</option>
+            </select>
+        </div>
+        <div class="group" ng-if="serie.type !== &#39;pie&#39; &amp;&amp; serie.type !== &#39;treemap&#39;">
+            <label>
+                <input type="checkbox" ng-model="serie.displayValues"> <span translate="">display values on chart</span>
+            </label>
+        </div>
+    </div>
+    <div ng-show="display==&#39;label&#39;" ng-if="advanced">
+        <div class="group shift-right">
+            <label>
+                <input type="text" ng-model="serie.yLabelOverride" d4c-delay="800" translate="placeholder" placeholder="Alternate serie title">
+            </label>
+        </div>
+        <div class="group" ng-if="serie.func !== &#39;COUNT&#39;">
+            <label translate="d4c-tooltip" d4c-tooltip="Displays the unit defined in the dataset for the selected field. If no unit has been set by the publisher, nothing is displayed.">
+                <input type="checkbox" ng-model="serie.displayUnits"> <translate>display units</translate>
+            </label>
+        </div>
+    </div>
+    <div ng-show="display==&#39;yaxis&#39;" ng-if="advanced &amp;&amp; !singleAxis">
+        <div class="group shift-right">
+            <label class="checkbox">
+                <input type="checkbox" ng-model="serie.scale" ng-true-value="logarithmic" ng-false-value="linear">
+                <span translate="">Log scale</span>
+            </label>
+        </div>
+        <div class="group shift-right">
+            <label>
+                <span translate="">Min value on axis</span>
+            </label>
+            <input type="text" ng-model="serie.yRangeMin" d4c-delay="500" size="2">
+            <label>
+                <span translate="">Max value on axis</span>
+            </label>
+            <input type="text" ng-model="serie.yRangeMax" d4c-delay="500" size="2">
+        </div>
+    </div>
+    <div ng-show="display==&#39;thresholds&#39; &amp;&amp; allowThresholds(serie.type)">
+        <div class="group shift-right" ng-model="serie.thresholds" add-remove="">
+            <a ng-click="add({})" translate="">Add a threshold</a>
+            <div ng-if="serie.thresholds" ng-repeat="threshold in serie.thresholds track by $index">
+                <label>
+                    <span translate="">if Y &gt;</span>
+                    <input type="number" ng-model="threshold.value" d4c-delay="500" size="4">
+                </label>
+                <label>
+                    <span translate="">color</span>
+                    <div class="group">
+                        <span d4c-color-chooser="" color="threshold.color" allowedcolors="[&#39;single&#39;]" size="2"></span>
+                    </div>
+                </label>
+                <span ng-click="remove($index)"><i class="icon-remove"></i></span>
+            </div>
+        </div>
+    </div>
+</span>

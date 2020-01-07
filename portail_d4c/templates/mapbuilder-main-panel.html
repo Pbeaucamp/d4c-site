@@ -1,0 +1,72 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-mapbuilder__main-panel">
+
+    <div class="d4c-mapbuilder__main-panel__top-bar">
+        <div class="d4c-mapbuilder__main-panel__map-selection">
+            <button class="d4c-mapbuilder__main-panel__button" ng-click="showSelectorModal()">
+                <i class="d4cui-maps_empty" aria-hidden="true"></i>
+                <span translate>My maps</span>
+            </button>
+        </div>
+        <input class="d4c-mapbuilder__main-panel__map-name" aria-label="{{ placeholder }}" type="text" ng-model="mapObject.title" placeholder="{{ placeholder }}">
+        <div class="d4c-mapbuilder__main-panel__mode-switch">
+            <d4c-toggle left-label="{{ 'Edition'|translate }}"
+                        right-label="{{ 'Preview'|translate }}"
+                        left-value="'edition'"
+                        right-value="'preview'"
+                        ng-model="interfaceMode"
+                        default-value="'edition'"></d4c-toggle>
+        </div>
+    </div>
+
+    <div class="d4c-mapbuilder__main-panel__button-bar">
+        <button class="d4c-mapbuilder__main-panel__button d4c-mapbuilder__main-panel__button--flexible d4c-mapbuilder__main-panel__button--with-disabled-tooltip"
+                d4c-disabled-tooltip="mapObject.value.groups.length === 0"
+                d4c-disabled-tooltip-wrapper-class="d4c-mapbuilder__main-panel__button--flexible"
+                d4c-disabled-tooltip-text="Your map doesn't have any layer"
+                translate="d4c-disabled-tooltip-text"
+                ng-click="showGroupsModal($event)">
+            <i class="d4cui-bars" aria-hidden="true"></i>
+            <span translate>Order and groups</span>
+        </button>
+        <button class="d4c-mapbuilder__main-panel__button d4c-mapbuilder__main-panel__button--flexible" ng-click="startMapConfiguration($event)">
+            <i class="d4cui-configuration" aria-hidden="true"></i>
+            <span translate>Configuration</span>
+        </button>
+
+        <button class="d4c-mapbuilder__main-panel__button d4c-mapbuilder__main-panel__button--flexible d4c-mapbuilder__main-panel__button--with-disabled-tooltip"
+                ng-click="saveMap()"
+                d4c-tooltip="last {{ lastModified|timesince }}"
+                d4c-tooltip-disabled="!mapStorage.isPersisted() || !dirty || !lastModified"
+                ng-disabled="working || (mapStorage.isPersisted() && !dirty) || (!mapStorage.isPersisted() && !mapObject.title)"
+                d4c-disabled-tooltip="!mapObject.title"
+                d4c-disabled-tooltip-wrapper-class="d4c-mapbuilder__main-panel__button--flexible"
+                d4c-disabled-tooltip-text="You need to name your map"
+                translate="d4c-disabled-tooltip-text">
+            <i class="d4cui-save" aria-hidden="true"></i>
+            <span translate>Save</span>
+        </button>
+
+        <button class="d4c-mapbuilder__main-panel__button d4c-mapbuilder__main-panel__button--flexible"
+                ng-click="showShareModal($event)">
+            <i class="d4cui-share" aria-hidden="true"></i>
+            <span translate>Share</span>
+        </button>
+    </div>
+
+    <d4c-mapbuilder-modal-share></d4c-mapbuilder-modal-share>
+    <d4c-mapbuilder-modal-groups></d4c-mapbuilder-modal-groups>
+    <d4c-mapbuilder-modal-configuration></d4c-mapbuilder-modal-configuration>
+    <d4c-modal name="selectorModal"
+               title="{{ 'My maps'|translate }}"
+               title-icon="d4cui-maps_empty">
+        <d4c-modal-body>
+            <d4c-mapbuilder-modal-selector></d4c-mapbuilder-modal-selector>
+        </d4c-modal-body>
+    </d4c-modal>
+    <d4c-mapbuilder-modal-signup></d4c-mapbuilder-modal-signup>
+</div>

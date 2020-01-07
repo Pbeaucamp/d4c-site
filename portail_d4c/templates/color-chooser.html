@@ -1,0 +1,32 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-color-chooser">
+    <div ng-click="toggleSelector($event)" ng-switch="internalValues.colortype" class="d4c-color-chooser__preview">
+        <div ng-switch-when="single" ng-style="{&#39;background-color&#39;: internalValues.color}" class="d4c-color-chooser__current-color"></div>
+        <div ng-switch-when="custom" ng-style="{&#39;background-color&#39;: internalValues.color}" class="d4c-color-chooser__current-color"></div>
+        <table ng-switch-when="range" class="d4c-color-chooser__current-color-range">
+            <tbody><tr>
+                <td ng-repeat="c in colorrangetemplates[internalValues.color.replace(&#39;range-&#39;, &#39;&#39;)] track by $index" ng-style="{&#39;background-color&#39;: c}"></td>
+            </tr>
+        </tbody></table>
+    </div>
+    <ul ng-if="!preview" class="d4c-color-chooser__color-selector">
+        <li ng-repeat="color in colortemplates">
+            <table ng-if="color.label.startsWith(&#39;range-&#39;)" class="d4c-color-chooser__color-preview color-select" ng-class="{&#39;selected&#39;: color.color === internalValues.color}" ng-click="selectDynamicRange(color.label)">
+                <tbody><tr>
+                    <td ng-repeat="c in color.color track by $index" ng-style="{&#39;background-color&#39;: c}"></td>
+                </tr>
+            </tbody></table>
+            <div ng-if="!color.label.startsWith(&#39;range-&#39;) &amp;&amp; !color.label.startsWith(&#39;custom-&#39;)" ng-click="selectSingleColor(color.label)" ng-style="{&#39;background-color&#39;: color.color}" class="d4c-color-chooser__color-preview d4c-color-chooser__color-preview--single" ng-class="{&#39;d4c-color-chooser__color-preview--selected&#39;: color.color === internalValues.color}"></div>
+        </li>
+        <li>
+            <div ng-if="!internalValues.color.startsWith(&#39;range-&#39;)" class="d4c-color-chooser__custom-color" ng-class="{&#39;d4c-color-chooser__custom-color--selected&#39;: internalValues.colortype == &#39;custom&#39;}">
+                <span class="d4c-color-chooser__custom-color-title" translate="">Custom value</span>
+                <d4c-colorpicker ng-model="internalValues.color"></d4c-colorpicker>
+            </div>
+        </li>
+    </ul>
+</div>

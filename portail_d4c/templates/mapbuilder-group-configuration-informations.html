@@ -1,0 +1,54 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-mapbuilder__group-configuration d4c-mapbuilder__group-configuration-informations">
+    <div class="d4c-form">
+        <div class="d4c-mapbuilder__group-configuration__section">
+            <h2 class="d4c-mapbuilder__group-configuration__section-title" translate>Information</h2>
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <label class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" for="groupTitle" translate>Title</label>
+                    <input type="text"
+                           class="d4c-form__control d4c-form__control--fluid"
+                           ng-model="group.title"
+                           ng-model-options="{updateOn: 'change blur'}"
+                           ng-value="group.title || group.layers[0].context.dataset.metas.title"
+                           id="groupTitle">
+            </div>
+            <div class="d4c-form__group d4c-form__group--horizontal" ng-init="maxLength = 200">
+                <label class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration"
+                       for="groupDesription"
+                       translate>Description</label>
+                <div class="d4c-form__group--vertical d4c-mapbuilder__group-configuration__description">
+                    <textarea class="d4c-form__control d4c-mapbuilder__group-configuration__description-input"
+                              maxlength="{{ maxLength }}"
+                              ng-model="group.description" id="groupDescription"></textarea>
+                    <p class="d4c-form__help-text d4c-mapbuilder__layer-configuration__description-help"
+                       translate
+                       translate-n="maxLength - group.description.length"
+                       translate-plural="{{ $count }} characters remaining">{{ $count }} character remaining</p>
+                </div>
+            </div>
+            <fieldset>
+                <div class="d4c-form__group d4c-form__group--horizontal">
+                    <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration"
+                           translate>Icon</legend>
+                    <d4c-pictopicker ng-model="group.pictoIcon"
+                                     aria-label-text="Group color"
+                                     translate="aria-label-text"></d4c-pictopicker>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="d4c-form__group d4c-form__group--horizontal">
+                    <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration"
+                           translate>Color</legend>
+                    <d4c-colorpicker ng-model="group.pictoColor" default-color="#E5E5E5"
+                                     required="true"
+                                     aria-label-text="Group color"></d4c-colorpicker>
+                </div>
+
+            </fieldset>
+        </div>
+    </div>
+</div>

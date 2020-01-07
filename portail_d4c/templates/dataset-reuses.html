@@ -1,0 +1,187 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-dataset-reuses">
+    <d4c-collapsible initially-expanded="true">
+        <d4c-collapsible-above-fold>
+            <h3 class="d4c-dataset-reuses__toggle-header">
+                <span translate>Reuses</span> <span ng-if="reuses.length > 0">({{ reuses.length }})</span>
+            </h3>
+        </d4c-collapsible-above-fold>
+        <d4c-collapsible-fold>
+            <div class="d4c-dataset-reuses__reuses-container">
+                <ul class="d4c-dataset-reuses__list">
+                    <li ng-if="$index < maxReuses || extraReuses" ng-repeat="r in reuses">
+                        <div class="d4c-dataset-reuses__reuse" d4c-full-click>
+                            <h2 class="d4c-dataset-reuses__reuse-title">{{ r.title }}</h2>
+                            <div class="d4c-dataset-reuses__reuse-information">
+                                <div class="d4c-dataset-reuses__reuse-thumbnail" ng-class="{'d4c-dataset-reuses__reuse-thumbnail--no-preview': !r.image}">
+                                    <a ng-show="r.image" href="{{ r.url }}" d4c-main-click title="{{ r.title }}" target="_blank"><img class="d4c-dataset-reuses__reuse-thumbnail-image" ng-src="{{ r.image }}" /></a>
+                                    <i ng-hide="r.image" class="fa fa-ban-circle"></i>
+                                </div>
+                                <div class="d4c-dataset-reuses__reuse-description" ng-bind-html="r.description|prettyText|safenewlines"></div>
+                            </div>
+                            <div class="d4c-dataset-reuses__reuse-authoring-information">
+								<a ng-show="r.author_url" href="{{ r.author_url }}" title="{{ r.author_name }}" target="_blank"><span class="d4c-dataset-reuses__reuse-author">{{ r.author_name }}</span></a>
+                                <span ng-hide="r.author_url" class="d4c-dataset-reuses__reuse-author" ng-if="r.author_name">{{ r.author_name }}</span>
+                                <!--<span class="d4c-dataset-reuses__reuse-author" ng-if="!r.user.first_name && !r.user.last_name">{{ r.user.username }}</span>-->
+                                <i class="fa fa-calendar" aria-hidden="true"></i> {{ r.date|moment:'LLL' }}
+								<span class="d4c-dataset-reuses__reuse-type" ng-if="r.type">{{ types[r.type] }}</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div ng-show="maxReuses < reuses.length" class="d4c-dataset-reuses__expand-toggle">
+                    <a href="" ng-click="toggleExtraReuses()"><i class="icon" ng-class="{'fa': true, 'fa-angle-down': !extraReuses, 'fa-angle-up': extraReuses}"></i>
+                        <span ng-hide="extraReuses" translate>Show more...</span>
+                        <span ng-show="extraReuses" translate>Show less...</span>
+                    </a>
+                </div>
+
+                <d4c-collapsible ng-hide="readonly">
+                    <d4c-collapsible-above-fold>
+                        <h4 class="d4c-dataset-reuses__new-reuse">
+                            <span translate>Submit a reuse</span>
+                        </h4>
+                    </d4c-collapsible-above-fold>
+                    <d4c-collapsible-fold>
+                        <div class="reuseForm">
+                            <debug data="reuse"></debug>
+
+                            <form ng-show="submitAllow" ng-submit="submitReuse()" name="reuseForm">
+                                
+								<div class="d4c-form__group">
+									<label for="reuse_lastname" class="d4c-form__label d4c-form__label--mandatory" translate>Name</label>
+									<input id="reuse_lastname" type="text" maxlength="100" class="d4c-form__control" ng-model="reuse.author_name" required="required" />
+									<p class="d4c-form__help-text" translate>Your name will be publicly displayed with your reuse</p>
+								</div>
+								<div ng-if="!loggedIn">
+                                    <div class="d4c-form__group">
+                                        <label for="reuse_email" class="d4c-form__label d4c-form__label--mandatory" translate>Email</label>
+                                        <input class="d4c-form__control" id="reuse_email" maxlength="256" ng-model="reuse.user_email" type="email" required="required" />
+                                        <p class="d4c-form__help-text" translate>Your email will only be used by the administrators to contact you.</p>
+                                    </div>
+                                </div>
+                                <div class="d4c-form__group"
+                                     ng-class="{'d4c-form__group--danger': reuseForm.reuse_title.$dirty && !reuse.title}">
+                                    <label for="reuse_title"
+                                           class="d4c-form__label d4c-form__label--mandatory"
+                                           translate>Title</label>
+                                    <input class="d4c-form__control d4c-form__control--large"
+                                           ng-class="{'d4c-form__control--danger': reuseForm.reuse_title.$dirty && !reuse.title}"
+                                           id="reuse_title"
+                                           name="reuse_title"
+                                           maxlength="100"
+                                           ng-model="reuse.title"
+                                           type="text"
+                                           required>
+                                    <p class="d4c-form__help-text" translate>Title of your work (max. 100 characters)</p>
+                                </div>
+
+                                <div class="d4c-form__group"
+                                     ng-class="{'d4c-form__group--danger': reuseForm.reuse_description.$dirty && !reuse.description}">
+                                    <label for="reuse_description"
+                                           class="d4c-form__label d4c-form__label--mandatory"
+                                           translate>Description</label>
+                                    <textarea class="d4c-form__control d4c-form__control--large"
+                                              ng-class="{'d4c-form__control--danger': reuseForm.reuse_description.$dirty && !reuse.description}"
+                                              rows="3"
+                                              id="reuse_description"
+                                              name="reuse_description"
+                                              maxlength="1000"
+                                              ng-model="reuse.description"
+                                              required></textarea>
+                                    <p class="d4c-form__help-text" translate>A description about the using this dataset</p>
+                                </div>
+								
+								<div class="d4c-form__group"
+                                     ng-class="{'d4c-form__group--danger': !reuse.type}">
+                                    <label for="reuse_type"
+                                           class="d4c-form__label d4c-form__label--mandatory"
+                                           translate>Type</label>
+									<select class="d4c-form__control d4c-form__control--large"
+									        ng-class="{'d4c-form__control--danger': !reuse.type}"
+									        id="reuse_type"
+									        name="reuse_type"
+									        ng-model="reuse.type"
+											ng-options="key as value for (key, value) in types"
+											ng-init="reuse.type = 'visualization'"
+                                            required></select>
+									
+                                    <p class="d4c-form__help-text" translate>Le contexte de l'utilisation</p>
+                                </div>
+
+                                <div class="d4c-form__group"
+                                     ng-class="{'d4c-form__group--danger': reuseForm.reuse_url.$dirty && reuseForm.reuse_url.$invalid}">
+                                    <label for="reuse_url"
+                                           class="d4c-form__label d4c-form__label--mandatory"
+                                           translate>URL</label>
+                                    <!-- Max URL size https://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers -->
+                                    <input class="d4c-form__control d4c-form__control--large"
+                                           ng-class="{'d4c-form__control--danger': reuseForm.reuse_url.$dirty && reuseForm.reuse_url.$invalid}"
+                                           id="reuse_url"
+                                           name="reuse_url"
+                                           size="35"
+                                           maxlength="2000"
+                                           ng-model="reuse.url"
+                                           placeholder="http://..."
+                                           type="url"
+                                           required="required" />
+                                    <p class="d4c-form__help-text" translate>An URL where your work can be accessed publicly</p>
+                                </div>
+
+                                <div class="d4c-form__group"
+                                     ng-class="{'d4c-form__group--danger': reuseForm.thumbnail.$dirty && reuseForm.thumbnail.$invalid}">
+                                    <label class="d4c-form__label" for="thumbnail" translate>Thumbnail</label>
+                                    <div class="d4c-form__vertical-controls">
+                                        <div class="d4c-form__horizontal-controls">
+                                            <input class="d4c-form__control d4c-form__control--large reuse_thumbnail_url"
+                                                   ng-class="{'d4c-form__control--danger': reuseForm.thumbnail.$dirty && reuseForm.thumbnail.$invalid}"
+                                                   maxlength="2000"
+                                                   name="thumbnail"
+                                                   id="thumbnail"
+                                                   placeholder="http://..."
+                                                   ng-model="reuse.image"
+                                                   type="url">
+                                            &nbsp;<span translate>or</span>&nbsp;
+                                            <input class="d4c-reuses__upload-input" ng-model="reuse.file" type="file" onchange="angular.element(this).scope().upload(this)" />
+                                            <button type="button" class="d4c-button d4c-reuses__upload-button">
+                                                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                                                <span translate>Upload a file</span>
+                                            </button>
+                                            <button ng-show="uploadedFile" class="d4c-button d4c-button--danger" ng-click="reset()" type="button"><i class="fa fa-remove" aria-hidden="true"></i> Remove</button>
+                                        </div>
+                                        <p class="d4c-form__help-text" translate>(optional) An URL or an image which illustrates your work</p>
+                                    </div>
+                                </div>
+
+                                <div ng-hide="loggedIn" class="d4c-form__group">
+                                    <div class="g-recaptcha"></div>
+                                </div>
+
+                                <div class="d4c-form__group">
+                                    <button class="d4c-button d4c-button--primary"
+                                            type="submit"
+                                            ng-disabled="inProgress || !dirty">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true" ng-show="inProgress"></i>
+                                        <span translate>Submit</span>
+                                    </button>
+                                </div>
+
+                                <div class="d4c-message-box d4c-message-box--error" ng-show="error"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>{{ error }}</div>
+                                <div class="d4c-message-box d4c-message-box--success" ng-show="success"><i class="fa fa-check" aria-hidden="true"></i> {{ success }}</div>
+                            </form>
+
+                            <div class="d4c-dataset-reuses__login-required" ng-hide="submitAllow">
+                                <span translate>Please <a href="/user/login/">login</a> to submit a new reuse.</span>
+                            </div>
+                        </div>
+                    </d4c-collapsible-fold>
+                </d4c-collapsible>
+            </div>
+        </d4c-collapsible-fold>
+    </d4c-collapsible>
+</div>

@@ -1,0 +1,281 @@
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
+<div class="d4c-mapbuilder__marker-configuration" ng-show="layerStatistics.count|isDefined">
+    <div class="d4c-mapbuilder__layer-configuration__section">
+        <h2 class="d4c-mapbuilder__layer-configuration__section-title">
+            <span translate>Marker display</span>
+            <i translate="d4c-tooltip"
+               d4c-tooltip="Dots are recommended for high density datasets. Icons and marker are recommended for low density datasets."
+               d4c-tooltip-direction="bottom"
+               class="fa fa-question-circle"></i>
+        </h2>
+
+        <fieldset>
+
+            <div class="d4c-form__group d4c-form__group--horizontal" ng-if="layerStatistics.hasPoints">
+                <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration"
+                       translate>Display</legend>
+                <div class="d4c-form__vertical-controls">
+                    <div class="d4c-form__check-line">
+                        <label class="d4c-form__check-label">
+                            <input class="d4c-form__control-check"
+                                   type="radio"
+                                   name="marker-configuration-choice"
+                                   ng-model="choice"
+                                   ng-change="selectChoice(choice)" value="dot">
+                            <span class="d4c-mapbuilder__marker-configuration__choice-name" translate>Dot</span>
+                            <d4c-map-picto class="d4c-mapbuilder__marker-configuration__choice-preview"
+                                           classes="\'chosen-picto \'"
+                                           name="dot"></d4c-map-picto>
+                        </label>
+                    </div>
+                    <div class="d4c-form__check-line">
+                        <label class="d4c-form__check-label">
+                            <input class="d4c-form__control-check"
+                                   type="radio"
+                                   name="marker-configuration-choice"
+                                   ng-model="choice"
+                                   ng-change="selectChoice(choice)"
+                                   value="icon">
+                            <span class="d4c-mapbuilder__marker-configuration__choice-name" translate>Icon</span>
+                            <d4c-map-picto class="d4c-mapbuilder__marker-configuration__choice-preview"
+                                           classes="\'chosen-picto \'"
+                                           name="{{ savedIcon }}"></d4c-map-picto>
+                        </label>
+                    </div>
+                    <div class="d4c-form__check-line">
+                        <label class="d4c-form__check-label">
+                            <input class="d4c-form__control-check"
+                                   type="radio"
+                                   name="marker-configuration-choice"
+                                   ng-model="choice"
+                                   ng-change="selectChoice(choice)"
+                                   value="marker">
+                            <span class="d4c-mapbuilder__marker-configuration__choice-name" translate>Map marker</span>
+                            <i class="d4cui-marker_size_max d4c-mapbuilder__marker-configuration__choice-preview"></i>
+                            <div class="d4c-mapbuilder__marker-configuration__choice-name__information" translate>
+                                (with an optional icon)
+                            </div>
+
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <div class="d4c-message-box d4c-mapbuilder__layer-configuration__message" ng-if="!layerStatistics.hasPoints" translate>
+            No points are available in this dataset.
+        </div>
+    </div>
+
+    <!-- Shapes and marker styles styles -->
+    <div class="d4c-mapbuilder__layer-configuration__section">
+        <h2 class="d4c-mapbuilder__layer-configuration__section-title" ng-if="layerStatistics.hasShapes" translate>
+            Shapes
+            style</h2>
+        <h2 class="d4c-mapbuilder__layer-configuration__section-title"
+            ng-if="!layerStatistics.hasShapes && choice === 'dot'"
+            translate>Dots style</h2>
+        <h2 class="d4c-mapbuilder__layer-configuration__section-title"
+            ng-if="!layerStatistics.hasShapes && choice === 'icon'"
+            translate>Icons style</h2>
+        <h2 class="d4c-mapbuilder__layer-configuration__section-title"
+            ng-if="!layerStatistics.hasShapes && choice === 'marker'"
+            translate>Markers style</h2>
+        <fieldset ng-if="layerStatistics.hasPoints && showPictoPicker">
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Icon</legend>
+                <d4c-pictopicker ng-model="layer.picto"></d4c-pictopicker>
+            </div>
+        </fieldset>
+        <fieldset ng-if="layerStatistics.hasPoints">
+            <div class="d4c-form__group d4c-form__group--horizontal" >
+                <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Size</legend>
+                <div class="d4c-form__vertical-controls">
+                    <d4c-range-input ng-model="layer.size"
+                                     ng-model-options="{ debounce: 500 }"
+                                     min="1"
+                                     max="10"
+                                     editable-value="true"
+                                     icon-min="d4cui-dot_size_small"
+                                     icon-max="d4cui-dot_size_big"
+                                     aria-label-text="Size"
+                                     translate="aria-label-text"></d4c-range-input>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset ng-if="layerStatistics.hasPoints">
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Point
+                    opacity</legend>
+                <div class="d4c-form__vertical-controls">
+                    <d4c-range-input ng-model="layer.pointOpacity"
+                                     ng-model-options="{ debounce: 500 }"
+                                     min="0"
+                                     max="1"
+                                     step="0.1"
+                                     editable-value="true"
+                                     icon-min="d4cui-dot_opacity_mini"
+                                     icon-max="d4cui-dot_opacity_max"
+                                     aria-label-text="Point opacity"
+                                     translate="aria-label-text"></d4c-range-input>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset  ng-if="layerStatistics.hasShapes">
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Shape
+                    opacity</legend>
+                <div class="d4c-form__vertical-controls">
+                    <d4c-range-input ng-model="layer.shapeOpacity"
+                                     ng-model-options="{ debounce: 500 }"
+                                     min="0"
+                                     max="1"
+                                     step="0.1"
+                                     editable-value="true"
+                                     icon-min="d4cui-dot_opacity_mini"
+                                     icon-max="d4cui-dot_opacity_max"
+                                     aria-label-text="Shape opacity"
+                                     translate="aria-label-text"></d4c-range-input>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset ng-if="layerStatistics.hasLines">
+            <div class="d4c-form__group d4c-form__group--horizontal" >
+                <label class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Line thickness</label>
+                <div class="d4c-form__vertical-controls">
+                    <d4c-range-input ng-model="layer.lineWidth"
+                                     ng-model-options="{ debounce: 500 }"
+                                     min="1"
+                                     max="10"
+                                     step="1"
+                                     editable-value="true"
+                                     icon-min="d4cui-dot_thickness_mini"
+                                     icon-max="d4cui-dot_thickness_max"
+                                     aria-label-text="Line thickness"
+                                     translate="aria-label-text"></d4c-range-input>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset ng-if="layer.display !== 'categories' && layer.display !== 'choropleth' ">
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Color</legend>
+                <d4c-colorpicker ng-model="layer.color"
+                                 required="true"></d4c-colorpicker>
+            </div>
+        </fieldset >
+
+        <!-- Custom marker color options for categories -->
+        <fieldset ng-if="layer.display === 'categories'">
+            <div class="d4c-form__group d4c-form__group--horizontal">
+                <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Palette</legend>
+                <div class="d4c-form__vertical-controls">
+                    <div class="d4c-form__check-line">
+                        <label class="d4c-form__check-label">
+                            <input class="d4c-form__control-check" type="radio" name="categories-type"
+                                   ng-model="layer.color.type" value="categories">
+                            <span translate>Custom palette based on a field's values</span>
+                        </label>
+                    </div>
+                    <div class="d4c-form__check-line">
+                        <label class="d4c-form__check-label">
+                            <input class="d4c-form__control-check" type="radio" name="categories-type"
+                                   ng-model="layer.color.type" value="field">
+                            <span translate>Generated with colors contained in a field</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset ng-if="layer.display === 'categories'">
+            <div class="d4c-form__group d4c-form__group--horizontal" >
+                <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Field</legend>
+                <d4c-mapbuilder-color-categories
+                        layer="layer"
+                        ng-if="layer.color.type === 'categories'"></d4c-mapbuilder-color-categories>
+                <select ng-options="field.name as field.label for field in textFields"
+                        class="d4c-form__control"
+                        ng-model="layer.color.field"
+                        ng-if="layer.color.type === 'field'"></select>
+
+            </div>
+        </fieldset>
+
+        <!-- Custom marker color options for choropleth -->
+        <fieldset ng-if="layer.display === 'choropleth'">
+            <div class="d4c-form__group d4c-form__group--horizontal" >
+                <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Palette</legend>
+                <!--
+                <select class="d4c-form__control"
+                        ng-options="field.name as field.label for field in numFields"
+                        ng-model="layer.color.field"></select>
+                -->
+                <d4c-mapbuilder-color-choropleth layer="layer" fields="numFields"></d4c-mapbuilder-color-choropleth>
+
+            </div>
+        </fieldset>
+    </div>
+
+    <!-- Borders styles -->
+    <div class="d4c-mapbuilder__layer-configuration__section">
+        <h2 class="d4c-mapbuilder__layer-configuration__section-title" translate>Shapes border</h2>
+
+        <div ng-if="layerStatistics.hasShapes">
+            <fieldset>
+                <div class="d4c-form__group d4c-form__group--horizontal">
+                    <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Pattern</legend>
+                    <div class="d4c-form__vertical-controls">
+                        <d4c-select choices="borderPatterns" aria-label-text="Pattern" translate="aria-label-text" ng-model="layer.borderPattern"></d4c-select>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="d4c-form__group d4c-form__group--horizontal">
+                    <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration"
+                           translate>Thickness</legend>
+                    <div class="d4c-form__vertical-controls">
+                        <d4c-range-input ng-model="layer.borderSize"
+                                         ng-model-options="{ debounce: 500 }"
+                                         min="0"
+                                         max="5"
+                                         editable-value="true"
+                                         icon-min="d4cui-dot_thickness_mini"
+                                         icon-max="d4cui-dot_thickness_max"
+                                         aria-label-text="Shapes border size"
+                                         translate="aria-label-text"></d4c-range-input>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="d4c-form__group d4c-form__group--horizontal">
+                    <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate>Opacity</legend>
+                    <div class="d4c-form__vertical-controls">
+                        <d4c-range-input ng-model="layer.borderOpacity"
+                                         ng-model-options="{ debounce: 500 }"
+                                         min="0"
+                                         max="1"
+                                         step="0.1"
+                                         editable-value="true"
+                                         icon-min="d4cui-dot_border_opacity_mini"
+                                         icon-max="d4cui-dot_border_opacity_max"
+                                         aria-label-text="Shapes border opacity"
+                                         translate="aria-label-text"></d4c-range-input>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="d4c-form__group d4c-form__group--horizontal">
+                    <legend class="d4c-form__label d4c-form__label--mapbuilder-layer-configuration" translate >Color</legend>
+                    <d4c-colorpicker ng-model="layer.borderColor"
+                                     aria-label-text="Shapes color"
+                                     required="true"></d4c-colorpicker>
+                </div>
+            </fieldset>
+        </div>
+        <div ng-if="!layerStatistics.hasShapes" class="d4c-message-box d4c-mapbuilder__layer-configuration__message" translate>
+            No shapes are available in this dataset.
+        </div>
+    </div>
+</div>
