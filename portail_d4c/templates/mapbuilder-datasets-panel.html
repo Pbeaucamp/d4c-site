@@ -1,9 +1,9 @@
+<div class="d4c-mapbuilder__datasets-panel">
 <!--
 MIT Licence
 ods-widgets -- https://github.com/opendatasoft/ods-widgets
 Copyright (c) 2014 - Opendatasoft
 -->
-<div class="d4c-mapbuilder__datasets-panel">
 
     <!-- There are already configured dataset -->
     <div ng-if="mapConfig.value.groups.length > 0 && !editing"
@@ -96,9 +96,8 @@ Copyright (c) 2014 - Opendatasoft
                 d4c-dataset-selection-centralstore-disabled="false"
                 d4c-dataset-selection-related-domains-disabled="true"
                 d4c-dataset-selection-filtering-enabled="true">
-            <d4c-picto url="'/sites/default/files/api/portail_d4c/img/add_dataset_to_basemap.svg'"
-                       classes="'d4c-mapbuilder__add-first-dataset-button__image'"></d4c-picto>
-            <span translate>Add a dataset to this map</span>
+            <i class="d4cui-add" aria-hidden="true" style="font-size: 21px;vertical-align: middle;"></i>
+            <span translate>Add a data layer</span>
         </button>
     </div>
 </div>

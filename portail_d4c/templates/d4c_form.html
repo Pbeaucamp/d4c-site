@@ -1,9 +1,9 @@
+<form class="D4CForm">
 <!--
 MIT Licence
 ods-widgets -- https://github.com/opendatasoft/ods-widgets
 Copyright (c) 2014 - Opendatasoft
 -->
-<form class="D4CForm">
     <div ng-repeat="field in formDefinition" ng-hide="field.advanced &amp;&amp; !showAdvanced || field.hidden" ng-if="(!field.depends_on) || field.depends_on_value.indexOf(model[field.depends_on]) !== -1">
         <d4c-form-field d4c-form-id="form_id" addentrylabel="field.addentrylabel" ng-if="!overrideModel || !isOverridden(field)" model="model" field="field" values-language="valuesLanguage" ng-class="{&#39;required&#39;: field.is_mandatory, &#39;error&#39;: errors[field.name]}" d4c-disabled="overrideModel || field.disabled" context="context"></d4c-form-field>
         <d4c-form-field d4c-form-id="form_id" addentrylabel="field.addentrylabel" ng-if="overrideModel &amp;&amp; isOverridden(field)" model="overrideModel" field="field" values-language="valuesLanguage" ng-class="{&#39;required&#39;: field.is_mandatory, &#39;error&#39;: errors[field.name]}" context="context"></d4c-form-field>

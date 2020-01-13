@@ -507,6 +507,12 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				"Add a dataset to this map": {
 					"$$noContext": "Ajouter un jeu de données à cette carte"
 				},
+				"Add a data layer": {
+					"$$noContext": "Ajouter une couche de données"
+				},
+				"Add a data serie": {
+					"$$noContext": "Ajouter une série de données"
+				},
 				"Add a page": {
 					"$$noContext": "Ajouter une page"
 				},

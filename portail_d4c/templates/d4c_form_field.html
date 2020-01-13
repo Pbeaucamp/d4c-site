@@ -1,9 +1,9 @@
+<div class="D4CFormItem">
 <!--
 MIT Licence
 ods-widgets -- https://github.com/opendatasoft/ods-widgets
 Copyright (c) 2014 - Opendatasoft
 -->
-<div class="D4CFormItem">
     <label class="D4CFormLabel" for="{{ id }}" ng-class="{&#39;overridden&#39;: isOverridden(), &#39;listlabel&#39;: !isOverriden() &amp;&amp; field.type === &#39;objectlist&#39;}" ng-if="(field.type === &#39;boolean&#39;) || field.label || isOverridable()">
         <input ng-if="field.type === &#39;boolean&#39;" id="{{ id }}" ng-model="model[field.name]" type="checkbox" ng-required="field.is_mandatory">
         {{ field.label|translate }}
