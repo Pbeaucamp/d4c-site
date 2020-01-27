@@ -1152,7 +1152,7 @@ SOFTWARE.*/
 
     function initializeMap(element, MapHelper, D4CWidgetsConfig, customOptions) {
         var map = new L.D4CMap(element, customOptions);
-        var defaultLoc = MapHelper.getLocationStructure(D4CWidgetsConfig.defaultMapLocation);
+        var defaultLoc = MapHelper.getLocationStructure(D4CWidgetsConfig.defaultMapLocation());
         map.setView(defaultLoc.center, defaultLoc.zoom);
         return map;
     }
@@ -9873,7 +9873,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 		//url: "/api/maps/layers/?type=tile",
 		url: "/api/maps/layers/",
 		success: function(result){
-			D4C.basemaps = result;
+			D4C.basemaps = result.layers;
+			D4C.default_bbox = result.default_bbox;
 			/*console.log(D4CWidgetsConfigProvider.customConfig);
 			D4CWidgetsConfigProvider.setConfig({
 				basemaps: result
@@ -13238,12 +13239,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         }
                     });
                     map.addControl(drawControl);
-                    if (angular.isDefined(D4CWidgetsConfig.defaultMapLocation)) {
-                        var loc = MapHelper.getLocationStructure(D4CWidgetsConfig.defaultMapLocation);
+                    //if (angular.isDefined(D4CWidgetsConfig.defaultMapLocation)) {
+                        var loc = MapHelper.getLocationStructure(D4CWidgetsConfig.defaultMapLocation());
                         map.setView(loc.center, loc.zoom);
-                    } else {
-                        map.setView([0, 0], 0);
-                    }
+                    //} else {
+                    //    map.setView([0, 0], 0);
+                    //}
                     var clearLayers = function () {
                         if (drawnItems.getLayers().length > 0) {
                             drawnItems.removeLayer(drawnItems.getLayers()[0]);
@@ -18246,7 +18247,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     if (bounds) {
                                         scope.map.fitBounds(bounds);
                                     } else {
-                                        var loc = MapHelper.getLocationStructure(D4CWidgetsConfig.defaultMapLocation);
+                                        var loc = MapHelper.getLocationStructure(D4CWidgetsConfig.defaultMapLocation());
                                         scope.map.setView(loc.center, loc.zoom);
                                     }
                                     refreshData(false);

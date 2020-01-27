@@ -108,9 +108,12 @@ d4c.config(function (D4CWidgetsConfigProvider, ModuleLazyLoaderProvider) {
 		url: "/api/maps/layers/", 
 		success: function(result){
 			try{
-				D4C.basemaps = JSON.parse(result);
+				var res = JSON.parse(result);
+				D4C.basemaps = res.layers;
+				D4C.default_bbox = res.default_bbox;
 			} catch(e){
-				D4C.basemaps = result;
+				D4C.basemaps = result.layers;
+				D4C.default_bbox = result.default_bbox;
 			}
 			/*console.log(D4CWidgetsConfigProvider.customConfig);
 			D4CWidgetsConfigProvider.setConfig({
@@ -211,7 +214,9 @@ d4c.config(function (D4CWidgetsConfigProvider, ModuleLazyLoaderProvider) {
 		//defaultMapLocation: "9,46.14559,-1.10138", //La Rochelle
 		//defaultMapLocation: "12,48.85218,2.36996", //Paris
 		//defaultMapLocation: "1,37.16032,-49.21875", //Monde
-		defaultMapLocation: "5,46.85218,2.36996",  //France
+		//defaultMapLocation: "5,46.85218,2.36996",  //France
+		//defaultMapLocation: "11,48.68958,6.18517",  //Nancy
+		defaultMapLocation: function(){ return (D4C.default_bbox != null )? D4C.default_bbox : "5,46.85218,2.36996";},
 		appendedURLQuerystring: ""
 	});
 	var loadingConfig = ModuleLazyLoaderProvider.getConfig();
