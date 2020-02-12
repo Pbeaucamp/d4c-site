@@ -4336,7 +4336,7 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
                     return APIXHRService("GET", API_PATH + 'datasets/1.0/search/', timezoneAwareOptions(options), customHeaders);
                 },
                 'attachmentURL': function (attachment) {
-                    return API_PATH + 'datasets/1.0/' + config.DATASET_ID + '/attachments/' + attachment.id + '/';
+                    return API_PATH + 'datasets/1.0/' + config.ID_DATASET + '/attachments/' + attachment.id + '/';
                 },
                 'feedback': function (datasetId, data) {
                     return APIXHRService('POST', API_PATH + 'datasets/1.0/' + datasetId + '/feedback/', data);
@@ -4637,12 +4637,12 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
         var API_PATH = '/api/datasets/1.0/';
         return {
             'list': function () {
-                return APIXHRService('GET', API_PATH + config.DATASET_ID + '/reuses/', {});
+                return APIXHRService('GET', API_PATH + config.ID_DATASET + '/reuses/', {});
             },
             'save': function (data) {
-                return APIXHRService('POST', API_PATH + config.DATASET_ID + '/reuses/', data);
+                return APIXHRService('POST', API_PATH + config.ID_DATASET + '/reuses/', data);
             },
-            'save_url': API_PATH + config.DATASET_ID + '/reuses/'
+            'save_url': API_PATH + config.ID_DATASET + '/reuses/'
         };
     }]);
     app.factory("DebugLogger", ['$window', 'config', function ($window, config) {

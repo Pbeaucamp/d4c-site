@@ -56,8 +56,8 @@ Copyright (c) 2014 - Opendatasoft
             </li>
         </ul>
 
-        <h3 ng-if="context.dataset.features.indexOf('calendar') > -1"><span translate>Specialized formats</span></h3>
-        <ul class="d4c-dataset-export__format-choices" ng-if="context.dataset.features.indexOf('calendar') > -1">
+        <h3 ng-if="context.dataset.features.indexOf('calendar') > -1 && false"><span translate>Specialized formats</span></h3>
+        <ul class="d4c-dataset-export__format-choices" ng-if="context.dataset.features.indexOf('calendar') > -1 && false">
             <li class="d4c-dataset-export__format-choice">
                 <div d4c-dataset-export-link export-parameters="exportParameters" format-label="iCalendar" format-extension="ics" context="context" nhits="context.nhits" ></div>
             </li>
