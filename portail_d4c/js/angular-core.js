@@ -20583,6 +20583,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     tr.appendChild(td);
                     for (var j = 0; j < datasetFields.length; j++) {
                         var field = datasetFields[j];
+						if(field.type == 'geo_point_2d') {
+							var valcoord = record.fields[field.name];
+							record.fields[field.name] = valcoord.split(', ');
+						}
                         var fieldValue = $filter('formatFieldValue')(record.fields, field, $scope.context);
                         td = document.createElement('td');
                         td.className = 'd4cwidget-table__cell';
