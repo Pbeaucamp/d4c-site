@@ -20585,7 +20585,16 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         var field = datasetFields[j];
 						if(field.type == 'geo_point_2d') {
 							var valcoord = record.fields[field.name];
-							record.fields[field.name] = valcoord.split(', ');
+							if (valcoord.includes(';')) {
+								var coords = valcoord.split(';');
+								coords.map(coord => coord.trim());
+								record.fields[field.name] = coords;
+							}
+							else if (valcoord.includes(',')) {
+								var coords = valcoord.split(',');
+								coords.map(coord => coord.trim());
+								record.fields[field.name] = coords;
+							}
 						}
                         var fieldValue = $filter('formatFieldValue')(record.fields, field, $scope.context);
                         td = document.createElement('td');
