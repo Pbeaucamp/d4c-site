@@ -23234,7 +23234,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             return;
                         }
                         format = format || 'csv';
-                        var url = this.domainUrl + '/explore/dataset/' + this.dataset.datasetid + '/download/?format=' + format;
+                        //var url = this.domainUrl + '/explore/dataset/' + this.dataset.datasetid + '/download/?format=' + format;
+						var url = 'api/records/2.0/downloadfile/format=' + format;
+						url += '&resource_id=' + this.dataset.resourceCSVid;
                         url += this.getQueryStringURL(parameters);
                         return url;
                     },
