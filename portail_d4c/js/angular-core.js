@@ -6389,6 +6389,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if (scope.defaultColor) {
                         return scope.defaultColor.toUpperCase();
                     }
+					else {
+						return "#000000";
+					}
                 };
                 scope.selectNiceColor = function (val) {
                     scope.selectedColor = val;
@@ -10678,7 +10681,13 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 						let monthT=dateTimeTL.getMonth()+ 1;
 						let yearT=dateTimeTL.getFullYear();
 						 
-						dateTimeTL=yearT+'/'+monthT+'/'+dayT;
+						// dateTimeTL=yearT+'/'+monthT+'/'+dayT;
+						if(monthT < 10) {
+							dateTimeTL=dayT+'/0'+monthT+'/'+yearT;
+						}
+						else {
+							dateTimeTL=dayT+'/'+monthT+'/'+yearT;
+						}
 				 
 						if(a%2==0){
 							$('#timenil').append('<div class="timenil-node"><div class="timenil-node-child-left timenil-node-child-left-theme"><div class="timenil-content-box"> <div class="timenil-content-text" >'+'<div class="timeline-img-header"  style="'+style_img+' background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0, .4)), url('+data.records[a][columns.image_url]+') center center no-repeat; background-size: cover;"><h2>'+data.records[a][columns.title]+'</h2></div><p>'+info+'</p><a class="bnt-more" target="_blank" href="'+url_plus+'">En savoir plus <i class="fa fa-external-link" aria-hidden="true"></i></a> </div></div></div><div class="timenil-node-center"></div><div class="timenil-node-trace"></div><div class="timenil-node-child-right"><div class="timenil-content-box"> <div class="timenil-content-text"><p> <h1>'+dateTimeTL+'</h1></p></div></div></div><br></div>');
@@ -22097,6 +22106,15 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 					var p = JSON.stringify(parameters);
 					p = p.replace(/\//g, "_slash_");
 					parameters = JSON.parse(p);
+					
+					for (var prop in parameters) { 
+						if(prop.startsWith('refine')) {
+							if(parameters[prop].includes('+')) {
+								parameters[prop] = parameters[prop].replace('+', '_plussign_');
+							}
+						}
+					}
+					
 					if(context.name != "externalcontext"){
 						return request(context, '/api/records/1.0/download/', angular.extend({}, parameters, {
 							resource_id: context.dataset.resourceCSVid
