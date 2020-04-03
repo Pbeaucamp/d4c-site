@@ -6389,9 +6389,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if (scope.defaultColor) {
                         return scope.defaultColor.toUpperCase();
                     }
-					else {
-						return "#000000";
-					}
+					// else {
+						// return undefined;
+					// }
                 };
                 scope.selectNiceColor = function (val) {
                     scope.selectedColor = val;
