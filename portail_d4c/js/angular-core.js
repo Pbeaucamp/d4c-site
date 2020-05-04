@@ -1867,7 +1867,10 @@ function fireDOMEvent(element, eventName) {
                 if (type === 'date') {
                     input = $filter('moment')(input, 'LL');
                 } else if (type === 'datetime') {
-                    input = $filter('moment')(input, 'LLL');
+                    input = moment.utc(input);
+                    input = moment(input).local().format('LLL');
+                    // input = test;
+                    // input = moment($test).local().format('LLL');
                 }
             } else {
                 input = input.toString();

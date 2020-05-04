@@ -7119,6 +7119,9 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				},
 				"← or → to reorder<br>space or ↵ to add/remove": {
 					"$$noContext": "← ou → pour réordonner<br>espace ou ↵ pour ajouter/supprimer"
+				},
+				"Dataset date": {
+					"$$noContext": "Date du jeu de données"
 				}
 			};
 			var current_language = "fr";
