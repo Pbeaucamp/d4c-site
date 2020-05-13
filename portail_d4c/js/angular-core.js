@@ -33091,9 +33091,24 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                     return field.label;
                 },
                 getFieldsForType: function (fieldType) {
+                    //If the type is geo_point_2d
+                    //We send back the field with annotation == is_geoloc if it exist, if not we send back the first geoloc field
                     var fields = [];
+                    if (fieldType === 'geo_point_2d') {
+
+                        for (var i = 0; i < this.fields.length; i++) {
+                            var field = this.fields[i];
+                            if (!(field.annotations  === undefined) && field.annotations[0].name === 'is_geoloc') {
+                                fields.push(field);
+                                return fields;
+                            }
+                        }
+
+                    }
+
                     for (var i = 0; i < this.fields.length; i++) {
                         var field = this.fields[i];
+
                         if (field.type === fieldType) {
                             fields.push(field);
                         }
