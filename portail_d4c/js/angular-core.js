@@ -33094,21 +33094,22 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                     //If the type is geo_point_2d
                     //We send back the field with annotation == is_geoloc if it exist, if not we send back the first geoloc field
                     var fields = [];
-                    if (fieldType === 'geo_point_2d') {
 
-                        for (var i = 0; i < this.fields.length; i++) {
-                            var field = this.fields[i];
-                            if (!(field.annotations  === undefined) && field.annotations[0].name === 'is_geoloc') {
-                                fields.push(field);
-                                return fields;
-                            }
-                        }
+                    // It is not good for now, we disable it. We choosed to create the geolocalisation column in the first column of the file to be choosed over an other column with geo_point_2d
+                    // if (fieldType === 'geo_point_2d') {
 
-                    }
+                    //     for (var i = 0; i < this.fields.length; i++) {
+                    //         var field = this.fields[i];
+                    //         if (!(field.annotations  === undefined) && field.annotations[0].name === 'is_geoloc') {
+                    //             fields.push(field);
+                    //             return fields;
+                    //         }
+                    //     }
+
+                    // }
 
                     for (var i = 0; i < this.fields.length; i++) {
                         var field = this.fields[i];
-
                         if (field.type === fieldType) {
                             fields.push(field);
                         }
