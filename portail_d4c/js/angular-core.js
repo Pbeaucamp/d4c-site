@@ -23776,8 +23776,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             layer.marker = true;
                         }
                     }
-                    layer.color = layer.color || layer.context.dataset.getExtraMeta('visualization', 'map_marker_color') || defaultMarkerColor;
-                    layer.picto = layer.picto || layer.context.dataset.getExtraMeta('visualization', 'map_marker_picto') || (layer.marker ? "d4c-circle" : "dot");
+                    layer.color = layer.context.dataset.getExtraMeta('visualization', 'map_marker_color') || layer.color || defaultMarkerColor;
+                    layer.picto = layer.context.dataset.getExtraMeta('visualization', 'map_marker_picto') || layer.picto || (layer.marker ? "d4c-circle" : "dot");
                     if (layer.marker) {
                         layer.size = layer.size || 4;
                     } else {
