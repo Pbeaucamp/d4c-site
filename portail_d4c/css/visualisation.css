@@ -2864,6 +2864,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Ar
 .d4c-content{min-height:100%}
 .d4c-content:after{content:"";display:block}
 main{min-height:calc(100% - 60px - 40px);height:auto;margin:20px 10px}
+.leaflet-draw {display: initial !important;}
 
 #disqus_thread{margin-top: 20px;padding: 0 20px;background-color: white;}
 .js-open-modal[data-parameters='{}'] .fa-filter {color: black!important;}
