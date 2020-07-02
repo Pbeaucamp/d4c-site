@@ -826,7 +826,7 @@ SOFTWARE.
                 $scope.fetchLayerStatistics = function() {
                     var calls = [D4CAPI.records.boundingbox($scope.layer.context, $scope.layer.context.parameters)];
                     if ($scope.layer.context.dataset.hasFieldType('geo_shape')) {
-                        calls.push(D4CAPI.records.geopolygon($scope.layer.context, $scope.layer.context.parameters));
+                        //calls.push(D4CAPI.records.geopolygon($scope.layer.context, $scope.layer.context.parameters));
                     }
                     $q.all(calls).then(function(results) {
                         var bboxResult = results[0].data;
