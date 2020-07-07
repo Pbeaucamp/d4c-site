@@ -9585,6 +9585,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     } else {
                         var urlParts = parseUrl(url).pathname.split('/');
                         paneSlug = urlParts[urlParts.length - 2];
+                        paneSlug = decodeURIComponent(paneSlug);
                     }
                     angular.forEach($scope.panes, function (p) {
                         if (!pane && paneSlug === p.slug) {

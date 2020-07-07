@@ -721,11 +721,11 @@ function createDataset(data){
 						let titleCustomView = data.metas.custom_view.title;
 						// let custom_view_vis;
 						if (titleCustomView) {
-							let custom_view_vis = '<p><a href="/visualisation/'+data.metas.custom_view.slug+'/?id='+id+'"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>'+titleCustomView+'</a></p>';
+							let custom_view_vis = '<p><a href="/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>'+titleCustomView+'</a></p>';
 							vis = custom_view_vis;
 						}
 						else {
-							let custom_view_vis = '<p><a href="/visualisation/'+data.metas.custom_view.slug+'/?id='+id+'"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>Vue personnalisée</a></p>';
+							let custom_view_vis = '<p><a href="/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>Vue personnalisée</a></p>';
 							vis = custom_view_vis;
 						}
 						break;
