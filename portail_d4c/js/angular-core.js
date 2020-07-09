@@ -24972,7 +24972,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                     for (var i = 0; i < data.length; i++) {
                         shape = data[i];
-                        if (shape.geometry.type === 'Point') {
+                        if (shape.geometry != null && shape.geometry.type === 'Point') {
                             MapLayerHelper.drawPoint(layerConfig, map, [shape.geometry.coordinates[1], shape.geometry.coordinates[0]], null, layerGroup, shape.geo_digest);
                         } else {
                             MapLayerHelper.drawShape(layerConfig, map, shape.geometry, null, layerGroup, shape.geo_digest);
