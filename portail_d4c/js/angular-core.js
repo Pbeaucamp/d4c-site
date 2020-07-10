@@ -17723,7 +17723,45 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 					}
                     $templateCache.put('custom-tooltip-' + scope.context.dataset.datasetid, attrs.template);
                 } else {
-                    $templateCache.put('default-tooltip', '<div class="infoPaneLayout">' + '<h2 class="d4cwidget-map-tooltip__header" ng-show="!!getTitle(record)">' + '   <span ng-bind="getTitle(record) | shortSummary: 100"></span> ' + '</h2>' + '<dl class="d4cwidget-map-tooltip__record-values">' + '    <dt ng-repeat-start="field in context.dataset.fields|fieldsForVisualization:\'map\'|fieldsFilter:context.dataset.extra_metas.visualization.map_tooltip_fields" ' + '        ng-show="record.fields[field.name]|isDefined"' + '        class="d4cwidget-map-tooltip__field-name">' + '        {{ field.label }}' + '    </dt>' + '    <dd ng-repeat-end ' + '        ng-switch="field.type" ' + '        ng-show="record.fields[field.name]|isDefined"' + '        class="d4cwidget-map-tooltip__field-value">' + '        <span ng-switch-when="geo_point_2d">' + '            <d4c-geotooltip width="300" height="300" coords="record.fields[field.name]">{{ record.fields|formatFieldValue:field:context }}</d4c-geotooltip>' + '        </span>' + '        <span ng-switch-when="geo_shape">' + '            <d4c-geotooltip width="300" height="300" geojson="record.fields[field.name]">{{ record.fields|formatFieldValue:field:context }}</d4c-geotooltip>' + '        </span>' + '        <span ng-switch-when="file">' + '            <div ng-if="!context.dataset.isFieldAnnotated(field, \'has_thumbnails\')" ng-bind-html="record.fields|formatFieldValue:field:context"></div>' + '            <div ng-if="context.dataset.isFieldAnnotated(field, \'has_thumbnails\')" ng-bind-html="record.fields[field.name]|displayImageValue:context.dataset.datasetid" style="text-align: center;"></div>' + '        </span>' + '        <span ng-switch-default title="{{record.fields|formatFieldValue:field:context}}" ng-bind-html="record.fields|formatFieldValue:field|imagify|videoify|prettyText|nofollow"></span>' + '    </dd>' + '</dl>' + '</div>');
+
+                    /* get checkbox value to disable the empty values or not */
+                    var metas_extras = scope.context.dataset.metas.extras;
+                    var emptyfieldsboolean = "";
+                    for (var i = 0; i < metas_extras.length; i++) {
+                            if( metas_extras[i]["key"] == "disable_fields_empty") {
+                               
+                                emptyfieldsboolean = metas_extras[i]["value"];
+                                break;
+                            }
+                        
+                    }
+
+                    $templateCache.put('default-tooltip', '<div class="infoPaneLayout">' +
+                     '<h2 class="d4cwidget-map-tooltip__header" ng-show="!!getTitle(record)">' +
+                      '   <span ng-bind="getTitle(record) | shortSummary: 100"></span> ' + 
+                      '</h2>' +
+                       '<dl class="d4cwidget-map-tooltip__record-values">' +
+                     '   <dt ng-repeat-start="field in context.dataset.fields|fieldsForVisualization:\'map\'|fieldsFilter:context.dataset.extra_metas.visualization.map_tooltip_fields" '
+                      +'ng-show="record.fields[field.name]|isDefined" ' + 
+                      '        class="d4cwidget-map-tooltip__field-name" >' + 
+                            ((emptyfieldsboolean == 1)?
+                            ' <span ng-hide=" record.fields[field.name]== \'\'"> {{ field.label }} </span>' 
+                            :' <span > {{ field.label }} </span>')+ '    </dt>'+
+                       '    <dd ng-repeat-end ' +
+                        '        ng-switch="field.type" ' + 
+                       '        ng-show="record.fields[field.name]|isDefined"' + 
+                       '        class="d4cwidget-map-tooltip__field-value">' + 
+                       '        <span ng-switch-when="geo_point_2d">' + 
+                       '            <d4c-geotooltip width="300" height="300" coords="record.fields[field.name]">'+
+                       '{{ record.fields|formatFieldValue:field:context }}</d4c-geotooltip>' + '        </span>' + 
+                       '<span ng-switch-when="geo_shape">' + 
+'   <d4c-geotooltip width="300" height="300" geojson="record.fields[field.name]">{{ record.fields|formatFieldValue:field:context }}'+
+'</d4c-geotooltip>' +
+                        '        </span>' + 
+                        '<span ng-switch-when="file">' 
+                        + 
+                        ' <div ng-if="!context.dataset.isFieldAnnotated(field, \'has_thumbnails\')" ng-bind-html="record.fields|formatFieldValue:field:context"></div>' 
+                        + '<div ng-if="context.dataset.isFieldAnnotated(field, \'has_thumbnails\')" ng-bind-html="record.fields[field.name]|displayImageValue:context.dataset.datasetid" style="text-align: center;"></div>' + '        </span>' + '        <span ng-switch-default title="{{record.fields|formatFieldValue:field:context}}" ng-bind-html="record.fields|formatFieldValue:field|imagify|videoify|prettyText|nofollow"></span>' + '    </dd>' + '</dl>' + '</div>');
                 }
             },
             controller: ['$scope', '$filter', 'D4CAPI', function ($scope, $filter, D4CAPI) {
