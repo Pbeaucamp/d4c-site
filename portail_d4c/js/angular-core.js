@@ -5777,20 +5777,14 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     this.ctrl = ctrl;
                 };
                 $scope.initColorsCategoryModal = function (field) {
-
-                    console.log("initColorsCategoryModal(query.xAxis)");
-                    console.log(field);
                     $scope.categoryColors = angular.copy($scope.query.categoryColors) || {};
                     $scope.updateCategories(field);
                     $scope.showColorsCategoryModal();
                 };
                 $scope.updateCategories = function (field) {
-
-                    console.log("update categorie");
                     var datasetContext = ContextHelper.getDatasetContext('chartcontext', '', $scope.query.config.dataset, $scope.query.config.options);
                     datasetContext.wait().then(function () {
                         datasetContext.getFacetValues(field).then(function (result) {
-                            console.log(result);
                             result.map(function (item) {
                                 $scope.categoryColors[item] = $scope.categoryColors[item] || '';
                             });
@@ -5803,19 +5797,13 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     });
                 };
                 $scope.apply = function () {
-
-                    console.log("apply");
                     var cleanupCategoryColors = {};
-
-                    console.log($scope.categoryColors);
                     for (var key in $scope.categoryColors) {
                         if ($scope.categoryColors[key]) {
                             cleanupCategoryColors[key] = $scope.categoryColors[key];
                         }
                     }
-
                     $scope.query.categoryColors = cleanupCategoryColors;
-                    console.log($scope.query.categoryColors);
                     $scope.hideColorsCategoryModal();
                 }
             },
@@ -6388,9 +6376,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         }
                     }
                 });
-                var template = '<div class="d4c-color-picker__button">' + 
-                '   <span class="d4c-form__addon-wrapper">' + '       <input type="text"' + 
-                '              class="d4c-form__control d4c-color-picker__hex-color-input"' + '              ng-model="internalModel"' + '              ng-disabled="ngDisabled"' + '              ng-readonly="ngReadonly"' + '              ng-class="{\'d4c-color-picker__hex-color-input-wrapper--disabled\': ngDisabled}"' + '              ng-click="onTextClick($event)"' + '              maxlength="7"' + '              aria-label="{{inputLabel}}">' + '       <button class="d4c-button d4c-form__addon d4c-color-picker__input-button"' + '               type="button"' + '               ng-click="toggleColorPicker($event)"' + '               ng-disabled="ngDisabled"' + '               ng-readonly="ngReadonly"' + '               aria-label="{{buttonLabel}}">' + '           <div class="d4c-color-picker__color-sample"></div>' + '           <i class="d4cui-bottom d4c-color-picker__input-button-arrow"' + '              ng-readonly="ngReadonly" ></i>' + '       </button>' + '   </span>' + '   <button ng-hide="ngDisabled||ngReadonly"' + '           type="button"' + '           class=" d4c-color-picker__reset-button"' + '           ng-click="resetDefaultColor()"' + '           aria-label="Reset value"' + '           translate="aria-label">' + '       <i class="d4cui-reset"></i>' + '   </button>' + '</div>';
+                var template = '<div class="d4c-color-picker__button">' + '   <span class="d4c-form__addon-wrapper">' + '       <input type="text"' + '              class="d4c-form__control d4c-color-picker__hex-color-input"' + '              ng-model="internalModel"' + '              ng-disabled="ngDisabled"' + '              ng-readonly="ngReadonly"' + '              ng-class="{\'d4c-color-picker__hex-color-input-wrapper--disabled\': ngDisabled}"' + '              ng-click="onTextClick($event)"' + '              maxlength="7"' + '              aria-label="{{inputLabel}}">' + '       <button class="d4c-button d4c-form__addon d4c-color-picker__input-button"' + '               type="button"' + '               ng-click="toggleColorPicker($event)"' + '               ng-disabled="ngDisabled"' + '               ng-readonly="ngReadonly"' + '               aria-label="{{buttonLabel}}">' + '           <div class="d4c-color-picker__color-sample"></div>' + '           <i class="d4cui-bottom d4c-color-picker__input-button-arrow"' + '              ng-readonly="ngReadonly" ></i>' + '       </button>' + '   </span>' + '   <button ng-hide="ngDisabled||ngReadonly"' + '           type="button"' + '           class=" d4c-color-picker__reset-button"' + '           ng-click="resetDefaultColor()"' + '           aria-label="Reset value"' + '           translate="aria-label">' + '       <i class="d4cui-reset"></i>' + '   </button>' + '</div>';
                 var pickerButton = angular.element(template);
                 element.replaceWith(pickerButton);
                 pickerButton = $compile(pickerButton)(scope);
@@ -6403,17 +6389,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     required = true;
                 }
                 defaultColor = function () {
-                 
                     if (scope.defaultColor) {
                         return scope.defaultColor.toUpperCase();
                     }
-					else {
-                        
-                        var colonneColorChoice = $(".d4c-color-chooser__current-color").css('backgroundColor');
-                        hexc(colonneColorChoice);
-                         
-						return color;
-					}
+					// else {
+						// return undefined;
+					// }
                 };
                 scope.selectNiceColor = function (val) {
                     scope.selectedColor = val;
@@ -6428,17 +6409,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if (event.keyCode === 13) {
                         scope.changeTab(tab);
                     }
-                };
-                var color = '';
-
-                function hexc(colorval) {
-                      var parts = colorval.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-                      delete(parts[0]);
-                      for (var i = 1; i <= 3; ++i) {
-                        parts[i] = parseInt(parts[i]).toString(16);
-                        if (parts[i].length == 1) parts[i] = '0' + parts[i];
-                      }
-                      color = '#' + parts.join('');
                 };
 
                 function initPickerWindow() {
@@ -20429,29 +20399,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             replace: true,
             transclude: true,
             require: ['?d4cAutoResize', '?autoResize'],
-            template: '<div class="records records-table d4cwidget d4cwidget-table">' + ' <div class="d4cwidget-table__header" ng-show="records.length">' +
-             '     <table class="d4cwidget-table__internal-table">' + '         <thead class="d4cwidget-table__internal-header-table-header">' + 
-             '         <tr>' + 
-             '             <th class="d4cwidget-table__header-cell d4cwidget-table__header-cell--spinner"><div class="d4cwidget-table__cell-container"><d4c-spinner ng-show="fetching" class="d4cwidget-spinner--large"></d4c-spinner></div></th>' +
-              '             <th class="d4cwidget-table__header-cell" ng-repeat="field in context.dataset.fields|fieldsForVisualization:\'table\'|fieldsFilter:displayedFieldsArray"' + '                 title="{{ field.description || field.label }}"' + '                 ng-click="toggleSort(field)"' + '                 >' +
-               '                 <div class="d4cwidget-table__header-cell-container">' + 
-              '                     <div class="d4cwidget-table__label" ng-bind="field.label"></div>' +
-               '                     <div ng-class="{\'d4cwidget-table__sort-icons\': true, \'d4cwidget-table__sort-icons--active\': field.name == context.parameters.sort || \'-\'+field.name == context.parameters.sort}" ng-show="isFieldSortable(field)" title="sort" translate="title">' + '                         <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in ascending order" tabindex="0" translate="aria-label">' + '                            <i class="fa fa-chevron-up d4cwidget-table__sort-icons__up"  ng-class="{\'d4cwidget-table__sort-icons__up--active\': isDescendingSorted(field)}" aria-hidden="true"></i>' + 
-               '                         </button>' + 
-               '                         <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in descending order" tabindex="0" translate="aria-label">' + '                            <i class="fa fa-chevron-down d4cwidget-table__sort-icons__down"  ng-class="{\'d4cwidget-table__sort-icons__down--active\': isAscendingSorted(field)}" aria-hidden="true"></i>' + '                         </button>' + '                     </div>' + '                 </div>' + '             </th>' + '         </tr>' + '         </thead>' + '     </table>' + ' </div>' + ' <div class="d4cwidget-table__records">' + 
-               '     <table class="d4cwidget-table__internal-table" infinite-scroll="loadMore()" infinite-scroll-distance="1" infinite-scroll-disabled="fetching">' +
-                '         <thead class="d4cwidget-table__internal-table-header">' + '             <tr>' + 
-                '                 <th class="d4cwidget-table__header-cell d4cwidget-table__header-cell--spinner"><div class="d4cwidget-table__cell-container"><d4c-spinner ng-show="fetching" class="d4cwidget-spinner--large"></d4c-spinner></div></th>' + '                 <th class="d4cwidget-table__header-cell" ng-repeat="field in context.dataset.fields|fieldsForVisualization:\'table\'|fieldsFilter:displayedFieldsArray"' + '                     title="{{ field.name }}">' + '                     <div class="d4cwidget-table__cell-container">' + 
-                '                         <span ng-bind="field.label"></span>' + '                         <div class="d4cwidget-table__sort-icons" ng-show="isFieldSortable(field)" title="sort" translate="title">' + '                             <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in ascending order" tabindex="0" translate="aria-label">' + '                                <i class="fa fa-chevron-up d4cwidget-table__sort-icons__up" aria-hidden="true"></i>' + '                             </button>' + '                             <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in descending order" tabindex="0" translate="aria-label">' + '                                <i class="fa fa-chevron-down d4cwidget-table__sort-icons__down" aria-hidden="true"></i>' + '                             </button>' + '                         </div>' + '                     </div>' + '                 </th>' + '             </tr>' + '         </thead>' +
-                 '         <tbody class="d4cwidget-table__records-tbody">' + '         </tbody>' + 
-                 '     </table>' + ' </div>' + '<div ng-if="forcedTimezone" class="table-timezone-caption">' + 
-                 '    <i class="fa fa-info" aria-hidden="true"></i>' + '    All dates and times are in {{ forcedTimezone }} time.' +
-                  '</div>' + 
-                  ' <div ng-if="displayDatasetFeedback" class="table-feedback-new"><a d4c-dataset-feedback d4c-dataset-feedback-dataset="context.dataset">'+
-                  '<i class="fa fa-comment" aria-hidden="true"></i> <span translate>Suggest a new record</span></a></div>' + 
-                  ' <div class="d4cwidget-overlay" ng-hide="fetching || records"><span class="d4cwidget-overlay__message" translate>No results</span></div>' + 
-                  ' <div class="d4cwidget-overlay" ng-hide="(!fetching || records) && !working"><d4c-spinner></d4c-spinner></div>' +
-             '</div>',
+            template: '<div class="records records-table d4cwidget d4cwidget-table">' + ' <div class="d4cwidget-table__header" ng-show="records.length">' + '     <table class="d4cwidget-table__internal-table">' + '         <thead class="d4cwidget-table__internal-header-table-header">' + '         <tr>' + '             <th class="d4cwidget-table__header-cell d4cwidget-table__header-cell--spinner"><div class="d4cwidget-table__cell-container"><d4c-spinner ng-show="fetching" class="d4cwidget-spinner--large"></d4c-spinner></div></th>' + '             <th class="d4cwidget-table__header-cell" ng-repeat="field in context.dataset.fields|fieldsForVisualization:\'table\'|fieldsFilter:displayedFieldsArray"' + '                 title="{{ field.description || field.label }}"' + '                 ng-click="toggleSort(field)"' + '                 >' + '                 <div class="d4cwidget-table__header-cell-container">' + '                     <div class="d4cwidget-table__label" ng-bind="field.label"></div>' + '                     <div ng-class="{\'d4cwidget-table__sort-icons\': true, \'d4cwidget-table__sort-icons--active\': field.name == context.parameters.sort || \'-\'+field.name == context.parameters.sort}" ng-show="isFieldSortable(field)" title="sort" translate="title">' + '                         <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in ascending order" tabindex="0" translate="aria-label">' + '                            <i class="fa fa-chevron-up d4cwidget-table__sort-icons__up"  ng-class="{\'d4cwidget-table__sort-icons__up--active\': isDescendingSorted(field)}" aria-hidden="true"></i>' + '                         </button>' + '                         <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in descending order" tabindex="0" translate="aria-label">' + '                            <i class="fa fa-chevron-down d4cwidget-table__sort-icons__down"  ng-class="{\'d4cwidget-table__sort-icons__down--active\': isAscendingSorted(field)}" aria-hidden="true"></i>' + '                         </button>' + '                     </div>' + '                 </div>' + '             </th>' + '         </tr>' + '         </thead>' + '     </table>' + ' </div>' + ' <div class="d4cwidget-table__records">' + '     <table class="d4cwidget-table__internal-table" infinite-scroll="loadMore()" infinite-scroll-distance="1" infinite-scroll-disabled="fetching">' + '         <thead class="d4cwidget-table__internal-table-header">' + '             <tr>' + '                 <th class="d4cwidget-table__header-cell d4cwidget-table__header-cell--spinner"><div class="d4cwidget-table__cell-container"><d4c-spinner ng-show="fetching" class="d4cwidget-spinner--large"></d4c-spinner></div></th>' + '                 <th class="d4cwidget-table__header-cell" ng-repeat="field in context.dataset.fields|fieldsForVisualization:\'table\'|fieldsFilter:displayedFieldsArray"' + '                     title="{{ field.name }}">' + '                     <div class="d4cwidget-table__cell-container">' + '                         <span ng-bind="field.label"></span>' + '                         <div class="d4cwidget-table__sort-icons" ng-show="isFieldSortable(field)" title="sort" translate="title">' + '                             <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in ascending order" tabindex="0" translate="aria-label">' + '                                <i class="fa fa-chevron-up d4cwidget-table__sort-icons__up" aria-hidden="true"></i>' + '                             </button>' + '                             <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in descending order" tabindex="0" translate="aria-label">' + '                                <i class="fa fa-chevron-down d4cwidget-table__sort-icons__down" aria-hidden="true"></i>' + '                             </button>' + '                         </div>' + '                     </div>' + '                 </th>' + '             </tr>' + '         </thead>' + '         <tbody class="d4cwidget-table__records-tbody">' + '         </tbody>' + '     </table>' + ' </div>' + '<div ng-if="forcedTimezone" class="table-timezone-caption">' + '    <i class="fa fa-info" aria-hidden="true"></i>' + '    All dates and times are in {{ forcedTimezone }} time.' + '</div>' + ' <div ng-if="displayDatasetFeedback" class="table-feedback-new"><a d4c-dataset-feedback d4c-dataset-feedback-dataset="context.dataset"><i class="fa fa-comment" aria-hidden="true"></i> <span translate>Suggest a new record</span></a></div>' + ' <div class="d4cwidget-overlay" ng-hide="fetching || records"><span class="d4cwidget-overlay__message" translate>No results</span></div>' + ' <div class="d4cwidget-overlay" ng-hide="(!fetching || records) && !working"><d4c-spinner></d4c-spinner></div>' + '</div>',
             controller: ['$scope', '$element', '$timeout', '$document', '$window', 'D4CAPI', 'DebugLogger', '$filter', '$http', '$compile', '$transclude', '$q', function ($scope, $element, $timeout, $document, $window, D4CAPI, DebugLogger, $filter, $http, $compile, $transclude, $q) {
                 $scope.displayedFieldsArray = null;
                 $scope.displayDatasetFeedback = false;
@@ -20622,7 +20570,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     customTemplate = clone.contents().length > 0 && clone.contents().html().trim().length > 0;
                 });
                 var renderOneRecord = function (index, records, position) {
-              
                     var tr, td, record = records[index];
                     tr = document.createElement('tr');
                     tr.className = 'd4cwidget-table__internal-table-row record-' + index;
@@ -20730,7 +20677,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     return num;
                 };
                 var displayRecords = function () {
-              
                     var offsetHeight = recordsArea[0].offsetHeight;
                     var scrollTop = recordsArea[0].scrollTop;
                     var recordHeight = recordsBody.find('tr').eq(1).height();
@@ -20811,7 +20757,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     lastEndIndex = endIndex;
                 };
                 $scope.$watchCollection('records', function (newValue, oldValue) {
-                  
                     if (newValue !== oldValue) {
                         displayRecords();
                         $scope.computeLayout();
@@ -21134,13 +21079,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
         return {
             restrict: 'E',
             replace: true,
-            template: '' + '<div class="d4cwidget d4cwidget-text-search">' +
-             '   <form ng-submit="applySearch()" class="d4cwidget-text-search__form">' + 
-             '       <input class="d4cwidget-text-search__search-box" name="q" type="text" ' +
-              '               ng-model="searchExpression" ' + 
-              '               aria-label="{{ translatedPlaceholder }}" ' +
-               '               placeholder="{{ translatedPlaceholder }}"> ' +
-                '       <button type="reset" class="d4cwidget-text-search__reset" ng-show="searchExpression" ng-click="resetSearch()" aria-label="Reset search" translate="aria-label">' + '           <i class="fa fa-times-circle" aria-hidden="true"></i>' + '       </button>' + '       <button type="submit" class="d4cwidget-text-search__submit" aria-label="Search in catalog" translate="aria-label">' + '           <i class="fa fa-search" aria-hidden="true"></i>' + '       </button>' + '    </form>' + '</div>',
+            template: '' + '<div class="d4cwidget d4cwidget-text-search">' + '   <form ng-submit="applySearch()" class="d4cwidget-text-search__form">' + '       <input class="d4cwidget-text-search__search-box" name="q" type="text" ' + '               ng-model="searchExpression" ' + '               aria-label="{{ translatedPlaceholder }}" ' + '               placeholder="{{ translatedPlaceholder }}"> ' + '       <button type="reset" class="d4cwidget-text-search__reset" ng-show="searchExpression" ng-click="resetSearch()" aria-label="Reset search" translate="aria-label">' + '           <i class="fa fa-times-circle" aria-hidden="true"></i>' + '       </button>' + '       <button type="submit" class="d4cwidget-text-search__submit" aria-label="Search in catalog" translate="aria-label">' + '           <i class="fa fa-search" aria-hidden="true"></i>' + '       </button>' + '    </form>' + '</div>',
             scope: {
                 placeholder: '@?',
                 button: '@?',
@@ -21154,8 +21093,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 }
             },
             controller: ['$scope', '$attrs', 'translate', function ($scope, $attrs, translate) {
-
-               
                 var contexts = [];
                 var config = {};
                 if (!angular.isArray($scope.context)) {
