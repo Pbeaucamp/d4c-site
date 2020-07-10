@@ -17757,7 +17757,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     var metas_extras = scope.context.dataset.metas.extras;
                     var emptyfieldsboolean = "";
                     for (var i = 0; i < metas_extras.length; i++) {
-                            if( metas_extras[i]["key"] == "checkbox_fields_empty") {
+                            if( metas_extras[i]["key"] == "disable_fields_empty") {
                                
                                 emptyfieldsboolean = metas_extras[i]["value"];
                                 break;
