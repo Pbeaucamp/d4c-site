@@ -6,11 +6,14 @@ function calculValueFromFiltre(elem, idRes, colonne, operation,colonne_filtre=nu
                 cache: true,
                 data : { idRes : idRes, colonne : colonne, colonne_filtre: colonne_filtre,  valeur_filtre: valeur_filtre, operation : operation },
                 success: function (data) {
+
                         var resultat = numberWithCommas(parseInt(data.result));
-                	$( "#"+elem ).append( "<p>"+resultat+"</p>" );
-                     
-                	
+                	/*$( "#"+elem ).append( "<p>"+resultat+"</p>" );*/
+                        elem.append(resultat );
+                       
+                       
                 }
+                
 	});
 }
 
