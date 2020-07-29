@@ -17810,9 +17810,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if ($scope.shape) {
                         shapeType = $scope.shape.type;
                     }
-                    if ($scope.recordid && shapeType !== 'Point') {
-                        options.q = "recordid:'" + $scope.recordid + "'";
-                    } else if ($scope.geoDigest) {
+                    // Disable for now cause it is not working for shapes
+                    // if ($scope.recordid && shapeType !== 'Point') {
+                    //     options.q = "recordid:'" + $scope.recordid + "'";
+                    // } else if ($scope.geoDigest) {
+                    // End disable
+                    if ($scope.geoDigest) {
                         options.geo_digest = $scope.geoDigest;
                     } else if ($scope.gridData) {
                         if ($scope.gridData['d4c:geo_grid'] !== null) {
