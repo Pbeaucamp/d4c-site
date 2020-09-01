@@ -21335,8 +21335,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             template: '' + '<div class="d4cwidget d4cwidget-timerange">' + '    <div class="d4cwidget-timerange__from">' + '        <span class="d4cwidget-timerange__label" ng-bind="labelFrom"></span>' + '        <input type="text" placeholder="{{ placeholderFrom }}" class="d4cwidget-timerange__input">' + '        <button type="reset" class="d4cwidget-timerange__reset" ng-show="from" ng-click="resetSearchFrom()" aria-label="Reset search" translate="aria-label">' + '           <i class="fa fa-times-circle" aria-hidden="true"></i>' + '        </button>' + '    </div>' + '    <div class="d4cwidget-timerange__to">' + '        <span class="d4cwidget-timerange__label" ng-bind="labelTo"></span>' + '        <input type="text" placeholder="{{ placeholderTo }}" class="d4cwidget-timerange__input">' + '        <button type="reset" class="d4cwidget-timerange__reset" ng-show="to" ng-click="resetSearchTo()" aria-label="Reset search" translate="aria-label">' + '           <i class="fa fa-times-circle" aria-hidden="true"></i>' + '        </button>' + '    </div>' + '</div>',
             link: function (scope, element, attrs) {
                 var formattedSuffix = !angular.isUndefined(scope.suffix) ? ('.' + scope.suffix) : '';
-                scope.labelFrom = angular.isDefined(scope.labelFrom) ? scope.labelFrom : translate('From');
-                scope.labelTo = angular.isDefined(scope.labelTo) ? scope.labelTo : translate('to');
+                scope.labelFrom = angular.isDefined(scope.labelFrom) ? scope.labelFrom : translate('Du');
+                scope.labelTo = angular.isDefined(scope.labelTo) ? scope.labelTo : translate('au');
                 var inputs = element.find('input');
                 var defaultDateFormat = 'YYYY-MM-DD HH:mm';
                 if (angular.isDefined(scope.displayTime) && scope.displayTime === 'false') {
@@ -23602,10 +23602,17 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             getLocationStructure: function (location) {
                 var tokens = location.split(locationDelimiter);
-                return {
-                    center: [tokens[1], tokens[2]],
-                    zoom: tokens[0]
-                };
+                if(tokens.length > 2 ) {
+                    return {
+                        center: [tokens[1], tokens[2]],
+                        zoom: tokens[0]
+                    };
+                } else {
+                    return {
+                        center: [tokens[0], tokens[1]],
+                        zoom: 6
+                    };
+                }
             },
             getLocationParameter: function (center, zoom) {
                 if (angular.isArray(center)) {
