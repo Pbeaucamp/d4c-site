@@ -665,3 +665,8 @@ div[role="main"] .row{
 body{
 	overflow-x: initial!important;
 }
+
+/* Override this so the scroll bar behave as expected for the menu - http://mantis.bpm-conseil.com/view.php?id=8276 */
+.toolbar-oriented .toolbar-tray-vertical > .toolbar-lining:before {
+    position: static;
+}

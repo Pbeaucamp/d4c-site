@@ -23605,10 +23605,18 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             getLocationStructure: function (location) {
                 var tokens = location.split(locationDelimiter);
-                return {
-                    center: [tokens[1], tokens[2]],
-                    zoom: tokens[0]
-                };
+                if(tokens.length > 2 ) {
+                    return {
+                        center: [tokens[1], tokens[2]],
+                        zoom: tokens[0]
+                    };
+                }
+                else {
+                    return {
+                        center: [tokens[0], tokens[1]],
+                        zoom: 6
+                    };
+                }
             },
             getLocationParameter: function (center, zoom) {
                 if (angular.isArray(center)) {
