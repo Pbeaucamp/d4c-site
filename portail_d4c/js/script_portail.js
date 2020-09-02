@@ -11,6 +11,7 @@ var search;
 var typeReq;
 var theme;
 var records_counts;
+var filtreMapCoord = [];
 
 var canReplaceUrl;
 var themes = [];
@@ -131,10 +132,13 @@ $(document).ready(function(){
 	});
 
 	$('#reset-filters').on('click',function(event){
+
 		resetFilters();
 	});
 
+
 	$('.jetons').on('click','span',function(){
+
 
         if(typeof $(this).parent().data("orga") != "undefined"){
 			for (var j= 0; j < filtreProducteur.length; j++) {
@@ -153,7 +157,8 @@ $(document).ready(function(){
 			}
             
 			$('#input-theme').val(filtreTheme.join(";"));
-		} 
+		}
+
         /*else if(typeof $(this).parent().data("format") != "undefined"){
 			for (var l= 0; l < filtreFormats.length; l++) {
 				if(filtreFormats[l] == $(this).parent().data('format')){
@@ -195,8 +200,10 @@ $(document).ready(function(){
 	
 });
 
+
+
 function loadParameters(){
-	
+
 	/* old parammeters : to keep compatibility */
     var search = getQueryVariable('search');
 	var theme = getQueryVariable('theme');
@@ -288,8 +295,8 @@ function loadParameters(){
 
 }
 
+
 function resetFilters(){
-    
 		//filtreLicence = [];
 		filtreProducteur = [];
 		filtreGranularite = [];
@@ -297,6 +304,8 @@ function resetFilters(){
 		filtreTags = [];
 		filtreVisu = [];
 		filtreTheme = [];
+		filtreMapCoord = [];
+		$('#input-map-coordinate').val('');
 		searchDatasets();
 }
 
@@ -388,6 +397,7 @@ function getReq(){
 	var sortReq = "";
 	var fqReq = "";
 	var qReq = "";
+	var coordReq = "";
 	var facetReq = 'facet.field=["organization","tags","theme","features"]';
 
 	var page = getPage();
@@ -447,12 +457,22 @@ function getReq(){
 	if(filtreVisu.length > 0){
 		fqArr.push("features:(*"+ filtreVisu.join("* OR *") +"*)");
 	}
+
+	if($('#input-map-coordinate').val() != "") {
+		var inputmapcoord  = $('#input-map-coordinate').val();
+		filtreMapCoord.push(inputmapcoord);
+		coordReq = "&coordReq=("+ filtreMapCoord +")";
+		filtreMapCoord = [];
+
+	}
 	
 	if(fqArr.length > 0){
 		fqReq = "&fq=" + fqArr.join(" AND ");
 	}
+
 	
-	req = facetReq + rowsReq + startReq + qReq + sortReq + fqReq;
+	
+	req = facetReq + rowsReq + startReq + qReq + sortReq + coordReq + fqReq;
 	
 	return req;
 }
@@ -471,7 +491,6 @@ function searchDatasets(){
 		dataType: 'json',
 		cache : true,
 		success: function (data) {
-            //console.log(data);
 			orgas = data.all_organizations;
 			loading(false);
             renderResult(data);
@@ -514,7 +533,7 @@ function renderResult(json){
 	//if(doCLear)	$("select").val($("select option:first").val());
 
 	$('#nb_jeux').text("");
- 
+
     var n = 0;
 	var numDataset = 0;
 	
@@ -527,7 +546,7 @@ function renderResult(json){
 	$('#nb_jeux').text(numDataset);
 	//datasets
 	package_list = json.result.results;
-	
+
 	for (var i=package_list.length-1; i >= 0; i--) {
 		createDataset(package_list[i]);
 	}                       
