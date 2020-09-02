@@ -21363,8 +21363,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             link: function (scope, element, attrs) {
                 var formattedSuffix = !angular.isUndefined(scope.suffix) ? ('.' + scope.suffix) : '';
                 console.log(formattedSuffix);
-                scope.labelFrom = angular.isDefined(scope.labelFrom) ? scope.labelFrom : translate('Du');
-                scope.labelTo = angular.isDefined(scope.labelTo) ? scope.labelTo : translate('Au');
+                scope.labelFrom = angular.isDefined(scope.labelFrom) ? scope.labelFrom : translate('From');
+                scope.labelTo = angular.isDefined(scope.labelTo) ? scope.labelTo : translate('to');
                 var inputs = element.find('input');
                 var defaultDateFormat = 'YYYY-MM-DD HH:mm';
                 if (angular.isDefined(scope.displayTime) && scope.displayTime === 'false') {
