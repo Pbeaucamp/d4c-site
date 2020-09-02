@@ -18577,21 +18577,47 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             applyDrawnLayer(layer, type);
                             scope.$apply();
                         });
+                        $('#reset-filters').on('click',function(event){
+                            delete scope.mapConfig.drawnArea;
+                            scope.$apply();
+                        });
                         scope.map.on('draw:deleted', function () {
                             delete scope.mapConfig.drawnArea;
+                            resetFilters()
                             scope.$apply();
                         });
                         var applyDrawnLayer = function (layer, type) {
                             if (type === 'circle') {
                                 var distance = layer.getRadius();
                                 var center = layer.getLatLng();
+                                console.log(center.lat);
+                                console.log(center.lng);
+                                console.log(distance);
                                 scope.mapConfig.drawnArea = {
                                     'shape': 'circle',
                                     'coordinates': center.lat + ',' + center.lng + ',' + distance
                                 };
-                            } else {
+                                $('#input-map-coordinate').val(center.lat + ',' + center.lng + ',' + distance);
+                                var req = getReq();
+                                searchDatasets();
+
+                            }else if(type="rectangle") {
+                                $('#input-map-coordinate').val("");
                                 var geoJson = layer.toGeoJSON();
                                 var path = D4C.GeoFilter.getGeoJSONPolygonAsPolygonParameter(geoJson.geometry);
+                                $('#input-map-coordinate').val(path);
+                                var req = getReq();
+                                searchDatasets();
+                                scope.mapConfig.drawnArea = {
+                                    'shape': 'polygon',
+                                    'coordinates': path
+                                };
+                            } 
+                            else {
+                                var geoJson = layer.toGeoJSON();
+                                console.log(geoJson);
+                                var path = D4C.GeoFilter.getGeoJSONPolygonAsPolygonParameter(geoJson.geometry);
+                                console.log(path);
                                 scope.mapConfig.drawnArea = {
                                     'shape': 'polygon',
                                     'coordinates': path
