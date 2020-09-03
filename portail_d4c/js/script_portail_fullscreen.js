@@ -11,7 +11,6 @@ var search;
 var typeReq;
 var theme;
 var records_counts;
-var filtreMapCoord = [];
 
 var canReplaceUrl;
 var themes = [];
@@ -32,39 +31,12 @@ var features = [
 var goToPage = 0;
 var rows = 10;
 $(document).ready(function(){
-
-	/*
-	$("#barreRecherche input").autocomplete({
-		source: function(request, response) {
-				var results = $.ui.autocomplete.filter(listeSource, request.term); 
-				var resultats = results.slice(0,10);
-				//console.log(resultats);
-				// for (var i = 0; i < resultats.length; i++) {
-				// 	resultats[i] = resultats[i].replace(request.term,'<b>'+request.term+'</b>');
-				// }
-
-				response(resultats);
-			},
-		select : function(event,ui){
-			$('#search-form input').val(ui.item.value);
-			if(listeProducteur.indexOf(ui.item.label) != -1)
-			{
-				var idProd = listeIdProducteur[listeProducteur.indexOf(ui.item.label)];
-				searchDatasets(null, idProd,true,false);
-			}
-			else
-			{
-				searchDatasets(null, "text",true,true);
-			}
-		}
-	});
-	*/
-    
-	//autoComplete();
-	
 	canReplaceUrl = window.history && window.history.pushState;
 	
 	loadParameters();
+
+	var selectedOrganisation = $('#selected-organization').val();
+	filtreProducteur.push(selectedOrganisation);
 	
 	searchDatasets();
 	getThemes();
@@ -73,10 +45,6 @@ $(document).ready(function(){
 	$("#search-form").submit(function(e) {
 	   searchDatasets();
 	   e.preventDefault();
-	});
-
-	$('#datasets').on('click','h2',function(){
-		window.location.href = 'visualisation?id=' + $(this).data('id')+''+$(this).data('analyse');		
 	});
 	
 	$('#datasets ').on('click','.jetons .tag',function(){
@@ -132,13 +100,10 @@ $(document).ready(function(){
 	});
 
 	$('#reset-filters').on('click',function(event){
-
 		resetFilters();
 	});
 
-
 	$('.jetons').on('click','span',function(){
-
 
         if(typeof $(this).parent().data("orga") != "undefined"){
 			for (var j= 0; j < filtreProducteur.length; j++) {
@@ -157,8 +122,7 @@ $(document).ready(function(){
 			}
             
 			$('#input-theme').val(filtreTheme.join(";"));
-		}
-
+		} 
         /*else if(typeof $(this).parent().data("format") != "undefined"){
 			for (var l= 0; l < filtreFormats.length; l++) {
 				if(filtreFormats[l] == $(this).parent().data('format')){
@@ -200,10 +164,8 @@ $(document).ready(function(){
 	
 });
 
-
-
 function loadParameters(){
-
+	
 	/* old parammeters : to keep compatibility */
     var search = getQueryVariable('search');
 	var theme = getQueryVariable('theme');
@@ -295,8 +257,8 @@ function loadParameters(){
 
 }
 
-
 function resetFilters(){
+    
 		//filtreLicence = [];
 		filtreProducteur = [];
 		filtreGranularite = [];
@@ -304,8 +266,6 @@ function resetFilters(){
 		filtreTags = [];
 		filtreVisu = [];
 		filtreTheme = [];
-		filtreMapCoord = [];
-		$('#input-map-coordinate').val('');
 		searchDatasets();
 }
 
@@ -315,52 +275,6 @@ function changeUrl(requete){
 		window.history.pushState({}, null, url);
 	}
 }
-
-/*function autoComplete(){
-	
-	$("#search_bar").autocomplete({
-		source: function(request, response) {
-				$.ajax('/api/datasets/2.0/search/q=title:*' + request.term + '*&rows=10000',
-				{
-					type: 'POST',
-					dataType: 'json',
-					cache : true,
-					success: function (data) {
-//						console.log(data);
-						var res = data.result.results.map(function(d){ return d.title;});
-						
-						var lengthMax = 0;
-						for(var i= 0; i < res.length; i++) {
-							if(res[i].length > lengthMax) {
-								lengthMax = res[i].length;
-							}
-						}
-						
-						response(res); 
-						$('ul.ui-autocomplete').css('width',lengthMax * 5);
-						$('ul.ui-autocomplete').css('overflow','hidden');
-					},
-					error: function (e) {
-						console.log("ERROR: ", e);
-					}
-				});
-				
-			},
-		select : function(event,ui){
-			$('#search-form input').val('"' + ui.item.value + '"');
-			// if(listeProducteur.indexOf(ui.item.label) != -1)
-			// {
-			// 	var idProd = listeIdProducteur[listeProducteur.indexOf(ui.item.label)];
-			// 	searchDatasets(null, idProd,true,false);
-			// }
-			// else
-			// {
-				searchDatasets(null, "text",true,true);
-			// }
-		}
-	});
-	
-}*/
 
 function getThemes(){
 	$.ajax('/api/themes/',
@@ -377,27 +291,11 @@ function getThemes(){
 	});
 }
 
-/*function getOrgas(){
-	$.ajax('/api/organizations/all_fields=true',
-	{
-		type: 'POST',
-		dataType: 'json',
-		cache : true,
-		success: function (res) {
-			orgas = res;
-		},
-		error: function (e) {
-			console.log("ERROR: ", e);
-		}
-	});
-}*/
-
 function getReq(){
 	var req = "";
 	var sortReq = "";
 	var fqReq = "";
 	var qReq = "";
-	var coordReq = "";
 	var facetReq = 'facet.field=["organization","tags","theme","features"]';
 
 	var page = getPage();
@@ -457,22 +355,12 @@ function getReq(){
 	if(filtreVisu.length > 0){
 		fqArr.push("features:(*"+ filtreVisu.join("* OR *") +"*)");
 	}
-
-	if($('#input-map-coordinate').val() != "") {
-		var inputmapcoord  = $('#input-map-coordinate').val();
-		filtreMapCoord.push(inputmapcoord);
-		coordReq = "&coordReq=("+ filtreMapCoord +")";
-		filtreMapCoord = [];
-
-	}
 	
 	if(fqArr.length > 0){
 		fqReq = "&fq=" + fqArr.join(" AND ");
 	}
-
 	
-	
-	req = facetReq + rowsReq + startReq + qReq + sortReq + coordReq + fqReq;
+	req = facetReq + rowsReq + startReq + qReq + sortReq + fqReq;
 	
 	return req;
 }
@@ -484,13 +372,13 @@ function searchDatasets(){
 	var req = getReq();
 
 	changeUrl(req);
-	//$.ajax(ckan + '/api/action/package_search?' + requete + '&rows=1000'  + pertinence,
 	$.ajax('/api/datasets/2.0/search/' + req,
 	{
 		type: 'POST',
 		dataType: 'json',
 		cache : true,
 		success: function (data) {
+            //console.log(data);
 			orgas = data.all_organizations;
 			loading(false);
             renderResult(data);
@@ -499,15 +387,6 @@ function searchDatasets(){
 			console.log("ERROR: ", e);
 		}
 	});
-	/*$.ajax('/api/datasets/2.0/records/count/' + encodeURIComponent(requete) + '&rows=10000'  + pertinence,
-	{
-		type: 'POST',
-		dataType: 'json',
-		cache : true,
-		success: function (data) {
-            records_counts = data;
-		}
-	});*/
 }
 
 accentsTidy = function(s){
@@ -530,10 +409,8 @@ function renderResult(json){
 	});
 	$('#filter').find('.jetons').children().remove();
 	
-	//if(doCLear)	$("select").val($("select option:first").val());
-
 	$('#nb_jeux').text("");
-
+ 
     var n = 0;
 	var numDataset = 0;
 	
@@ -546,7 +423,7 @@ function renderResult(json){
 	$('#nb_jeux').text(numDataset);
 	//datasets
 	package_list = json.result.results;
-
+	
 	for (var i=package_list.length-1; i >= 0; i--) {
 		createDataset(package_list[i]);
 	}                       
@@ -602,9 +479,9 @@ function renderResult(json){
 	
 	
 	//filtres actifs
-	$.each(filtreProducteur, function(i, orga){
-		$('#filter').find('.jetons').append('<li data-orga="' + orga + '">'+ orgas.filter(function(o){ return o.name == orga; })[0].title +' <span class="glyphicon glyphicon-remove"></span></li>');
-	});
+	// $.each(filtreProducteur, function(i, orga){
+	// 	$('#filter').find('.jetons').append('<li data-orga="' + orga + '">'+ orgas.filter(function(o){ return o.name == orga; })[0].title +' <span class="glyphicon glyphicon-remove"></span></li>');
+	// });
 	$.each(filtreTags, function(i, tag){
 		$('#filter').find('.jetons').append('<li data-tag="' + tag + '">'+ tag +' <span class="glyphicon glyphicon-remove"></span></li>');
 	});
@@ -623,25 +500,6 @@ function createDataset(data){
     
 	var name_orga = data.organization.title;
 	var id_orga = data.organization.id;
-
-	/*var reuses = data.extras.filter(function(element){
-		return element.key == 'utilisations';
-	});
-
-	var li_reuses = "";
-	var nb_reuses = 0;
-
-	if(reuses != undefined && reuses.length != 0)
-	{
-		if(reuses[0].value != 0)
-		{
-			li_reuses = '<ul><li class="titre">Réutilisations</li><li class="info">' + reuses[0].value + '</li></ul>';
-			nb_reuses = reuses[0].value;
-		}
-			
-		
-	}*/
-	
 	var modif = data.metadata_modified;
 	var date = new Date(Date.UTC(modif.substring(0,4),+modif.substring(5,7) - 1,+modif.substring(8,10),+modif.substring(11,13),+modif.substring(14,16)));
 	var heure = (date.toLocaleTimeString()).substring(0,5);
@@ -693,15 +551,15 @@ function createDataset(data){
     
 	//visus
 	
-    let api_vis = '<p><a href="/visualisation/api/?id=' + id + '"><i class="fa ' + features.filter(function(o){ return o.name == "api"; })[0].picto + '" aria-hidden="true"></i>' +features.filter(function(o){ return o.name == "api"; })[0].label + '</a></p>'; 
-    let analize_vis= '<p><a href="/visualisation/analyze/?id='+id+''+analyseDefault+'"><i class="fa ' + features.filter(function(o){ return o.name == "analyze"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "analyze"; })[0].label + '</a></p>';
-    let table_vis ='<p><a href="/visualisation/table/?id='+id+''+analyseDefault+'"><i class="fa ' + features.filter(function(o){ return o.name == "table"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "table"; })[0].label + '</a></p>';
-    let timeline_vis= '<p><a href="/visualisation/timeline/?id='+id+''+analyseDefault+'"><i class="fa ' + features.filter(function(o){ return o.name == "timeline"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "timeline"; })[0].label + '</a></p>';
-    let map_vis= '<p><a href="/visualisation/map/?id='+id+'"><i class="fa ' + features.filter(function(o){ return o.name == "geo"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "geo"; })[0].label + '</a></p>';
-    let wordcloud_vis= '<p><a href="/visualisation/wordcloud/?id='+id+''+analyseDefault+'"><i class="fa ' + features.filter(function(o){ return o.name == "wordcloud"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "wordcloud"; })[0].label + '</a></p>';
-    let image_vis= '<p><a href="/visualisation/images/?id='+id+'"><i class="fa ' + features.filter(function(o){ return o.name == "image"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "image"; })[0].label + '</a></p>';
-    let calendar_vis= '<p><a href="/visualisation/calendar/?id='+id+'"><i class="fa ' + features.filter(function(o){ return o.name == "calendar"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "calendar"; })[0].label + '</a></p>';
-    let export_vis= '<p><a href="/visualisation/export/?id='+id+''+analyseDefault+'"><i class="fa ' + features.filter(function(o){ return o.name == "export"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "export"; })[0].label + '</a></p>';
+    let api_vis = '<p><a href="/visualisation/api/?id=' + id + '" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "api"; })[0].picto + '" aria-hidden="true"></i>' +features.filter(function(o){ return o.name == "api"; })[0].label + '</a></p>'; 
+    let analize_vis= '<p><a href="/visualisation/analyze/?id='+id+''+analyseDefault+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "analyze"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "analyze"; })[0].label + '</a></p>';
+    let table_vis ='<p><a href="/visualisation/table/?id='+id+''+analyseDefault+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "table"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "table"; })[0].label + '</a></p>';
+    let timeline_vis= '<p><a href="/visualisation/timeline/?id='+id+''+analyseDefault+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "timeline"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "timeline"; })[0].label + '</a></p>';
+    let map_vis= '<p><a href="/visualisation/map/?id='+id+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "geo"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "geo"; })[0].label + '</a></p>';
+    let wordcloud_vis= '<p><a href="/visualisation/wordcloud/?id='+id+''+analyseDefault+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "wordcloud"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "wordcloud"; })[0].label + '</a></p>';
+    let image_vis= '<p><a href="/visualisation/images/?id='+id+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "image"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "image"; })[0].label + '</a></p>';
+    let calendar_vis= '<p><a href="/visualisation/calendar/?id='+id+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "calendar"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "calendar"; })[0].label + '</a></p>';
+    let export_vis= '<p><a href="/visualisation/export/?id='+id+''+analyseDefault+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "export"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "export"; })[0].label + '</a></p>';
     
    
 	let rightPanel= '';
@@ -740,11 +598,11 @@ function createDataset(data){
 						let titleCustomView = data.metas.custom_view.title;
 						// let custom_view_vis;
 						if (titleCustomView) {
-							let custom_view_vis = '<p><a href="/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>'+titleCustomView+'</a></p>';
+							let custom_view_vis = '<p><a href="/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'" target="_blank" rel="noopener noreferrer"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>'+titleCustomView+'</a></p>';
 							vis = custom_view_vis;
 						}
 						else {
-							let custom_view_vis = '<p><a href="/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>Vue personnalisée</a></p>';
+							let custom_view_vis = '<p><a href="/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'" target="_blank" rel="noopener noreferrer"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>Vue personnalisée</a></p>';
 							vis = custom_view_vis;
 						}
 						break;
@@ -786,7 +644,7 @@ function createDataset(data){
     '<div class="box_1"><div style="display: flex; flex-direction:row">'+
                 '<div class="box_3"><div style=" background-image: url('+url_img_them+'); margin-top: 10px;  display: inline-block; width: 30px; height: 30px; background-repeat: no-repeat; background-size: contain; vertical-align: middle; margin-right: 8px;"></div></div>'+
 
-                '<div class="box_4"><div class="inner"><h2 data-id="' + id +'" data-analyse="'+analyseDefault+'"> ' + data.title + ' </h2></div></div></div>'+
+				'<div class="box_4"><div class="inner"><h2><a href="/visualisation/?id=' + id + '' + analyseDefault + '" target="_blank" rel="noopener noreferrer"> ' + data.title + ' </a></h2></div></div></div>'+
                            
             '<div class="inner"><p class="data-desc">' + description + '</p>'+ listeFormat +'</div><div class="infos inner"><ul><li class="titre">Producteur</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul><ul><li class="titre">Date modification</li><li class="info">' + date.toLocaleDateString() + '</ul>'+ /*li_granularite + li_reuses +*/'<ul class="jetons">' + tagList +'</ul></div>'               
     +'</div>'+

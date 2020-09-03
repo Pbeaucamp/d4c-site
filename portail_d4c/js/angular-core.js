@@ -12903,6 +12903,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     facetCtrl.toggleRefinement(path);
                     categoryList.emptySearch();
                 };
+
+
                 var defaultTemplate = '' + '<span class="d4cwidget-facet__category-count">{{ category.count|number }}</span> ' + '<span class="d4cwidget-facet__category-name" ng-bind-html="formatCategory(category.name, category.path)"></span>';
                 var template = scope.template || defaultTemplate;
                 template = '' + '<a class="d4cwidget-facet__category" ' + '   href="#" ' + '   ng-click="toggleRefinement($event, category.path)" ' + '   ng-class="{\'d4cwidget-facet__category--refined\': category.state === \'refined\'}" ' + '   title="{{ category.name }}">' + template + '</a>';
@@ -13048,6 +13050,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             });
                             addRefinement(context, timeField.label, context.parameters[parameter], parameter, timerangeDisplayValue);
                         } else if (parameter.indexOf('.from_date') !== -1) {
+                            console.log(" from date ");
                             var fromDate = d4cTimeboundParser(context.parameters[parameter]);
                             timeField = context.dataset.getField(fromDate.field);
                             getTimeLabels(timeField);
@@ -13057,6 +13060,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             });
                             addRefinement(context, timeField.label, context.parameters[parameter], parameter, fromDateDisplayValue);
                         } else if (parameter.indexOf('.to_date') !== -1) {
+                            console.log(" to date ");
                             var toDate = d4cTimeboundParser(context.parameters[parameter]);
                             timeField = context.dataset.getField(toDate.field);
                             getTimeLabels(timeField);
@@ -17810,9 +17814,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if ($scope.shape) {
                         shapeType = $scope.shape.type;
                     }
-                    if ($scope.recordid && shapeType !== 'Point') {
-                        options.q = "recordid:'" + $scope.recordid + "'";
-                    } else if ($scope.geoDigest) {
+                    // Disable for now cause it is not working for shapes
+                    // if ($scope.recordid && shapeType !== 'Point') {
+                    //     options.q = "recordid:'" + $scope.recordid + "'";
+                    // } else if ($scope.geoDigest) {
+                    // End disable
+                    if ($scope.geoDigest) {
                         options.geo_digest = $scope.geoDigest;
                     } else if ($scope.gridData) {
                         if ($scope.gridData['d4c:geo_grid'] !== null) {
@@ -18570,21 +18577,47 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             applyDrawnLayer(layer, type);
                             scope.$apply();
                         });
+                        $('#reset-filters').on('click',function(event){
+                            delete scope.mapConfig.drawnArea;
+                            scope.$apply();
+                        });
                         scope.map.on('draw:deleted', function () {
                             delete scope.mapConfig.drawnArea;
+                            resetFilters()
                             scope.$apply();
                         });
                         var applyDrawnLayer = function (layer, type) {
                             if (type === 'circle') {
                                 var distance = layer.getRadius();
                                 var center = layer.getLatLng();
+                                console.log(center.lat);
+                                console.log(center.lng);
+                                console.log(distance);
                                 scope.mapConfig.drawnArea = {
                                     'shape': 'circle',
                                     'coordinates': center.lat + ',' + center.lng + ',' + distance
                                 };
-                            } else {
+                                $('#input-map-coordinate').val(center.lat + ',' + center.lng + ',' + distance);
+                                var req = getReq();
+                                searchDatasets();
+
+                            }else if(type="rectangle") {
+                                $('#input-map-coordinate').val("");
                                 var geoJson = layer.toGeoJSON();
                                 var path = D4C.GeoFilter.getGeoJSONPolygonAsPolygonParameter(geoJson.geometry);
+                                $('#input-map-coordinate').val(path);
+                                var req = getReq();
+                                searchDatasets();
+                                scope.mapConfig.drawnArea = {
+                                    'shape': 'polygon',
+                                    'coordinates': path
+                                };
+                            } 
+                            else {
+                                var geoJson = layer.toGeoJSON();
+                                console.log(geoJson);
+                                var path = D4C.GeoFilter.getGeoJSONPolygonAsPolygonParameter(geoJson.geometry);
+                                console.log(path);
                                 scope.mapConfig.drawnArea = {
                                     'shape': 'polygon',
                                     'coordinates': path
@@ -20485,6 +20518,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         jQuery.extend(options, {
                             fields: $scope.displayedFieldsArray.join(',')
                         });
+
+                        console.log(options);
+
                     }
                     if (options.sort) {
                         var sortedFieldName = options.sort.replace('-', '');
@@ -20649,6 +20685,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (field.type === "int" || field.type === "double") {
                             div.className += ' d4cwidget-table__cell-container__right-aligned';
                         }
+
+
                         td.appendChild(div);
                         var newScope, node;
                         if (customTemplate) {
@@ -20688,6 +20726,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 }
                             }
                         }
+                       
                         div.appendChild(node);
                     }
                     return tr;
@@ -21186,6 +21225,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         }
                         unwatch();
                         $scope.$watch(function () {
+                            
                             return contexts.map(function (context) {
                                 var contextConfig = getContextConfig(context);
                                 var queryParameter = getQueryParameter(contextConfig);
@@ -21223,6 +21263,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     });
                 };
                 $scope.applySearch = function () {
+                    console.log("apply search ");
                     angular.forEach(contexts, function (context) {
                         var contextConfig = getContextConfig(context);
                         var queryParameter = getQueryParameter(contextConfig);
@@ -21254,6 +21295,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
         };
     });
 }());;
+
+
+
 (function () {
     'use strict';
     var mod = angular.module('d4c-widgets');
@@ -21332,9 +21376,19 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 placeholderFrom: '@?',
                 placeholderTo: '@?'
             },
-            template: '' + '<div class="d4cwidget d4cwidget-timerange">' + '    <div class="d4cwidget-timerange__from">' + '        <span class="d4cwidget-timerange__label" ng-bind="labelFrom"></span>' + '        <input type="text" placeholder="{{ placeholderFrom }}" class="d4cwidget-timerange__input">' + '        <button type="reset" class="d4cwidget-timerange__reset" ng-show="from" ng-click="resetSearchFrom()" aria-label="Reset search" translate="aria-label">' + '           <i class="fa fa-times-circle" aria-hidden="true"></i>' + '        </button>' + '    </div>' + '    <div class="d4cwidget-timerange__to">' + '        <span class="d4cwidget-timerange__label" ng-bind="labelTo"></span>' + '        <input type="text" placeholder="{{ placeholderTo }}" class="d4cwidget-timerange__input">' + '        <button type="reset" class="d4cwidget-timerange__reset" ng-show="to" ng-click="resetSearchTo()" aria-label="Reset search" translate="aria-label">' + '           <i class="fa fa-times-circle" aria-hidden="true"></i>' + '        </button>' + '    </div>' + '</div>',
+            template: '' + '<div class="d4cwidget d4cwidget-timerange">' +
+             '    <div class="d4cwidget-timerange__from">' + 
+             '        <span class="d4cwidget-timerange__label" ng-bind="labelFrom"></span>' + 
+             '        <input type="text" placeholder="{{ placeholderFrom }}" class="d4cwidget-timerange__input">' + 
+             '        <button type="reset" class="d4cwidget-timerange__reset" ng-show="from" ng-click="resetSearchFrom()" aria-label="Reset search" translate="aria-label">' + '           <i class="fa fa-times-circle" aria-hidden="true"></i>' + '        </button>' + '    </div>' + '    <div class="d4cwidget-timerange__to">' + 
+             '        <span class="d4cwidget-timerange__label" ng-bind="labelTo"></span>' + 
+             '        <input type="text" placeholder="{{ placeholderTo }}" class="d4cwidget-timerange__input">' + 
+             '        <button type="reset" class="d4cwidget-timerange__reset" ng-show="to" ng-click="resetSearchTo()" aria-label="Reset search" translate="aria-label">' + '           <i class="fa fa-times-circle" aria-hidden="true"></i>' + '        </button>' + '    </div>' + '</div>',
+            
+
             link: function (scope, element, attrs) {
                 var formattedSuffix = !angular.isUndefined(scope.suffix) ? ('.' + scope.suffix) : '';
+                console.log(formattedSuffix);
                 scope.labelFrom = angular.isDefined(scope.labelFrom) ? scope.labelFrom : translate('From');
                 scope.labelTo = angular.isDefined(scope.labelTo) ? scope.labelTo : translate('to');
                 var inputs = element.find('input');
@@ -21379,6 +21433,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     } else {
                         scope.displayTime = (scope.displayTime === "true");
                     }
+
                     var fromRome = rome(inputs[0], angular.extend({}, romeOptions, {
                         time: scope.displayTime,
                         dateValidator: rome.val.beforeEq(inputs[1]),
@@ -21450,10 +21505,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     };
                 });
             },
-            controller: ['$scope', '$attrs', '$q', '$compile', '$rootScope', '$parse', function ($scope, $attrs, $q, $compile, $rootScope, $parse) {
+            controller: ['$scope', '$attrs', '$q', '$compile', '$rootScope', '$parse', function ($scope, $attrs, $q, $compile, $rootScope, $parse) 
+            {
                 var contexts = [],
                     conf = {};
                 var formattedSuffix = !angular.isUndefined($scope.suffix) ? ('.' + $scope.suffix) : '';
+
                 var getTimeField = function (dataset) {
                     if (dataset) {
                         var fields = dataset.fields.filter(function (item) {
@@ -21469,6 +21526,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                     return null;
                 };
+
+
                 if (!angular.isArray($scope.context)) {
                     contexts.push($scope.context);
                     conf[$scope.context.name] = {};
@@ -21505,22 +21564,29 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 evaluationScope.$to = $scope.to;
                                 evaluationScope.$from = $scope.from;
                                 evaluationScope.$field = configurations[context.name]['timefield'];
+                                console.log(parameterName);
                                 if (['q', 'rq'].indexOf(parameterName) > -1) {
                                     parameterName = parameterName + '.timerange' + formattedSuffix;
                                 }
                                 context.parameters[parameterName] = configurations[context.name]['formatter'](evaluationScope);
                                 deleteUsedDate(context, configurations, dates);
+                                console.log($scope.records);
+                                console.log($scope);
+                                console.log(context);
                             });
                         } else if (nv[0] && !nv[1]) {
                             dates = ['to_date', 'timerange'];
                             angular.forEach(contexts, function (context) {
-                                context.parameters[getParameterName(context, configurations, 'from_date')] = configurations[context.name]['timefield'] + '>="' + nv[0] + '"';
+                                
+                            context.parameters[getParameterName(context, configurations, 'from_date')] = configurations[context.name]['timefield'] + '<="' + nv[0] + '"';
+
+                                console.log(context.parameters[getParameterName(context, configurations, 'from_date')]);
                                 deleteUsedDate(context, configurations, dates);
                             });
                         } else if (nv[1] && !nv[0]) {
                             dates = ['from_date', 'timerange'];
                             angular.forEach(contexts, function (context) {
-                                context.parameters[getParameterName(context, configurations, 'to_date')] = configurations[context.name]['timefield'] + '<="' + nv[1] + '"';
+                            context.parameters[getParameterName(context, configurations, 'to_date')] = configurations[context.name]['timefield'] + '<="' + nv[1] + '"';
                                 deleteUsedDate(context, configurations, dates);
                             });
                         } else {
@@ -21539,6 +21605,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     });
                 };
                 var getParameterName = function (context, configurations, type) {
+                    
                     return configurations[context.name]['parameter'] + '.' + type + formattedSuffix;
                 };
                 if (contexts.length == 1 && contexts[0].type == 'catalog') {
@@ -21558,6 +21625,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
         };
     }]);
 }());;
+
+
+
+
+
 (function () {
     'use strict';
     var mod = angular.module('d4c-widgets');
@@ -22097,6 +22169,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 			'external': externalFunctions,
             'datasets': {
                 'get': function (context, datasetID, parameters, timeout) {
+
+                    console.log((context, '/api/datasets/1.0/' + datasetID + '/', parameters, timeout));
                     return request(context, '/api/datasets/1.0/' + datasetID + '/', parameters, timeout);
                 },
                 'search': function (context, parameters, timeout) {
@@ -23602,10 +23676,18 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             getLocationStructure: function (location) {
                 var tokens = location.split(locationDelimiter);
-                return {
-                    center: [tokens[1], tokens[2]],
-                    zoom: tokens[0]
-                };
+                if(tokens.length > 2 ) {
+                    return {
+                        center: [tokens[1], tokens[2]],
+                        zoom: tokens[0]
+                    };
+                }
+                else {
+                    return {
+                        center: [tokens[0], tokens[1]],
+                        zoom: 6
+                    };
+                }
             },
             getLocationParameter: function (center, zoom) {
                 if (angular.isArray(center)) {
