@@ -3683,6 +3683,7 @@ L.DrawToolbar = L.Toolbar.extend({
 
 	// @method initialize(): void
 	initialize: function (options) {
+		console.log(" initialize ");
 		// Ensure that the options are merged correctly since L.extend is only shallow
 		for (var type in this.options) {
 			if (this.options.hasOwnProperty(type)) {
@@ -3731,6 +3732,7 @@ L.DrawToolbar = L.Toolbar.extend({
 	// @method getActions(): object
 	// Get action information
 	getActions: function (handler) {
+		console.log(" get action ");
 		return [
 			{
 				enabled: handler.completeShape,
@@ -3758,6 +3760,7 @@ L.DrawToolbar = L.Toolbar.extend({
 	// @method setOptions(): void
 	// Sets the options to the toolbar
 	setOptions: function (options) {
+		console.log(" set options ");
 		L.setOptions(this, options);
 
 		for (var type in this._modes) {
@@ -4230,6 +4233,7 @@ L.EditToolbar.Edit = L.Handler.extend({
 	},
 
 	_hasAvailableLayers: function () {
+		console.log(" hhshs ");
 		return this._featureGroup.getLayers().length !== 0;
 	}
 });
