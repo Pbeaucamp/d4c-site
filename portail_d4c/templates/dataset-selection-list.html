@@ -64,6 +64,50 @@ Copyright (c) 2014 - Opendatasoft
                             <d4c-facet name="keyword" title="{{ &#39;Keyword&#39;|translate }}"></d4c-facet>
                             <d4c-facet name="theme" title="{{ &#39;Theme&#39;|translate }}"></d4c-facet>
                         </d4c-facets>
+                        <style type="text/css">
+        
+                        .main-container.container.js-quickedit-main-content {
+                            width: 100%!important;
+                            padding: 0px!important;
+                            margin: 0px!important;
+                        }
+
+                        .d4c-box {
+
+                            padding: 0 !important; 
+                            margin-bottom: 0 !important; 
+                        }
+                        .d4cwidget-map__map {
+                            height: 238px !important;
+                            min-height: 100px !important;
+                        }
+
+                        .d4cwidget-map {
+                            height: 238px !important;
+                            min-height: 100px !important;
+                        }
+
+                        .leaflet-bottom  {
+                            display: none !important;
+                        }
+                        
+                        </style>
+                         <div class="ng-scope" ng-app="d4c-widgets">
+                        
+                        <d4c-dataset-context style="height:100px" communesinfocom94contour-dataset="communes-infocom-94-contour" communesinfocom94contour-parameters="{'id':'b8b96201-6e89-42f0-b48b-7eec54c1a6de'}" context="communesinfocom94contour" class="ng-scope">
+                                    <div class="row" >
+                                        
+                                        <div class="col-md-12 col-sm-4">
+                                            <div class="d4c-box d4c-map-wp">
+                                            <d4c-map basemap="osm" context="communesinfocom94contour" location="11,43.61124,3.87673" provider="osm" scroll-wheel-zoom="false" class="ng-isolate-scope">
+
+                                                    <d4c-map-layer border-color="#FFFFFF" border-opacity="1" border-pattern="solid" border-size="1" caption="false" color="#0e7ce3" context="communesinfocom94contour" exclude-from-refit="false"  picto="d4c-" show-marker="false" size-function="linear"> 
+                                                    </d4c-map-layer> 
+                                                </d4c-map> 
+                                            </div>
+                                        </div>
+                                    </div>
+                        </d4c-dataset-context></div>
                     </div>
                 </div>
                 <div class="two-thirds col-sm-8">
