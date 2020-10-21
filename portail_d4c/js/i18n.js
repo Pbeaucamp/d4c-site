@@ -4299,8 +4299,11 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				"Published": {
 					"$$noContext": "Publié"
 				},
-				"Publisher": {
+				"Producer": {
 					"$$noContext": "Producteur"
+				},
+				"Publisher": {
+					"$$noContext": "Organisation"
 				},
 				"Publishing in progress, collecting potential errors...": {
 					"$$noContext": "Publication en cours, collecte des éventuelles erreurs..."
