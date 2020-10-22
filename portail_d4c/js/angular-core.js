@@ -5362,6 +5362,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             templateUrl: '/sites/default/files/api/portail_d4c/templates/api-console.html',
             controller: function ($scope) {
+                /*console.log($http);*/
                 $scope.apiParams = {};
                 $scope.errors = null;
                 $scope.results = null;
@@ -5380,16 +5381,19 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         urlParameters: {}
                     };
                     var baseURL = $scope.service.url;
+
                     if ($scope.service.urlParameters) {
                         var value;
                         for (var key in $scope.api.urlParameters) {
                             value = $scope.api.urlParameters[key];
+                            console.log(value);
                             if (value) {
                                 $scope.apiParams.urlParameters[key] = value;
                             }
                         }
                         for (var i = 0; i < $scope.service.urlParameters.length; i++) {
                             var urlParameter = $scope.service.urlParameters[i];
+                            console.log(urlParameter);
                             value = '';
                             if ($scope.api.urlParameters[urlParameter.name]) {
                                 value = $scope.api.urlParameters[urlParameter.name];
@@ -5400,8 +5404,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if ($scope.service.parameters) {
                         for (var j = 0; j < $scope.service.parameters.length; j++) {
                             var parameter = $scope.service.parameters[j];
+                            
                             if (parameter.type === 'hierarchical' && $scope.api.parameters[parameter.name]) {
                                 var object = $scope.api.parameters[parameter.name];
+                                console.log(object);
                                 for (var subkey in object) {
                                     var name = parameter.name + '.' + subkey;
                                     $scope.apiParams.parameters[name] = object[subkey];
@@ -5409,6 +5415,18 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             } else if ($scope.api.parameters[parameter.name]) {
                                 $scope.apiParams.parameters[parameter.name] = $scope.api.parameters[parameter.name];
                             }
+
+                            //personnalize fields when param name is facet
+                            if(parameter.name === "facet") {
+                                for(var fac in $scope.api.parameters[parameter.name]) {
+                                    if($scope.api.parameters["hideColumnsApi."+$scope.api.parameters[parameter.name][fac]] === true) {
+                                        let index = $scope.api.parameters[parameter.name].indexOf($scope.api.parameters[parameter.name][fac]);
+                                        $scope.api.parameters[parameter.name].splice(index, 1);
+                                    }
+                                    
+                                }
+                            }
+
                         }
                     }
                     var queryString = $.param($scope.apiParams.parameters, true);
@@ -5420,6 +5438,13 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 };
                 $scope.sendCall = function () {
                     $http.get($scope.computeURL()).success(function (data) {
+                        // check if data result does not contains fields with hideclumnapi
+                        for(var fieldkey in data.records[0]["fields"]) {
+                            //if true remove it from fields result
+                            if($scope.api.parameters["facet"].indexOf(fieldkey) === -1){
+                                delete data.records[0]["fields"][fieldkey];
+                            }
+                        }
                         $scope.results = data;
                         $scope.errors = null;
                     }).error(function (data) {
@@ -12742,6 +12767,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 this.setDisjunctive = function (name) {
                     $scope.context.parameters['disjunctive.' + name] = true;
                 };
+                this.setHideColumnsApi = function (name, bool) {
+                    $scope.context.parameters['hideColumnsApi.' + name] = bool;
+                };
                 this.toggleRefinement = function (facetName, path) {
                     $scope.context.toggleRefine(facetName, path);
                     angular.forEach(facetsMapping[facetName], function (mapping) {
@@ -12782,7 +12810,23 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 if (scope.disjunctive) {
                     facetsCtrl.setDisjunctive(scope.name);
                 }
+              
+                
                 scope.context = scope.context || facetsCtrl.context;
+                
+                // check if hidecolumnapi is checked and added to params api
+                let fieldscontextdataset = scope.context.dataset.fields;
+                var fieldresult = fieldscontextdataset.filter(function (field) { return field.name == scope.name });
+                if(fieldresult.length > 0){
+                    var columnapiboolean = fieldresult[0].annotations.filter(function (annot) { return annot.name == "hideColumnsApi" });
+                    if(columnapiboolean && columnapiboolean.length > 0 ) {
+                        facetsCtrl.setHideColumnsApi(scope.name,true);
+                    }
+                    else{
+                        facetsCtrl.setHideColumnsApi(scope.name,false);
+                    }
+                   
+                }
                 scope.displayTimerange = function () {
                     if (!scope.timerangeFilter) {
                         return false;
@@ -22212,6 +22256,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }), timeout);
                 },
                 'search': function (context, parameters, timeout) {
+                    console.log(" yes");
 					var p = JSON.stringify(parameters);
 					p = p.replace(/\//g, "_slash_");
 					parameters = JSON.parse(p);
@@ -32770,6 +32815,7 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
     var D4C = {
         Context: {
             toggleRefine: function (context, facetName, path, replace) {
+                console.log("context");
                 var refineKey = 'refine.' + facetName;
                 var refineSeparator = '/';
                 if (context.dataset) {
@@ -32808,6 +32854,8 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                 } else {
                     context.parameters[refineKey] = path;
                 }
+
+                console.log(context);
             }
         },
         GeoFilter: {
@@ -33070,6 +33118,7 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
             }
         },
         Dataset: function (dataset) {
+            console.log(" Dataset 330");
             var types, facetsCount, filtersDescription;
             var getFieldAnnotation = function (field, annotationName) {
                 var i = 0;
@@ -33081,6 +33130,7 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                     }
                 }
             };
+
             var isFieldAnnotated = function (field, annotationName) {
                 return typeof getFieldAnnotation(field, annotationName) !== "undefined";
             };
