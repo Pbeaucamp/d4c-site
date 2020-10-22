@@ -5438,6 +5438,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 };
                 $scope.sendCall = function () {
                     $http.get($scope.computeURL()).success(function (data) {
+
+                        data.parameters["facet"] = $scope.api.parameters["facet"];
                         // check if data result does not contains fields with hideclumnapi
                         for(var fieldkey in data.records[0]["fields"]) {
                             //if true remove it from fields result
@@ -22256,7 +22258,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }), timeout);
                 },
                 'search': function (context, parameters, timeout) {
-                    console.log(" yes");
 					var p = JSON.stringify(parameters);
 					p = p.replace(/\//g, "_slash_");
 					parameters = JSON.parse(p);
@@ -33118,7 +33119,6 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
             }
         },
         Dataset: function (dataset) {
-            console.log(" Dataset 330");
             var types, facetsCount, filtersDescription;
             var getFieldAnnotation = function (field, annotationName) {
                 var i = 0;
