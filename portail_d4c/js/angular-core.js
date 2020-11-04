@@ -5438,15 +5438,24 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 };
                 $scope.sendCall = function () {
                     $http.get($scope.computeURL()).success(function (data) {
-
                         data.parameters["facet"] = $scope.api.parameters["facet"];
-                        // check if data result does not contains fields with hideclumnapi
-                        for(var fieldkey in data.records[0]["fields"]) {
-                            //if true remove it from fields result
-                            if($scope.api.parameters["facet"].indexOf(fieldkey) === -1){
-                                delete data.records[0]["fields"][fieldkey];
-                            }
+                        if(data.parameters["facet"].length <= 0 ){
+                            data.parameters["facet"] = "Aucun champ";
                         }
+                        // check if data result does not contains fields with hideclumnapi
+                        for (var i = 0; i < data.records.length; i++) {
+                            for(var fieldkey in data.records[i]["fields"]) {
+                                //if true remove it from fields result
+                                if($scope.api.parameters["facet"].indexOf(fieldkey) === -1){
+                                    delete data.records[i]["fields"][fieldkey];
+                                }
+                        }
+                        
+                         if(Object.keys(data.records[i]["fields"]).length <= 0) {
+                            data.records[i]["fields"] = "Aucun champ";
+                        }
+                        }
+                        
                         $scope.results = data;
                         $scope.errors = null;
                     }).error(function (data) {
