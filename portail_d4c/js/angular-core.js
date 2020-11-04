@@ -12890,18 +12890,18 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 scope.context = scope.context || facetsCtrl.context;
                 
                 // check if hidecolumnapi is checked and added to params api
-                let fieldscontextdataset = scope.context.dataset.fields;
-                var fieldresult = fieldscontextdataset.filter(function (field) { return field.name == scope.name });
-                if(fieldresult.length > 0){
-                    var columnapiboolean = fieldresult[0].annotations.filter(function (annot) { return annot.name == "hideColumnsApi" });
-                    if(columnapiboolean && columnapiboolean.length > 0 ) {
-                        facetsCtrl.setHideColumnsApi(scope.name,true);
-                    }
-                    else{
-                        facetsCtrl.setHideColumnsApi(scope.name,false);
-                    }
+                // let fieldscontextdataset = scope.context.dataset.fields;
+                // var fieldresult = fieldscontextdataset.filter(function (field) { return field.name == scope.name });
+                // if(fieldresult.length > 0){
+                //     var columnapiboolean = fieldresult[0].annotations.filter(function (annot) { return annot.name == "hideColumnsApi" });
+                //     if(columnapiboolean && columnapiboolean.length > 0 ) {
+                //         facetsCtrl.setHideColumnsApi(scope.name,true);
+                //     }
+                //     else{
+                //         facetsCtrl.setHideColumnsApi(scope.name,false);
+                //     }
                    
-                }
+                // }
                 scope.displayTimerange = function () {
                     if (!scope.timerangeFilter) {
                         return false;
