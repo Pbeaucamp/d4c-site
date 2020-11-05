@@ -12406,9 +12406,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             }
                             else {
                                 scope.sample = data.result.records[0];
-                            }
-                           
-                              console.log(scope.sample);                
+                            }               
 							angular.forEach(scope.$parent.$parent.$parent.$parent.$parent.panes, function (p) {
 								//if(p.slug != "information" && p.slug != "export"){
 									p.hidden = false;
