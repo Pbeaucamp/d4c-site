@@ -24284,7 +24284,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                 });
             },
-            drawShape: function (layerConfig, map, geoJSON, record, targetLayer, geoDigest) {
+            drawShape: function (layerConfig, map, geoJSON, record, targetLayer, geoDigest, route_color) {
                 var service = this;
                 var clickable = layerConfig.refineOnClick || (angular.isDefined(layerConfig.tooltipDisabled) ? !layerConfig.tooltipDisabled : true);
                 var shapeLayer = new L.GeoJSON(geoJSON, {
@@ -24298,6 +24298,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (feature.geometry.type === 'LineString' || feature.geometry.type === 'MultiLineString') {
                             opts.weight = layerConfig.lineWidth;
                             opts.color = service.getRecordColor(record, layerConfig);
+                            if(route_color != null) {
+                                opts.color = "#"+route_color;
+                            }
+                            console.log("route color ");
+                            console.log(route_color);
                             if (angular.isDefined(layerConfig.shapeOpacity)) {
                                 opts.opacity = layerConfig.shapeOpacity;
                             } else {
@@ -24788,7 +24793,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (shape.type === 'Point') {
                             MapLayerHelper.drawPoint(layerConfig, map, [shape.coordinates[1], shape.coordinates[0]], value, shapeLayerGroup, record.geo_digest);
                         } else {
-                            MapLayerHelper.drawShape(layerConfig, map, shape, value, shapeLayerGroup, record.geo_digest);
+                            MapLayerHelper.drawShape(layerConfig, map, shape, value, shapeLayerGroup, record.geo_digest,record.route_color);
                         }
                     }
                     deferred.resolve(shapeLayerGroup);
@@ -24991,7 +24996,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (geoJSON.type === 'Point') {
                             MapLayerHelper.drawPoint(layerConfig, map, [geoJSON.coordinates[1], geoJSON.coordinates[0]], record, markerLayerGroup);
                         } else {
-                            MapLayerHelper.drawShape(layerConfig, map, geoJSON, record, markerLayerGroup);
+                            MapLayerHelper.drawShape(layerConfig, map, geoJSON, record, markerLayerGroup,record.route_color);
                         }
                     }
                     deferred.resolve(markerLayerGroup);
@@ -25025,7 +25030,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (shape.geometry != null && shape.geometry.type === 'Point') {
                             MapLayerHelper.drawPoint(layerConfig, map, [shape.geometry.coordinates[1], shape.geometry.coordinates[0]], null, layerGroup, shape.geo_digest);
                         } else {
-                            MapLayerHelper.drawShape(layerConfig, map, shape.geometry, null, layerGroup, shape.geo_digest);
+                            MapLayerHelper.drawShape(layerConfig, map, shape.geometry, null, layerGroup, shape.geo_digest,shape.route_color);
                         }
                     }
                     deferred.resolve(layerGroup);
