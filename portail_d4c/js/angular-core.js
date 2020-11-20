@@ -12651,16 +12651,20 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                          for(let i = 0; i<facets.length; i++){
                                             let descr =facets[i].description;
                                             //descr=descr.split('\r\n');
-											if(descr == null) descr = "";
-                                             descr=descr.replace(';', ',');
-                                             descr=descr.replace('><', '>,<');
-                                             descr=descr.split(',');
-                                             
-                                            for(let g = 0; g<descr.length; g++){
-                                                let teg =descr[g];
-                                                teg = teg.split('?');
-                                                if(teg[0]=='<!--facet_name'){
-                                                  facets[i].label = teg[1].slice(0, -3).replace(/_/g, ' ');
+                                            if (descr == null) {
+                                                descr = "";
+                                            }
+                                            if(descr) {
+                                                descr=descr.replace(';', ',');
+                                                descr=descr.replace('><', '>,<');
+                                                descr=descr.split(',');
+                                                 
+                                                for(let g = 0; g<descr.length; g++){
+                                                    let teg =descr[g];
+                                                    teg = teg.split('?');
+                                                    if(teg[0]=='<!--facet_name'){
+                                                      facets[i].label = teg[1].slice(0, -3).replace(/_/g, ' ');
+                                                    }
                                                 }
                                             }
                                         }                                     
@@ -18712,39 +18716,77 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             if (type === 'circle') {
                                 var distance = layer.getRadius();
                                 var center = layer.getLatLng();
-                                console.log(center.lat);
-                                console.log(center.lng);
-                                console.log(distance);
                                 scope.mapConfig.drawnArea = {
                                     'shape': 'circle',
                                     'coordinates': center.lat + ',' + center.lng + ',' + distance
                                 };
-                                $('#input-map-coordinate').val(center.lat + ',' + center.lng + ',' + distance);
-                                var req = getReq();
-                                searchDatasets();
 
-                            }else if(type="rectangle") {
-                                $('#input-map-coordinate').val("");
+                                if (scope.context.name == 'mapemprise') {
+                                    $('#input-map-coordinate').val(center.lat + ',' + center.lng + ',' + distance);
+                                    var req = getReq();
+                                    searchDatasets();
+                                }
+                            }
+                            else if (type="rectangle") {
                                 var geoJson = layer.toGeoJSON();
                                 var path = D4C.GeoFilter.getGeoJSONPolygonAsPolygonParameter(geoJson.geometry);
-                                $('#input-map-coordinate').val(path);
-                                var req = getReq();
-                                searchDatasets();
                                 scope.mapConfig.drawnArea = {
                                     'shape': 'polygon',
                                     'coordinates': path
                                 };
+
+                                if (scope.context.name == 'mapemprise') {
+                                    $('#input-map-coordinate').val("");
+                                    $('#input-map-coordinate').val(path);
+                                    var req = getReq();
+                                    searchDatasets();
+                                }
                             } 
                             else {
                                 var geoJson = layer.toGeoJSON();
-                                console.log(geoJson);
                                 var path = D4C.GeoFilter.getGeoJSONPolygonAsPolygonParameter(geoJson.geometry);
-                                console.log(path);
                                 scope.mapConfig.drawnArea = {
                                     'shape': 'polygon',
                                     'coordinates': path
                                 };
                             }
+
+                            // if (type === 'circle') {
+                            //     var distance = layer.getRadius();
+                            //     var center = layer.getLatLng();
+                            //     console.log(center.lat);
+                            //     console.log(center.lng);
+                            //     console.log(distance);
+                            //     scope.mapConfig.drawnArea = {
+                            //         'shape': 'circle',
+                            //         'coordinates': center.lat + ',' + center.lng + ',' + distance
+                            //     };
+                            //     $('#input-map-coordinate').val(center.lat + ',' + center.lng + ',' + distance);
+                            //     var req = getReq();
+                            //     searchDatasets();
+
+                            // }else if(type="rectangle") {
+                            //     $('#input-map-coordinate').val("");
+                            //     var geoJson = layer.toGeoJSON();
+                            //     var path = D4C.GeoFilter.getGeoJSONPolygonAsPolygonParameter(geoJson.geometry);
+                            //     $('#input-map-coordinate').val(path);
+                            //     var req = getReq();
+                            //     searchDatasets();
+                            //     scope.mapConfig.drawnArea = {
+                            //         'shape': 'polygon',
+                            //         'coordinates': path
+                            //     };
+                            // } 
+                            // else {
+                            //     var geoJson = layer.toGeoJSON();
+                            //     console.log(geoJson);
+                            //     var path = D4C.GeoFilter.getGeoJSONPolygonAsPolygonParameter(geoJson.geometry);
+                            //     console.log(path);
+                            //     scope.mapConfig.drawnArea = {
+                            //         'shape': 'polygon',
+                            //         'coordinates': path
+                            //     };
+                            // }
                         };
                         var getDrawnLayerType = function (layer) {
                             if (angular.isDefined(layer.getRadius)) {
