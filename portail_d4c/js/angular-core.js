@@ -25126,6 +25126,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 var shapeFields = layerConfig.context.dataset.getFieldsForType('geo_shape');
                 var shapeField = shapeFields.length ? shapeFields[0].name : null;
                 var includedFields = [];
+                //We had the field _id to find it in the method download
+                includedFields.push('_id');
                 if (shapeField) {
                     includedFields.push(shapeField);
                 } else {
