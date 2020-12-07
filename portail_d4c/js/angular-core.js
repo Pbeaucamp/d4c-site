@@ -9914,10 +9914,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
         this.setConfig = function (customConfig) {
             	$.ajax({
 		//url: "/api/maps/layers/?type=tile",
+		// url: "https://cda.data4citizen.com/api/maps/layers/",
 		url: "/api/maps/layers/",
 		success: function(result){
 			D4C.basemaps = result.layers;
-			D4C.default_bbox = result.default_bbox;
+            D4C.default_bbox = result.default_bbox;
+            //Uncomment this if you want to support custom config (see CDA Parcelles)
 			/*console.log(D4CWidgetsConfigProvider.customConfig);
 			D4CWidgetsConfigProvider.setConfig({
 				basemaps: result
@@ -13359,7 +13361,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 ModuleLazyLoader('leaflet').then(function () {
                     var map = new L.D4CMap(element.find('.d4cwidget-geo-search__map')[0], {
                         scrollWheelZoom: false,
-                        basemapsList: [D4CWidgetsConfig.basemaps()[0]],
+                        basemapsList: [(typeof D4CWidgetsConfig.basemaps === "function" ? D4CWidgetsConfig.basemaps() : D4CWidgetsConfig.basemaps)[0]],
                         disableAttribution: true,
                         maxBounds: [
                             [-90, -180],
@@ -17183,7 +17185,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     var unwatchInit = $scope.$watch('initMap', function () {
                         if ($scope.initMap) {
                             unwatchInit();
-                            $scope.initMap(newValue, $scope.embedMode, D4CWidgetsConfig.basemaps(), translate, D4CWidgetsConfig.mapGeobox, $scope.mapContext.basemap, $scope.staticMap, D4CWidgetsConfig.mapPrependAttribution, D4CWidgetsConfig.language);
+                            $scope.initMap(newValue, $scope.embedMode, (typeof D4CWidgetsConfig.basemaps === "function" ? D4CWidgetsConfig.basemaps() : D4CWidgetsConfig.basemaps), translate, D4CWidgetsConfig.mapGeobox, $scope.mapContext.basemap, $scope.staticMap, D4CWidgetsConfig.mapPrependAttribution, D4CWidgetsConfig.language);
                         }
                     });
                     unwatchSchema();
@@ -17286,7 +17288,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     }
                                 });
                             });
-                            if (D4CWidgetsConfig.basemaps().length > 1) {
+                            if ((typeof D4CWidgetsConfig.basemaps === "function" ? D4CWidgetsConfig.basemaps() : D4CWidgetsConfig.basemaps).length > 1) {
                                 $scope.map.on('baselayerchange', function (e) {
                                     $scope.mapContext.basemap = e.layer.basemapId;
                                     if (!$scope.$$phase && !$scope.$root.$$phase) {
@@ -17941,11 +17943,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         shapeType = $scope.shape.type;
                     }
                     // Disable for now cause it is not working for shapes
-                    // if ($scope.recordid && shapeType !== 'Point') {
-                    //     options.q = "recordid:'" + $scope.recordid + "'";
-                    // } else if ($scope.geoDigest) {
+                    if ($scope.recordid && shapeType !== 'Point') {
+                        options.q = "_id:'" + $scope.recordid + "'";
+                    } else if ($scope.geoDigest) {
                     // End disable
-                    if ($scope.geoDigest) {
+                    // if ($scope.geoDigest) {
                         options.geo_digest = $scope.geoDigest;
                     } else if ($scope.gridData) {
                         if ($scope.gridData['d4c:geo_grid'] !== null) {
@@ -18190,7 +18192,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 }
                 ModuleLazyLoader('leaflet').then(function () {
                     var mapOptions = {
-                        basemapsList: D4CWidgetsConfig.basemaps(),
+                        basemapsList: (typeof D4CWidgetsConfig.basemaps === "function" ? D4CWidgetsConfig.basemaps() : D4CWidgetsConfig.basemaps),
                         worldCopyJump: true,
                         basemap: scope.mapContext.basemap,
                         dragging: !isStatic,
@@ -18292,7 +18294,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         };
                         map.addControl(geocoder);
                     }
-		    basemapsList: D4CWidgetsConfig.basemaps() || D4CWidgetsConfig.basemaps;
+		    basemapsList: (typeof D4CWidgetsConfig.basemaps === "function" ? D4CWidgetsConfig.basemaps() : D4CWidgetsConfig.basemaps);
                     if (toolbarGeolocation && !isStatic) {
                         var geolocateControl = new L.Control.Locate({
                             position: 'topright',
@@ -18538,7 +18540,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             }
                         }
                     });
-                    if (D4CWidgetsConfig.basemaps().length > 1) {
+                    if ((typeof D4CWidgetsConfig.basemaps === "function" ? D4CWidgetsConfig.basemaps() : D4CWidgetsConfig.basemaps).length > 1) {
                         scope.map.on('baselayerchange', function (e) {
                             scope.$evalAsync('mapContext.basemap = "' + e.layer.basemapId + '"');
                             angular.forEach(scope.mapConfig.groups, function (groupConfig) {
