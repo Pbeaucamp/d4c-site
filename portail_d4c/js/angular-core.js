@@ -18723,7 +18723,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     'coordinates': center.lat + ',' + center.lng + ',' + distance
                                 };
 
-                                if (scope.context.name == 'mapemprise') {
+                                if (scope.context != undefined && scope.context.name == 'mapemprise') {
                                     $('#input-map-coordinate').val(center.lat + ',' + center.lng + ',' + distance);
                                     var req = getReq();
                                     searchDatasets();
@@ -18737,7 +18737,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     'coordinates': path
                                 };
 
-                                if (scope.context.name == 'mapemprise') {
+                                if (scope.context != undefined && scope.context.name == 'mapemprise') {
                                     $('#input-map-coordinate').val("");
                                     $('#input-map-coordinate').val(path);
                                     var req = getReq();
