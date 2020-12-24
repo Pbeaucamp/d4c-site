@@ -30,7 +30,7 @@ var features = [
 ];
 
 var goToPage = 0;
-var rows = 12;
+var rows = 14;
 $(document).ready(function(){
 
 	/*
