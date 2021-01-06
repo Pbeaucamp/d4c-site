@@ -33440,6 +33440,13 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                         return null;
                     }
                 },
+                getPredefinedFilters: function () {
+                    if (this.extra_metas && this.extra_metas['predefined_filters']) {
+                        return this.extra_metas['predefined_filters'];
+                    } else {
+                        return null;
+                    }
+                },
                 isFieldAnnotated: function (field, annotationName) {
                     return isFieldAnnotated(field, annotationName);
                 },
