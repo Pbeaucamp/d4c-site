@@ -33307,6 +33307,7 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                 attachments: dataset.attachments,
                 alternative_exports: dataset.alternative_exports,
                 resources_versions: dataset.resources_versions,
+                is_subscribed: dataset.is_subscribed,
                 fields: dataset.fields,
                 extra_metas: dataset.extra_metas,
                 interop_metas: dataset.interop_metas,
