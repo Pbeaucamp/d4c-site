@@ -10,20 +10,16 @@ Copyright (c) 2014 - Opendatasoft
          license-name="context.dataset.metas.license"
          action="download"
          conditions-version="conditionsVersion">
-        <p ng-if="context.dataset.metas.license"><span translate>This dataset is licensed under : </span> <span ng-bind-html="context.dataset.metas.license|prettyText|licenseLink"></span></p>
+        <p ng-if="context.dataset.metas.license"><span translate>This dataset is licensed under :</span> <span ng-bind-html="context.dataset.metas.license|prettyText|licenseLink"></span></p>
         <div ng-if="context.dataset.extra_metas.exporters.additional_projections">
             <span translate>Export geographical coordinates as:</span> <select required="required" ng-model="exportParameters.epsg" ng-options="epsg.value as epsg.label for epsg in epsgList"></select>
         </div>
-       
-
-
-
-   
-        <h3 ng-if="context.dataset.canAnalyze" translate>Flat file formats </h3>
+        <h3 ng-if="context.dataset.canAnalyze" translate>Flat file formats</h3>
         <ul ng-if="context.dataset.canAnalyze" class="d4c-dataset-export__format-choices">
             <li class="d4c-dataset-export__format-choice">
+                <div d4c-dataset-export-link export-parameters="exportParameters" format-label="CSV" format-extension="csv" context="context" nhits="context.nhits"></div>
 
-                <div class="d4c-dataset-export-link ng-isolate-scope"  > 
+                <!-- <div class="d4c-dataset-export-link ng-isolate-scope"> 
                        <span class="d4c-dataset-export-link__format-name ng-binding">CSV</span>
                            <a rel="nofollow" href="api/records/2.0/downloadfile/format=csv&amp;resource_id={{context.dataset.resourceCSVid}}&amp;use_labels_for_header=true&amp;user_defined_fields=true" ng-click="triggerTrackers($event, false)" class="d4c-dataset-export-link__link" target="_self" aria-label="Dataset export (CSV)" translate="aria-label">  
                                  <i class="fa fa-download" aria-hidden="true"></i>  
@@ -34,7 +30,7 @@ Copyright (c) 2014 - Opendatasoft
                                  <i class="fa fa-download" aria-hidden="true"></i>  
                             <span translate="" aria-hidden="true"><span class="ng-scope">Seulement les {{context.nhits}} enregistrements sélectionnés </span></span>    </a>  </span>  
                     
-                </div>
+                </div> -->
 
                 <p class="d4c-dataset-export-link__explanations" translate>CSV uses semicolon (;) as a separator.</p>
             </li>
@@ -42,7 +38,8 @@ Copyright (c) 2014 - Opendatasoft
                 <div d4c-dataset-export-link export-parameters="exportParameters" format-label="JSON" format-extension="json" context="context" nhits="context.nhits" ></div>
             </li>
 			<li class="d4c-dataset-export__format-choice">
-                <div class="d4c-dataset-export-link ng-isolate-scope"  > 
+                <div d4c-dataset-export-link export-parameters="exportParameters" format-label="Excel" format-extension="xls" context="context" nhits="context.nhits" ></div>
+                <!-- <div class="d4c-dataset-export-link ng-isolate-scope"  > 
                        <span class="d4c-dataset-export-link__format-name ng-binding">Excel</span>
                            <a rel="nofollow" href="api/records/2.0/downloadfile/format=xls&amp;resource_id={{context.dataset.resourceCSVid}}&amp;use_labels_for_header=true&amp;user_defined_fields=true" ng-click="triggerTrackers($event, false)" class="d4c-dataset-export-link__link" target="_self" aria-label="Dataset export (CSV)" translate="aria-label">  
                                  <i class="fa fa-download" aria-hidden="true"></i>  
@@ -52,9 +49,7 @@ Copyright (c) 2014 - Opendatasoft
                                  <i class="fa fa-download" aria-hidden="true"></i>  
                             <span translate="" aria-hidden="true"><span class="ng-scope">Seulement les {{context.nhits}} enregistrements sélectionnés</span></span>    </a></span>    
                     
-                </div>
-
-                <!-- <div d4c-dataset-export-link export-parameters="exportParameters" format-label="Excel" format-extension="xls" context="context" nhits="context.nhits" ></div> -->
+                </div> -->
             </li>
         </ul>
 
