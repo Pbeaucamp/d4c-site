@@ -7125,6 +7125,9 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				},
 				"Dataset date": {
 					"$$noContext": "Date du jeu de données"
+				},
+				"Predefined Filters": {
+					"$$noContext": "Filtres prédéfinis"
 				}
 			};
 			var current_language = "fr";

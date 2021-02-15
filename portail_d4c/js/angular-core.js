@@ -33305,6 +33305,7 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                 features: dataset.features,
                 attachments: dataset.attachments,
                 alternative_exports: dataset.alternative_exports,
+                resources_versions: dataset.resources_versions,
                 fields: dataset.fields,
                 extra_metas: dataset.extra_metas,
                 interop_metas: dataset.interop_metas,
@@ -33435,6 +33436,13 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                 getExtraMeta: function (template, name) {
                     if (this.extra_metas && this.extra_metas[template] && this.extra_metas[template][name]) {
                         return this.extra_metas[template][name];
+                    } else {
+                        return null;
+                    }
+                },
+                getPredefinedFilters: function () {
+                    if (this.extra_metas && this.extra_metas['predefined_filters']) {
+                        return this.extra_metas['predefined_filters'];
                     } else {
                         return null;
                     }

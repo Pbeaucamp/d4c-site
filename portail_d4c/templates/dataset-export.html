@@ -110,7 +110,22 @@ Copyright (c) 2014 - Opendatasoft
             </li>
         </ul>
 
-        <h3 ng-if="snapshots && snapshotList.length > 0" translate>Snapshots</h3>
+        <div ng-repeat="extras in context.dataset.metas.extras">
+            <div ng-if="extras.key == 'display_versionning' && extras.value == 1">
+                <h3 ng-if="context.dataset.resources_versions.length > 0" translate>Historic</h3>
+                <p ng-if="context.dataset.resources_versions > 0" translate>You can download a previous version of resources.</p>
+                <div ng-repeat="resource in context.dataset.resources_versions">
+                    <span class="name"><b>{{ resource.name }}</b></span>
+                    <li ng-repeat="version in resource.versions" class="d4c-dataset-export__format-choice">
+                        {{ version.creation_date.split(" ")[0] }}
+                        <a ng-href="{{ version.filepath }}" target="_blank">Télécharger</a>
+                    </li>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <h3 ng-if="snapshots && snapshotList.length > 0" translate>Snapshots</h3>
         <p ng-if="snapshots && snapshotList.length > 0" translate>You can download a previous version of the dataset in the CSV format.</p>
         <ul ng-if="snapshots && snapshotList.length > 0" class="d4c-dataset-export__format-choices">
             <li ng-repeat="snapshot in snapshotList" class="d4c-dataset-export__format-choice">
@@ -122,6 +137,6 @@ Copyright (c) 2014 - Opendatasoft
                 </a>
                 <span ng-show="snapshot.description" class="description">({{ snapshot.description }})</span>
             </li>
-        </ul>
+        </ul> -->
     </div>
 </div>
