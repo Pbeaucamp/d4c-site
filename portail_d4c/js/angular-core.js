@@ -12488,7 +12488,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 var dsq = document.createElement('script');
                 dsq.type = 'text/javascript';
                 dsq.async = true;
-                dsq.src = '//' + $window.disqus_shortname + '.disqus.com/embed.js';
+                // dsq.src = $window.disqus_shortname + '.disqus.com/embed.js';
+                dsq.src = 'data4citizen.disqus.com/embed.js';
                 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
             }
         };
@@ -33306,6 +33307,7 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                 attachments: dataset.attachments,
                 alternative_exports: dataset.alternative_exports,
                 resources_versions: dataset.resources_versions,
+                is_subscribed: dataset.is_subscribed,
                 fields: dataset.fields,
                 extra_metas: dataset.extra_metas,
                 interop_metas: dataset.interop_metas,
