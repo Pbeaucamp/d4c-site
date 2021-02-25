@@ -61,10 +61,10 @@ SOFTWARE.*/
                 '<p class="d4c-supported-browsers-message__message d4c-supported-browsers-message__message--p1"></p>' +
                 '<p class="d4c-supported-browsers-message__message d4c-supported-browsers-message__message--p2"></p>' +
                 '<div class="d4c-supported-browsers-message__supported-browsers">' +
-                '   <div class="d4c-supported-browsers-message__browser"><a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie"><img src="/sites/default/files/api/portail_d4c/img/browserlogos/internet-explorer_64x64.png"><p>Version 10+</p></a></div>' +
-                '   <div class="d4c-supported-browsers-message__browser"><a href="http://www.mozilla.org/"><img src="/sites/default/files/api/portail_d4c/img/browserlogos/firefox_64x64.png"><p>Version 10+</p></a></div>' +
-                '   <div class="d4c-supported-browsers-message__browser"><a href="http://www.google.com/chrome/"><img src="/sites/default/files/api/portail_d4c/img/browserlogos/chrome_64x64.png"><p>Version 13+</p></a></div>' +
-                '   <div class="d4c-supported-browsers-message__browser"><a href="http://www.apple.com/safari/"><img src="/sites/default/files/api/portail_d4c/img/browserlogos/safari_64x64.png"><p>Version 5+</p></a></div>' +
+                '   <div class="d4c-supported-browsers-message__browser"><a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie"><img src=' + fetchPrefix() + '"/sites/default/files/api/portail_d4c/img/browserlogos/internet-explorer_64x64.png"><p>Version 10+</p></a></div>' +
+                '   <div class="d4c-supported-browsers-message__browser"><a href="http://www.mozilla.org/"><img src=' + fetchPrefix() + '"/sites/default/files/api/portail_d4c/img/browserlogos/firefox_64x64.png"><p>Version 10+</p></a></div>' +
+                '   <div class="d4c-supported-browsers-message__browser"><a href="http://www.google.com/chrome/"><img src=' + fetchPrefix() + '"/sites/default/files/api/portail_d4c/img/browserlogos/chrome_64x64.png"><p>Version 13+</p></a></div>' +
+                '   <div class="d4c-supported-browsers-message__browser"><a href="http://www.apple.com/safari/"><img src=' + fetchPrefix() + '"/sites/default/files/api/portail_d4c/img/browserlogos/safari_64x64.png"><p>Version 5+</p></a></div>' +
                 '</div>' +
                 '</div>';
             container.getElementsByTagName('h2')[0].innerHTML = msgs.h;

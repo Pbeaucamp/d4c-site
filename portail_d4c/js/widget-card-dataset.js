@@ -1,5 +1,5 @@
 function calculValueFromFiltre(elem, idRes, colonne, operation,colonne_filtre=null, valeur_filtre =null ) {
-	$.ajax('/api/calculvaluefiltre', {
+	$.ajax(fetchPrefix() + '/d4c/api/calculvaluefiltre', {
         	type: 'POST',
                 dataType: "json",
                 cache: true,

@@ -104,8 +104,8 @@ d4c.config(function (D4CCurrentDomainProvider) {
 });
 d4c.config(function (D4CWidgetsConfigProvider, ModuleLazyLoaderProvider) {
 	$.ajax({
-		//url: "/api/maps/layers/?type=tile", 
-		url: "/api/maps/layers/", 
+		//url: fetchPrefix() + "/d4c/api/maps/layers/?type=tile", 
+		url: fetchPrefix() + "/d4c/api/maps/layers/", 
 		success: function(result){
 			try{
 				var res = JSON.parse(result);
@@ -208,7 +208,7 @@ d4c.config(function (D4CWidgetsConfigProvider, ModuleLazyLoaderProvider) {
 				"color": "#F82618"
 			}
 		},
-		basePath: '/sites/default/files/api/portail_d4c/',
+		basePath: fetchPrefix() + '/sites/default/files/api/portail_d4c/',
 		websiteName: "data4citizen.com",
 		mapPrependAttribution: '',
 		//defaultMapLocation: "9,46.14559,-1.10138", //La Rochelle

@@ -2,7 +2,7 @@
 
 
 function updateNbViews(id){
-    var url = '/api/datasets/'+id+'/update/views';
+    var url = fetchPrefix() + '/d4c/api/datasets/'+id+'/update/views';
     $.ajax( url ,
         {
             type:'GET',
@@ -20,7 +20,7 @@ function updateNbViews(id){
 }
 
 function updateNbDownload(id){
-    var url = '/api/datasets/'+id+'/update/downloads';
+    var url = fetchPrefix() + '/d4c/api/datasets/'+id+'/update/downloads';
     $.ajax( url ,
         {
             type:'GET',
@@ -42,7 +42,7 @@ function updateNbDownload(id){
 function showPopularDataset(){
     // list-popularDataset
     $('#list-popularDataset').find('li').remove() ;
-    $.ajax('/api/datasets/sort/bykey/nb_download' ,
+    $.ajax(fetchPrefix() + '/d4c/api/datasets/sort/bykey/nb_download' ,
         {
             type:'GET',
             dataType:'json',
@@ -87,7 +87,7 @@ function getPopularData(json){
             div.classList.add("div-most-popular-dataset-details");*/
         var a = document.createElement("a");
         a.classList.add("link-most-popular-dataset");
-        var url="/visualisation/table/?id="+json[i].id ;
+        var url ="' + fetchPrefix() + '/visualisation/table/?id="+json[i].id ;
         //"/explore/dataset/"+json[i].title +"/" ;
         a.setAttribute("href", url );
         a.setAttribute("target", "_self" );
@@ -105,7 +105,7 @@ function getPopularData(json){
 // A supprimer
 function showTheme(){
    
-    $.ajax('/api/datasets/sort/bykey/nb_download' ,
+    $.ajax(fetchPrefix() + '/d4c/api/datasets/sort/bykey/nb_download' ,
         {
             type:'GET',
             dataType:'json',

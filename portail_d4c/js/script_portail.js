@@ -76,7 +76,7 @@ $(document).ready(function(){
 	});
 
 	$('#datasets').on('click','h2',function(){
-		window.location.href = 'visualisation?id=' + $(this).data('id')+''+$(this).data('analyse');		
+		window.location.href = fetchPrefix() + '/visualisation?id=' + $(this).data('id')+''+$(this).data('analyse');		
 	});
 	
 	$('#datasets ').on('click','.jetons .tag',function(){
@@ -195,7 +195,7 @@ $(document).ready(function(){
 	$('#list-cat li').on('click', function(e){ 
 		var cat = $(this).data('cat');
 		var req = getReq();
-		window.location.href = '/api/datasets/2.0/download/' + cat + "/" + req;
+		window.location.href = fetchPrefix() + '/d4c/api/datasets/2.0/download/' + cat + "/" + req;
 	});
 	
 });
@@ -320,7 +320,7 @@ function changeUrl(requete){
 	
 	$("#search_bar").autocomplete({
 		source: function(request, response) {
-				$.ajax('/api/datasets/2.0/search/q=title:*' + request.term + '*&rows=10000',
+				$.ajax(fetchPrefix() + '/d4c/api/datasets/2.0/search/q=title:*' + request.term + '*&rows=10000',
 				{
 					type: 'POST',
 					dataType: 'json',
@@ -363,7 +363,7 @@ function changeUrl(requete){
 }*/
 
 function getThemes(){
-	$.ajax('/api/themes/',
+	$.ajax(fetchPrefix() + '/d4c/api/themes/',
 	{
 		type: 'POST',
 		dataType: 'json',
@@ -378,7 +378,7 @@ function getThemes(){
 }
 
 /*function getOrgas(){
-	$.ajax('/api/organizations/all_fields=true',
+	$.ajax(fetchPrefix() + '/d4c/api/organizations/all_fields=true',
 	{
 		type: 'POST',
 		dataType: 'json',
@@ -398,7 +398,7 @@ function getReq(){
 	var fqReq = "";
 	var qReq = "";
 	var coordReq = "";
-	var facetReq = 'facet.field=["organization","tags","theme","features"]';
+	var facetReq = 'facet.field=%5B"organization","tags","theme","features"%5D';
 
 	var page = getPage();
 	var start = rows * page;
@@ -485,7 +485,7 @@ function searchDatasets(){
 
 	changeUrl(req);
 	//$.ajax(ckan + '/api/action/package_search?' + requete + '&rows=1000'  + pertinence,
-	$.ajax('/api/datasets/2.0/search/' + req,
+	$.ajax(fetchPrefix() + '/d4c/api/datasets/2.0/search/' + req,
 	{
 		type: 'POST',
 		dataType: 'json',
@@ -499,7 +499,7 @@ function searchDatasets(){
 			console.log("ERROR: ", e);
 		}
 	});
-	/*$.ajax('/api/datasets/2.0/records/count/' + encodeURIComponent(requete) + '&rows=10000'  + pertinence,
+	/*$.ajax(fetchPrefix() + '/d4c/api/datasets/2.0/records/count/' + encodeURIComponent(requete) + '&rows=10000'  + pertinence,
 	{
 		type: 'POST',
 		dataType: 'json',
@@ -680,7 +680,7 @@ function createDataset(data){
 	//console.log(data);
     
     let analyseDefault = '';
-    let imgBck ='/sites/default/files/img_backgr/default.svg';
+    let imgBck = fetchPrefix() + '/sites/default/files/img_backgr/default.svg';
     for(let i = 0; i<data.extras.length; i++){
         if(data.extras[i].key=='analyse_default'){
            analyseDefault = '&'+ data.extras[i].value;
@@ -693,15 +693,15 @@ function createDataset(data){
     
 	//visus
 	
-    let api_vis = '<p><a href="/visualisation/api/?id=' + id + '"><i class="fa ' + features.filter(function(o){ return o.name == "api"; })[0].picto + '" aria-hidden="true"></i>' +features.filter(function(o){ return o.name == "api"; })[0].label + '</a></p>'; 
-    let analize_vis= '<p><a href="/visualisation/analyze/?id='+id+''+analyseDefault+'"><i class="fa ' + features.filter(function(o){ return o.name == "analyze"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "analyze"; })[0].label + '</a></p>';
-    let table_vis ='<p><a href="/visualisation/table/?id='+id+''+analyseDefault+'"><i class="fa ' + features.filter(function(o){ return o.name == "table"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "table"; })[0].label + '</a></p>';
-    let timeline_vis= '<p><a href="/visualisation/timeline/?id='+id+''+analyseDefault+'"><i class="fa ' + features.filter(function(o){ return o.name == "timeline"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "timeline"; })[0].label + '</a></p>';
-    let map_vis= '<p><a href="/visualisation/map/?id='+id+'"><i class="fa ' + features.filter(function(o){ return o.name == "geo"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "geo"; })[0].label + '</a></p>';
-    let wordcloud_vis= '<p><a href="/visualisation/wordcloud/?id='+id+''+analyseDefault+'"><i class="fa ' + features.filter(function(o){ return o.name == "wordcloud"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "wordcloud"; })[0].label + '</a></p>';
-    let image_vis= '<p><a href="/visualisation/images/?id='+id+'"><i class="fa ' + features.filter(function(o){ return o.name == "image"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "image"; })[0].label + '</a></p>';
-    let calendar_vis= '<p><a href="/visualisation/calendar/?id='+id+'"><i class="fa ' + features.filter(function(o){ return o.name == "calendar"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "calendar"; })[0].label + '</a></p>';
-    let export_vis= '<p><a href="/visualisation/export/?id='+id+''+analyseDefault+'"><i class="fa ' + features.filter(function(o){ return o.name == "export"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "export"; })[0].label + '</a></p>';
+    let api_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/api/?id=' + id + '"><i class="fa ' + features.filter(function(o){ return o.name == "api"; })[0].picto + '" aria-hidden="true"></i>' +features.filter(function(o){ return o.name == "api"; })[0].label + '</a></p>'; 
+    let analize_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/analyze/?id='+id+''+analyseDefault+'"><i class="fa ' + features.filter(function(o){ return o.name == "analyze"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "analyze"; })[0].label + '</a></p>';
+    let table_vis ='<p><a href ="' + fetchPrefix() + '/visualisation/table/?id='+id+''+analyseDefault+'"><i class="fa ' + features.filter(function(o){ return o.name == "table"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "table"; })[0].label + '</a></p>';
+    let timeline_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/timeline/?id='+id+''+analyseDefault+'"><i class="fa ' + features.filter(function(o){ return o.name == "timeline"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "timeline"; })[0].label + '</a></p>';
+    let map_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/map/?id='+id+'"><i class="fa ' + features.filter(function(o){ return o.name == "geo"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "geo"; })[0].label + '</a></p>';
+    let wordcloud_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/wordcloud/?id='+id+''+analyseDefault+'"><i class="fa ' + features.filter(function(o){ return o.name == "wordcloud"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "wordcloud"; })[0].label + '</a></p>';
+    let image_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/images/?id='+id+'"><i class="fa ' + features.filter(function(o){ return o.name == "image"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "image"; })[0].label + '</a></p>';
+    let calendar_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/calendar/?id='+id+'"><i class="fa ' + features.filter(function(o){ return o.name == "calendar"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "calendar"; })[0].label + '</a></p>';
+    let export_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/export/?id='+id+''+analyseDefault+'"><i class="fa ' + features.filter(function(o){ return o.name == "export"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "export"; })[0].label + '</a></p>';
     
    
 	let rightPanel= '';
@@ -740,11 +740,11 @@ function createDataset(data){
 						let titleCustomView = data.metas.custom_view.title;
 						// let custom_view_vis;
 						if (titleCustomView) {
-							let custom_view_vis = '<p><a href="/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>'+titleCustomView+'</a></p>';
+							let custom_view_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>'+titleCustomView+'</a></p>';
 							vis = custom_view_vis;
 						}
 						else {
-							let custom_view_vis = '<p><a href="/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>Vue personnalisée</a></p>';
+							let custom_view_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>Vue personnalisée</a></p>';
 							vis = custom_view_vis;
 						}
 						break;

@@ -276,7 +276,7 @@ SOFTWARE.*/
     mod.directive('d4cFormContent', function() {
         var formUniqueId = 0;
         return {
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/d4c_form.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/d4c_form.html',
             replace: true,
             restrict: 'E',
             scope: {
@@ -349,7 +349,7 @@ SOFTWARE.*/
     mod.directive('d4cFormField', ['APIXHRService', '$q', function(APIXHRService, $q) {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/d4c_form_field.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/d4c_form_field.html',
             replace: true,
             require: '^d4cFormContent',
             scope: {
@@ -640,7 +640,7 @@ SOFTWARE.*/
                 restrictUnit: "@",
                 label: "@"
             },
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/quota.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/quota.html',
             link: function(scope, element, attrs) {
                 scope.orderUnits = ["second", "minute", "hour", "day", "month"];
                 scope.units = {
@@ -1554,7 +1554,7 @@ SOFTWARE.*/
                 dataset_status: '=datasetStatus',
                 dataset: '=',
             },
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/snapshot_form.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/snapshot_form.html',
             replace: true,
             restrict: 'E',
             controller: function($scope) {
@@ -1723,7 +1723,7 @@ SOFTWARE.*/
     }]);
     mod.directive('staticfilestoreAsset', ['$http', 'd4cNotificationService', 'AssetHelper', 'ManagementAPI', function($http, d4cNotificationService, AssetHelper, ManagementAPI) {
         var templateUrl = function(type) {
-            return '/sites/default/files/api/portail_d4c/templates/assets/' + type + '.html';
+            return fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/assets/' + type + '.html';
         };
         return {
             restrict: 'E',
@@ -3341,7 +3341,7 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
         };
     }]);
     app.factory("ManagementAPI", ["APIFileService", "APIXHRService", "$q", "$rootScope", 'config', 'DebugLogger', 'd4cNotificationService', function(APIFileService, APIXHRService, $q, $rootScope, config, DebugLogger, d4cNotificationService) {
-        var API_PATH = '/api/management/1.0/';
+        var API_PATH = fetchPrefix() + '/d4c/api/management/1.0/';
         var assetUrlToFileName = function(url) {
             if (url.indexOf('/') > -1) {
                 url = url.split('/')[url.split('/').length - 1];
@@ -3667,18 +3667,18 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
             'metadata_templates': {
                 'get': function(language) {
                     if (language) {
-                        return APIXHRService("GET", API_PATH + "metadata_/sites/default/files/api/portail_d4c/templates/", {
+                        return APIXHRService("GET", API_PATH + "metadata_" + fetchPrefix() + "/sites/default/files/api/portail_d4c/templates/", {
                             'lang': language
                         });
                     } else {
-                        return APIXHRService("GET", API_PATH + "metadata_/sites/default/files/api/portail_d4c/templates/", {});
+                        return APIXHRService("GET", API_PATH + "metadata_" + fetchPrefix() + "/sites/default/files/api/portail_d4c/templates/", {});
                     }
                 },
                 'save': function(metadata_templates) {
-                    return APIXHRService("POST", API_PATH + "metadata_/sites/default/files/api/portail_d4c/templates/", metadata_templates);
+                    return APIXHRService("POST", API_PATH + "metadata_" + fetchPrefix() + "/sites/default/files/api/portail_d4c/templates/", metadata_templates);
                 },
                 'suggest': function(template_name, meta_name, query) {
-                    return APIXHRService("GET", API_PATH + "metadata_/sites/default/files/api/portail_d4c/templates/" + template_name + '/' + meta_name + '/suggest/', {
+                    return APIXHRService("GET", API_PATH + "metadata_" + fetchPrefix() + "/sites/default/files/api/portail_d4c/templates/" + template_name + '/' + meta_name + '/suggest/', {
                         query: query
                     });
                 }
@@ -4304,7 +4304,7 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
         };
     }]);
     app.factory("SearchAPI", ["APIXHRService", "config", function(APIXHRService, config) {
-        var API_PATH = '/api/';
+        var API_PATH = fetchPrefix() + '/d4c/api/';
         var customHeaders = {};
         var timezone = jstz.determine().name();
         var timezoneAwareOptions = function(options) {
@@ -4392,7 +4392,7 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
         };
     }]);
     app.factory('PlatformAPI', ['APIXHRService', 'config', function(APIXHRService, config) {
-        var API_PATH = '/api/platform/1.0/';
+        var API_PATH = fetchPrefix() + '/d4c/api/platform/1.0/';
         return {
             domains: {
                 'delete': function(domain) {
@@ -4476,7 +4476,7 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
         };
     }]);
     app.factory('CoreAPI', ['APIXHRService', 'config', function(APIXHRService, config) {
-        var API_PATH = '/api/';
+        var API_PATH = fetchPrefix() + '/d4c/api/';
         return {
             'account': {
                 'get': function() {
@@ -4600,7 +4600,7 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
         };
     }]);
     app.factory('PageAPI', ['APIXHRService', '$q', 'config', function(APIXHRService) {
-        var API_PATH = '/api/v2/pages/';
+        var API_PATH = fetchPrefix() + '/d4c/api/v2/pages/';
         return {
             contact: function(slug, data) {
                 return APIXHRService("POST", API_PATH + slug + '/contact/', data);
@@ -4614,7 +4614,7 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
         };
     }]);
     app.factory('MapbuilderAPI', ['APIXHRService', '$q', 'config', function(APIXHRService) {
-        var API_PATH = '/api/mapbuilder/';
+        var API_PATH = fetchPrefix() + '/d4c/api/mapbuilder/';
         return {
             create: function(data) {
                 return APIXHRService("POST", API_PATH, data);
@@ -4634,7 +4634,7 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
         };
     }]);
     app.factory('ReuseAPI', ['APIXHRService', 'config', function(APIXHRService, config) {
-        var API_PATH = '/api/datasets/1.0/';
+        var API_PATH = fetchPrefix() + '/d4c/api/datasets/1.0/';
         return {
             'list': function() {
                 return APIXHRService('GET', API_PATH + config.DATASET_ID + '/reuses/', {});
@@ -5337,7 +5337,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 autoRequest: '@',
                 service: '='
             },
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/api-console.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/api-console.html',
             controller: function($scope) {
                 $scope.apiParams = {};
                 $scope.errors = null;
@@ -5575,7 +5575,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             $scope.allowedcolors = ChartHelper.getAllowedColors($scope.serie.type, $scope.breakdown);
         };
         return {
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/chart-control-serie.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/chart-control-serie.html',
             require: "^chartControls",
             scope: {
                 serie: '=',
@@ -5637,7 +5637,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             $scope.availableFunctions = ChartHelper.getAvailableFunctions(uniqueid);
         };
         return {
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/chart-control-serie-function.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/chart-control-serie-function.html',
             scope: {
                 serie: '=',
                 context: '=',
@@ -5666,7 +5666,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
     mod.directive('chartControls', ['$http', '$location', '$timeout', 'translate', 'ChartHelper', 'AggregationHelper', 'ContextHelper', function($http, $location, $timeout, translate, ChartHelper, AggregationHelper, ContextHelper) {
         var $dataset;
         return {
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/chart-controls.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/chart-controls.html',
             scope: {
                 context: '=',
                 dataChart: '=datachart',
@@ -5821,7 +5821,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
     mod.directive('advancedChartControls', ['config', 'ChartHelper', 'URLSynchronizer', 'SearchAPI', '$location', '$timeout', '$q', 'ManagementAPI', function(config, ChartHelper, URLSynchronizer, SearchAPI, $location, $timeout, $q, ManagementAPI) {
         return {
             restrict: 'AE',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/advanced-chart-controls.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/advanced-chart-controls.html',
             scope: {
                 context: '=',
                 chartContext: '=',
@@ -6739,7 +6739,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
     var mod = angular.module('d4c.core');
     mod.factory('d4cCountriesListProvider', ['config', '$http', function(config, $http) {
         var lang = config.LANGUAGE;
-        var promise = $http.get('/sites/default/files/api/portail_d4c/templates/' + lang + '.json');
+        var promise = $http.get(fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/' + lang + '.json');
         return {
             promise: promise
         };
@@ -6820,7 +6820,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 dataset: '=',
                 record: '='
             },
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/dataset-feedback-interface.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/dataset-feedback-interface.html',
             link: function(scope, element, attrs) {
                 element.on('click', function(e) {
                     e.stopPropagation();
@@ -6897,7 +6897,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 filteringEnabled: '=?',
                 preventDatasetChange: '=?'
             },
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/dataset-selection-with-permissions.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/dataset-selection-with-permissions.html',
             link: function(scope) {
                 scope.BRAND_HOSTNAME = config.BRAND_HOSTNAME;
                 scope.USER = config.USER;
@@ -6967,7 +6967,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 filteringEnabled: '=?',
                 preventDatasetChange: '=?'
             },
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/dataset-selection-with-permissions.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/dataset-selection-with-permissions.html',
             link: function(scope) {
                 scope.BRAND_HOSTNAME = config.BRAND_HOSTNAME;
                 scope.USER = config.USER;
@@ -7181,7 +7181,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 relatedDomainsDisabled: '=?',
                 preventDatasetChange: '=?'
             },
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/dataset-selection-list.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/dataset-selection-list.html',
             controller: function($scope) {
                 $scope.BRAND_HOSTNAME = config.BRAND_HOSTNAME;
                 $scope.PORTAL_TITLE = D4CWidgetsConfig.websiteName;
@@ -7456,7 +7456,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 forceEmbedDatasetCard: '=',
                 widgetCode: '=?'
             },
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/embed_control.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/embed_control.html',
             controller: function($scope, $timeout) {
                 $scope.sizes = [{
                     name: 'small',
@@ -7760,7 +7760,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 allowedcolors: '='
             },
             replace: true,
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/color-chooser.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/color-chooser.html',
             link: function(scope, element, attrs) {
                 scope.colorrangetemplates = colorScale.getColorSets();
                 scope.colortemplates = [];
@@ -8827,7 +8827,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     });
                     return count;
                 };
-                var promise = $http.get('/sites/default/files/api/portail_d4c/img/set-v3/' + lang + '.json');
+                var promise = $http.get(fetchPrefix() + '/sites/default/files/api/portail_d4c/img/set-v3/' + lang + '.json');
                 promise.then(function(response) {
                     if (response.status === 200) {
                         pictos = response.data;
@@ -8863,7 +8863,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                 };
                 scope.iconPlaceholder = scope.placeholder || translate('No icon');
-                var templatePopupHTML = '<div class="d4c-pictopicker__popup">' + '   <div class="d4c-pictopicker__popup__search">' + '       <i class="d4cui-search d4c-pictopicker__popup__search__placeholder-icon"></i>' + '       <input class="d4c-pictopicker__popup__search__input" type="search" ng-model="q" ng-change="filterPictos(q)" ng-model-options="{ debounce: 200 }" placeholder="Search an icon" translate="placeholder" autofocus/>' + '       <button type="button" ng-if="q" class="d4c-pictopicker__popup__search__clear-button" aria-label="Clear search box." translate="aria-label" ng-click="clearInput()">' + '           <i class="d4cui-delete" aria-hidden="true"></i>' + '       </button>' + '   </div>' + '   <div class="d4c-pictopicker__popup__search__results-count">{{filteredIconsCount}} / {{iconsCount}}</div>' + '   <div class="d4c-pictopicker__popup__icons-list" id="d4c-pictopicker__popup__icons-list">' + '       <div id="d4c-pictopicker__popup__icons-list__top"></div>' + '       <div ng-hide="required" class="d4c-pictopicker__popup__no-icon" id="d4c-pictopicker__popup-no_icon">' + '           <p class="d4c-pictopicker__popup__no-icon__category-title" translate>No icon</p>' + '           <div class="d4c-pictopicker__popup__icons-list__icon"' + '               ng-click="select(\'\')" ng-class="{\'no-picto\': true, \'active\': \'\' === currentPicto}"' + '               ng-mouseenter="previewNoPicto()"' + '               ng-mouseleave="hidePreview()" tabindex="0" ng-keypress="checkIconKey($event, \'\')" aria-label="No icon" role="button" translate="aria-label">' + '               <img src="/sites/default/files/api/portail_d4c/img/set-v3/pictos/no_picto.svg"/>' + '           </div>' + '       </div>' + '       <div class="d4c-pictopicker__popup__icons-list__group" ng-if="filteredCategories" ng-repeat="category in filteredCategories track by category.title" ' + '           id="d4c-pictopicker__popup__icons-list__group">' + '           <p class="d4c-pictopicker__popup__icons-list__group__category-title" ng-bind="category.title"></p>' + '           <div class="d4c-pictopicker__popup__icons-list__icon"' + '               title="{{picto.label}}" ng-repeat="picto in category.icons track by picto.filename" ' + '               ng-click="select(picto)" ng-class="{\'active\': picto.name === currentPicto}"' + '               ng-mouseenter="previewPicto(picto)"' + '               ng-mouseleave="hidePreview()" tabindex="0" role="button" aria-label="{{picto.name}}" translate="aria-label" ng-keypress="checkIconKey($event, picto)">' + '               <img ng-src="/sites/default/files/api/portail_d4c/img/set-v3/pictos/{{picto.filename}}.svg" />' + '           </div>' + '       </div>' + '   </div>' + '   <div class="d4c-pictopicker__popup__selected-icon">' + '       <div ng-if="isOldIcon && !selectedPicto && !showPreview && !showNoIconPreview">' + '           <div>Select an icon</div>' + '       </div>' + '       <div ng-if="selectedPicto && !showPreview && !showNoIconPreview && !isOldIcon">' + '           <div class="d4c-pictopicker__popup__selected-icon__icon" ng-click="scrollTo(picto.filename)">' + '               <img ng-src="/sites/default/files/api/portail_d4c/img/set-v3/pictos/{{selectedPicto}}.svg" />' + '           </div>' + '           <span>' + '               <div ng-bind="selectedPictoName"></div>' + '           </span>' + '       </div>' + '       <div ng-if="!selectedPicto && !showPreview && !showNoIconPreview && !isOldIcon">' + '           <div class="d4c-pictopicker__popup__selected-icon__icon" ng-click="scrollTo(\'d4c-pictopicker__popup__icons-list__top\')">' + '               <img src="/sites/default/files/api/portail_d4c/img/set-v3/pictos/no_picto.svg" />' + '           </div>' + '           <span d4c-pictopicker__popup__selected-icon__no-icon translate>No icon</span>' + '       </div>' + '       <div ng-if="showPreview">' + '           <div class="d4c-pictopicker__popup__selected-icon__icon-preview" ng-click="scrollTo(picto.filename)">' + '               <img ng-src="/sites/default/files/api/portail_d4c/img/set-v3/pictos/{{pictoPreview}}.svg" />' + '           </div>' + '           <span>' + '               <div ng-bind="pictoPreviewName"></div>' + '           </span>' + '       </div>' + '       <div ng-if="showNoIconPreview ">' + '           <div class="d4c-pictopicker__popup__selected-icon__icon-preview" ng-click="scrollTo(picto.filename)">' + '               <img src="/sites/default/files/api/portail_d4c/img/set-v3/pictos/no_picto.svg" />' + '           </div>' + '           <span>' + '               <div translate>No icon</div>' + '           </span>' + '       </div>' + '   </div>' + '   <div class="d4c-pictopicker__popup__validation">' + '       <button type="button" ng-click="close()" class="d4c-button d4c-button--link d4c-pictopicker__popup__cancel-button" ' + '               tabindex="0" aria-label="Close icon picker" translate="aria-label">Cancel</button>' + '       <button class="d4c-button d4c-button--primary d4c-pictopicker__popup__apply-button" ng-click="validate(picto)" tabindex="0" type="button">' + '           <i class="d4cui-valid" aria-hidden="true"></i> <span translate>Select icon</span>' + '       </button>' + '   </div>' + '</div>';
+                var templatePopupHTML = '<div class="d4c-pictopicker__popup">' + '   <div class="d4c-pictopicker__popup__search">' + '       <i class="d4cui-search d4c-pictopicker__popup__search__placeholder-icon"></i>' + '       <input class="d4c-pictopicker__popup__search__input" type="search" ng-model="q" ng-change="filterPictos(q)" ng-model-options="{ debounce: 200 }" placeholder="Search an icon" translate="placeholder" autofocus/>' + '       <button type="button" ng-if="q" class="d4c-pictopicker__popup__search__clear-button" aria-label="Clear search box." translate="aria-label" ng-click="clearInput()">' + '           <i class="d4cui-delete" aria-hidden="true"></i>' + '       </button>' + '   </div>' + '   <div class="d4c-pictopicker__popup__search__results-count">{{filteredIconsCount}} / {{iconsCount}}</div>' + '   <div class="d4c-pictopicker__popup__icons-list" id="d4c-pictopicker__popup__icons-list">' + '       <div id="d4c-pictopicker__popup__icons-list__top"></div>' + '       <div ng-hide="required" class="d4c-pictopicker__popup__no-icon" id="d4c-pictopicker__popup-no_icon">' + '           <p class="d4c-pictopicker__popup__no-icon__category-title" translate>No icon</p>' + '           <div class="d4c-pictopicker__popup__icons-list__icon"' + '               ng-click="select(\'\')" ng-class="{\'no-picto\': true, \'active\': \'\' === currentPicto}"' + '               ng-mouseenter="previewNoPicto()"' + '               ng-mouseleave="hidePreview()" tabindex="0" ng-keypress="checkIconKey($event, \'\')" aria-label="No icon" role="button" translate="aria-label">' + '               <img src=' + fetchPrefix() + '"/sites/default/files/api/portail_d4c/img/set-v3/pictos/no_picto.svg"/>' + '           </div>' + '       </div>' + '       <div class="d4c-pictopicker__popup__icons-list__group" ng-if="filteredCategories" ng-repeat="category in filteredCategories track by category.title" ' + '           id="d4c-pictopicker__popup__icons-list__group">' + '           <p class="d4c-pictopicker__popup__icons-list__group__category-title" ng-bind="category.title"></p>' + '           <div class="d4c-pictopicker__popup__icons-list__icon"' + '               title="{{picto.label}}" ng-repeat="picto in category.icons track by picto.filename" ' + '               ng-click="select(picto)" ng-class="{\'active\': picto.name === currentPicto}"' + '               ng-mouseenter="previewPicto(picto)"' + '               ng-mouseleave="hidePreview()" tabindex="0" role="button" aria-label="{{picto.name}}" translate="aria-label" ng-keypress="checkIconKey($event, picto)">' + '               <img ng-src=' + fetchPrefix() + '"/sites/default/files/api/portail_d4c/img/set-v3/pictos/{{picto.filename}}.svg" />' + '           </div>' + '       </div>' + '   </div>' + '   <div class="d4c-pictopicker__popup__selected-icon">' + '       <div ng-if="isOldIcon && !selectedPicto && !showPreview && !showNoIconPreview">' + '           <div>Select an icon</div>' + '       </div>' + '       <div ng-if="selectedPicto && !showPreview && !showNoIconPreview && !isOldIcon">' + '           <div class="d4c-pictopicker__popup__selected-icon__icon" ng-click="scrollTo(picto.filename)">' + '               <img ng-src=' + fetchPrefix() + '"/sites/default/files/api/portail_d4c/img/set-v3/pictos/{{selectedPicto}}.svg" />' + '           </div>' + '           <span>' + '               <div ng-bind="selectedPictoName"></div>' + '           </span>' + '       </div>' + '       <div ng-if="!selectedPicto && !showPreview && !showNoIconPreview && !isOldIcon">' + '           <div class="d4c-pictopicker__popup__selected-icon__icon" ng-click="scrollTo(\'d4c-pictopicker__popup__icons-list__top\')">' + '               <img src=' + fetchPrefix() + '"/sites/default/files/api/portail_d4c/img/set-v3/pictos/no_picto.svg" />' + '           </div>' + '           <span d4c-pictopicker__popup__selected-icon__no-icon translate>No icon</span>' + '       </div>' + '       <div ng-if="showPreview">' + '           <div class="d4c-pictopicker__popup__selected-icon__icon-preview" ng-click="scrollTo(picto.filename)">' + '               <img ng-src=' + fetchPrefix() + '"/sites/default/files/api/portail_d4c/img/set-v3/pictos/{{pictoPreview}}.svg" />' + '           </div>' + '           <span>' + '               <div ng-bind="pictoPreviewName"></div>' + '           </span>' + '       </div>' + '       <div ng-if="showNoIconPreview ">' + '           <div class="d4c-pictopicker__popup__selected-icon__icon-preview" ng-click="scrollTo(picto.filename)">' + '               <img src=' + fetchPrefix() + '"/sites/default/files/api/portail_d4c/img/set-v3/pictos/no_picto.svg" />' + '           </div>' + '           <span>' + '               <div translate>No icon</div>' + '           </span>' + '       </div>' + '   </div>' + '   <div class="d4c-pictopicker__popup__validation">' + '       <button type="button" ng-click="close()" class="d4c-button d4c-button--link d4c-pictopicker__popup__cancel-button" ' + '               tabindex="0" aria-label="Close icon picker" translate="aria-label">Cancel</button>' + '       <button class="d4c-button d4c-button--primary d4c-pictopicker__popup__apply-button" ng-click="validate(picto)" tabindex="0" type="button">' + '           <i class="d4cui-valid" aria-hidden="true"></i> <span translate>Select icon</span>' + '       </button>' + '   </div>' + '</div>';
                 var popup;
                 var clickAnywhereToClose = function() {
                     closePicker();
@@ -9471,7 +9471,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             if ($scope.syncToUrlMode === 'hash') {
                                 $location.hash(pane.slug);
                             } else {
-                                $location.path('visualisation/' + pane.slug + '/');
+                                $location.path(fetchPrefix() + '/visualisation/' + pane.slug + '/');
                             }
                         }
                         if ($scope.syncToObject && !defaultSelection) {
@@ -11915,7 +11915,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 $scope.facets = [];
                 
 				try{
-					var url = '/api/datasets/'+$scope.context.dataset.datasetid+'/update/views';
+					var url = fetchPrefix() + '/d4c/api/datasets/'+$scope.context.dataset.datasetid+'/update/views';
 					$.ajax(url,
 						{
 							type:'POST',
@@ -20314,23 +20314,23 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             'datasets': {
                 'get': function(context, datasetID, parameters, timeout) {
-                    return request(context, '/api/datasets/1.0/' + datasetID + '/', parameters, timeout);
+                    return request(context, fetchPrefix() + '/d4c/api/datasets/1.0/' + datasetID + '/', parameters, timeout);
                 },
                 'search': function(context, parameters, timeout) {
                     var queryParameters = angular.extend({}, context.parameters, parameters);
-                    return request(context, '/api/datasets/1.0/search/', queryParameters, timeout);
+                    return request(context, fetchPrefix() + '/d4c/api/datasets/1.0/search/', queryParameters, timeout);
                 },
                 'facets': function(context, facetName, timeout) {
                     var queryParameters = angular.extend({}, context.parameters, {
                         'rows': 0,
                         'facet': facetName
                     });
-                    return request(context, '/api/datasets/1.0/search/', queryParameters, timeout);
+                    return request(context, fetchPrefix() + '/d4c/api/datasets/1.0/search/', queryParameters, timeout);
                 }
             },
             'records': {
                 'analyze': function(context, parameters, timeout) {
-                    return request(context, '/api/records/1.0/analyze/', angular.extend({}, parameters, {
+                    return request(context, fetchPrefix() + '/d4c/api/records/1.0/analyze/', angular.extend({}, parameters, {
                         dataset: context.dataset.datasetid
                     }), timeout).success(function(data, status, headers, config) {
                         if (headers()['d4c-analyze-truncated']) {
@@ -20339,37 +20339,37 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     });
                 },
                 'search_simple': function(context, parameters, timeout) {
-                    return request(context, '/api/records/1.0/search/', angular.extend({}, parameters, {
+                    return request(context, fetchPrefix() + '/d4c/api/records/1.0/search/', angular.extend({}, parameters, {
                         resource_id: context.dataset.resourceCSVid
                     }), timeout);
                 },
                 'search': function(context, parameters, timeout) {
-                    return request(context, '/api/records/1.0/download/', angular.extend({}, parameters, {
+                    return request(context, fetchPrefix() + '/d4c/api/records/1.0/download/', angular.extend({}, parameters, {
                         resource_id: context.dataset.resourceCSVid
                     }), timeout);
                 },
                 'download': function(context, parameters, timeout) {
-                    return request(context, '/api/records/2.0/download/', angular.extend({}, parameters, {
+                    return request(context, fetchPrefix() + '/d4c/api/records/2.0/download/', angular.extend({}, parameters, {
                         resource_id: context.dataset.resourceCSVid
                     }), timeout);
                 },
                 'geo': function(context, parameters, timeout) {
-                    return request(context, '/api/records/1.0/geocluster/', angular.extend({}, parameters, {
+                    return request(context, fetchPrefix() + '/d4c/api/records/1.0/geocluster/', angular.extend({}, parameters, {
                         dataset: context.dataset.datasetid
                     }), timeout);
                 },
                 'geopreview': function(context, parameters, timeout) {
-                    return request(context, '/api/records/1.0/geopreview/', angular.extend({}, parameters, {
+                    return request(context, fetchPrefix() + '/d4c/api/records/1.0/geopreview/', angular.extend({}, parameters, {
                         resource_id: context.dataset.resourceCSVid
                     }), timeout);
                 },
                 'boundingbox': function(context, parameters, timeout) {
-                    return request(context, '/api/records/1.0/boundingbox/', angular.extend({}, parameters, {
+                    return request(context, fetchPrefix() + '/d4c/api/records/1.0/boundingbox/', angular.extend({}, parameters, {
                         resource_id: context.dataset.resourceCSVid
                     }), timeout);
                 },
                 'geopolygon': function(context, parameters, timeout) {
-                    return request(context, '/api/records/1.0/geopolygon/', angular.extend({}, parameters, {
+                    return request(context, fetchPrefix() + '/d4c/api/records/1.0/geopolygon/', angular.extend({}, parameters, {
                         dataset: context.dataset.datasetid
                     }), timeout);
                 }
@@ -22420,7 +22420,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         showmarker: layerConfig.marker
                     };
                     angular.extend(tilesOptions, layerConfig.context.parameters);
-                    var url = '/api/datasets/1.0/' + layerConfig.context.dataset.datasetid + '/tiles/simple/{z}/{x}/{y}.bundle';
+                    var url = fetchPrefix() + '/d4c/api/datasets/1.0/' + layerConfig.context.dataset.datasetid + '/tiles/simple/{z}/{x}/{y}.bundle';
                     var params = '';
                     angular.forEach(tilesOptions, function(value, key) {
                         if (value !== null) {
@@ -23493,9 +23493,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     url += '/static/pictos/img/set-v1/' + picto + '.svg';
                 } else if (picto.startsWith('d4c-')) {
                     picto = picto.replace('d4c-', '');
-                    url += '/sites/default/files/api/portail_d4c/img/set-v3/pictos/' + picto + '.svg';
+                    url += fetchPrefix() + '/sites/default/files/api/portail_d4c/img/set-v3/pictos/' + picto + '.svg';
                 } else {
-                    url += '/sites/default/files/api/portail_d4c/img/set-v2/' + picto + '.svg';
+                    url += fetchPrefix() + '/sites/default/files/api/portail_d4c/img/set-v2/' + picto + '.svg';
                 }
                 return url;
             }
@@ -31724,7 +31724,7 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function($
                 console.log('ERROR : This field is not an file field.');
             }
             var url = context.domainUrl;
-            url += '/api/datasets/1.0/' + context.dataset.datasetid + '/files/' + fieldValue.id + '/';
+            url += fetchPrefix() + '/d4c/api/datasets/1.0/' + context.dataset.datasetid + '/files/' + fieldValue.id + '/';
             return url;
         };
     });

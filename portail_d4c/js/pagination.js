@@ -12,7 +12,7 @@ function initPagination() {
 	var rows = listElement.children().filter(function(d, i){ return i.innerText.match(txtFilter) != null;});
 	var url = tabUrl;
 	var resourceId = url.substring(url.indexOf('resource/') + 9, url.indexOf('/', url.indexOf('resource/') + 9));
-	var url = '/api/records/search/resource_id=' + resourceId + '&limit=0';
+	var url = fetchPrefix() + '/d4c/api/records/search/resource_id=' + resourceId + '&limit=0';
 	var numPages = 0;
 	$.getJSON(url, function(data) {
 		
@@ -95,7 +95,7 @@ function initPagination() {
 		var limit = perPage * (0+1);
 		var offset = perPage * (0+1) - perPage;
 		
-		var url = '/api/records/search/download/resource_id=' + resourceId + '&limit=' + limit+ '&offset=' + offset + '&format=objects';
+		var url = fetchPrefix() + '/d4c/api/records/search/download/resource_id=' + resourceId + '&limit=' + limit+ '&offset=' + offset + '&format=objects';
 		
 		d3.request(url)
 		    .mimeType("text/csv; charset=ISO-8859-1")
@@ -140,7 +140,7 @@ function initPagination() {
 	var limit = perPage * (page+1);
 	var offset = perPage * (page+1) - perPage;
 	
-	var url = '/api/records/search/download/resource_id=' + resourceId + '&limit=' + limit+ '&offset=' + offset + '&format=objects';
+	var url = fetchPrefix() + '/d4c/api/records/search/download/resource_id=' + resourceId + '&limit=' + limit+ '&offset=' + offset + '&format=objects';
 		
 		d3.request(url)
 		    .mimeType("text/csv; charset=ISO-8859-1")

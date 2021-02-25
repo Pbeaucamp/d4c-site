@@ -159,7 +159,7 @@ $(document).ready(function(){
 	$('#list-cat li').on('click', function(e){ 
 		var cat = $(this).data('cat');
 		var req = getReq();
-		window.location.href = '/api/datasets/2.0/download/' + cat + "/" + req;
+		window.location.href = fetchPrefix() + '/d4c/api/datasets/2.0/download/' + cat + "/" + req;
 	});
 	
 });
@@ -277,7 +277,7 @@ function changeUrl(requete){
 }
 
 function getThemes(){
-	$.ajax('/api/themes/',
+	$.ajax(fetchPrefix() + '/d4c/api/themes/',
 	{
 		type: 'POST',
 		dataType: 'json',
@@ -372,7 +372,7 @@ function searchDatasets(){
 	var req = getReq();
 
 	changeUrl(req);
-	$.ajax('/api/datasets/2.0/search/' + req,
+	$.ajax(fetchPrefix() + '/d4c/api/datasets/2.0/search/' + req,
 	{
 		type: 'POST',
 		dataType: 'json',
@@ -538,7 +538,7 @@ function createDataset(data){
 	//console.log(data);
     
     let analyseDefault = '';
-    let imgBck ='/sites/default/files/img_backgr/default.svg';
+    let imgBck = fetchPrefix() + '/sites/default/files/img_backgr/default.svg';
     for(let i = 0; i<data.extras.length; i++){
         if(data.extras[i].key=='analyse_default'){
            analyseDefault = '&'+ data.extras[i].value;
@@ -551,15 +551,15 @@ function createDataset(data){
     
 	//visus
 	
-    let api_vis = '<p><a href="/visualisation/api/?id=' + id + '" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "api"; })[0].picto + '" aria-hidden="true"></i>' +features.filter(function(o){ return o.name == "api"; })[0].label + '</a></p>'; 
-    let analize_vis= '<p><a href="/visualisation/analyze/?id='+id+''+analyseDefault+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "analyze"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "analyze"; })[0].label + '</a></p>';
-    let table_vis ='<p><a href="/visualisation/table/?id='+id+''+analyseDefault+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "table"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "table"; })[0].label + '</a></p>';
-    let timeline_vis= '<p><a href="/visualisation/timeline/?id='+id+''+analyseDefault+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "timeline"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "timeline"; })[0].label + '</a></p>';
-    let map_vis= '<p><a href="/visualisation/map/?id='+id+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "geo"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "geo"; })[0].label + '</a></p>';
-    let wordcloud_vis= '<p><a href="/visualisation/wordcloud/?id='+id+''+analyseDefault+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "wordcloud"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "wordcloud"; })[0].label + '</a></p>';
-    let image_vis= '<p><a href="/visualisation/images/?id='+id+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "image"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "image"; })[0].label + '</a></p>';
-    let calendar_vis= '<p><a href="/visualisation/calendar/?id='+id+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "calendar"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "calendar"; })[0].label + '</a></p>';
-    let export_vis= '<p><a href="/visualisation/export/?id='+id+''+analyseDefault+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "export"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "export"; })[0].label + '</a></p>';
+    let api_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/api/?id=' + id + '" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "api"; })[0].picto + '" aria-hidden="true"></i>' +features.filter(function(o){ return o.name == "api"; })[0].label + '</a></p>'; 
+    let analize_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/analyze/?id='+id+''+analyseDefault+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "analyze"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "analyze"; })[0].label + '</a></p>';
+    let table_vis ='<p><a href ="' + fetchPrefix() + '/visualisation/table/?id='+id+''+analyseDefault+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "table"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "table"; })[0].label + '</a></p>';
+    let timeline_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/timeline/?id='+id+''+analyseDefault+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "timeline"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "timeline"; })[0].label + '</a></p>';
+    let map_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/map/?id='+id+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "geo"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "geo"; })[0].label + '</a></p>';
+    let wordcloud_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/wordcloud/?id='+id+''+analyseDefault+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "wordcloud"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "wordcloud"; })[0].label + '</a></p>';
+    let image_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/images/?id='+id+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "image"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "image"; })[0].label + '</a></p>';
+    let calendar_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/calendar/?id='+id+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "calendar"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "calendar"; })[0].label + '</a></p>';
+    let export_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/export/?id='+id+''+analyseDefault+'" target="_blank" rel="noopener noreferrer"><i class="fa ' + features.filter(function(o){ return o.name == "export"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "export"; })[0].label + '</a></p>';
     
    
 	let rightPanel= '';
@@ -598,11 +598,11 @@ function createDataset(data){
 						let titleCustomView = data.metas.custom_view.title;
 						// let custom_view_vis;
 						if (titleCustomView) {
-							let custom_view_vis = '<p><a href="/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'" target="_blank" rel="noopener noreferrer"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>'+titleCustomView+'</a></p>';
+							let custom_view_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'" target="_blank" rel="noopener noreferrer"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>'+titleCustomView+'</a></p>';
 							vis = custom_view_vis;
 						}
 						else {
-							let custom_view_vis = '<p><a href="/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'" target="_blank" rel="noopener noreferrer"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>Vue personnalisée</a></p>';
+							let custom_view_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'" target="_blank" rel="noopener noreferrer"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>Vue personnalisée</a></p>';
 							vis = custom_view_vis;
 						}
 						break;
@@ -644,7 +644,7 @@ function createDataset(data){
     '<div class="box_1"><div style="display: flex; flex-direction:row">'+
                 '<div class="box_3"><div style=" background-image: url('+url_img_them+'); margin-top: 10px;  display: inline-block; width: 30px; height: 30px; background-repeat: no-repeat; background-size: contain; vertical-align: middle; margin-right: 8px;"></div></div>'+
 
-				'<div class="box_4"><div class="inner"><h2><a href="/visualisation/?id=' + id + '' + analyseDefault + '" target="_blank" rel="noopener noreferrer"> ' + data.title + ' </a></h2></div></div></div>'+
+				'<div class="box_4"><div class="inner"><h2><a href ="' + fetchPrefix() + '/visualisation/?id=' + id + '' + analyseDefault + '" target="_blank" rel="noopener noreferrer"> ' + data.title + ' </a></h2></div></div></div>'+
                            
             '<div class="inner"><p class="data-desc">' + description + '</p>'+ listeFormat +'</div><div class="infos inner"><ul><li class="titre">Producteur</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul><ul><li class="titre">Date modification</li><li class="info">' + date.toLocaleDateString() + '</ul>'+ /*li_granularite + li_reuses +*/'<ul class="jetons">' + tagList +'</ul></div>'               
     +'</div>'+

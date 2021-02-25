@@ -431,30 +431,30 @@ SOFTWARE.
             display: 'auto',
             label: translate('Dots and shapes'),
             description: translate('All dots and shapes are displayed, in a single color'),
-            previewUrl: '/sites/default/files/api/portail_d4c/img/dots_and_shapes.svg'
+            previewUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/img/dots_and_shapes.svg'
         }, {
             display: 'clusters',
             label: translate('Cluster'),
             description: translate('Data is clustered, with an aggregation option'),
-            previewUrl: '/sites/default/files/api/portail_d4c/img/clusters.svg'
+            previewUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/img/clusters.svg'
         }, {
             display: 'choropleth',
             label: translate('Choropleth'),
             description: translate('Data is displayed using a color scale based on a variable'),
-            previewUrl: '/sites/default/files/api/portail_d4c/img/choropleth.svg',
+            previewUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/img/choropleth.svg',
             requiresShapeAggregation: true,
             requiresType: ['int', 'double']
         }, {
             display: 'categories',
             label: translate('Color by category'),
             description: translate('Data is displayed using a text — color mapping'),
-            previewUrl: '/sites/default/files/api/portail_d4c/img/categories.svg',
+            previewUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/img/categories.svg',
             requiresType: ['text']
         }, {
             display: 'heatmap',
             label: translate('Heatmap'),
             description: translate('Data is aggregated to represent density based on a variable'),
-            previewUrl: '/sites/default/files/api/portail_d4c/img/heatmap.svg'
+            previewUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/img/heatmap.svg'
         }];
     }
     ]);
@@ -463,7 +463,7 @@ SOFTWARE.
     'use strict';
     var mod = angular.module('d4c.frontend');
     mod.factory("SignupAPI", ["APIXHRService", function(APIXHRService) {
-        var API_PATH = '/api/signup/';
+        var API_PATH = fetchPrefix() + '/d4c/api/signup/';
         return {
             'is_logged_in': function() {
                 return APIXHRService('GET', API_PATH + 'is_logged_in/');
@@ -501,7 +501,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderMainPanel', ['$document', 'keypressHelper', '$window', 'translate', 'SignupAPI', 'MapbuilderConfig', function($document, keypressHelper, $window, translate, SignupAPI, MapbuilderConfig) {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-main-panel.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-main-panel.html',
             scope: {
                 mapObject: '=',
                 mapStorage: '='
@@ -621,7 +621,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderDatasetsPanel', ['config', 'translate', function(config, translate) {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-datasets-panel.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-datasets-panel.html',
             scope: {
                 mapConfig: '='
             },
@@ -784,7 +784,7 @@ SOFTWARE.
         return {
             restrict: 'E',
             replace: true,
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-layer-edition.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-layer-edition.html',
             scope: {
                 layer: '=',
                 group: '='
@@ -891,7 +891,7 @@ SOFTWARE.
         return {
             restrict: 'E',
             replace: true,
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-group-edition.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-group-edition.html',
             scope: {
                 group: '='
             },
@@ -920,7 +920,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderGroupConfigurationInformations', [function() {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-group-configuration-informations.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-group-configuration-informations.html',
             scope: {
                 group: '='
             }
@@ -934,7 +934,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderModalShare', ['SignupAPI', 'MapbuilderConfig', 'translate', function(SignupAPI, MapbuilderConfig, translate) {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-modal-share.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-modal-share.html',
             controller: ['$scope', '$window', 'MapbuilderHelper', 'WidgetCodeBuilder', function($scope, $window, MapbuilderHelper, WidgetCodeBuilder) {
                 $scope.loggedIn = MapbuilderConfig.userLoggedIn;
                 $scope.activationPending = MapbuilderConfig.userActivationPending;
@@ -1051,7 +1051,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderModalGroups', [function() {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-modal-groups.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-modal-groups.html',
             controller: ['$scope', 'MapbuilderHelper', 'filterFilter', function($scope, MapbuilderHelper, filterFilter) {
                 function groupsShallowCopy(originalGroups) {
                     var shallowCopy = [];
@@ -1238,7 +1238,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderModalConfiguration', [function() {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-modal-configuration.html'
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-modal-configuration.html'
         };
     }
     ]);
@@ -1249,7 +1249,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderModalSelector', ['MapbuilderStorage', 'MapbuilderConfig', '$filter', '$window', function(MapbuilderStorage, MapbuilderConfig, $filter, $window) {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-modal-selector.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-modal-selector.html',
             link: function(scope) {
                 scope.appRoot = $window.location.pathname.split('/')[1];
                 scope.loggedIn = MapbuilderConfig.userLoggedIn;
@@ -1356,7 +1356,7 @@ SOFTWARE.
         return {
             restrict: 'E',
             scope: false,
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-modal-signup.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-modal-signup.html',
             controller: ['$scope', function($scope) {
                 $scope.startSignupProcess = function() {
                     $scope.identity = undefined;
@@ -1451,7 +1451,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderLayerConfigurationAuto', ['translate', function(translate) {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-layer-configuration-auto.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-layer-configuration-auto.html',
             scope: {
                 layer: '=',
                 layerStatistics: '='
@@ -1467,7 +1467,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderLayerConfigurationCategories', [function() {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-layer-configuration-categories.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-layer-configuration-categories.html',
             scope: {
                 layer: '=',
                 layerStatistics: '='
@@ -1483,7 +1483,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderLayerConfigurationChoropleth', [function() {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-layer-configuration-choropleth.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-layer-configuration-choropleth.html',
             scope: {
                 layer: '=',
                 layerStatistics: '='
@@ -1499,7 +1499,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderLayerConfigurationClusters', [function() {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-layer-configuration-clusters.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-layer-configuration-clusters.html',
             scope: {
                 layer: '='
             },
@@ -1543,7 +1543,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderLayerConfigurationHeatmap', [function() {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-layer-configuration-heatmap.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-layer-configuration-heatmap.html',
             scope: {
                 layer: '='
             },
@@ -1587,7 +1587,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderMarkerConfiguration', ['translate', function(translate) {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-marker-configuration.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-marker-configuration.html',
             scope: {
                 layer: '=',
                 layerStatistics: '='
@@ -1654,35 +1654,35 @@ SOFTWARE.
                 $scope.borderPatterns = [{
                     'name': 'solid',
                     'label': translate('Straight line'),
-                    'image': '/sites/default/files/api/portail_d4c/img/solid.svg'
+                    'image': fetchPrefix() + '/sites/default/files/api/portail_d4c/img/solid.svg'
                 }, {
                     'name': 'long-dashes',
                     'label': translate('Long dashes'),
-                    'image': '/sites/default/files/api/portail_d4c/img/long-dashes.svg'
+                    'image': fetchPrefix() + '/sites/default/files/api/portail_d4c/img/long-dashes.svg'
                 }, {
                     'name': 'medium-dashes',
                     'label': translate('Medium dashes'),
-                    'image': '/sites/default/files/api/portail_d4c/img/medium-dashes.svg'
+                    'image': fetchPrefix() + '/sites/default/files/api/portail_d4c/img/medium-dashes.svg'
                 }, {
                     'name': 'short-dashes',
                     'label': translate('Short dashes'),
-                    'image': '/sites/default/files/api/portail_d4c/img/short-dashes.svg'
+                    'image': fetchPrefix() + '/sites/default/files/api/portail_d4c/img/short-dashes.svg'
                 }, {
                     'name': 'short-dot',
                     'label': translate('Short - dot'),
-                    'image': '/sites/default/files/api/portail_d4c/img/short-dot.svg'
+                    'image': fetchPrefix() + '/sites/default/files/api/portail_d4c/img/short-dot.svg'
                 }, {
                     'name': 'short-dot-dot',
                     'label': translate('Short - dot - dot'),
-                    'image': '/sites/default/files/api/portail_d4c/img/short-dot-dot.svg'
+                    'image': fetchPrefix() + '/sites/default/files/api/portail_d4c/img/short-dot-dot.svg'
                 }, {
                     'name': 'medium-short',
                     'label': translate('Medium - short'),
-                    'image': '/sites/default/files/api/portail_d4c/img/medium-short.svg'
+                    'image': fetchPrefix() + '/sites/default/files/api/portail_d4c/img/medium-short.svg'
                 }, {
                     'name': 'dots',
                     'label': translate('Dots'),
-                    'image': '/sites/default/files/api/portail_d4c/img/dots.svg'
+                    'image': fetchPrefix() + '/sites/default/files/api/portail_d4c/img/dots.svg'
                 }];
             }
         };
@@ -1696,7 +1696,7 @@ SOFTWARE.
         return {
             restrict: 'E',
             replace: true,
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-displaymodes-list.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-displaymodes-list.html',
             scope: {
                 layer: '=',
                 layerStatistics: '='
@@ -1916,7 +1916,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderColorCategories', [function() {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-color-categories.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-color-categories.html',
             scope: {
                 layer: '='
             },
@@ -1966,7 +1966,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderColorChoropleth', [function() {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-color-choropleth.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-color-choropleth.html',
             scope: {
                 layer: '=',
                 fields: '='
@@ -1996,7 +1996,7 @@ SOFTWARE.
         return {
             restrict: 'E',
             require: '^^d4cMapbuilderColorChoropleth',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-color-choropleth-form.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-color-choropleth-form.html',
             scope: {
                 layer: '=',
                 fields: '=',
@@ -2273,7 +2273,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderColorHeatmap', [function() {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-color-heatmap.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-color-heatmap.html',
             scope: {
                 layer: '='
             },
@@ -2477,7 +2477,7 @@ SOFTWARE.
     mod.directive('d4cMapbuilderLayerConfigurationCaption', [function() {
         return {
             restrict: 'E',
-            templateUrl: '/sites/default/files/api/portail_d4c/templates/mapbuilder-layer-configuration-caption.html',
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/mapbuilder-layer-configuration-caption.html',
             scope: {
                 layer: '=',
                 group: '='
