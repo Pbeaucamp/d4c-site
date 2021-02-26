@@ -1,7 +1,7 @@
 /*@font-face{
     font-family:"DroidSans";
-    src:url("../fonts/DroidSans.ttf")format("ttf");vvvvvvvv
-    src:url("../fonts/DroidSans.eot")format("eot");
+    src:url("..fonts/DroidSans.ttf")format("ttf");vvvvvvvv
+    src:url("..fonts/DroidSans.eot")format("eot");
 }*/
 
 @font-face {
@@ -557,58 +557,58 @@
 }
 
 .li-most-popular-dataset.theme-administration-gouvernement-finances-publiques-citoyennete::before {
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-administration-gouvernement-finances-publiques-citoyennete.svg);
+    background-image: url(../img/theme-administration-gouvernement-finances-publiques-citoyennete.svg);
 }
 .li-most-popular-dataset.theme-amenagement-du-territoire-urbanisme-batiments-equipements-logement::before {
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-amenagement-du-territoire-urbanisme-batiments-equipements-logement.svg);
+    background-image: url(../img/theme-amenagement-du-territoire-urbanisme-batiments-equipements-logement.svg);
 }
 .li-most-popular-dataset.theme-culture-patrimoine::before {
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-culture-patrimoine.svg);
+    background-image: url(../img/theme-culture-patrimoine.svg);
 }
 .li-most-popular-dataset.theme-default::before {
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-default.png);
+    background-image: url(../img/theme-default.png);
 }
 .li-most-popular-dataset.theme-economie-business-pme-developpement-economique-emploi::before {
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-economie-business-pme-developpement-economique-emploi.svg);
+    background-image: url(../img/theme-economie-business-pme-developpement-economique-emploi.svg);
 }
 .li-most-popular-dataset.theme-education-formation-recherche-enseignement::before {
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-education-formation-recherche-enseignement.svg);
+    background-image: url(../img/theme-education-formation-recherche-enseignement.svg);
 }
 .li-most-popular-dataset.theme-environnement::before {
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-environnement.svg);
+    background-image: url(../img/theme-environnement.svg);
 }
 .li-most-popular-dataset.theme-services-social::before {
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-services-social.svg);
+    background-image: url(../img/theme-services-social.svg);
 }
 .li-most-popular-dataset.theme-transports-deplacements::before {
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-transports-deplacements.svg);
+    background-image: url(../img/theme-transports-deplacements.svg);
 }
 .link-most-popular-theme.theme-administration-gouvernement-finances-publiques-citoyennete{
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-administration-gouvernement-finances-publiques-citoyennete.svg);
+    background-image: url(../img/theme-administration-gouvernement-finances-publiques-citoyennete.svg);
 }
 .link-most-popular-theme.theme-amenagement-du-territoire-urbanisme-batiments-equipements-logement{
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-amenagement-du-territoire-urbanisme-batiments-equipements-logement.svg);
+    background-image: url(../img/theme-amenagement-du-territoire-urbanisme-batiments-equipements-logement.svg);
 }
 .link-most-popular-theme.theme-culture-patrimoine{
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-culture-patrimoine.svg);
+    background-image: url(../img/theme-culture-patrimoine.svg);
 }
 .link-most-popular-theme.theme-default{
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-default.png);
+    background-image: url(../img/theme-default.png);
 }
 .link-most-popular-theme.theme-economie-business-pme-developpement-economique-emploi{
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-economie-business-pme-developpement-economique-emploi.svg);
+    background-image: url(../img/theme-economie-business-pme-developpement-economique-emploi.svg);
 }
 .link-most-popular-theme.theme-education-formation-recherche-enseignement{
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-education-formation-recherche-enseignement.svg);
+    background-image: url(../img/theme-education-formation-recherche-enseignement.svg);
 }
 .link-most-popular-theme.theme-environnement{
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-environnement.svg);
+    background-image: url(../img/theme-environnement.svg);
 }
 .link-most-popular-theme.theme-services-social{
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-services-social.svg);
+    background-image: url(../img/theme-services-social.svg);
 }
 .link-most-popular-theme.theme-transports-deplacements{
-    background-image: url(/sites/default/files/api/portail_d4c/img/theme-transports-deplacements.svg);
+    background-image: url(../img/theme-transports-deplacements.svg);
 }
 
 .d4cwidget-spinner {

@@ -97,7 +97,7 @@ Copyright (c) 2014 - Opendatasoft
                     <a class="d4c-dataset-export-link__link"
                        target="_blank"
                        {% verbatim %}
-                       ng-href="/api/datasets/1.0/{{context.dataset.datasetid}}/alternative_exports/{{export.id}}/"
+                       ng-href="{{context.fetchPrefix}}/d4c/api/datasets/1.0/{{context.dataset.datasetid}}/alternative_exports/{{export.id}}/"
                        {% endverbatim %}
                        href="#"><i class="fa fa-download" aria-hidden="true"></i> <span translate>Download</span></a>
                     <div class="d4c-dataset-export-link__description" ng-show="export.description" ng-bind="export.description"></div>

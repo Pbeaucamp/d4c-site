@@ -470,18 +470,18 @@ body { -webkit-animation: bugfix infinite 1s; }
 
 @font-face {
   font-family: DroidSans;
-  src:  url('/sites/default/files/api/portail_d4c/fonts/DroidSans-webfont.eot?') format("eot"),
-        url('/sites/default/files/api/portail_d4c/fonts/DroidSans-webfont.woff') format("woff"),
-        url('/sites/default/files/api/portail_d4c/fonts/DroidSans-webfont.ttf') format("truetype"),
-        url('/sites/default/files/api/portail_d4c/fonts/DroidSans-webfont.svg#OpenSans-Light') format("svg");
+  src:  url('../fonts/DroidSans-webfont.eot?') format("eot"),
+        url('../fonts/DroidSans-webfont.woff') format("woff"),
+        url('../fonts/DroidSans-webfont.ttf') format("truetype"),
+        url('../fonts/DroidSans-webfont.svg#OpenSans-Light') format("svg");
 }
 
 @font-face {
   font-family: DroidSansBold;
-  src:  url('/sites/default/files/api/portail_d4c/fonts/DroidSans-Bold-webfont.eot?') format("eot"),
-        url('/sites/default/files/api/portail_d4c/fonts/DroidSans-Bold-webfont.woff') format("woff"),
-        url('/sites/default/files/api/portail_d4c/fonts/DroidSans-Bold-webfont.ttf') format("truetype"),
-        url('/sites/default/files/api/portail_d4c/fonts/DroidSans-Bold-webfont.svg#OpenSans-Semibold') format("svg");
+  src:  url('../fonts/DroidSans-Bold-webfont.eot?') format("eot"),
+        url('../fonts/DroidSans-Bold-webfont.woff') format("woff"),
+        url('../fonts/DroidSans-Bold-webfont.ttf') format("truetype"),
+        url('../fonts/DroidSans-Bold-webfont.svg#OpenSans-Semibold') format("svg");
 }
 
 html,
@@ -778,7 +778,7 @@ header.ng-scope {
   border: none;
   border-radius: 50%;
   background-color: #004793;
-  background-image: url('/sites/default/files/api/portail_d4c/img/search.svg');
+  background-image: url('../img/search.svg');
   background-size: 14px 14px;
   background-position: center;
   background-repeat: no-repeat;
@@ -932,7 +932,7 @@ header.ng-scope {
   height: 24px;
   top: 6px;
   left: 6px;
-  background-image: url('/sites/default/files/api/portail_d4c/img/menu-burger.svg');
+  background-image: url('../img/menu-burger.svg');
   background-size: 20px 24px;
   background-position: center;
   -webkit-transition: all 0.4s ease-in;
