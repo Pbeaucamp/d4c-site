@@ -5431,13 +5431,29 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                     var queryString = $.param($scope.apiParams.parameters, true);
                     if (queryString) {
-                        return baseURL + '?' + queryString;
+                        //We have a redirection which makes a error if we go through gravitee if we use ? so we had it only if baseUrl doesn't end with a slash
+                        if (baseURL.endsWith("/")) {
+                            return baseURL + queryString;
+                        }
+                        else {
+                            return baseURL + '?' + queryString;
+                        }
                     } else {
                         return baseURL;
                     }
                 };
+                $scope.getHeaders = function () {
+                    var options = {};
+                    if ($scope.service.apiKey) {
+                        options.headers = {
+                            'X-Gravitee-Api-Key': $scope.service.apiKey
+                        };
+                    }
+                    return options;
+                };
                 $scope.sendCall = function () {
-                    $http.get($scope.computeURL()).success(function (data) {
+                    var queryOptions = $scope.getHeaders();
+                    $http.get($scope.computeURL(), queryOptions).success(function (data) {
                         data.parameters["facet"] = $scope.api.parameters["facet"];
                         if(data.parameters["facet"].length <= 0 ){
                             data.parameters["facet"] = "Aucun champ";

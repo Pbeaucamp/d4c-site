@@ -7128,6 +7128,9 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				},
 				"Predefined Filters": {
 					"$$noContext": "Filtres prédéfinis"
+				},
+				"Historic": {
+					"$$noContext": "Historique"
 				}
 			};
 			var current_language = "fr";
