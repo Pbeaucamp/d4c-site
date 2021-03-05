@@ -496,7 +496,9 @@ return;}*/
                     parameters: {}
                 };
                 $scope.service = ServiceDescription;
-                $scope.service.url = $scope.serviceUrl + $scope.service.url;
+                if (!$scope.service.url.includes($scope.serviceUrl)) {
+                    $scope.service.url = $scope.serviceUrl + $scope.service.url;
+                }
                 $scope.service.apiKey = $scope.serviceApiKey;
                 var hierarchicalArrayToParams = function(service, params) {
                     var paramName, key;
