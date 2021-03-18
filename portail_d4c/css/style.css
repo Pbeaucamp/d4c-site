@@ -672,8 +672,9 @@ body{
 }
 
 .dataset-h2 {
-    color: #06504F;
-    margin-top: 5px;
-    cursor: pointer;
-    font-size: 20px;
+    margin: 0;
+    font-family: DroidSansBold, "Open Sans", Arial, sans-serif !important;
+    line-height: 1.2;
+    color: #0463b3;
+    font-size: 1.125rem;
 }
