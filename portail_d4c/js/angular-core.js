@@ -12504,7 +12504,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 var dsq = document.createElement('script');
                 dsq.type = 'text/javascript';
                 dsq.async = true;
-                // dsq.src = $window.disqus_shortname + '.disqus.com/embed.js';
+                dsq.src = 'https://data4citizen.disqus.com/embed.js';
                 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
             }
         };

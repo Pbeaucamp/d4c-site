@@ -7131,6 +7131,9 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				},
 				"Historic": {
 					"$$noContext": "Historique"
+				},
+				"Last data update": {
+					"$$noContext": "Dernière mise à jour des données"
 				}
 			};
 			var current_language = "fr";

@@ -670,3 +670,10 @@ body{
 .toolbar-oriented .toolbar-tray-vertical > .toolbar-lining:before {
     position: static;
 }
+
+.dataset-h2 {
+    color: #06504F;
+    margin-top: 5px;
+    cursor: pointer;
+    font-size: 20px;
+}
