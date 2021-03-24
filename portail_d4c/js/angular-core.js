@@ -5445,8 +5445,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 $scope.getHeaders = function () {
                     var options = {};
                     if ($scope.service.apiKey) {
+                        var headerKey = ($scope.service.headerKey ? $scope.service.headerKey : 'X-Gravitee-Api-Key');
                         options.headers = {
-                            'X-Gravitee-Api-Key': $scope.service.apiKey
+                            [headerKey]: $scope.service.apiKey
                         };
                     }
                     return options;

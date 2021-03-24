@@ -485,7 +485,8 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
             scope: {
                 context: '=',
                 serviceUrl: '@',
-                serviceApiKey: '@'
+                serviceApiKey: '@',
+                serviceHeaderKey: '@'
             },
             controller: function($location, $scope, DebugLogger, ServiceDescription, SearchAPI) {
                 DebugLogger.log('init api');
@@ -500,6 +501,7 @@ return;}*/
                     $scope.service.url = $scope.serviceUrl + $scope.service.url;
                 }
                 $scope.service.apiKey = $scope.serviceApiKey;
+                $scope.service.headerKey = $scope.serviceHeaderKey;
                 var hierarchicalArrayToParams = function(service, params) {
                     var paramName, key;
                     for (var i = 0; i < service.parameters.length; i++) {
