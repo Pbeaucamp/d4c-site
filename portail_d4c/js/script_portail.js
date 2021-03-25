@@ -677,16 +677,32 @@ function createDataset(data){
 	
 	var modif = data.metadata_modified;
 	var date = new Date(Date.UTC(modif.substring(0,4),+modif.substring(5,7) - 1,+modif.substring(8,10),+modif.substring(11,13),+modif.substring(14,16)));
-	var heure = (date.toLocaleTimeString()).substring(0,5);
+	// var heure = (date.toLocaleTimeString()).substring(0,5);
 
-	var imported = data.metadata_imported;
-	if(imported != undefined){
-		imported = new Date(Date.UTC(imported.substring(0,4),+imported.substring(5,7) - 1,+imported.substring(8,10),+imported.substring(11,13),+imported.substring(14,16)));
-	} else {
-		imported = new Date();
+	// var imported = data.metadata_imported;
+	// if(imported != undefined){
+	// 	imported = new Date(Date.UTC(imported.substring(0,4),+imported.substring(5,7) - 1,+imported.substring(8,10),+imported.substring(11,13),+imported.substring(14,16)));
+	// } else {
+	// 	imported = new Date();
+	// }
+		
+	//Define last data update date
+	var lastUpdateDate;
+	for (let i = 0; i < data.resources.length; i++){
+		let resource = data.resources[i];
+        let currentDataDate = resource.last_modified;
+		if (!currentDataDate) {
+			currentDataDate = resource.created;
+		}
+
+		if (!lastUpdateDate) {
+			lastUpdateDate = currentDataDate;
+		}
+    }
+	if (lastUpdateDate) {
+		lastUpdateDate = new Date(Date.UTC(lastUpdateDate.substring(0,4), +lastUpdateDate.substring(5,7) - 1, +lastUpdateDate.substring(8,10), +lastUpdateDate.substring(11,13), +lastUpdateDate.substring(14,16)));
 	}
-		
-		
+
 	/////////////
 	var tagList = "";
 
@@ -819,18 +835,19 @@ function createDataset(data){
    
     
     
-    $('#datasets').prepend('<div div class="dataset col-md-6 col-sm-12 col-xs-12 content-body" data-theme="' + selectedTheme.title +'" data-orga="' + id_orga /*+'" data-reuses="'+ nb_reuses*/  +'" data-id="' + id +'" data-time="' + date.getTime() /*+'" data-views="' + nbViews + '" data-downloads="' + nbDownloads + '" data-records="' + nbRecords*/ + '" data-analyse="'+analyseDefault+'" data-imported="' + imported.getTime() +'" style="background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.41)), url('+imgBck+') center center no-repeat; background-size: cover;" >'+
-   
-    '<div class="box_1"><div style="display: flex; flex-direction:row">'+
-                '<div class="box_3"><div style=" background-image: url('+url_img_them+'); margin-top: 10px;  display: inline-block; width: 30px; height: 30px; background-repeat: no-repeat; background-size: contain; vertical-align: middle; margin-right: 8px;"></div></div>'+
-
-				'<div class="box_4"><div class="inner"><div class="dataset-h2"><a href="/visualisation/?id=' + id + '' + analyseDefault + '"' + targetValue + '> ' + data.title + ' </a></div></div></div></div>'+
+    $('#datasets').prepend('<div div class="dataset col-md-6 col-sm-12 col-xs-12 content-body" data-theme="' + selectedTheme.title +'" data-orga="' + id_orga /*+'" data-reuses="'+ nb_reuses*/  +'" data-id="' + id +'" data-time="' + date.getTime() /*+'" data-views="' + nbViews + '" data-downloads="' + nbDownloads + '" data-records="' + nbRecords*/ + '" data-analyse="'+analyseDefault+'" data-imported="' + (lastUpdateDate !=  null ? lastUpdateDate.getTime() : '') +'" style="background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.41)), url('+imgBck+') center center no-repeat; background-size: cover;" >'+
+    	'<div class="box_1"><div style="display: flex; flex-direction:row">'+
+			'<div class="box_3"><div style=" background-image: url('+url_img_them+'); margin-top: 10px;  display: inline-block; width: 30px; height: 30px; background-repeat: no-repeat; background-size: contain; vertical-align: middle; margin-right: 8px;"></div></div>'+
+			'<div class="box_4"><div class="inner"><div class="dataset-h2"><a href="/visualisation/?id=' + id + '' + analyseDefault + '"' + targetValue + '> ' + data.title + ' </a></div></div></div></div>'+
                            
-            '<div class="inner"><p class="data-desc">' + description + '</p>'+ listeFormat +'</div><div class="infos inner"><ul><li class="titre">Producteur</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul><ul><li class="titre">Date modification</li><li class="info">' + date.toLocaleDateString() + '</ul>'+ /*li_granularite + li_reuses +*/'<ul class="jetons">' + tagList +'</ul></div>'               
-    +'</div>'+
-                           
-                   
-    '<div class="box_2">'+rightPanel+'</div>'+
+            '<div class="inner"><p class="data-desc">' + description + '</p>'+ listeFormat +'</div>' +
+				'<div class="infos inner">' + 
+					'<ul><li class="titre">Producteur</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul>' +
+					'<ul><li class="titre">Date modification</li><li class="info">' + (lastUpdateDate != null ? lastUpdateDate.toLocaleDateString() : '') + (lastUpdateDate != null ? ' ' + lastUpdateDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '') + '</ul>'+ /*li_granularite + li_reuses +*/
+					'<ul class="jetons">' + tagList +'</ul>' + 
+				'</div>' +               
+    		'</div>'+     
+    	'<div class="box_2">'+rightPanel+'</div>'+
     '</div>');
 
 }
