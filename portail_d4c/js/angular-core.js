@@ -33289,7 +33289,7 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
 						}
 					});
 					if(res.length > 0){
-						resourceCSVid = res[0].id;
+						resourceCSVid = res[res.length - 1].id;
 					}
 				}
 			} else {
