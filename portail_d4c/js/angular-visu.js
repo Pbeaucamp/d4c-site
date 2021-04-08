@@ -1011,7 +1011,7 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             if (format == "wms") {
                 parameters = "?layername=" + layerName + "&owstype=WMS&owsurl=" + serviceUrl;
             }
-            window.open('/mapfishapp' + parameters, '_blank');
+            window.open('/mapfishapp/' + parameters, '_blank');
         };
     }
     ]);
