@@ -22794,14 +22794,17 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     } else if (field.type == 'double' || field.type == 'int') {
                         numericalXs.push(field);
                     } else {
-                        if (field.annotations) {
-                            for (var a = 0; a < field.annotations.length; a++) {
-                                var anno = field.annotations[a];
-                                if (anno.name === 'facet' || anno.name === 'analyse') {
-                                    availableX.push(field);
-                                }
-                            }
-                        }
+                        availableX.push(field);
+
+                        //We disable this filter for now to allow all columns on axe X
+                        // if (field.annotations) {
+                        //     for (var a = 0; a < field.annotations.length; a++) {
+                        //         var anno = field.annotations[a];
+                        //         if (anno.name === 'facet' || anno.name === 'analyse') {
+                        //             availableX.push(field);
+                        //         }
+                        //     }
+                        // }
                     }
                 }
                 availableX = availableX.concat(numericalXs);
