@@ -670,3 +670,8 @@ body{
 .toolbar-oriented .toolbar-tray-vertical > .toolbar-lining:before {
     position: static;
 }
+
+.btn-filter {
+    margin-top: 25px !important;
+    margin-left: 6px !important;
+}
