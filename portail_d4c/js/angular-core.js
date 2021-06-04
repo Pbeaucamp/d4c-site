@@ -11100,7 +11100,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     var boundsQuery = [scope.startField + '<' + end.format('YYYY-MM-DD'), scope.endField + '>=' + start.format('YYYY-MM-DD')].join(' AND ');
                     options = $.extend(options, {
                         'q.calendar_bounds': boundsQuery,
-                        fields: scope.tooltipFields
+                        fields: scope.tooltipFields.join(',')
                     });
                    
                     return options;
@@ -22802,22 +22802,23 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 var numericalXs = [];
                 for (var i = 0; i < fields[datasetid].length; i++) {
                     var field = fields[datasetid][i];
-                    if (field.type == 'int' || field.type == 'double') {
+                    // if (field.type == 'int' || field.type == 'double') {
                         availableY.push(field);
-                    }
+                    // }
                     if (field.type == 'datetime' || field.type == 'date') {
                         availableX.unshift(field);
                     } else if (field.type == 'double' || field.type == 'int') {
                         numericalXs.push(field);
                     } else {
-                        if (field.annotations) {
-                            for (var a = 0; a < field.annotations.length; a++) {
-                                var anno = field.annotations[a];
-                                if (anno.name === 'facet' || anno.name === 'analyse') {
-                                    availableX.push(field);
-                                }
-                            }
-                        }
+                        availableX.push(field);
+                        // if (field.annotations) {
+                        //     for (var a = 0; a < field.annotations.length; a++) {
+                        //         var anno = field.annotations[a];
+                        //         if (anno.name === 'facet' || anno.name === 'analyse') {
+                        //             availableX.push(field);
+                        //         }
+                        //     }
+                        // }
                     }
                 }
                 availableX = availableX.concat(numericalXs);
