@@ -22786,9 +22786,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 var numericalXs = [];
                 for (var i = 0; i < fields[datasetid].length; i++) {
                     var field = fields[datasetid][i];
-                    if (field.type == 'int' || field.type == 'double') {
+                    // if (field.type == 'int' || field.type == 'double') {
                         availableY.push(field);
-                    }
+                    // }
                     if (field.type == 'datetime' || field.type == 'date') {
                         availableX.unshift(field);
                     } else if (field.type == 'double' || field.type == 'int') {

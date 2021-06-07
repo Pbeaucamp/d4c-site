@@ -1000,18 +1000,32 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
         });
         $scope.canAccessData = function() {
             return $scope.ctx.dataset.has_records && $scope.ctx.dataset.data_visible;
-        }
-        ;
+        };
         $scope.canAccessServices = function() {
             return $scope.ctx.dataset.hasFeature('api') && $scope.ctx.dataset.data_visible;
-        }
-        ;
+        };
+        var openPostForm = function(toolName, jsonParameter) {
+            var a = $('\x3cform action\x3d"/' + toolName + '" method\x3d"POST" target\x3d"_blank"\x3e\x3c/form\x3e')
+              , b = $('\x3cinput name\x3d"data" /\x3e');
+            a.appendTo("body");
+            a.append(b);
+            b.val(jsonParameter);
+            a.submit();
+            a.remove();
+        };
         $scope.openMapfishapp = function(layerName, serviceUrl, format) {
-            var parameters = "";
-            if (format == "wms") {
-                parameters = "?layername=" + layerName + "&owstype=WMS&owsurl=" + serviceUrl;
-            }
-            window.open('/mapfishapp/' + parameters, '_blank');
+            var json = {
+                layername: layerName,
+                owstype: "WMS",
+                owsurl: serviceUrl
+            };
+            
+            var a = {
+                services: [],
+                layers: []
+            };
+            a.layers.push(json);
+            openPostForm("mapfishapp/", JSON.stringify(a))
         };
     }
     ]);
