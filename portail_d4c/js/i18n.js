@@ -5247,8 +5247,8 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				"Tags": {
 					"$$noContext": "Tags"
 				},
-				"Take a look at the <a href=\"/api/doc\"><i class=\"icon-book\"></i> API documentation</a> and use the <a href=\"/api/console\">full API console</a> to try the other API services!": {
-					"$$noContext": "Jetez un oeil à la <a href=\"/api/doc\"><i class=\"icon-book\"></i> documentation de l'API</a> et utilisez la <a href=\"/api/console\">console d'API complète</a> pour essayer les autres API !"
+				"Take a look at the <a href=\"/data4citizen/api\"><i class=\"icon-book\"></i> API page</a> to try the other API services!": {
+					"$$noContext": "Jetez un oeil à la <a href=\"/data4citizen/api\"><i class=\"icon-book\"></i> page API</a> pour essayer les autres API !"
 				},
 				"Temperature": {
 					"$$noContext": "Température"
