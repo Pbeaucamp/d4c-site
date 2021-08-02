@@ -155,9 +155,9 @@ $(document).ready(function(){
             
 			$('#input-producteur').val(filtreProducteur.join(";"));
 		}
-        else if(typeof $(this).parent().data("theme") != "undefined"){
+        else if(typeof $(this).parent().data("themes") != "undefined"){
 			for (var j= 0; j < filtreTheme.length; j++) {
-				if(filtreTheme[j] == $(this).parent().data('theme')){
+				if(filtreTheme[j] == $(this).parent().data('themes')){
 					filtreTheme.splice(j,1);
 				}
 			}
@@ -212,7 +212,7 @@ function loadParameters(){
 
 	/* old parammeters : to keep compatibility */
     var search = getQueryVariable('search');
-	var theme = getQueryVariable('theme');
+	var theme = getQueryVariable('themes');
 	var tag = getQueryVariable('tag');
 	
 	/* new parameters */
@@ -280,7 +280,10 @@ function loadParameters(){
 				filtreProducteur = values;
 			} else if(part[0] == "tags"){
 				filtreTags = values;
-			} else if(part[0] == "theme"){
+			} else if(part[0] == "themes"){
+				$.each(values, function(i, v){
+					values[i] = v.replace(/\*/g, "");
+				});
 				filtreTheme = values;
 			} else if(part[0] == "features"){
 				$.each(values, function(i, v){
@@ -414,7 +417,7 @@ function getReq(){
 	var fqReq = "";
 	var qReq = "";
 	var coordReq = "";
-	var facetReq = 'facet.field=%5B"organization","tags","theme","features"%5D';
+	var facetReq = 'facet.field=%5B"organization","tags","themes","features"%5D';
 
 	var page = getPage();
 	var start = rows * page;
@@ -468,7 +471,7 @@ function getReq(){
 		fqArr.push("tags:("+ filtreTags.join(" OR ") +")");
 	}
 	if(filtreTheme.length > 0){
-		fqArr.push("theme:("+ filtreTheme.join(" OR ") +")");
+		fqArr.push("themes:(*"+ filtreTheme.join("* OR *") +"*)");
 	}
 	if(filtreVisu.length > 0){
 		fqArr.push("features:(*"+ filtreVisu.join("* OR *") +"*)");
@@ -584,7 +587,7 @@ function renderResult(json){
 	});
 	
 	//theme facet
-	var themes_facet = json.result.search_facets.theme.items;
+	var themes_facet = json.result.search_facets.themes.items;
 	themes_facet.sort(function(a,b) {
 		return b.count-a.count;
 	});
@@ -806,32 +809,22 @@ function createDataset(data){
 	});
 
     
-	var theme = data.extras.filter(function(t){ return t.key == "theme"})[0];
-	var tooltipTitle;
-	var link_theme;
-	if(theme != undefined){
-		theme = theme.value;
-		tooltipTitle = theme.value;
-		link_theme = theme.value;
-	} else {
-		theme = "default";
-		tooltipTitle = "default";
-		link_theme = "default"; 
+	var theme = data.extras.filter(function(t){ return t.key == "themes"})[0];
+	if (theme) {
+		theme = jQuery.parseJSON(theme.value);
 	}
-	
+	else {
+		theme = ["default"];
+	}
+
 	//theme = accentsTidy(theme.replace(new RegExp(", ", 'g'),"-").replace(new RegExp(",", 'g'),"-").replace(new RegExp(" ", 'g'),"-"));
-    var selectedTheme = themes.filter(function(o){ return o.title == theme; });
-	if(selectedTheme.length > 0){
-		 var url_img_them = selectedTheme[0].url; 
-	} else {
-		var url_img_them = "";
-	}
+	var imageThemes = buildImageThemes(theme);
    
     
     
-    $('#datasets').prepend('<div div class="dataset col-md-6 col-sm-12 col-xs-12 content-body" data-theme="' + selectedTheme.title +'" data-orga="' + id_orga /*+'" data-reuses="'+ nb_reuses*/  +'" data-id="' + id +'" data-time="' + date.getTime() /*+'" data-views="' + nbViews + '" data-downloads="' + nbDownloads + '" data-records="' + nbRecords*/ + '" data-analyse="'+analyseDefault+'" data-imported="' + (lastUpdateDate !=  null ? lastUpdateDate.getTime() : '') +'" style="background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.41)), url('+imgBck+') center center no-repeat; background-size: cover;" >'+
+    $('#datasets').prepend('<div div class="dataset col-md-6 col-sm-12 col-xs-12 content-body" data-theme="' + theme[0] +'" data-orga="' + id_orga /*+'" data-reuses="'+ nb_reuses*/  +'" data-id="' + id +'" data-time="' + date.getTime() /*+'" data-views="' + nbViews + '" data-downloads="' + nbDownloads + '" data-records="' + nbRecords*/ + '" data-analyse="'+analyseDefault+'" data-imported="' + (lastUpdateDate !=  null ? lastUpdateDate.getTime() : '') +'" style="background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.41)), url('+imgBck+') center center no-repeat; background-size: cover;" >'+
     	'<div class="box_1"><div style="display: flex; flex-direction:row">'+
-			'<div class="box_3"><div style=" background-image: url('+url_img_them+'); margin-top: 10px;  display: inline-block; width: 30px; height: 30px; background-repeat: no-repeat; background-size: contain; vertical-align: middle; margin-right: 8px;"></div></div>'+
+			'<div>' + imageThemes + '</div>'+
 			'<div class="box_4"><div class="inner"><div class="dataset-h2"><a href="' + fetchPrefix() + '/visualisation/?id=' + id + '' + analyseDefault + '"' + targetValue + '> ' + data.title + ' </a></div></div></div></div>'+
                            
             '<div class="inner"><p class="data-desc">' + description + '</p>'+ listeFormat +'</div>' +
@@ -844,6 +837,26 @@ function createDataset(data){
     	'<div class="box_2">'+rightPanel+'</div>'+
     '</div>');
 
+}
+
+function buildImageThemes(selectedThemes) {
+	var imageThemes = '';
+
+	for (var i=0; i<selectedThemes.length; i++) {
+		var theme = selectedThemes[i];
+
+		var selectedTheme = themes.filter(function(o){ return o.title == theme; });
+		if(selectedTheme.length > 0){
+			var url_img_them = selectedTheme[0].url; 
+		}
+		else {
+			var url_img_them = "";
+		}
+
+		imageThemes = imageThemes +	'<div style=" background-image: url('+url_img_them+'); margin-top: 10px;  display: inline-block; width: 30px; height: 30px; background-repeat: no-repeat; background-size: contain; vertical-align: middle; margin-right: 8px;"></div>';
+	}
+
+	return imageThemes;
 }
 
 function getUrl(name){
