@@ -11769,7 +11769,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
     'use strict';
     var mod = angular.module('d4c-widgets');
     mod.directive('d4cDatasetContext', ['D4CAPI', '$q', '$interpolate', '$interval', 'URLSynchronizer', 'ContextHelper', function (D4CAPI, $q, $interpolate, $interval, URLSynchronizer, ContextHelper) {
-        var exposeContext = function (domain, datasetID, scope, contextName, apikey, parameters, parametersFromContext, source, urlSync, schema, refreshDelay) {
+        var exposeContext = function (domain, datasetID, scope, contextName, apikey, parameters, parametersFromContext, source, urlSync, schema, refreshDelay, selectedResourceId) {
             var contextParams;
             if (!angular.equals(parameters, {})) {
                 contextParams = parameters;
@@ -11797,7 +11797,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             if (source && contextParams) {
                 contextParams.source = source;
             }
-            scope[contextName] = ContextHelper.getDatasetContext(contextName, domain, datasetID, contextParams, source, apikey, schema);
+            scope[contextName] = ContextHelper.getDatasetContext(contextName, domain, datasetID, contextParams, source, apikey, schema, selectedResourceId);
             if (refreshDelay) {
                 $interval(function () {
                     scope[contextName]['parameters']['_refreshTimestamp'] = new Date().getTime();
@@ -11813,7 +11813,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             replace: true,
             controller: ['$scope', '$attrs', function ($scope, $attrs) {
                 var contextNames = $attrs.context.split(',');
-                var datasetID, domain, apikey, sort, source, schema, refreshDelay;
+                var datasetID, domain, apikey, sort, source, schema, refreshDelay, selectedResourceId;
                 for (var i = 0; i < contextNames.length; i++) {
                     var contextName = contextNames[i].trim();
                     if (!$attrs[contextName + 'Dataset'] && !$attrs[contextName + 'DatasetSchema']) {
@@ -11849,6 +11849,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     } else {
                         schema = undefined;
                     }
+                    if ($attrs[contextName + 'SelectedResourceId']) {
+                        selectedResourceId = $interpolate($attrs[contextName + 'SelectedResourceId'])($scope);
+                    } else {
+                        selectedResourceId = null;
+                    }
                     if (angular.isDefined($attrs[contextName + 'RefreshDelay'])) {
                         refreshDelay = parseInt($interpolate($attrs[contextName + 'RefreshDelay'])($scope), 10);
                         if (!isFinite(refreshDelay)) {
@@ -11865,7 +11870,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         parameters.sort = sort;
                     }
                     var urlSync = $scope.$eval($attrs[contextName + 'Urlsync']);
-                    exposeContext(domain, datasetID, $scope, contextName, apikey, parameters, parametersFromContext, source, urlSync, schema, refreshDelay);
+                    exposeContext(domain, datasetID, $scope, contextName, apikey, parameters, parametersFromContext, source, urlSync, schema, refreshDelay, selectedResourceId);
                 }
             }]
         };
@@ -23518,7 +23523,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
     var loadingSchemas = {};
     mod.factory('ContextHelper', ['D4CAPI', '$q', 'QueryParameters', function (D4CAPI, $q, QueryParameters) {
         return {
-            getDatasetContext: function (contextName, domainId, datasetId, contextParameters, source, apikey, schema) {
+            getDatasetContext: function (contextName, domainId, datasetId, contextParameters, source, apikey, schema, selectedResourceId) {
                 var deferred = $q.defer();
                 var context = {
                     'wait': function () {
@@ -23588,17 +23593,17 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     'fetchPrefix': fetchPrefix(),
                 };
                 if (schema) {
-                    context.dataset = new D4C.Dataset(schema);
+                    context.dataset = new D4C.Dataset(schema, selectedResourceId);
                     deferred.resolve(context.dataset);
                 } else {
                     var sourceParameter = (contextParameters && contextParameters.source) || source || "";
                     var cacheKey = (context.domain || "") + '.' + sourceParameter + '.' + datasetId + '.' + (apikey || "");
                     if (angular.isDefined(schemaCache[cacheKey])) {
-                        context.dataset = new D4C.Dataset(schemaCache[cacheKey]);
+                        context.dataset = new D4C.Dataset(schemaCache[cacheKey], selectedResourceId);
                         deferred.resolve(context.dataset);
                     } else if (angular.isDefined(loadingSchemas[cacheKey])) {
                         loadingSchemas[cacheKey].then(function (response) {
-                            context.dataset = new D4C.Dataset(response.data);
+                            context.dataset = new D4C.Dataset(response.data, selectedResourceId);
                             deferred.resolve(context.dataset);
                         });
                     } else {
@@ -23608,7 +23613,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         });
                         loadingSchemas[cacheKey].success(function (data) {
                             schemaCache[cacheKey] = data;
-                            context.dataset = new D4C.Dataset(data);
+                            context.dataset = new D4C.Dataset(data, selectedResourceId);
                             deferred.resolve(context.dataset);
                         }).error(function (data) {
                             context.error = true;
@@ -33249,6 +33254,9 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
             }
         },
         Dataset: function (dataset) {
+            return D4C.Dataset(dataset, null);
+        },
+        Dataset: function (dataset, selectedResourceId) {
             var types, facetsCount, filtersDescription;
             var getFieldAnnotation = function (field, annotationName) {
                 var i = 0;
@@ -33287,11 +33295,11 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
 			if(dataset.metas.resources != undefined){
 				if(dataset.metas.resources.length > 0){
 					var res = dataset.metas.resources.filter(function (r) {
-						if (r.mimetype == "text/csv" && r.datastore_active == true) {//} || r.mimetype == "application/vnd.ms-excel" || r.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+						if (r.mimetype == "text/csv" && r.datastore_active == true && (selectedResourceId == null || selectedResourceId == r.id)) {//} || r.mimetype == "application/vnd.ms-excel" || r.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
 							return r;
 						}
 					});
-					if(res.length > 0){
+					if (res.length > 0) {
 						resourceCSVid = res[res.length - 1].id;
 					}
 				}

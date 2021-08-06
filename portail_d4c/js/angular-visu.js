@@ -1027,6 +1027,9 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             a.layers.push(json);
             openPostForm("mapfishapp/", JSON.stringify(a))
         };
+        $scope.visualizeResource = function(datasetId, resourceId) {
+            window.location.search = '?id=' + datasetId + '&resourceId=' + resourceId;
+        };
     }
     ]);
 }());

@@ -743,3 +743,32 @@ body{
 .text-uppercase {
     text-transform: uppercase!important;
 }
+
+.download-item {
+    margin-bottom: 10px;
+}
+
+.download-active {
+    width: 4px;
+    height: 35px;
+    background-color: #ffc9a2;
+    margin-right: 3px;
+}
+
+.download-img {
+    vertical-align: top;
+    margin-top: 12px;
+    margin-right: 8px;
+}
+
+.download-text {
+    font-weight: bold;
+}
+
+.download-link {
+    font-size: small;
+}
+
+.inline {
+    display: inline-block;
+}
