@@ -1030,6 +1030,9 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
         $scope.visualizeResource = function(datasetId, resourceId) {
             window.location.search = '?id=' + datasetId + '&resourceId=' + resourceId;
         };
+        $scope.onClose = function() {
+            window.history.back();
+        };
     }
     ]);
 }());

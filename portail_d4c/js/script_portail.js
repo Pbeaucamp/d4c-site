@@ -468,7 +468,7 @@ function getReq(){
 		fqArr.push("organization:("+ filtreProducteur.join(" OR ") +")");
 	}
 	if(filtreTags.length > 0){
-		fqArr.push("tags:("+ filtreTags.join(" OR ") +")");
+		fqArr.push("tags:(\""+ filtreTags.join("\" OR \"") +"\")");
 	}
 	if(filtreTheme.length > 0){
 		fqArr.push("themes:(*"+ filtreTheme.join("* OR *") +"*)");
