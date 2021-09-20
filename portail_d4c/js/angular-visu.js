@@ -989,7 +989,10 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
         }
         ;
         var tabsInitialized = false;
+        var tabName = '';
+        var displayFilters = false;
         $scope.$on('tabSelected', function(e, args) {
+            tabName = args.selection;
             if (!tabsInitialized) {
                 tabsInitialized = true;
                 return;
@@ -998,6 +1001,15 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                 sendVisualizationAnalytics(args.selection);
             }
         });
+        $scope.canDisplayFilters = function() {
+            if (tabName === 'table' || tabName === 'map' || tabName === 'analyze' || tabName === 'calendar' || tabName === 'cloud' || tabName === 'timeline' || tabName === 'export' || tabName === 'api') {
+                displayFilters = $scope.ctx.dataset.has_records && $scope.ctx.dataset.data_visible;
+            }
+            else if (tabName === 'information' || tabName === 'images') {
+                displayFilters = false;
+            }
+            return displayFilters;
+        };
         $scope.canAccessData = function() {
             return $scope.ctx.dataset.has_records && $scope.ctx.dataset.data_visible;
         };
@@ -1029,6 +1041,15 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
         };
         $scope.visualizeResource = function(datasetId, resourceId) {
             window.location.search = '?id=' + datasetId + '&resourceId=' + resourceId;
+        };
+        $scope.downloadResource = function(serviceWMSUrl, serviceWFSUrl, format) {
+            var type = $("#d4c-select-download-resource :selected")[0].parentNode.label;
+            if (type == 'WMS') {
+                window.open(serviceWMSUrl + format, '_blank');
+            }
+            else if (type == 'WFS') {
+                window.open(serviceWFSUrl + format, '_blank');
+            }
         };
         $scope.onClose = function() {
             window.history.back();
