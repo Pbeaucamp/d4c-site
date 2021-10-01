@@ -188,6 +188,9 @@ $(document).ready(function(){
 				}
 			}
 			$('#input-visu').val(filtreVisu.join(";"));
+		}
+		else if(typeof $(this).parent().data("search") != "undefined"){
+			$('#search-form input').val("");
 		}		
 		
 		$(this).parent().remove();
@@ -325,6 +328,7 @@ function resetFilters(){
 		filtreTheme = [];
 		filtreMapCoord = [];
 		$('#input-map-coordinate').val('');
+		$('#search-form input').val('');
 		searchDatasets();
 }
 
@@ -424,10 +428,10 @@ function getReq(){
 	var rowsReq = "&rows="+rows;
 	var startReq = "&start="+start;
 
-	name = $('#search-form input').val();
-	if(name != ""){
-		name = name.toLowerCase();
-		qReq = "&q=text:"+name;
+	var searchValue = getSearchValue();
+	if (searchValue != "") {
+		searchValue = searchValue.toLowerCase();
+		qReq = "&q=text:" + searchValue;
 	}
 	
 	if($('#filter select').val() != ""){
@@ -494,6 +498,10 @@ function getReq(){
 	req = facetReq + rowsReq + startReq + qReq + sortReq + coordReq + fqReq;
 	
 	return req;
+}
+
+function getSearchValue() {
+	return $('#search-form input').val();
 }
 
 function searchDatasets(page){
@@ -564,6 +572,11 @@ function renderResult(json){
 	
 	if( json == null || json.result.count == 0){
 		$('#datasets').append('<div class="alert alert-info">Aucun jeu de données trouvé</div>');
+	
+		setActiveFilters();
+
+		initPagination(rows, numDataset, getPage());
+
 		return;
 	}
     
@@ -627,8 +640,17 @@ function renderResult(json){
 	
 	
 	//filtres actifs
+	setActiveFilters();
+	
+	initPagination(rows, numDataset, getPage());
+}
+
+function setActiveFilters() {
+	var hasActifFilters = false;
+
 	if (!hasSelectedOrganization()) {
 		$.each(filtreProducteur, function(i, orga){
+			hasActifFilters = true;
 			$('#filter').find('.jetons').append('<li data-orga="' + orga + '">'+ orgas.filter(function(o){ return o.name == orga; })[0].title +' <span class="glyphicon glyphicon-remove"></span></li>');
 		});
 	}
@@ -636,17 +658,31 @@ function renderResult(json){
 		$('#div-producteur').hide();
 	}
 	$.each(filtreTags, function(i, tag){
+		hasActifFilters = true;
 		$('#filter').find('.jetons').append('<li data-tag="' + tag + '">'+ tag +' <span class="glyphicon glyphicon-remove"></span></li>');
 	});
 	$.each(filtreTheme, function(i, theme){
+		hasActifFilters = true;
 		$('#filter').find('.jetons').append('<li data-theme="' + theme + '">'+ themes.filter(function(o){ return o.title == theme; })[0].label +' <span class="glyphicon glyphicon-remove"></span></li>');
 	});
 	$.each(filtreVisu, function(i, visu){
+		hasActifFilters = true;
 		var feat = features.filter(function(o){ return o.name == visu; });
 		$('#filter').find('.jetons').append('<li data-visu="' + visu + '">'+ '<i class="fa ' + feat[0].picto + '" aria-hidden="true"></i>' + feat[0].label +' <span class="glyphicon glyphicon-remove"></span></li>');
 	});
-	
-	initPagination(rows, numDataset, getPage());
+
+	var searchValue = getSearchValue()
+	if (searchValue) {
+		hasActifFilters = true;
+		$('#filter').find('.jetons').append('<li data-search="' + searchValue + '">'+ searchValue +' <span class="glyphicon glyphicon-remove"></span></li>');
+	}
+
+	if (hasActifFilters) {
+		$('#actif-filters').show();
+	}
+	else {
+		$('#actif-filters').hide();
+	}
 }
 
 function createDataset(data){
@@ -899,13 +935,15 @@ function initPagination(perPage, total, index) {
 	$('.pagination').text("");
 	$('.pagination').data("curr",index);
 
-	$('<li><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>').appendTo('.pagination');
-	var curr = 0;
-	while(numPages > curr){
-	  $('<li><a href="#" class="page_link">'+(curr+1)+'</a></li>').appendTo('.pagination');
-	  curr++;
+	if (numPages > 1) {
+		$('<li><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>').appendTo('.pagination');
+		var curr = 0;
+		while(numPages > curr){
+		  $('<li><a href="#" class="page_link">'+(curr+1)+'</a></li>').appendTo('.pagination');
+		  curr++;
+		}
+		$('<li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>').appendTo('.pagination');
 	}
-	$('<li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>').appendTo('.pagination');
 
 	$('.pagination li:nth-child('+ (2+index)+ ')').addClass('active');
 	

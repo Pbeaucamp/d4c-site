@@ -1005,7 +1005,7 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             if (tabName === 'table' || tabName === 'map' || tabName === 'analyze' || tabName === 'calendar' || tabName === 'cloud' || tabName === 'timeline' || tabName === 'export' || tabName === 'api') {
                 displayFilters = $scope.ctx.dataset.has_records && $scope.ctx.dataset.data_visible;
             }
-            else if (tabName === 'information' || tabName === 'images') {
+            else if (tabName === 'information' || tabName === 'images' || tabName === 'reuses') {
                 displayFilters = false;
             }
             return displayFilters;
@@ -1051,8 +1051,8 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                 window.open(serviceWFSUrl + format, '_blank');
             }
         };
-        $scope.onClose = function() {
-            window.history.back();
+        $scope.goBackToSearch = function() {
+            window.location.href = fetchPrefix() + '/portail';
         };
     }
     ]);
