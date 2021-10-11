@@ -594,8 +594,9 @@ function renderResult(json){
 	tags_facet.sort(function(a,b) {
 		return b.count-a.count;
 	});
-	$.each(tags_facet, function(i, t){
-		$('#list-tag').append('<li class="list-item" data-tag="' + t.name +'">' + t.name + 
+	$.each(tags_facet, function(i, t) {
+		var selectedCss = isSelected(filtreTags, t);
+		$('#list-tag').append('<li class="list-item ' + selectedCss + '" data-tag="' + t.name +'">' + t.name + 
 			' <span class="number_element">' + t.count + '</span></li>');
 	});
 	
@@ -605,9 +606,10 @@ function renderResult(json){
 		return b.count-a.count;
 	});
 	$.each(themes_facet, function(i, t){
+		var selectedCss = isSelected(filtreTheme, t);
 		var theme = themes.filter(function(o){ return o.title == t.name; });
 		if(theme.length > 0){
-			$('#list-theme').append('<li class="list-item" data-theme="' + t.name +'">' + theme[0].label + 
+			$('#list-theme').append('<li class="list-item ' + selectedCss + '" data-theme="' + t.name +'">' + theme[0].label + 
 			' <span class="number_element">' + t.count + '</span></li>');
 		}
 	});
@@ -618,9 +620,10 @@ function renderResult(json){
 		return b.count-a.count;
 	});
 	$.each(orga_facet, function(i, t){
+		var selectedCss = isSelected(filtreProducteur, t);
 		var orga = orgas.filter(function(o){ return o.name == t.name; });
 		if(orga.length > 0){
-			$('#list-producteur').append('<li class="list-item" data-orga="' + t.name +'">' + orga[0].title + 
+			$('#list-producteur').append('<li class="list-item ' + selectedCss + '" data-orga="' + t.name +'">' + orga[0].title + 
 			' <span class="number_element">' + t.count + '</span></li>');
 		}
 	});
@@ -631,9 +634,10 @@ function renderResult(json){
 		return b.count-a.count;
 	});
 	$.each(visu_facet, function(i, t){
+		var selectedCss = isSelected(filtreVisu, t);
 		var feat = features.filter(function(o){ return o.name == t.name; });
 		if(feat.length > 0){
-			$('#list-visu').append('<li class="list-item" data-visu="' + t.name +'">' + '<i class="fa ' + feat[0].picto + '" aria-hidden="true"></i>' + feat[0].label + 
+			$('#list-visu').append('<li class="list-item ' + selectedCss + '" data-visu="' + t.name +'">' + '<i class="fa ' + feat[0].picto + '" aria-hidden="true"></i>' + feat[0].label + 
 			' <span class="number_element">' + t.count + '</span></li>');
 		}
 	});
@@ -643,6 +647,16 @@ function renderResult(json){
 	setActiveFilters();
 	
 	initPagination(rows, numDataset, getPage());
+}
+
+function isSelected(filters, item) {
+	for (i=0; i < filters.length; i++) {
+		var filter = filters[i];
+		if (filter == item.name) {
+			return "selected";
+		}
+	}
+	return "";
 }
 
 function setActiveFilters() {
