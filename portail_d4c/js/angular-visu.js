@@ -986,8 +986,19 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             } else {
                 mobileParametersUnwatcher();
             }
+        };
+        $scope.extendFilters = function(closeOnly) {
+            if (closeOnly) {
+                $scope.toggleState.expandedFilters = true;
+            }
+            $scope.toggleState.expandedFilters = !$scope.toggleState.expandedFilters;
+            if ($scope.toggleState.expandedFilters) {
+                // $("d4c-filters").show();
+                $("#d4c-filters").addClass("d4c-filters-open");
+            } else {
+                $("#d4c-filters").removeClass("d4c-filters-open");
+            }
         }
-        ;
         var tabsInitialized = false;
         var tabName = '';
         var displayFilters = false;
