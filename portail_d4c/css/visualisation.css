@@ -1563,7 +1563,8 @@ html[dir=rtl] .d4c-embed-control__size-options select{margin-left:1rem;margin-ri
 html[dir=rtl] .d4c-embed-control__size-options input{direction:rtl}
 .d4c-embed-control__misc-options{margin-top:.5rem}
 .d4c-embed-control__misc-option{display:block}
-.d4c-embed-watermark{display:block}
+<!-- .d4c-embed-watermark{display:block} -->
+.d4c-embed-watermark{display:none !important}
 .d4c-embed-watermark__image{max-width:100px;max-height:40px}
 .d4c-embed-watermark--analyze,.d4c-embed-watermark--images,.d4c-embed-watermark--table{position:fixed;bottom:10px;left:10px}
 .d4c-embed-watermark--map{position:fixed;bottom:0;left:140px;background:rgba(255,255,255,.7);padding:5px}

@@ -15685,10 +15685,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 											}
 										} 
 										else {
+                                            var display = mainTypeChart != "pie" ? true : false;
+
 											//console.log(options.series);
 											var yAxis = [];
 											for(var i=0; i<options.yAxis.length; i++){
-												options.yAxis[i].display = true;
+												options.yAxis[i].display = display;
 												options.yAxis[i].id = 'y'+ i;
 												/*options.yAxis[i].ticks = {
 																beginAtZero: true,

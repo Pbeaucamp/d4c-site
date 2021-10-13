@@ -1254,3 +1254,38 @@ footer.ng-scope a:focus {
   padding: 15px;
   border-radius: 3px;
 } 
+
+/* POLL */
+
+section#block-sondageleplusrecent {
+    background-color: white;
+    margin-bottom: 10px;
+    border-radius: 5px;
+	padding: 10px;
+}
+
+h2:first-child.block-title {
+    font-size: 17px!important;
+    font-weight: 300;
+    color: #292F33;
+    font-size: 27px;
+    line-height: 36px!important;
+    margin: 0;
+    font-family: Helvetica, Roboto, "Segoe UI", Calibri, sans-serif;
+}
+
+fieldset#edit-choice--wrapper legend{
+    display: none!important;
+}
+
+.btn-primary {
+    color: #77bd7c!important;
+    background-color: #ffffff!important;
+    border-color: #77bd7c!important;
+}
+
+.btn-primary:hover {
+    color: #ffffff!important;
+    background-color: #77bd7c!important;
+    border-color: #77bd7c!important;
+}
