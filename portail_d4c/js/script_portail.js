@@ -763,12 +763,12 @@ function createDataset(data){
 	var id = data.id;
     
 	///////////
-	var description = data.notes;
-
-	if(description.indexOf("__Origine__") != -1)
-	{
+	var description = data.notes != null ? data.notes : '';
+	if(description.indexOf("__Origine__") != -1) {
 		description = description.substring(0,description.indexOf("__Origine__"));
 	}
+	//We remove HTML tags
+	description = strip(description);
 	description = description.substring(0,80) + "...";
 	
 	var listeFormat = '<ul class="listeFormat"></ul>';
@@ -888,6 +888,12 @@ function createDataset(data){
     '</div>');
 
 }
+
+function strip(html){
+	let doc = new DOMParser().parseFromString(html, 'text/html');
+	return doc.body.textContent || "";
+}
+
 
 function buildImageThemes(selectedThemes) {
 	var imageThemes = '';
