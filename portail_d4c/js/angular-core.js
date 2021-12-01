@@ -9684,9 +9684,13 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 				if(ctx != undefined && ctx.dataset != undefined){
 					var canAnalyze = ctx.dataset.canAnalyze;
 				
-					if(canAnalyze || scope.struct.slug == "information" || scope.struct.slug == "export"){
+					if (canAnalyze || scope.struct.slug == "information" || scope.struct.slug == "export"){
 						tabsCtrl.addPane(scope.struct, position);
 					}
+                    // If we have a WMS, we have the feature geo
+                    else if (scope.struct.slug == "map" && ctx.dataset.hasWMS()) {
+						tabsCtrl.addPane(scope.struct, position);
+                    }
 				} else {
 					tabsCtrl.addPane(scope.struct, position);
 				}
@@ -18242,6 +18246,25 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 						});
 					}
                     resizeMap();
+
+                    //Check if dataset has WMS layers available
+                    if (scope.context != undefined && scope.context.dataset != undefined && scope.context.dataset.hasWMS()) {
+                        mapOptions.customWMSLayers = [];
+
+                        for(let i = 0; i < scope.context.dataset.metas.resources.length; i++){
+                            var resource = scope.context.dataset.metas.resources[i];
+							if (resource.format.toUpperCase()  == "WMS") {
+                                var wmsLayer = {
+                                    url: resource.url,
+                                    name: resource.name,
+                                };
+
+                                mapOptions.customWMSLayers.push(wmsLayer);
+                            }
+						}
+
+                    }
+
                     var map = new L.D4CMap(element.children()[0].children[0], mapOptions);
                     map.addControl(new L.Control.Scale());
                     if (!isStatic) {
@@ -33295,7 +33318,7 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
 			if(dataset.metas.resources != undefined){
 				if(dataset.metas.resources.length > 0){
 					var res = dataset.metas.resources.filter(function (r) {
-						if (r.mimetype == "text/csv" && r.datastore_active == true && (selectedResourceId == null || selectedResourceId == r.id)) {//} || r.mimetype == "application/vnd.ms-excel" || r.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+						if ((r.mimetype == "text/csv" || r.format.toUpperCase()  == "CSV") && r.datastore_active == true && (selectedResourceId == null || selectedResourceId == r.id)) {//} || r.mimetype == "application/vnd.ms-excel" || r.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
 							return r;
 						}
 					});
@@ -33337,7 +33360,18 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                     return types;
                 },
                 hasFeature: function (featureName) {
-                    return (dataset.features.indexOf(featureName) > -1);
+                    return (dataset.features && dataset.features.indexOf(featureName) > -1);
+                },
+                hasWMS: function () {
+                    if (dataset != undefined && dataset.metas != undefined && dataset.metas.resources != undefined && dataset.metas.resources.length > 0){
+                        var res = dataset.metas.resources.filter(function (r) {
+                            if (r.format.toUpperCase()  == "WMS") {//} || r.mimetype == "application/vnd.ms-excel" || r.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+                                return true;
+                            }
+                        });
+                        return res.length > 0;
+                    }
+                    return false;
                 },
                 hasFieldType: function (fieldType) {
                     for (var i = 0; i < this.fields.length; i++) {

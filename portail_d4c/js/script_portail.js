@@ -777,6 +777,7 @@ function createDataset(data){
     
     let analyseDefault = '';
     let imgBck = fetchPrefix() + '/sites/default/files/img_backgr/default.svg';
+
     for(let i = 0; i<data.extras.length; i++){
         if(data.extras[i].key=='analyse_default'){
            analyseDefault = '&'+ data.extras[i].value;
@@ -786,6 +787,13 @@ function createDataset(data){
            imgBck = data.extras[i].value;
         }
     }
+
+	//Check if dataset has features geo or hasWMS to display map
+	let hasGeo = data.metas != undefined && data.metas.features != undefined && data.metas.features.indexOf("geo") != -1;
+	// let featureGeo = myFeatures.filter(function(o){ return o.name == "geo"; })[0];
+	if (!hasGeo && hasWMS(data)) {
+		data.metas.features.push("geo");
+	}
 
 	let targetValue = '';
 	if (isMarqueBlanche()) {
@@ -887,6 +895,18 @@ function createDataset(data){
     	'<div class="box_2">'+rightPanel+'</div>'+
     '</div>');
 
+}
+
+function hasWMS(dataset) {
+	if (dataset != undefined && dataset.resources != undefined && dataset.resources.length > 0){
+		var res = dataset.resources.filter(function (r) {
+			if (r.format.toUpperCase()  == "WMS") {
+				return true;
+			}
+		});
+		return res.length > 0;
+	}
+	return false;
 }
 
 function strip(html){

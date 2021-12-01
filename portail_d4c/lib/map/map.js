@@ -29,7 +29,8 @@ L.D4CMap = L.Map.extend({
         prependAttribution: null,
         basemap: null,
         disableAttribution: false,
-        attributionSeparator: ' - '
+        attributionSeparator: ' - ',
+        customWMSLayers: null,
     },
     initialize: function (id, options) {
         L.Map.prototype.initialize.call(this, id, options);
@@ -41,11 +42,12 @@ L.D4CMap = L.Map.extend({
                 this.options.basemap,
                 this.options.disableAttribution,
                 this.options.attributionSeparator,
-				false
+				false,
+                this.options.customWMSLayers
             );
         }
     },
-    _setTilesProvider: function(basemapsList, prependAttribution, appendAttribution, selectedBasemap, disableAttribution, attributionSeparator, showAllOverlays) {
+    _setTilesProvider: function(basemapsList, prependAttribution, appendAttribution, selectedBasemap, disableAttribution, attributionSeparator, showAllOverlays, customWMSLayers) {
         // OSM Free (don't use in production)
         //var tilesUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
         //var attrib = 'Map data © OpenStreetMap contributors';
@@ -92,6 +94,43 @@ L.D4CMap = L.Map.extend({
 				layers.push(layer);
 			}
             
+        }
+
+        if (customWMSLayers != undefined) {
+            for (var i=0; i<customWMSLayers.length; i++) {
+                var customWMS = customWMSLayers[i];
+                var url = customWMS.url;
+                if (url && url.indexOf("?") > -1) {
+                    url = url.slice(0, url.indexOf('?'));
+                }
+
+                var customWMSBaseMap = {
+                    name: customWMS.name,
+                    label: customWMS.name,
+                    provider: 'custom_wms',
+                    url: url,
+                    minZoom: 1,
+                    maxZoom: 19,
+                    type: 'layer',
+                    attribution: '',
+                    layers: customWMS.name,
+                }
+
+                layer = new L.D4CWMSTileLayer({
+                    basemap: customWMSBaseMap,
+                    prependAttribution: prependAttribution,
+                    appendAttribution: appendAttribution,
+                    disableAttribution: disableAttribution,
+                    attributionSeparator: attributionSeparator
+                });
+                if (typeof layer.options.minZoom !== 'number') {
+                    layer.options.minZoom = 2;
+                }
+                layer.basemapLabel = customWMS.name;
+                layer.basemapId = customWMS.name;
+                layer.options.opacity = 0.6;
+                overlays.push(layer);
+            }
         }
 
         if (layers.length > 1 || overlays.length >= 1) {
