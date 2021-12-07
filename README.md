@@ -24,7 +24,16 @@ Pour respecter ce path:
 
 ## Configuration
 
-Il y a peu de configuration du côté client du Drupal. 
+Il y a peu de configuration du côté client du Drupal.
 
 Le fichier i18n.js contient les traductions français/anglais mais aussi quelques configurations interessantes comme celle des **fonds de cartes**, qui se trouvent dans la variable **basemaps**.
 Cette est variable est un tableau et peut donc contenir plusieus fonds de cartes.
+
+Gestion du cache des fichiers js et img - Configuration NGINX
+
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+    	try_files $uri @rewrite;
+        expires 1d;
+        add_header Cache-Control "public, no-transform";
+        log_not_found off;
+    }
