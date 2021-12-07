@@ -42,7 +42,7 @@ SOFTWARE.*/
                     jQuery('.label-less', $element[0]).toggle();
                 };
             },
-            link: function (scope, element, attrs) {}
+            link: function (scope, element, attrs) { }
         };
     });
     mod.directive("collapsedItem", function () {
@@ -1061,8 +1061,8 @@ SOFTWARE.*/
                             vizFields = $filter('fieldsForVisualization')(vizFields, scope.visualization);
                         }
                         if (scope.model && scope.model.join('||') === $.map(vizFields, function (f) {
-                                return f.name;
-                            }).join('||')) {
+                            return f.name;
+                        }).join('||')) {
                             scope.model = [];
                         }
                     }
@@ -1131,7 +1131,7 @@ SOFTWARE.*/
                 element.on('scroll', shadows);
                 $($window).on('resize.scrollShadow', shadows);
                 if (angular.isUndefined(window.MutationObserver)) {
-                    scope.$watch(shadows, function () {});
+                    scope.$watch(shadows, function () { });
                 } else {
                     var observer = new MutationObserver(shadows);
                     observer.observe(element[0], {
@@ -2180,7 +2180,7 @@ function fireDOMEvent(element, eventName) {
                 key = [key];
             }
             for (var i = 0; i < key.length; i++) {
-                delete(filtered[key[i]]);
+                delete (filtered[key[i]]);
             }
             return filtered;
         };
@@ -3294,7 +3294,7 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
                     if (data) {
                         d4cNotificationService.sendNotification(data);
                     }
-                } catch (err) {}
+                } catch (err) { }
                 return $q.reject(reason);
             });
         };
@@ -4888,7 +4888,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     return contextName;
                 },
                 wrapInContextsCode: function (widgetCode) {
-					
+
                     var code = "<d4c-dataset-context ",
                         context, contextName;
                     code += 'context="' + contextsName.join(',') + '"';
@@ -5281,11 +5281,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 var contextsCodeBuilder = buildContextsCode();
                 if (context.dataset.extra_metas && context.dataset.extra_metas.visualization && context.dataset.extra_metas.visualization.custom_view_html) {
                     widgetCode = context.dataset.extra_metas.visualization.custom_view_html;
-					/*var reg1 = /<d4c-dataset-context[^>]*>/g;
-					var reg2 = /<\/d4c-dataset-context>/g;
-					var reg3 = / context="[^"]*"/g;
-					widgetCode = widgetCode.replace(reg1,"").replace(reg2,"");
-					widgetCode = widgetCode.replace(reg3,' context="ctx"');*/
+                    /*var reg1 = /<d4c-dataset-context[^>]*>/g;
+                    var reg2 = /<\/d4c-dataset-context>/g;
+                    var reg3 = / context="[^"]*"/g;
+                    widgetCode = widgetCode.replace(reg1,"").replace(reg2,"");
+                    widgetCode = widgetCode.replace(reg3,' context="ctx"');*/
                 }
                 if (context.dataset.extra_metas && context.dataset.extra_metas.visualization && context.dataset.extra_metas.visualization.custom_view_css) {
                     widgetCode += "\n<style type=\"text/css\">\n" + context.dataset.extra_metas.visualization.custom_view_css + "\n</style>\n";
@@ -5293,14 +5293,14 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 contextsCodeBuilder.addContext(context, 'ctx');
                 return contextsCodeBuilder.wrapInContextsCode(widgetCode);
             },
-			buildWordCloudWidgetCode: function (context, search_parameters) {
+            buildWordCloudWidgetCode: function (context, search_parameters) {
                 var contextsCodeBuilder = buildContextsCode(),
                     widgetCode = '<d4c-wordcloud';
                 widgetCode += ' context="' + contextsCodeBuilder.addContext(context) + '"';
                 widgetCode += '></d4c-wordcloud>\n';
                 return contextsCodeBuilder.wrapInContextsCode(widgetCode);
             },
-			buildTimeLineWidgetCode: function (context, search_parameters) {
+            buildTimeLineWidgetCode: function (context, search_parameters) {
                 var contextsCodeBuilder = buildContextsCode(),
                     widgetCode = '<d4c-timeline';
                 widgetCode += ' context="' + contextsCodeBuilder.addContext(context) + '"';
@@ -5404,7 +5404,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if ($scope.service.parameters) {
                         for (var j = 0; j < $scope.service.parameters.length; j++) {
                             var parameter = $scope.service.parameters[j];
-                            
+
                             if (parameter.type === 'hierarchical' && $scope.api.parameters[parameter.name]) {
                                 var object = $scope.api.parameters[parameter.name];
                                 console.log(object);
@@ -5417,13 +5417,13 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             }
 
                             //personnalize fields when param name is facet
-                            if(parameter.name === "facet") {
-                                for(var fac in $scope.api.parameters[parameter.name]) {
-                                    if($scope.api.parameters["hideColumnsApi."+$scope.api.parameters[parameter.name][fac]] === true) {
+                            if (parameter.name === "facet") {
+                                for (var fac in $scope.api.parameters[parameter.name]) {
+                                    if ($scope.api.parameters["hideColumnsApi." + $scope.api.parameters[parameter.name][fac]] === true) {
                                         let index = $scope.api.parameters[parameter.name].indexOf($scope.api.parameters[parameter.name][fac]);
                                         $scope.api.parameters[parameter.name].splice(index, 1);
                                     }
-                                    
+
                                 }
                             }
 
@@ -5439,23 +5439,23 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 $scope.sendCall = function () {
                     $http.get($scope.computeURL()).success(function (data) {
                         data.parameters["facet"] = $scope.api.parameters["facet"];
-                        if(data.parameters["facet"].length <= 0 ){
+                        if (data.parameters["facet"].length <= 0) {
                             data.parameters["facet"] = "Aucun champ";
                         }
                         // check if data result does not contains fields with hideclumnapi
                         for (var i = 0; i < data.records.length; i++) {
-                            for(var fieldkey in data.records[i]["fields"]) {
+                            for (var fieldkey in data.records[i]["fields"]) {
                                 //if true remove it from fields result
-                                if($scope.api.parameters["facet"].indexOf(fieldkey) === -1){
+                                if ($scope.api.parameters["facet"].indexOf(fieldkey) === -1) {
                                     delete data.records[i]["fields"][fieldkey];
                                 }
+                            }
+
+                            if (Object.keys(data.records[i]["fields"]).length <= 0) {
+                                data.records[i]["fields"] = "Aucun champ";
+                            }
                         }
-                        
-                         if(Object.keys(data.records[i]["fields"]).length <= 0) {
-                            data.records[i]["fields"] = "Aucun champ";
-                        }
-                        }
-                        
+
                         $scope.results = data;
                         $scope.errors = null;
                     }).error(function (data) {
@@ -5826,7 +5826,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             });
                             for (var category in $scope.categoryColors) {
                                 if (result.indexOf(category) === -1) {
-                                    delete($scope.categoryColors[category]);
+                                    delete ($scope.categoryColors[category]);
                                 }
                             }
                         });
@@ -5999,7 +5999,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     if (nv.datasets && nv.datasets[query.config.dataset]) {
                                         query.config.options = angular.copy(nv.datasets[query.config.dataset].parameters);
                                         if (query.config.options) {
-                                            delete(query.config.options.dataChart);
+                                            delete (query.config.options.dataChart);
                                         }
                                     }
                                 }
@@ -6167,7 +6167,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 }
                             }
                         });
-                    } else {}
+                    } else { }
                     preparationFinished();
                 }
             }
@@ -6428,9 +6428,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if (scope.defaultColor) {
                         return scope.defaultColor.toUpperCase();
                     }
-					// else {
-						// return undefined;
-					// }
+                    // else {
+                    // return undefined;
+                    // }
                 };
                 scope.selectNiceColor = function (val) {
                     scope.selectedColor = val;
@@ -7163,7 +7163,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     init();
                 }
             },
-            controller: function () {}
+            controller: function () { }
         };
     }]);
     mod.directive('d4cDatasetSelectionInterface', ['$compile', 'config', function ($compile, config) {
@@ -7798,7 +7798,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 event.preventDefault();
                             }
                             action();
-                        } else if (angular.isDefined(FormCtrl)) {}
+                        } else if (angular.isDefined(FormCtrl)) { }
                     } else {
                         if (event && event.preventDefault) {
                             event.preventDefault();
@@ -7931,7 +7931,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     get: function () {
                         return false;
                     },
-                    set: function () {}
+                    set: function () { }
                 };
                 Object.defineProperty(ctrl, '$pristine', alwaysFalse);
                 Object.defineProperty(ctrl, '$dirty', alwaysFalse);
@@ -8392,7 +8392,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if (scope.$applyAsync) {
                         scope.$applyAsync();
                     } else {
-                        $timeout(function () {});
+                        $timeout(function () { });
                     }
                 };
                 contentElement.addEventListener('scroll', setInnerShadows);
@@ -8922,8 +8922,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 scope.initRender = function () {
                     ngModel.$render();
                 };
-				scope.reset = function () {
-					ngModel.$rollbackViewValue();
+                scope.reset = function () {
+                    ngModel.$rollbackViewValue();
                     ngModel.$setViewValue("");
                 };
                 scope.scrollTo = function (target) {
@@ -9680,21 +9680,21 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         break;
                     }
                 }
-				var ctx = (scope.$parent.$parent.$parent.ctx != undefined)? scope.$parent.$parent.$parent.ctx : scope.$parent.$parent.$parent.context;
-				if(ctx != undefined && ctx.dataset != undefined){
-					var canAnalyze = ctx.dataset.canAnalyze;
-				
-					if (canAnalyze || scope.struct.slug == "information" || scope.struct.slug == "export"){
-						tabsCtrl.addPane(scope.struct, position);
-					}
+                var ctx = (scope.$parent.$parent.$parent.ctx != undefined) ? scope.$parent.$parent.$parent.ctx : scope.$parent.$parent.$parent.context;
+                if (ctx != undefined && ctx.dataset != undefined) {
+                    var canAnalyze = ctx.dataset.canAnalyze;
+
+                    if (canAnalyze || scope.struct.slug == "information" || scope.struct.slug == "export") {
+                        tabsCtrl.addPane(scope.struct, position);
+                    }
                     // If we have a WMS, we have the feature geo
                     else if (scope.struct.slug == "map" && ctx.dataset.hasWMS()) {
-						tabsCtrl.addPane(scope.struct, position);
+                        tabsCtrl.addPane(scope.struct, position);
                     }
-				} else {
-					tabsCtrl.addPane(scope.struct, position);
-				}
-                
+                } else {
+                    tabsCtrl.addPane(scope.struct, position);
+                }
+
                 scope.$watch(function () {
                     return (('ngShow' in attrs && !scope.$eval(attrs.ngShow)) || ('ngHide' in attrs && scope.$eval(attrs.ngHide)));
                 }, function (nv, ov) {
@@ -9709,6 +9709,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if (nv) {
                         scope.$applyAsync(function () {
                             scope.shown = true;
+
+                            // To resolve height problem for table
+                            if (scope.struct.slug == 'table') {
+                                scope.$broadcast('show-tab-table', scope);
+                            }
                         });
                     } else {
                         scope.shown = false;
@@ -9904,7 +9909,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             language: null,
             disqusShortname: null,
             customAPIHeaders: null,
-            basemaps: function(){ return D4C.basemaps; },
+            basemaps: function () { return D4C.basemaps; },
             // basemaps: [{"provider": "osm","label": "OpenStreetMap"}],
             mapGeobox: false,
             chartColors: null,
@@ -9916,24 +9921,24 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
         };
         this.customConfig = {};
         this.setConfig = function (customConfig) {
-            	$.ajax({
-		//url: fetchPrefix() + "/d4c/api/maps/layers/?type=tile",
-		// url: "https://cda.data4citizen.com/api/maps/layers/",
-		url: fetchPrefix() + "/d4c/api/maps/layers/",
-		success: function(result){
-			D4C.basemaps = result.layers;
-            D4C.default_bbox = result.default_bbox;
-            //Uncomment this if you want to support custom config (see CDA Parcelles)
-			/*console.log(D4CWidgetsConfigProvider.customConfig);
-			D4CWidgetsConfigProvider.setConfig({
-				basemaps: result
-			});
-			console.log(D4CWidgetsConfigProvider.customConfig);*/
-		},
-		error:function(error){
-		}
-	   });
-	    angular.extend(this.customConfig, customConfig);
+            $.ajax({
+                //url: fetchPrefix() + "/d4c/api/maps/layers/?type=tile",
+                // url: "https://cda.data4citizen.com/api/maps/layers/",
+                url: fetchPrefix() + "/d4c/api/maps/layers/",
+                success: function (result) {
+                    D4C.basemaps = result.layers;
+                    D4C.default_bbox = result.default_bbox;
+                    //Uncomment this if you want to support custom config (see CDA Parcelles)
+                    /*console.log(D4CWidgetsConfigProvider.customConfig);
+                    D4CWidgetsConfigProvider.setConfig({
+                        basemaps: result
+                    });
+                    console.log(D4CWidgetsConfigProvider.customConfig);*/
+                },
+                error: function (error) {
+                }
+            });
+            angular.extend(this.customConfig, customConfig);
         };
         this.$get = function () {
             return angular.extend({}, this.defaultConfig, this.customConfig);
@@ -10081,7 +10086,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     if (serie_name.replace("Cumulative", "").length > 0) {
                                         serie_name = serie_name.replace("Cumulative", "");
                                         cumulative = value;
-                                    } else {}
+                                    } else { }
                                 }
                                 serie_name = serie_name.toLowerCase();
                                 if (!series[serie_name]) {
@@ -10363,485 +10368,485 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
 (function () {
     'use strict';
-    var mod = angular.module('d4c-widgets');  
-    mod.directive("d4cWordcloud", function (URLSynchronizer, $location, DebugLogger,D4CAPI,$q) {
-		return {
+    var mod = angular.module('d4c-widgets');
+    mod.directive("d4cWordcloud", function (URLSynchronizer, $location, DebugLogger, D4CAPI, $q) {
+        return {
             restrict: 'E',
             template: '<div id="d4cWordcloudPlaceHolder"><div style="text-align: justify"><span style="margin:0 5px 0 5px"><label style="margin:0 5px 0 5px">Mots de visualisation</label><select ng-model="query.xAxis" ng-options="field.name as field.label for field in availableX" id="column_select"></select></span><span style="margin:0 5px 0 5px" id ="place_for_wc_count"><label style="margin:0 5px 0 5px">Valeurs calculées</label><select ng-show="availableY"  ng-model="query.yAxis" ng-options="field.name as field.label for field in availableY"  id="column_select_wc_number"><option value="" translate="" class="" selected="selected"><span>---</span></option></select></span><br><br><span style="margin:0 5px 0 5px"><label style="margin:0 5px 0 5px">Nombre de points max.</label><select ng-options="v for v in [5, 10, 20, 50, 100, 200]" ng-model="query.maxPoints" id="count_data_visu"><option value="" translate="" class="" selected="selected"><span>Tout afficher</span></option></select></span></div><br><br><div id="cloudPlace"></div> <div style="text-align: right;"><button id="saveButtonPng" >Télécharger PNG</button><button id="saveButtonSvg" >Télécharger SVG</button></div></div>',
-			scope: {
+            scope: {
                 context: '=',
                 autoResize: '@',
                 noControls: '=?'
             },
             replace: true,
-            controller: ['$scope', '$element', '$timeout', '$document', '$window', 'D4CAPI', 'DebugLogger', '$filter', '$http', '$compile', '$transclude', '$q','ModuleLazyLoader', 'ChartHelper', function ($scope, $element, $timeout, $document, $window, D4CAPI, DebugLogger, $filter, $http, $compile, $transclude, $q, ModuleLazyLoader, ChartHelper){
-				$scope.availableX = [];
-				$scope.availableY = [];
-				$scope.query = { 
-					xAxis:null,
-					yAxis:null,
-					maxPoints:0
-				};
-				
-				var layout;
-				var width = 800;          
-				var height = 500;	  
-				var color;
-				var fontsize;
-				
-				var refreshRecords = function(){
-					if($scope.query.xAxis == null) return; 
-					var promises = [];
-					var options = {
-						x: $scope.query.xAxis,
-					};
-					if($scope.query.yAxis == null){
-						options['y.serie1-1.func'] = "COUNT";
-					} else {
-						options['y.serie1-1.func'] = "SUM";
-						options['y.serie1-1.expr'] = $scope.query.yAxis;
-						options['y.serie1-1.cumulative'] = false;
-					}
-					if($scope.query.maxPoints != 0){
-						options['maxpoints'] = $scope.query.maxPoints;
-					}
-					/*promises.push(D4CAPI.records.analyze($scope.context, options));
-					$q.all(promises).then(function (responses) {
-						console.log(responses);
-					});*/
-					D4CAPI.records.analyze($scope.context, angular.extend({}, $scope.context.parameters, options)).success(function (data) {
-						//console.log(data);
+            controller: ['$scope', '$element', '$timeout', '$document', '$window', 'D4CAPI', 'DebugLogger', '$filter', '$http', '$compile', '$transclude', '$q', 'ModuleLazyLoader', 'ChartHelper', function ($scope, $element, $timeout, $document, $window, D4CAPI, DebugLogger, $filter, $http, $compile, $transclude, $q, ModuleLazyLoader, ChartHelper) {
+                $scope.availableX = [];
+                $scope.availableY = [];
+                $scope.query = {
+                    xAxis: null,
+                    yAxis: null,
+                    maxPoints: 0
+                };
 
-						var values = data.map(function(value,index) { return value["serie1-1"]; });
-						var min = Math.min(...values);
-						var max = Math.max(...values);
-						for(let i = 0; i<data.length; i++){
-							if(min == max){
-								data[i].size = 30;
-							} else {
-								let a =data[i]["serie1-1"];
-								var ratio = (100 - 10) / (max - min); 
-								var b = a * ratio - min*ratio + 10;
-								data[i].size = Math.round(b);
-							}
-							
-							data[i]["text"] = data[i].x;
-							// console.log(newData[i].size);
-						}
+                var layout;
+                var width = 800;
+                var height = 500;
+                var color;
+                var fontsize;
 
-						data.sort(function(a, b){
-							return b.size-a.size
-						});
-						
-						drawWC(data);
-					});
-				}
-				
-				var getAvailableX = function(){
-					var dataset=$scope.context.dataset;
-					for (let i = 0; i < dataset.fields.length; i++) {
-						if (dataset.fields[i].annotations ) {
-							for (let j = 0; j < dataset.fields[i].annotations.length; j++) {
-								if (dataset.fields[i].annotations[j].name == "wordcount") {
-									$scope.availableX.push(dataset.fields[i]);
-								}
-							}
-						}
-					}
-					if($scope.availableX.length > 0) $scope.query.xAxis = $scope.availableX[0].name;
-				}
-				
-				var getAvailableY = function(){
-					var dataset=$scope.context.dataset;
-					for (let i = 0; i < dataset.fields.length; i++) {
-						if (dataset.fields[i].annotations ) {
-							for (let j = 0; j < dataset.fields[i].annotations.length; j++) {
-								if (dataset.fields[i].annotations[j].name == "wordcountNumber") {
-									$scope.availableY.push(dataset.fields[i]);
-								}
-							}
-						}
-					}
-					if($scope.availableY.length > 0) $scope.query.yAxis = $scope.availableY[0].name;
-				}
-				
-				var drawWC=function(frequency_list){
-					$('#cloudPlace').html('');
-					let arr_colors=[];
-					let domain=[];
-				 
-					for(let i=0; i < frequency_list.length; i++){
-						arr_colors.push(getRandomColor());
-						domain.push(i);
-					}
-					
-					//var width = 1000;          
-					//var height = 500;	  
-					color = d3.scale.linear()
-						.domain(domain)
-						.range(arr_colors);
-					fontsize = d3.scale.linear()
-						.domain(d3.extent(frequency_list, function (d) {return d.size}))
-						.range([10,60]);
-					layout = d3.layout.cloud().size([width, height])
-						.words(frequency_list)
-						.padding(1)
-						.spiral("rectangular")
-						.rotate(function() { return ~~(Math.random() * 2); })
-						.font("Impact")
-						.fontSize(function(d) {
-							return fontsize(d.size);
-						})
-						.on("end", draw);
+                var refreshRecords = function () {
+                    if ($scope.query.xAxis == null) return;
+                    var promises = [];
+                    var options = {
+                        x: $scope.query.xAxis,
+                    };
+                    if ($scope.query.yAxis == null) {
+                        options['y.serie1-1.func'] = "COUNT";
+                    } else {
+                        options['y.serie1-1.func'] = "SUM";
+                        options['y.serie1-1.expr'] = $scope.query.yAxis;
+                        options['y.serie1-1.cumulative'] = false;
+                    }
+                    if ($scope.query.maxPoints != 0) {
+                        options['maxpoints'] = $scope.query.maxPoints;
+                    }
+                    /*promises.push(D4CAPI.records.analyze($scope.context, options));
+                    $q.all(promises).then(function (responses) {
+                        console.log(responses);
+                    });*/
+                    D4CAPI.records.analyze($scope.context, angular.extend({}, $scope.context.parameters, options)).success(function (data) {
+                        //console.log(data);
 
-					layout.start();
+                        var values = data.map(function (value, index) { return value["serie1-1"]; });
+                        var min = Math.min(...values);
+                        var max = Math.max(...values);
+                        for (let i = 0; i < data.length; i++) {
+                            if (min == max) {
+                                data[i].size = 30;
+                            } else {
+                                let a = data[i]["serie1-1"];
+                                var ratio = (100 - 10) / (max - min);
+                                var b = a * ratio - min * ratio + 10;
+                                data[i].size = Math.round(b);
+                            }
 
-				}
-				
-				function draw(words) {
-					var svg =  d3.select("#cloudPlace").append("svg")
-						.attr("width", layout.size()[0])
-						.attr("height", layout.size()[1])
-						.attr("id","svg_data")
-						.append("g")
-						.attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-						.selectAll("text")
-						.data(words)
-						.enter().append("text")
-						.style("font-size", function (d) {
-							return fontsize(d.size) + "px";
-						})
-						.style("font-family", "Impact")
-						.style("fill", function(d, i) {return color(i);})
-						.attr("text-anchor", "middle")
-						.attr("transform", function(d) {
-							return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-						})
-						.text(function(d) {return d.text;});
-					
-					d3.select('#saveButtonPng').on('click', function(){
-						var svgString = d3.select("svg")
-							.attr("title", $scope.context.dataset.name)
-							.attr("version", 1.1)
-							.attr("xmlns", "http://www.w3.org/2000/svg")
-							.node().parentNode.innerHTML;
-						svgString2Image( svgString, 2*width, 2*height, 'png', save ); // passes Blob and filesize String to the callback
+                            data[i]["text"] = data[i].x;
+                            // console.log(newData[i].size);
+                        }
 
-						function save( dataBlob, filesize ){
-							saveAs( dataBlob, $scope.context.dataset.datasetid + "-" + $scope.query.xAxis +'-cloud.png' ); // FileSaver.js function
-						}
-					});       
-					d3.select('#saveButtonSvg').on('click', function(){
-						var svgString = d3.select("svg")
-							.attr("title", $scope.context.dataset.name)
-							.attr("version", 1.1)
-							.attr("xmlns", "http://www.w3.org/2000/svg")
-							.node().parentNode.innerHTML;
+                        data.sort(function (a, b) {
+                            return b.size - a.size
+                        });
 
-						var blob = new Blob([svgString], {type: "image/svg+xml"});
-						saveAs(blob, $scope.context.dataset.datasetid + "-" + $scope.query.xAxis +'-cloud.svg');
-					});      
-				}		
+                        drawWC(data);
+                    });
+                }
 
-				function getSVGString( svgNode ) {
-					svgNode.setAttribute('xlink', 'http://www.w3.org/1999/xlink');
-					var cssStyleText = getCSSStyles( svgNode );
-					appendCSS( cssStyleText, svgNode );
+                var getAvailableX = function () {
+                    var dataset = $scope.context.dataset;
+                    for (let i = 0; i < dataset.fields.length; i++) {
+                        if (dataset.fields[i].annotations) {
+                            for (let j = 0; j < dataset.fields[i].annotations.length; j++) {
+                                if (dataset.fields[i].annotations[j].name == "wordcount") {
+                                    $scope.availableX.push(dataset.fields[i]);
+                                }
+                            }
+                        }
+                    }
+                    if ($scope.availableX.length > 0) $scope.query.xAxis = $scope.availableX[0].name;
+                }
 
-					var serializer = new XMLSerializer();
-					var svgString = serializer.serializeToString(svgNode);
-					svgString = svgString.replace(/(\w+)?:?xlink=/g, 'xmlns:xlink='); // Fix root xlink without namespace
-					svgString = svgString.replace(/NS\d+:href/g, 'xlink:href'); // Safari NS namespace fix
+                var getAvailableY = function () {
+                    var dataset = $scope.context.dataset;
+                    for (let i = 0; i < dataset.fields.length; i++) {
+                        if (dataset.fields[i].annotations) {
+                            for (let j = 0; j < dataset.fields[i].annotations.length; j++) {
+                                if (dataset.fields[i].annotations[j].name == "wordcountNumber") {
+                                    $scope.availableY.push(dataset.fields[i]);
+                                }
+                            }
+                        }
+                    }
+                    if ($scope.availableY.length > 0) $scope.query.yAxis = $scope.availableY[0].name;
+                }
 
-					return svgString;
-				}
-					
-				function getCSSStyles( parentElement ) {
-					var selectorTextArr = [];
+                var drawWC = function (frequency_list) {
+                    $('#cloudPlace').html('');
+                    let arr_colors = [];
+                    let domain = [];
 
-					// Add Parent element Id and Classes to the list
-					selectorTextArr.push( '#'+parentElement.id );
-					for (var c = 0; c < parentElement.classList.length; c++)
-						if ( !contains('.'+parentElement.classList[c], selectorTextArr) )
-							selectorTextArr.push( '.'+parentElement.classList[c] );
+                    for (let i = 0; i < frequency_list.length; i++) {
+                        arr_colors.push(getRandomColor());
+                        domain.push(i);
+                    }
 
-					// Add Children element Ids and Classes to the list
-					var nodes = parentElement.getElementsByTagName("*");
-					for (var i = 0; i < nodes.length; i++) {
-						var id = nodes[i].id;
-						if ( !contains('#'+id, selectorTextArr) )
-							selectorTextArr.push( '#'+id );
+                    //var width = 1000;          
+                    //var height = 500;	  
+                    color = d3.scale.linear()
+                        .domain(domain)
+                        .range(arr_colors);
+                    fontsize = d3.scale.linear()
+                        .domain(d3.extent(frequency_list, function (d) { return d.size }))
+                        .range([10, 60]);
+                    layout = d3.layout.cloud().size([width, height])
+                        .words(frequency_list)
+                        .padding(1)
+                        .spiral("rectangular")
+                        .rotate(function () { return ~~(Math.random() * 2); })
+                        .font("Impact")
+                        .fontSize(function (d) {
+                            return fontsize(d.size);
+                        })
+                        .on("end", draw);
 
-						var classes = nodes[i].classList;
-						for (var c = 0; c < classes.length; c++)
-							if ( !contains('.'+classes[c], selectorTextArr) )
-								selectorTextArr.push( '.'+classes[c] );
-					}
+                    layout.start();
 
-					// Extract CSS Rules
-					var extractedCSSText = "";
-					for (var i = 0; i < document.styleSheets.length; i++) {
-						var s = document.styleSheets[i];
-						
-						try {
-							if(!s.cssRules) continue;
-						} catch( e ) {
-							if(e.name !== 'SecurityError') throw e; // for Firefox
-							continue;
-						}
+                }
 
-						var cssRules = s.cssRules;
-						for (var r = 0; r < cssRules.length; r++) {
-							if ( contains( cssRules[r].selectorText, selectorTextArr ) )
-								extractedCSSText += cssRules[r].cssText;
-						}
-					}
-					return extractedCSSText;
-				}
-				
-				function contains(str,arr) {
-					return arr.indexOf( str ) === -1 ? false : true;
-				}
+                function draw(words) {
+                    var svg = d3.select("#cloudPlace").append("svg")
+                        .attr("width", layout.size()[0])
+                        .attr("height", layout.size()[1])
+                        .attr("id", "svg_data")
+                        .append("g")
+                        .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+                        .selectAll("text")
+                        .data(words)
+                        .enter().append("text")
+                        .style("font-size", function (d) {
+                            return fontsize(d.size) + "px";
+                        })
+                        .style("font-family", "Impact")
+                        .style("fill", function (d, i) { return color(i); })
+                        .attr("text-anchor", "middle")
+                        .attr("transform", function (d) {
+                            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                        })
+                        .text(function (d) { return d.text; });
 
-				function appendCSS( cssText, element ) {
-					var styleElement = document.createElement("style");
-					styleElement.setAttribute("type","text/css"); 
-					styleElement.innerHTML = cssText;
-					var refNode = element.hasChildNodes() ? element.children[0] : null;
-					element.insertBefore( styleElement, refNode );
-				}
-				
-				function svgString2Image( svgString, width, height, format, callback ) {
-					var format = format ? format : 'png';
-					var imgsrc = 'data:image/svg+xml;base64,'+ btoa( unescape( encodeURIComponent( svgString ) ) ); // Convert SVG string to data URL
+                    d3.select('#saveButtonPng').on('click', function () {
+                        var svgString = d3.select("svg")
+                            .attr("title", $scope.context.dataset.name)
+                            .attr("version", 1.1)
+                            .attr("xmlns", "http://www.w3.org/2000/svg")
+                            .node().parentNode.innerHTML;
+                        svgString2Image(svgString, 2 * width, 2 * height, 'png', save); // passes Blob and filesize String to the callback
 
-					var canvas = document.createElement("canvas");
-					var context = canvas.getContext("2d");
+                        function save(dataBlob, filesize) {
+                            saveAs(dataBlob, $scope.context.dataset.datasetid + "-" + $scope.query.xAxis + '-cloud.png'); // FileSaver.js function
+                        }
+                    });
+                    d3.select('#saveButtonSvg').on('click', function () {
+                        var svgString = d3.select("svg")
+                            .attr("title", $scope.context.dataset.name)
+                            .attr("version", 1.1)
+                            .attr("xmlns", "http://www.w3.org/2000/svg")
+                            .node().parentNode.innerHTML;
 
-					canvas.width = width;
-					canvas.height = height;
+                        var blob = new Blob([svgString], { type: "image/svg+xml" });
+                        saveAs(blob, $scope.context.dataset.datasetid + "-" + $scope.query.xAxis + '-cloud.svg');
+                    });
+                }
 
-					var image = new Image();
-					image.onload = function() {
-						context.clearRect ( 0, 0, width, height );
-						context.drawImage(image, 0, 0, width, height);
+                function getSVGString(svgNode) {
+                    svgNode.setAttribute('xlink', 'http://www.w3.org/1999/xlink');
+                    var cssStyleText = getCSSStyles(svgNode);
+                    appendCSS(cssStyleText, svgNode);
 
-						canvas.toBlob( function(blob) {
-							var filesize = Math.round( blob.length/1024 ) + ' KB';
-							if ( callback ) callback( blob, filesize );
-						});
-					};
+                    var serializer = new XMLSerializer();
+                    var svgString = serializer.serializeToString(svgNode);
+                    svgString = svgString.replace(/(\w+)?:?xlink=/g, 'xmlns:xlink='); // Fix root xlink without namespace
+                    svgString = svgString.replace(/NS\d+:href/g, 'xlink:href'); // Safari NS namespace fix
 
-					image.src = imgsrc;
-				}
-				
-				var getRandomColor = function(){
-					var letters = '0123456789ABCDEF';
-					var color = '#';
-					for (var i = 0; i < 6; i++) {
-						color += letters[Math.floor(Math.random() * 16)];
-					}
-					return color;
-				} 
-			
-				
-				$scope.context.wait().then(function () {
+                    return svgString;
+                }
+
+                function getCSSStyles(parentElement) {
+                    var selectorTextArr = [];
+
+                    // Add Parent element Id and Classes to the list
+                    selectorTextArr.push('#' + parentElement.id);
+                    for (var c = 0; c < parentElement.classList.length; c++)
+                        if (!contains('.' + parentElement.classList[c], selectorTextArr))
+                            selectorTextArr.push('.' + parentElement.classList[c]);
+
+                    // Add Children element Ids and Classes to the list
+                    var nodes = parentElement.getElementsByTagName("*");
+                    for (var i = 0; i < nodes.length; i++) {
+                        var id = nodes[i].id;
+                        if (!contains('#' + id, selectorTextArr))
+                            selectorTextArr.push('#' + id);
+
+                        var classes = nodes[i].classList;
+                        for (var c = 0; c < classes.length; c++)
+                            if (!contains('.' + classes[c], selectorTextArr))
+                                selectorTextArr.push('.' + classes[c]);
+                    }
+
+                    // Extract CSS Rules
+                    var extractedCSSText = "";
+                    for (var i = 0; i < document.styleSheets.length; i++) {
+                        var s = document.styleSheets[i];
+
+                        try {
+                            if (!s.cssRules) continue;
+                        } catch (e) {
+                            if (e.name !== 'SecurityError') throw e; // for Firefox
+                            continue;
+                        }
+
+                        var cssRules = s.cssRules;
+                        for (var r = 0; r < cssRules.length; r++) {
+                            if (contains(cssRules[r].selectorText, selectorTextArr))
+                                extractedCSSText += cssRules[r].cssText;
+                        }
+                    }
+                    return extractedCSSText;
+                }
+
+                function contains(str, arr) {
+                    return arr.indexOf(str) === -1 ? false : true;
+                }
+
+                function appendCSS(cssText, element) {
+                    var styleElement = document.createElement("style");
+                    styleElement.setAttribute("type", "text/css");
+                    styleElement.innerHTML = cssText;
+                    var refNode = element.hasChildNodes() ? element.children[0] : null;
+                    element.insertBefore(styleElement, refNode);
+                }
+
+                function svgString2Image(svgString, width, height, format, callback) {
+                    var format = format ? format : 'png';
+                    var imgsrc = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString))); // Convert SVG string to data URL
+
+                    var canvas = document.createElement("canvas");
+                    var context = canvas.getContext("2d");
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    var image = new Image();
+                    image.onload = function () {
+                        context.clearRect(0, 0, width, height);
+                        context.drawImage(image, 0, 0, width, height);
+
+                        canvas.toBlob(function (blob) {
+                            var filesize = Math.round(blob.length / 1024) + ' KB';
+                            if (callback) callback(blob, filesize);
+                        });
+                    };
+
+                    image.src = imgsrc;
+                }
+
+                var getRandomColor = function () {
+                    var letters = '0123456789ABCDEF';
+                    var color = '#';
+                    for (var i = 0; i < 6; i++) {
+                        color += letters[Math.floor(Math.random() * 16)];
+                    }
+                    return color;
+                }
+
+
+                $scope.context.wait().then(function () {
                     /*ChartHelper.init($scope.context, $scope.advanced, true);
-					$scope.availableX = ChartHelper.getAvailableX(ChartHelper.getDatasetId($scope.context), undefined, $scope.advanced);
-					$scope.availableY = ChartHelper.getAvailableY(ChartHelper.getDatasetId($scope.context), undefined, $scope.advanced);
-					*/
-					ModuleLazyLoader('wordcloud').then(function () {   
-						getAvailableX();
-						getAvailableY();
-						
-						refreshRecords();
-					});
-					
+                    $scope.availableX = ChartHelper.getAvailableX(ChartHelper.getDatasetId($scope.context), undefined, $scope.advanced);
+                    $scope.availableY = ChartHelper.getAvailableY(ChartHelper.getDatasetId($scope.context), undefined, $scope.advanced);
+                    */
+                    ModuleLazyLoader('wordcloud').then(function () {
+                        getAvailableX();
+                        getAvailableY();
+
+                        refreshRecords();
+                    });
+
                 });
-				
-				
-				$scope.$watch('context.parameters', function (ov, nv) {
-					/*ChartHelper.init(nv, $scope.advanced, true);
-					$scope.availableX = ChartHelper.getAvailableX(ChartHelper.getDatasetId($scope.context), undefined, $scope.advanced);*/
-					
-					refreshRecords();
-				}, true);
-				
-				$scope.$watch('query', function (nv, ov) {
-					if (nv && $scope.context) {
-						refreshRecords();
-					}
-				}, true);
-			}]
+
+
+                $scope.$watch('context.parameters', function (ov, nv) {
+                    /*ChartHelper.init(nv, $scope.advanced, true);
+                    $scope.availableX = ChartHelper.getAvailableX(ChartHelper.getDatasetId($scope.context), undefined, $scope.advanced);*/
+
+                    refreshRecords();
+                }, true);
+
+                $scope.$watch('query', function (nv, ov) {
+                    if (nv && $scope.context) {
+                        refreshRecords();
+                    }
+                }, true);
+            }]
         };
-	});  
+    });
 }());;
 
 (function () {
     'use strict';
     var mod = angular.module('d4c-widgets');
-   
-    mod.directive("d4cTimeline", function (URLSynchronizer, $location, DebugLogger,D4CAPI,$q) {   
-         
+
+    mod.directive("d4cTimeline", function (URLSynchronizer, $location, DebugLogger, D4CAPI, $q) {
+
         return {
             restrict: 'E',
             template: '<div id="timenil"></div>',
-			scope: {
+            scope: {
                 context: '=',
                 autoResize: '@',
                 noControls: '=?'
             },
             replace: true,
-            controller: ['$scope', '$element', '$timeout', '$document', '$window', 'D4CAPI', 'DebugLogger', '$filter', '$http', '$compile', '$transclude', '$q','ModuleLazyLoader', 'ChartHelper', function ($scope, $element, $timeout, $document, $window, D4CAPI, DebugLogger, $filter, $http, $compile, $transclude, $q, ModuleLazyLoader, ChartHelper){
-				$scope.timeLineCreate=function(data,columns){
-		   
-					//let columns = $scope.timeLineGetNameColumns();
-		
-					data.records = data.result.records;
-					//console.log(data.records);     
-			 
-					data.records = data.records.sort(function (a, b) {
-						let dateA = new Date(a[columns.dataT]),
-							dateB = new Date(b[columns.dataT]);
-						return  dateB - dateA 
-					});
-			 
-					// console.log(data.records);
-					$('#timenil').contents().remove();
-					$('#timenil').append( '<div id="tl_line" class="timenil-vertical-line" style="display:none"></div>');
-			 
-					for(let a=0; a<data.records.length; a++){
-						let info ='';
-						for(let g = 0; g<columns.description.length; g++ ){
-							info = info+'<p>'+data.records[a][columns.description[g]]+'</p> <br>';
-						}
-						//console.log(data.records[a][columns.image_url]);
-						let style_img ='';
-						if(data.records[a][columns.image_url]===''){
-							style_img = 'height: 6em;';
-						}
-						let url_plus =  window.location.href.replace('timeline', 'table')
-		   
-						let dateTimeTL=new Date(data.records[a][columns.dataT]);
-						let dayT=dateTimeTL.getDate();
-						let monthT=dateTimeTL.getMonth()+ 1;
-						let yearT=dateTimeTL.getFullYear();
-						 
-						// dateTimeTL=yearT+'/'+monthT+'/'+dayT;
-						if(monthT < 10) {
-							dateTimeTL=dayT+'/0'+monthT+'/'+yearT;
-						}
-						else {
-							dateTimeTL=dayT+'/'+monthT+'/'+yearT;
-						}
-				 
-						if(a%2==0){
-							$('#timenil').append('<div class="timenil-node"><div class="timenil-node-child-left timenil-node-child-left-theme"><div class="timenil-content-box"> <div class="timenil-content-text" >'+'<div class="timeline-img-header"  style="'+style_img+' background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0, .4)), url('+data.records[a][columns.image_url]+') center center no-repeat; background-size: cover;"><h2>'+data.records[a][columns.title]+'</h2></div><p>'+info+'</p><a class="bnt-more" target="_blank" href="'+url_plus+'">En savoir plus <i class="fa fa-external-link" aria-hidden="true"></i></a> </div></div></div><div class="timenil-node-center"></div><div class="timenil-node-trace"></div><div class="timenil-node-child-right"><div class="timenil-content-box"> <div class="timenil-content-text"><p> <h1>'+dateTimeTL+'</h1></p></div></div></div><br></div>');
-						}
-						else{
-							$('#timenil').append('<div class="timenil-node"><div class="timenil-node-child-left"><div class="timenil-content-box"> <div class="timenil-content-text"><p> <h1>'+dateTimeTL+'</h1></p></div></div></div><div class="timenil-node-center"></div><div class="timenil-node-trace"></div><div class="timenil-node-child-right timenil-node-child-right-theme"><div class="timenil-content-box"> <div class="timenil-content-text">'+'<div class="timeline-img-header"  style="'+style_img+' background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0, .4)), url('+data.records[a][columns.image_url]+') center center no-repeat; background-size: cover;"><h2>'+data.records[a][columns.title]+'</h2></div><p>'+info+'</p><a class="bnt-more"  target="_blank" href="'+url_plus+'">En savoir plus <i class="fa fa-external-link" aria-hidden="true"></i></a> </div></div></div></div>'); 
-						}
-					}
-			 
-					if(data.records.length>1){
-						$('#tl_line').removeAttr('style');
-					}
-		
-				}   
-     
-				$scope.timeLineGetNameColumns=function(){
-			 
-					let dataset=$scope.context.dataset;
-					let dataForTL = {
-						dataT:'',
-						description:[],
-						image_url:'',
-						title:''
-					};
-			 
-					for (let i = 0; i < dataset.fields.length; i++) {
-						//console.log(dataset.fields[i]);
-						if (dataset.fields[i].annotations ) {
-						   
-							for (let j = 0; j < dataset.fields[i].annotations.length; j++) {
-								if (dataset.fields[i].annotations[j].name == "date_timeLine") {
-									dataForTL.dataT = dataset.fields[i].name;
-								} 
-								else if (dataset.fields[i].annotations[j].name == "descr_for_timeLine") {
-									dataForTL.description.push(dataset.fields[i].name);
-								}
-								else if (dataset.fields[i].annotations[j].name == "has_thumbnails"){
-									dataForTL.image_url = dataset.fields[i].name;
-								}
-								else if (dataset.fields[i].annotations[j].name == "title_for_timeLine"){
-									dataForTL.title = dataset.fields[i].name;
-								}
-							}
-						}                      
-					}
-					//console.log(dataForTL);
-			 
-					return dataForTL;
-				}           
-					
-				var refreshRecords = function(){
-					let dataset=$scope.context.dataset;
-					var dataForTL = {
-						dataT:'',
-						description:[],
-						image_url:'',
-						title:''
-					};
-			 
-					for (let i = 0; i < dataset.fields.length; i++) {
-					//console.log(dataset.fields[i]);
-						if (dataset.fields[i].annotations ) {
-							for (let j = 0; j < dataset.fields[i].annotations.length; j++) {
-								if (dataset.fields[i].annotations[j].name == "date_timeLine") {
-									dataForTL.dataT = dataset.fields[i].name;
-								} 
-								else if (dataset.fields[i].annotations[j].name == "descr_for_timeLine") {
-									dataForTL.description.push(dataset.fields[i].name);
-								}
-								else if (dataset.fields[i].annotations[j].name == "has_thumbnails"){
-									dataForTL.image_url = dataset.fields[i].name;
-								}
-								else if (dataset.fields[i].annotations[j].name == "title_for_timeLine"){
-									dataForTL.title = dataset.fields[i].name;
-								}
-							}
-						}   
-					}
-						
-					D4CAPI.records.search($scope.context, $scope.context.parameters).success(function (data) {
-						//console.log(data);
-						$scope.timeLineCreate(data,dataForTL);
-					});
-				}
-				
-				   
-				$scope.context.wait().then(function () {
-				
-					ModuleLazyLoader('timeline').then(function () {   
-						refreshRecords();
-					});
-					
-				});
-				
-				$scope.$watch('context.parameters', function (ov, nv) {
-					refreshRecords();
-				}, true);
-				
-				$scope.$watch('query', function (nv, ov) {
-					if (nv && $scope.context) {
-						refreshRecords();
-					}
-				}, true);
-                
+            controller: ['$scope', '$element', '$timeout', '$document', '$window', 'D4CAPI', 'DebugLogger', '$filter', '$http', '$compile', '$transclude', '$q', 'ModuleLazyLoader', 'ChartHelper', function ($scope, $element, $timeout, $document, $window, D4CAPI, DebugLogger, $filter, $http, $compile, $transclude, $q, ModuleLazyLoader, ChartHelper) {
+                $scope.timeLineCreate = function (data, columns) {
+
+                    //let columns = $scope.timeLineGetNameColumns();
+
+                    data.records = data.result.records;
+                    //console.log(data.records);     
+
+                    data.records = data.records.sort(function (a, b) {
+                        let dateA = new Date(a[columns.dataT]),
+                            dateB = new Date(b[columns.dataT]);
+                        return dateB - dateA
+                    });
+
+                    // console.log(data.records);
+                    $('#timenil').contents().remove();
+                    $('#timenil').append('<div id="tl_line" class="timenil-vertical-line" style="display:none"></div>');
+
+                    for (let a = 0; a < data.records.length; a++) {
+                        let info = '';
+                        for (let g = 0; g < columns.description.length; g++) {
+                            info = info + '<p>' + data.records[a][columns.description[g]] + '</p> <br>';
+                        }
+                        //console.log(data.records[a][columns.image_url]);
+                        let style_img = '';
+                        if (data.records[a][columns.image_url] === '') {
+                            style_img = 'height: 6em;';
+                        }
+                        let url_plus = window.location.href.replace('timeline', 'table')
+
+                        let dateTimeTL = new Date(data.records[a][columns.dataT]);
+                        let dayT = dateTimeTL.getDate();
+                        let monthT = dateTimeTL.getMonth() + 1;
+                        let yearT = dateTimeTL.getFullYear();
+
+                        // dateTimeTL=yearT+'/'+monthT+'/'+dayT;
+                        if (monthT < 10) {
+                            dateTimeTL = dayT + '/0' + monthT + '/' + yearT;
+                        }
+                        else {
+                            dateTimeTL = dayT + '/' + monthT + '/' + yearT;
+                        }
+
+                        if (a % 2 == 0) {
+                            $('#timenil').append('<div class="timenil-node"><div class="timenil-node-child-left timenil-node-child-left-theme"><div class="timenil-content-box"> <div class="timenil-content-text" >' + '<div class="timeline-img-header"  style="' + style_img + ' background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0, .4)), url(' + data.records[a][columns.image_url] + ') center center no-repeat; background-size: cover;"><h2>' + data.records[a][columns.title] + '</h2></div><p>' + info + '</p><a class="bnt-more" target="_blank" href="' + url_plus + '">En savoir plus <i class="fa fa-external-link" aria-hidden="true"></i></a> </div></div></div><div class="timenil-node-center"></div><div class="timenil-node-trace"></div><div class="timenil-node-child-right"><div class="timenil-content-box"> <div class="timenil-content-text"><p> <h1>' + dateTimeTL + '</h1></p></div></div></div><br></div>');
+                        }
+                        else {
+                            $('#timenil').append('<div class="timenil-node"><div class="timenil-node-child-left"><div class="timenil-content-box"> <div class="timenil-content-text"><p> <h1>' + dateTimeTL + '</h1></p></div></div></div><div class="timenil-node-center"></div><div class="timenil-node-trace"></div><div class="timenil-node-child-right timenil-node-child-right-theme"><div class="timenil-content-box"> <div class="timenil-content-text">' + '<div class="timeline-img-header"  style="' + style_img + ' background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0, .4)), url(' + data.records[a][columns.image_url] + ') center center no-repeat; background-size: cover;"><h2>' + data.records[a][columns.title] + '</h2></div><p>' + info + '</p><a class="bnt-more"  target="_blank" href="' + url_plus + '">En savoir plus <i class="fa fa-external-link" aria-hidden="true"></i></a> </div></div></div></div>');
+                        }
+                    }
+
+                    if (data.records.length > 1) {
+                        $('#tl_line').removeAttr('style');
+                    }
+
+                }
+
+                $scope.timeLineGetNameColumns = function () {
+
+                    let dataset = $scope.context.dataset;
+                    let dataForTL = {
+                        dataT: '',
+                        description: [],
+                        image_url: '',
+                        title: ''
+                    };
+
+                    for (let i = 0; i < dataset.fields.length; i++) {
+                        //console.log(dataset.fields[i]);
+                        if (dataset.fields[i].annotations) {
+
+                            for (let j = 0; j < dataset.fields[i].annotations.length; j++) {
+                                if (dataset.fields[i].annotations[j].name == "date_timeLine") {
+                                    dataForTL.dataT = dataset.fields[i].name;
+                                }
+                                else if (dataset.fields[i].annotations[j].name == "descr_for_timeLine") {
+                                    dataForTL.description.push(dataset.fields[i].name);
+                                }
+                                else if (dataset.fields[i].annotations[j].name == "has_thumbnails") {
+                                    dataForTL.image_url = dataset.fields[i].name;
+                                }
+                                else if (dataset.fields[i].annotations[j].name == "title_for_timeLine") {
+                                    dataForTL.title = dataset.fields[i].name;
+                                }
+                            }
+                        }
+                    }
+                    //console.log(dataForTL);
+
+                    return dataForTL;
+                }
+
+                var refreshRecords = function () {
+                    let dataset = $scope.context.dataset;
+                    var dataForTL = {
+                        dataT: '',
+                        description: [],
+                        image_url: '',
+                        title: ''
+                    };
+
+                    for (let i = 0; i < dataset.fields.length; i++) {
+                        //console.log(dataset.fields[i]);
+                        if (dataset.fields[i].annotations) {
+                            for (let j = 0; j < dataset.fields[i].annotations.length; j++) {
+                                if (dataset.fields[i].annotations[j].name == "date_timeLine") {
+                                    dataForTL.dataT = dataset.fields[i].name;
+                                }
+                                else if (dataset.fields[i].annotations[j].name == "descr_for_timeLine") {
+                                    dataForTL.description.push(dataset.fields[i].name);
+                                }
+                                else if (dataset.fields[i].annotations[j].name == "has_thumbnails") {
+                                    dataForTL.image_url = dataset.fields[i].name;
+                                }
+                                else if (dataset.fields[i].annotations[j].name == "title_for_timeLine") {
+                                    dataForTL.title = dataset.fields[i].name;
+                                }
+                            }
+                        }
+                    }
+
+                    D4CAPI.records.search($scope.context, $scope.context.parameters).success(function (data) {
+                        //console.log(data);
+                        $scope.timeLineCreate(data, dataForTL);
+                    });
+                }
+
+
+                $scope.context.wait().then(function () {
+
+                    ModuleLazyLoader('timeline').then(function () {
+                        refreshRecords();
+                    });
+
+                });
+
+                $scope.$watch('context.parameters', function (ov, nv) {
+                    refreshRecords();
+                }, true);
+
+                $scope.$watch('query', function (nv, ov) {
+                    if (nv && $scope.context) {
+                        refreshRecords();
+                    }
+                }, true);
+
             }]
         };
     });
-  
+
 }());;
 
 
@@ -10859,7 +10864,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
         return {
             restrict: 'A',
             require: ["?d4cAutoResize", "?autoResize"],
-            controller: function ($scope, $element) {},
+            controller: function ($scope, $element) { },
             link: function (scope, element, attrs, ctrls) {
                 var timeout;
                 var ctrl = ctrls[0] || ctrls[1];
@@ -11089,10 +11094,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         'q.calendar_bounds': boundsQuery,
                         fields: scope.tooltipFields
                     });
-                   
+
                     return options;
-                    
-                    
+
+
                 };
                 ModuleLazyLoader('fullcalendar', 'qtip').then(function () {
                     scope.context.wait().then(function () {
@@ -11216,7 +11221,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
     var mod = angular.module('d4c-widgets');
     mod.directive('d4cCrossTable', ['D4CAPI', '$q', '$filter', '$timeout', function (D4CAPI, $q, $filter, $timeout) {
         var CrossTable = function (rowFields, colField, series, schema, dataset, repeatRowHeaders, displayIntermediaryResults, numberPrecision) {
-            
+
             this.rowFields = rowFields;
             this.colField = colField;
             this.schema = schema;
@@ -11288,8 +11293,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 }
             };
             this.buildTableStructure = function (analyses) {
-                
-                
+
+
                 var i;
                 for (i = 0; i < Math.min(2, this.series.length); i++) {
                     this.table.push([]);
@@ -11464,7 +11469,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             template: '' + '<div class="d4c-cross-table">' + '    <d4c-spinner with-backdrop ng-show="loading"></d4c-spinner>' + '    <div class="d4c-cross-table__frozen-header-wrapper">' + '        <table class="d4c-cross-table__frozen-header">' + '            <tr ng-repeat="row in table | limitTo:nbFrozenRows track by $index" class="d4c-cross-table__row">' + '                <td ng-repeat="cell in row | limitTo:nbFrozenCols track by $index" ' + '                    colspan="{{ cell.colspan }}" ' + '                    class="d4c-cross-table__cell {{ cell.classes }}">' + '                    <div class="d4c-cross-table__cell-content" ng-bind="cell.label || \'&nbsp;\'"></div>' + '                </td>' + '            </tr>' + '        </table>' + '    </div>' + '    <div class="d4c-cross-table__frozen-rows-wrapper">' + '        <table class="d4c-cross-table__frozen-rows">' + '            <tr ng-repeat="row in table | limitTo:nbFrozenRows track by $index" class="d4c-cross-table__row">' + '                <td ng-repeat="cell in row | limitTo:row.length:nbFrozenCols track by $index" ' + '                    colspan="{{ cell.colspan }}" ' + '                    class="d4c-cross-table__cell {{ cell.classes }}">' + '                    <div class="d4c-cross-table__cell-content" ng-bind="cell.label || \'&nbsp;\'"></div>' + '                </td>' + '            </tr>' + '        </table>' + '    </div>' + '    <div class="d4c-cross-table__frozen-cols-wrapper">' + '        <table class="d4c-cross-table__frozen-cols">' + '            <tr ng-repeat="row in table | limitTo:table.length:nbFrozenRows track by $index" class="d4c-cross-table__row">' + '                <td ng-repeat="cell in row | limitTo:nbFrozenCols track by $index" ' + '                    colspan="{{ cell.colspan }}" ' + '                    class="d4c-cross-table__cell {{ cell.classes }}">' + '                    <div class="d4c-cross-table__cell-content" ng-bind="cell.label || \'&nbsp;\'"></div>' + '                </td>' + '            </tr>' + '        </table>' + '    </div>' + '    <div class="d4c-cross-table__body-wrapper">' + '        <table class="d4c-cross-table__body">' + '            <tr ng-repeat="row in table | limitTo:table.length:nbFrozenRows track by $index" class="d4c-cross-table__row">' + '                <td ng-repeat="cell in row | limitTo:row.length:nbFrozenCols track by $index" ' + '                    colspan="{{ cell.colspan }}" ' + '                    class="d4c-cross-table__cell {{ cell.classes }}">' + '                    <div class="d4c-cross-table__cell-content" ng-bind="cell.label || \'&nbsp;\'"></div>' + '                </td>' + '            </tr>' + '        </table>' + '    </div>' + '</div>',
             link: function (scope, element, attrs) {
-                
+
                 scope.table = [];
                 scope.nbFrozenRows = 0;
                 scope.nbFrozenCols = 0;
@@ -11909,12 +11914,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     contextParams = {};
                 }
             }
-            
-			scope[contextName] = ContextHelper.getExternalDatasetContext(contextName, datasetID, contextParams, url, type, nhits);
-			scope[contextName].wait().then(function (dataset) {
+
+            scope[contextName] = ContextHelper.getExternalDatasetContext(contextName, datasetID, contextParams, url, type, nhits);
+            scope[contextName].wait().then(function (dataset) {
                 scope[contextName].parameters.uuid = datasetID;
             });
-            
+
             if (urlSync) {
                 URLSynchronizer.addSynchronizedObject(scope, contextName + '.parameters', ['basemap', 'location']);
             }
@@ -11947,21 +11952,21 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     } else {
                         url = '';
                     }
-                    
+
                     var parameters = $scope.$eval($attrs[contextName + 'Parameters']) || {};
                     var parametersFromContext = $attrs[contextName + 'ParametersFromContext'];
-                    
+
                     var urlSync = $scope.$eval($attrs[contextName + 'Urlsync']);
-					
-					var nhits = 0;
-					exposeContext(datasetID, $scope, contextName, url, type, parameters, parametersFromContext, urlSync, nhits);
+
+                    var nhits = 0;
+                    exposeContext(datasetID, $scope, contextName, url, type, parameters, parametersFromContext, urlSync, nhits);
                 }
-				
-				$scope.reset = function () {
-					exposeContext($scope.externalcontext.datasetID, $scope, contextName, $scope.externalcontext.url, $scope.externalcontext.type, $scope.externalcontext.parameters, parametersFromContext, urlSync, $scope.externalcontext.nhits);
-					//$scope.$apply();
-					//$scope.$applyAsync();
-				};
+
+                $scope.reset = function () {
+                    exposeContext($scope.externalcontext.datasetID, $scope, contextName, $scope.externalcontext.url, $scope.externalcontext.type, $scope.externalcontext.parameters, parametersFromContext, urlSync, $scope.externalcontext.nhits);
+                    //$scope.$apply();
+                    //$scope.$applyAsync();
+                };
             }]
         };
     }]);
@@ -12346,61 +12351,61 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             scope: {
                 'context': '='
             },
-            template: '' + '<div class="d4cwidget-dataset-schema">' + 
-            '   <div class="d4cwidget-dataset-schema__field" ng-repeat="field in context.dataset.fields">' +
-            '       <div class="d4cwidget-dataset-schema__field-label">{{ field.label }}</div>' + 
-            '       <div class="d4cwidget-dataset-schema__field-details">' +
-            '           <table class="d4cwidget-dataset-schema__field-properties">' + 
-            '               <tr class="d4cwidget-dataset-schema__field-name">' +
-            '                   <td class="d4cwidget-dataset-schema__field-properties-key">' + 
-            '                       <span translate>Name (identifier)</span>' + 
-            '                   </td>' + 
-            '                   <td class="d4cwidget-dataset-schema__field-properties-value">' + 
-            '                       <pre class="d4cwidget-dataset-schema__field-name-value">{{ field.name }}</pre>' +
-            '                   </td>' + 
-            '               </tr>' + 
-            '               <tr class="d4cwidget-dataset-schema__field-type">' + 
-            '                   <td class="d4cwidget-dataset-schema__field-properties-key">' + 
-            '                       <span translate>Type</span>' + 
-            '                   </td>' + 
-            '                   <td class="d4cwidget-dataset-schema__field-properties-value">' + 
-            '                       <pre class="d4cwidget-dataset-schema__field-type-value">{{ field.type | translate }}</pre>' + 
-            '                   </td>' + 
-            '               </tr>' + 
-            '               <tr class="d4cwidget-dataset-schema__field-type" ng-repeat="annotation in field.annotations|filter:{name: \'unit\'}:true">' + 
-            '                   <td class="d4cwidget-dataset-schema__field-properties-key">' + 
-            '                       <span translate>Unit</span>' + 
-            '                   </td>' + 
-            '                   <td class="d4cwidget-dataset-schema__field-properties-value">' + 
-            '                       <pre class="d4cwidget-dataset-schema__field-type-value">{{ annotation.args[0] }}</pre>' + 
-            '                   </td>' + 
-            '               </tr>' + 
-            '               <tr class="d4cwidget-dataset-schema__field-sample">' + 
-            '                   <td class="d4cwidget-dataset-schema__field-properties-key">' +
-            '                       <span translate>Description</span>' + 
-            '                   </td>' + 
-            '                   <td class="d4cwidget-dataset-schema__field-properties-value">' + 
-            '                       <pre class="d4cwidget-dataset-schema__field-description" ng-show="field.description">{{ field.descriptionlabel }}</pre>' + 
-            '                       <pre class="d4cwidget-dataset-schema__field-description" ng-hide="field.description" translate>No description available for this field.</pre>' + 
-            '                   </td>' + 
-            '               </tr>' + 
-            '               <tr class="d4cwidget-dataset-schema__field-sample">' + 
-            '                   <td class="d4cwidget-dataset-schema__field-properties-key">' +
-            '                       <span translate>Sample</span>' + 
-            '                   </td>' + 
-            '                   <td class="d4cwidget-dataset-schema__field-properties-value">' + 
-            '                       <pre class="d4cwidget-dataset-schema__field-sample-value">{{ sample[field.name] }}</pre>' + 
-            '                   </td>' + 
-            '               </tr>' + 
-            '           </table>' + 
-            '       </div>' + 
-            '   </div>' + 
-            '</div>',
+            template: '' + '<div class="d4cwidget-dataset-schema">' +
+                '   <div class="d4cwidget-dataset-schema__field" ng-repeat="field in context.dataset.fields">' +
+                '       <div class="d4cwidget-dataset-schema__field-label">{{ field.label }}</div>' +
+                '       <div class="d4cwidget-dataset-schema__field-details">' +
+                '           <table class="d4cwidget-dataset-schema__field-properties">' +
+                '               <tr class="d4cwidget-dataset-schema__field-name">' +
+                '                   <td class="d4cwidget-dataset-schema__field-properties-key">' +
+                '                       <span translate>Name (identifier)</span>' +
+                '                   </td>' +
+                '                   <td class="d4cwidget-dataset-schema__field-properties-value">' +
+                '                       <pre class="d4cwidget-dataset-schema__field-name-value">{{ field.name }}</pre>' +
+                '                   </td>' +
+                '               </tr>' +
+                '               <tr class="d4cwidget-dataset-schema__field-type">' +
+                '                   <td class="d4cwidget-dataset-schema__field-properties-key">' +
+                '                       <span translate>Type</span>' +
+                '                   </td>' +
+                '                   <td class="d4cwidget-dataset-schema__field-properties-value">' +
+                '                       <pre class="d4cwidget-dataset-schema__field-type-value">{{ field.type | translate }}</pre>' +
+                '                   </td>' +
+                '               </tr>' +
+                '               <tr class="d4cwidget-dataset-schema__field-type" ng-repeat="annotation in field.annotations|filter:{name: \'unit\'}:true">' +
+                '                   <td class="d4cwidget-dataset-schema__field-properties-key">' +
+                '                       <span translate>Unit</span>' +
+                '                   </td>' +
+                '                   <td class="d4cwidget-dataset-schema__field-properties-value">' +
+                '                       <pre class="d4cwidget-dataset-schema__field-type-value">{{ annotation.args[0] }}</pre>' +
+                '                   </td>' +
+                '               </tr>' +
+                '               <tr class="d4cwidget-dataset-schema__field-sample">' +
+                '                   <td class="d4cwidget-dataset-schema__field-properties-key">' +
+                '                       <span translate>Description</span>' +
+                '                   </td>' +
+                '                   <td class="d4cwidget-dataset-schema__field-properties-value">' +
+                '                       <pre class="d4cwidget-dataset-schema__field-description" ng-show="field.description">{{ field.descriptionlabel }}</pre>' +
+                '                       <pre class="d4cwidget-dataset-schema__field-description" ng-hide="field.description" translate>No description available for this field.</pre>' +
+                '                   </td>' +
+                '               </tr>' +
+                '               <tr class="d4cwidget-dataset-schema__field-sample">' +
+                '                   <td class="d4cwidget-dataset-schema__field-properties-key">' +
+                '                       <span translate>Sample</span>' +
+                '                   </td>' +
+                '                   <td class="d4cwidget-dataset-schema__field-properties-value">' +
+                '                       <pre class="d4cwidget-dataset-schema__field-sample-value">{{ sample[field.name] }}</pre>' +
+                '                   </td>' +
+                '               </tr>' +
+                '           </table>' +
+                '       </div>' +
+                '   </div>' +
+                '</div>',
             link: function (scope) {
                 scope.sample = {};
                 scope.context.wait().then(function () {
                     var options = {
-                        
+
                     };
                     if (scope.context.parameters.source) {
                         options.source = scope.context.parameters.source;
@@ -12410,49 +12415,49 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             //scope.sample = data.result.records[0];
                             console.log(data.result.records);
                             let result_records = data.result.records;
-                            if(result_records.length > 1){
-                                 for(var i in result_records){
+                            if (result_records.length > 1) {
+                                for (var i in result_records) {
                                     let element = result_records[i];
-                                for(var recordKey in element){
-                                    if(recordKey in scope.sample == false && element[recordKey] != null && element[recordKey] != "") {
-                                        scope.sample[recordKey] = element[recordKey]; 
+                                    for (var recordKey in element) {
+                                        if (recordKey in scope.sample == false && element[recordKey] != null && element[recordKey] != "") {
+                                            scope.sample[recordKey] = element[recordKey];
+                                        }
                                     }
                                 }
                             }
-                            }
                             else {
                                 scope.sample = data.result.records[0];
-                            }               
-							angular.forEach(scope.$parent.$parent.$parent.$parent.$parent.panes, function (p) {
-								//if(p.slug != "information" && p.slug != "export"){
-									p.hidden = false;
-								//}
-							});
+                            }
+                            angular.forEach(scope.$parent.$parent.$parent.$parent.$parent.panes, function (p) {
+                                //if(p.slug != "information" && p.slug != "export"){
+                                p.hidden = false;
+                                //}
+                            });
 
                         }).error(function (data) {
-							if (data) {
-								$scope.error = data.error;
-							}
-							currentRequestsTimeouts.splice(currentRequestsTimeouts.indexOf(timeout), 1);
-							$scope.fetching = false;
-							
-							if($scope.$parent != null && $scope.$parent.$parent != null && $scope.$parent.$parent.$parent != null && $scope.$parent.$parent.$parent.$parent != null
-							&& $scope.$parent.$parent.$parent.$parent.$parent != null){
-								/*var panes = $scope.$parent.$parent.$parent.$parent.$parent.panes;
-								$scope.$parent.$parent.$parent.$parent.$parent.panes= panes.filter(function(p){return (p.slug != "information" && p.slug != "export");});
-								$scope.$parent.$parent.$parent.$parent.$parent.selectTab(panes[0]);*/
-								/*angular.forEach($scope.$parent.$parent.$parent.$parent.$parent.panes, function (p) {
-									if(p.slug != "information" && p.slug != "export"){
-										p.hidden = true;
-									}
-								});*/
-							}
-							
-						});
+                            if (data) {
+                                $scope.error = data.error;
+                            }
+                            currentRequestsTimeouts.splice(currentRequestsTimeouts.indexOf(timeout), 1);
+                            $scope.fetching = false;
+
+                            if ($scope.$parent != null && $scope.$parent.$parent != null && $scope.$parent.$parent.$parent != null && $scope.$parent.$parent.$parent.$parent != null
+                                && $scope.$parent.$parent.$parent.$parent.$parent != null) {
+                                /*var panes = $scope.$parent.$parent.$parent.$parent.$parent.panes;
+                                $scope.$parent.$parent.$parent.$parent.$parent.panes= panes.filter(function(p){return (p.slug != "information" && p.slug != "export");});
+                                $scope.$parent.$parent.$parent.$parent.$parent.selectTab(panes[0]);*/
+                                /*angular.forEach($scope.$parent.$parent.$parent.$parent.$parent.panes, function (p) {
+                                    if(p.slug != "information" && p.slug != "export"){
+                                        p.hidden = true;
+                                    }
+                                });*/
+                            }
+
+                        });
                     }
-                
+
                 });
-                
+
             }
         };
     }]);
@@ -12660,26 +12665,26 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 } else {
                                     scope.context.wait().then(function () {
                                         facets = angular.copy(scope.context.dataset.getFacets());
-                                         for(let i = 0; i<facets.length; i++){
-                                            let descr =facets[i].description;
+                                        for (let i = 0; i < facets.length; i++) {
+                                            let descr = facets[i].description;
                                             //descr=descr.split('\r\n');
                                             if (descr == null) {
                                                 descr = "";
                                             }
-                                            if(descr) {
-                                                descr=descr.replace(';', ',');
-                                                descr=descr.replace('><', '>,<');
-                                                descr=descr.split(',');
-                                                 
-                                                for(let g = 0; g<descr.length; g++){
-                                                    let teg =descr[g];
+                                            if (descr) {
+                                                descr = descr.replace(';', ',');
+                                                descr = descr.replace('><', '>,<');
+                                                descr = descr.split(',');
+
+                                                for (let g = 0; g < descr.length; g++) {
+                                                    let teg = descr[g];
                                                     teg = teg.split('?');
-                                                    if(teg[0]=='<!--facet_name'){
-                                                      facets[i].label = teg[1].slice(0, -3).replace(/_/g, ' ');
+                                                    if (teg[0] == '<!--facet_name') {
+                                                        facets[i].label = teg[1].slice(0, -3).replace(/_/g, ' ');
                                                     }
                                                 }
                                             }
-                                        }                                     
+                                        }
 
                                         angular.forEach(facets, function (f) {
                                             f.title = f.label;
@@ -12904,10 +12909,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 if (scope.disjunctive) {
                     facetsCtrl.setDisjunctive(scope.name);
                 }
-              
-                
+
+
                 scope.context = scope.context || facetsCtrl.context;
-                
+
                 // check if hidecolumnapi is checked and added to params api
                 // let fieldscontextdataset = scope.context.dataset.fields;
                 // var fieldresult = fieldscontextdataset.filter(function (field) { return field.name == scope.name });
@@ -12919,7 +12924,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 //     else{
                 //         facetsCtrl.setHideColumnsApi(scope.name,false);
                 //     }
-                   
+
                 // }
                 scope.displayTimerange = function () {
                     if (!scope.timerangeFilter) {
@@ -13059,7 +13064,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if ($scope.valueFormatter) {
                         return ValueDisplay.format(value, $scope.valueFormatter, $scope.category.path);
                     } else {
-                        
+
                         return value;
                     }
                 };
@@ -13395,8 +13400,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     });
                     map.addControl(drawControl);
                     //if (angular.isDefined(D4CWidgetsConfig.defaultMapLocation)) {
-                        var loc = MapHelper.getLocationStructure(D4CWidgetsConfig.defaultMapLocation());
-                        map.setView(loc.center, loc.zoom);
+                    var loc = MapHelper.getLocationStructure(D4CWidgetsConfig.defaultMapLocation());
+                    map.setView(loc.center, loc.zoom);
                     //} else {
                     //    map.setView([0, 0], 0);
                     //}
@@ -13622,7 +13627,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 search_options.sort = D4C.DateFieldUtils.getTimescaleSort(search_options.x);
             }
             return search_options;
-        }; 
+        };
         var parseCustomExpression = function (serie, serieprefix, parentserie_for_subseries) {
             var regex = /([A-Z_-]*?)\((.*?)\)/g;
             var params2regex = /([A-Z_-]*?)\(([a-zA-Z0-9\.]+),\s?([0-9\.]+)\)/g;
@@ -13681,7 +13686,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 options['y.' + serie_name + '.expr'] += " * " + serie.multiplier;
             }
             return options;
-        }; 
+        };
         var addSeriesToSearchOptions = function (search_options, serie, serie_name) {
             var i, allQuantiles = true,
                 temp_serie;
@@ -13712,7 +13717,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             } else {
                 angular.extend(search_options, generateSerieOptions(serie, serie_name));
             }
-        }; 
+        };
         return function (queries, search_parameters, timeSerieMode, precision, periodic, domain, apikey, canceller) {
             var search_promises = [];
             var charts_by_query = [];
@@ -13781,8 +13786,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 timescale = parameters.queries[0].timescale || false;
             }
             if (timescale && $.grep(parameters.queries, function (query) {
-                    return query.sort;
-                }).length === 0) {
+                return query.sort;
+            }).length === 0) {
                 timeSerieMode = timescale;
                 var tokens = timeSerieMode.split(' ');
                 precision = tokens[0];
@@ -13814,7 +13819,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             }
             return useUTC;
         };
-      
+
         var getGlobalOptions = function (parameters, precision, periodic, chartplaceholder, domain) {
             var datasetid;
             if (parameters.queries.length === 0) {
@@ -13851,7 +13856,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         style: {
                             direction: 'initial'
                         },
-						length: parameters.labelsXLength
+                        length: parameters.labelsXLength
                     },
                     startOfWeek: 1,
                     minPadding: 0,
@@ -13865,7 +13870,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         month: '%b \'%y',
                         year: '%Y'
                     }*/
-					dateTimeLabelFormats: {
+                    dateTimeLabelFormats: {
                         second: 'hh:mm:ss',
                         minute: 'hh:mm',
                         hour: 'hh:mm',
@@ -13873,8 +13878,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         week: 'll',
                         month: 'MMM YYYY',
                         year: 'YYYY'
-                    }, 
-					timescale: parameters.timescale
+                    },
+                    timescale: parameters.timescale
                 },
                 legend: {
                     enabled: !!parameters.displayLegend,
@@ -14000,7 +14005,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 }
             } else if (['double', 'int'].indexOf(xAxisType) !== -1 && parameters.queries[0].sort === "") {
                 options.xAxis.type = "category";
-				options.xAxis.categories = [];
+                options.xAxis.categories = [];
             } else {
                 options.xAxis.type = "category";
                 options.xAxis.categories = [];
@@ -14040,7 +14045,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             //console.log(options);
             return options;
         };
-        
+
         var getSerieOptions = function (parameters, yAxisesIndexes, query, serie, suppXValue, domain, scope, colorsIndex) {
             var datasetid = ChartHelper.getDatasetId({
                 dataset: {
@@ -14049,7 +14054,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 domain: domain
             });
             var yLabel = ChartHelper.getYLabel(datasetid, serie);
-         
+
             var serieColor;
             if (!suppXValue && !ChartHelper.isMultiColorChart(serie.type)) {
                 serieColor = colorScale.getUniqueColor(serie.color);
@@ -14332,19 +14337,19 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             if (chart.type === 'spiderweb') {
                 yAxis.gridLineInterpolation = 'polygon';
                 yAxis.lineWidth = 0;
-                delete(yAxis.startOnTick);
-                delete(yAxis.endOnTick);
-                delete(yAxis.title);
-                delete(yAxis.labels);
-            } 
-            
-            
-            
+                delete (yAxis.startOnTick);
+                delete (yAxis.endOnTick);
+                delete (yAxis.title);
+                delete (yAxis.labels);
+            }
+
+
+
             else if (chart.type === 'polar') {
                 yAxis.endOnTick = false;
                 yAxis.showLastLabel = true;
-                delete(yAxis.title);
-                delete(yAxis.labels);
+                delete (yAxis.title);
+                delete (yAxis.labels);
             }
             if (stacked) {
                 yAxis.stackLabels = {
@@ -14362,8 +14367,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             var date = getDateFromXObject(x, minDate, alignMonth),
                 xValue;
             if (date && xAxisType === "datetime") {
-                
-                
+
+
                 xValue = date.getTime();
             } else if (date) {
                 xValue = dateFormatFunction(datePattern, date);
@@ -14374,33 +14379,33 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             } else if (xAxisType === "linear") {
                 xValue = x;
             } else {
-                
+
                 xValue = "" + x;
             }
             return xValue;
         }
 
         function getValidYValue(value, chart) {
-            
-            
-            
+
+
+
             if (chart.func === 'QUANTILES' && chart.subsets) {
-              
+
                 if (typeof value[chart.subsets] === "undefined") {
                     return null;
-                    
+
                 } else {
+
+                    /* let val = {
+                         prcnt:value[chart.subsets]
+                     };
+                     
                     
-                   /* let val = {
-                        prcnt:value[chart.subsets]
-                    };
-                    
-                   
-                    return val;*/
+                     return val;*/
                     return value[chart.subsets];
                 }
             } else {
-                
+
                 if (typeof value === "undefined") {
                     return null;
                 } else {
@@ -14451,7 +14456,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                 }, true);
                 this.highchartsLoaded = function (Highcharts, element) {
-                    var chartplaceholder = element.find('.chartplaceholder'); 
+                    var chartplaceholder = element.find('.chartplaceholder');
                     function formatRowX(value) {
                         if (periodic) {
                             console.warn('formatRowX on periodic value should not be used anymore');
@@ -14558,18 +14563,18 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             });
                         });
                         $scope.tzsForcedLength = Object.keys($scope.tzsForced).length;
-                    
-                        function pushValues(serie, categoryIndex, scale, valueX, valueY, colorForCategory, thresholds) {
-                            
 
-                            
-                            
+                        function pushValues(serie, categoryIndex, scale, valueX, valueY, colorForCategory, thresholds) {
+
+
+
+
                             var i, j, nullify = false,
                                 data = {};
                             if (options.xAxis.type === 'datetime' || options.xAxis.type === 'linear') {
-                                
-                               // console.log("sdfsdfdssfds");
-                               
+
+                                // console.log("sdfsdfdssfds");
+
                                 if (typeof valueY === 'object') {
                                     data = [valueX];
                                     if (scale === 'logarithmic') {
@@ -14674,7 +14679,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                             for (j = 0; j < valueY.length; j++) {
                                                 data.push(valueY[j]);
                                             }
-											/*for (j = 0; j < Object.keys(valueY).length; j++) {
+                                            /*for (j = 0; j < Object.keys(valueY).length; j++) {
                                                 data.push(valueY[Object.keys(valueY)[j]]);
                                             }*/
                                         }
@@ -14706,14 +14711,14 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 }
                             }
                         }
-                        
-                        
+
+
                         ////////////////////////////////////                      
                         request_canceller.resolve("new request coming, cancelling current one");
                         request_canceller = $q.defer();
                         $scope.loading = true;
                         var requestPromise = requestData(parameters.queries, $scope.searchoptions, timeSerieMode, precision, periodic, $scope.domain, $scope.apikey, request_canceller);
-                      
+
                         requestPromise.promise.then(function (http_calls) {
                             $scope.loading = false;
                             var charts_by_calls = requestPromise.charts;
@@ -14745,11 +14750,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             var colors = {};
                             var colorIndex = 0;
                             var handleSerie = function (serieHash, parameters, options, serie_options, query, serie, valueX, valueY, rawValueX) {
-                                var serieIndex = registered_series.indexOf(serieHash); 
+                                var serieIndex = registered_series.indexOf(serieHash);
                                 var serieColorIndex = 0;
                                 var categoryIndex;
                                 if (rawValueX) {
-                                    
+
                                     if ((rawValueX + serie.color) in colors) {
                                         serieColorIndex = colors[rawValueX + serie.color];
                                     } else {
@@ -14765,14 +14770,14 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     serieColorIndex = colorIndex;
                                     colorIndex++;
                                 }
-                                
+
                                 if (serieIndex === -1) {
                                     options.series.push(getSerieOptions(parameters, yAxisesIndexes, query, serie, rawValueX, query.config.domain || domain, $scope, serieColorIndex));
                                     serieIndex = registered_series.push(serieHash) - 1;
                                 } else if (!options.series[serieIndex]) {
                                     options.series[serieIndex] = getSerieOptions(parameters, yAxisesIndexes, query, serie, rawValueX, query.config.domain || domain, $scope, serieColorIndex);
                                 }
-                                                      
+
                                 if (options.xAxis.type === "category" && (categoryIndex = options.xAxis.categories.indexOf(valueX)) === -1) {
                                     categoryIndex = options.xAxis.categories.length;
                                     options.xAxis.categories.push(valueX);
@@ -14783,8 +14788,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     colorForCategory = query.categoryColors[valueX];
                                 }
                                 if (!rawValueX && serie.type !== 'pie') {
-                                    
-                                  //console.log(valueY);
+
+                                    //console.log(valueY);
                                     pushValues(options.series[serieIndex], categoryIndex, parameters.singleAxisScale || serie.scale, valueX, valueY, colorForCategory, serie.thresholds || []);
                                 } else {
                                     pushValues(options.series[serieIndex], categoryIndex, parameters.singleAxisScale || serie.scale, valueX, valueY, colorForCategory, serie.thresholds || []);
@@ -14881,15 +14886,15 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                                     valueY.push(getValidYValue(rawValueY, serie.charts[i]));
                                                 }
                                             } else {
-                                                
-                                               //console.log(rawValueY);
+
+                                                //console.log(rawValueY);
                                                 //console.log(serie);
                                                 valueY = getValidYValue(rawValueY, serie);
                                             }
-                                            
-                                            
-                                            
-                                            
+
+
+
+
                                             if (!multipleXs) {
                                                 handleSerie("" + serie_name, parameters, options, serie_options, query, serie, valueX, valueY);
                                                 if (series_to_accumulate.indexOf(serie_name) >= 0) {
@@ -14897,8 +14902,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                                 }
                                             } else {
                                                 angular.forEach(row.x, function (rawValueX, keyX) {
-                                                    
-                                                    
+
+
                                                     if (keyX !== xAxis) {
                                                         rawValueX = getXValue(Highcharts.dateFormat, buildDatePattern(rawValueX), rawValueX, minDate, false, parameters.alignMonth);
                                                         handleSerie("" + serie_name + keyX + rawValueX, parameters, options, serie_options, query, serie, valueX, valueY, rawValueX);
@@ -14982,7 +14987,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     d4cNotificationService.sendNotification(translate("There are too many series to be displayed correctly, try to refine your query a bit."));
                                     options.series = options.series.slice(0, 10);
                                 }
-                                
+
                                 //$scope.chart = new Highcharts.Chart(options, function() {});
                                 //var treeM = 'treemap';
                                 if (options.series[0].type == 'treemap') {
@@ -14992,46 +14997,46 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 } else {
                                     //$('#divChartJs').html('');
                                     //$('#divChartJs').html('<canvas id="myChart"></canvas>');
-                                    
-									if($scope.chart){
-                                        
-                                       
-                                        
-                                     
-                                        let idChart=$scope.chart.canvas.getContext('2d').canvas.id;
-                                        $('#'+idChart).remove();
-                                        
-                                        options.chart.renderTo.innerHTML = '<canvas id="'+idChart+'"></canvas>';
+
+                                    if ($scope.chart) {
+
+
+
+
+                                        let idChart = $scope.chart.canvas.getContext('2d').canvas.id;
+                                        $('#' + idChart).remove();
+
+                                        options.chart.renderTo.innerHTML = '<canvas id="' + idChart + '"></canvas>';
                                         var canvas = document.getElementById(idChart);
-										var ctx = canvas.getContext('2d');
-										$scope.chart = new Chart(ctx, chartjs(options));
-								
-                                        
-                                        
+                                        var ctx = canvas.getContext('2d');
+                                        $scope.chart = new Chart(ctx, chartjs(options));
+
+
+
                                         //$scope.chart = new Chart($scope.chart.canvas.getContext('2d'), chartjs(options));
-									} else {
-                                        
+                                    } else {
 
-										var id = "myChart-"+$('canvas').length;
 
-										options.chart.renderTo.innerHTML = '<canvas id="'+id+'"></canvas>';
+                                        var id = "myChart-" + $('canvas').length;
 
-										var canvas = document.getElementById(id);
-										var ctx = canvas.getContext('2d');
-										$scope.chart = new Chart(ctx, chartjs(options));
-									}
-									
+                                        options.chart.renderTo.innerHTML = '<canvas id="' + id + '"></canvas>';
+
+                                        var canvas = document.getElementById(id);
+                                        var ctx = canvas.getContext('2d');
+                                        $scope.chart = new Chart(ctx, chartjs(options));
+                                    }
+
                                 }
-                                
+
                                 // treemap 
                                 function createTreemap(options) {
                                     // set the dimensions and margins of the graph
                                     var margin = {
-                                            top: 10,
-                                            right: 10,
-                                            bottom: 10,
-                                            left: 10
-                                        },
+                                        top: 10,
+                                        right: 10,
+                                        bottom: 10,
+                                        left: 10
+                                    },
                                         width = $("#myTreemap").width() - margin.left - margin.right,
                                         height = 420 - margin.top - margin.bottom;
                                     // append the svg object to the body of the page
@@ -15056,9 +15061,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         .paddingTop(2)
                                         .paddingRight(2)
                                         .paddingInner(2) // Padding between each rectangle
-                                    //.paddingOuter(6)
-                                    //.padding(20)
-                                    (root)
+                                        //.paddingOuter(6)
+                                        //.padding(20)
+                                        (root)
                                     // prepare a color scale
                                     var color = d3.scaleOrdinal()
                                         .domain(options.xAxis.categories)
@@ -15107,7 +15112,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         .text(function (d) {
                                             return d.data.name
                                         })
-                                        .attr("font-size", "0.7em")                             
+                                        .attr("font-size", "0.7em")
                                         .attr("fill", "#ffffff")
 
                                     svg
@@ -15117,7 +15122,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         .append("title").text.text(function (d) {
                                             return d.data.name
                                         })
-                                    
+
                                 }
 
                                 function chartjs(optionsOld) {
@@ -15136,29 +15141,29 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         }
                                         return arrColors;
                                     }
-                                   
+
                                     var options = JSON.parse(JSON.stringify(optionsOld));
-                                  
-                                    var paramPrcnt=false;
-									
-									options.legend.display = options.legend.enabled;
-                                    
-                                    for( let f = 0; f<options.series.length; f++){
-										try{ 
-											//if(typeof(options.series[f].data[0].y)==='object'){
-											if(options.series[f].data[0].y != undefined && options.series[f].data[0].y.prcnt){
-												paramPrcnt=true;
-												for(let fg = 0; fg<options.series[f].data.length; fg++){
-													options.series[f].data[fg].y = options.series[f].data[fg].y.prcnt;
-												}
-											}
-										}
-                                        catch(e){
+
+                                    var paramPrcnt = false;
+
+                                    options.legend.display = options.legend.enabled;
+
+                                    for (let f = 0; f < options.series.length; f++) {
+                                        try {
+                                            //if(typeof(options.series[f].data[0].y)==='object'){
+                                            if (options.series[f].data[0].y != undefined && options.series[f].data[0].y.prcnt) {
+                                                paramPrcnt = true;
+                                                for (let fg = 0; fg < options.series[f].data.length; fg++) {
+                                                    options.series[f].data[fg].y = options.series[f].data[fg].y.prcnt;
+                                                }
+                                            }
+                                        }
+                                        catch (e) {
                                             console.log(e);
-										}
-                                        
+                                        }
+
                                     }
-                                    
+
                                     options.series = options.series.map(function (obj) {
                                         obj['label'] = obj['name'];
                                         obj['borderColor'] = obj['color'];
@@ -15176,298 +15181,298 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         }
                                         return dataNew;
                                     };
-                                    
+
                                     var mainTypeChart = 'bar';
-                                    var arearange = false; 
-                                    var newSeriesForArearange = []; 
-                                    var idSeriesOld = []; 
+                                    var arearange = false;
+                                    var newSeriesForArearange = [];
+                                    var idSeriesOld = [];
                                     let hBar = false;
 
-                                    if(options.xAxis.categories){
+                                    if (options.xAxis.categories) {
                                         getAllDataForChartjs();
                                     }
-                                    else{
-                                        options.xAxis.categories=[];
+                                    else {
+                                        options.xAxis.categories = [];
                                         getAllDataForChartjs();
                                     }
-                                    
-									
-                                    function getAllDataForChartjs(){
+
+
+                                    function getAllDataForChartjs() {
                                         for (let i = 0; i < options.series.length; i++) {
-											if (options.series[i].color) {
-												let newColor = hexToRgb([options.series[i].color]);
-												options.series[i].color = newColor[0];
-												options.series[i].backgroundColor = options.series[i].color;
-											} else {
-												options.series[i].colors = hexToRgb(options.series[i].colors);
-											}
-											if(options.yAxis.length > 1){
-												options.series[i].yAxisID = 'y'+i;
-												options.yAxis[i].ticks = {
-														beginAtZero: true
-													};
-											} else {
-												if(options.yAxis[0].title != null){
-													options.yAxis[0].scaleLabel = {
-														display: true,
-														labelString: options.yAxis[0].title.text
-													};
-												}
-												
-												if(options.yAxis[0].min != null || options.yAxis[0].max != null || options.yAxis[0].tickInterval != null){
-													options.yAxis[0].ticks = {
-														min: options.yAxis[0].min,
-														max: options.yAxis[0].max,
-														stepSize: options.yAxis[0].tickInterval
-													};
-												} else {
-													options.yAxis[0].ticks = {
-														beginAtZero: true
-													};
-												}
-												delete options.yAxis[0].endOnTick;
-												delete options.yAxis[0].max;
-												delete options.yAxis[0].min;
-												delete options.yAxis[0].opposite;
-												delete options.yAxis[0].startOnTick;
-												delete options.yAxis[0].tickInterval;
-											}
-											
+                                            if (options.series[i].color) {
+                                                let newColor = hexToRgb([options.series[i].color]);
+                                                options.series[i].color = newColor[0];
+                                                options.series[i].backgroundColor = options.series[i].color;
+                                            } else {
+                                                options.series[i].colors = hexToRgb(options.series[i].colors);
+                                            }
+                                            if (options.yAxis.length > 1) {
+                                                options.series[i].yAxisID = 'y' + i;
+                                                options.yAxis[i].ticks = {
+                                                    beginAtZero: true
+                                                };
+                                            } else {
+                                                if (options.yAxis[0].title != null) {
+                                                    options.yAxis[0].scaleLabel = {
+                                                        display: true,
+                                                        labelString: options.yAxis[0].title.text
+                                                    };
+                                                }
 
-											if (options.series[i].type == 'horizontalBar') {
-												if (typeof ((options.series[i].data[0])) === 'object') {
-													let dataNew = [];
-													let AxisX = [];
-													for (let idx = 0; idx < options.series[i].data.length; idx++) {
-														if(options.xAxis.type == "datetime"){
-															dataNew.push({
-																x: /*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/,
-																y: options.series[i].data[idx][1]
-															});
-															
-															AxisX.push(/*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/);
-														} else {
-															dataNew.push(options.series[i].data[idx].y);
-															if(options.series[i].data[idx].color != undefined){
-																if(!Array.isArray(options.series[i].backgroundColor)){
-																	options.series[i].backgroundColor = [];
-																}
-																options.series[i].backgroundColor.push(options.series[i].data[idx].color);
-															}
-														}
-													}
+                                                if (options.yAxis[0].min != null || options.yAxis[0].max != null || options.yAxis[0].tickInterval != null) {
+                                                    options.yAxis[0].ticks = {
+                                                        min: options.yAxis[0].min,
+                                                        max: options.yAxis[0].max,
+                                                        stepSize: options.yAxis[0].tickInterval
+                                                    };
+                                                } else {
+                                                    options.yAxis[0].ticks = {
+                                                        beginAtZero: true
+                                                    };
+                                                }
+                                                delete options.yAxis[0].endOnTick;
+                                                delete options.yAxis[0].max;
+                                                delete options.yAxis[0].min;
+                                                delete options.yAxis[0].opposite;
+                                                delete options.yAxis[0].startOnTick;
+                                                delete options.yAxis[0].tickInterval;
+                                            }
 
-													options.series[i].data = dataNew;
-													if(AxisX.length > 0){
-														options.xAxis.categories = AxisX;
-													}
-												}
-                                            
-												mainTypeChart = 'horizontalBar';
-												hBar = true;
-												options.series.data;
-											} 
-											else if (options.series[i].type == 'radar') {
-												mainTypeChart = 'radar';
-												if (typeof ((options.series[i].data[0])) === 'object') {
-													let dataNew = [];
-													let AxisX = [];
-													for (let idx = 0; idx < options.series[i].data.length; idx++) {
-														if(options.xAxis.type == "datetime"){
-															dataNew.push({
-																x: /*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/,
-																y: options.series[i].data[idx][1]
-															});
-															
-															AxisX.push(/*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/);
-														} else {
-															dataNew.push(options.series[i].data[idx].y);
-															if(options.series[i].data[idx].color != undefined){
-																if(!Array.isArray(options.series[i].backgroundColor)){
-																	options.series[i].backgroundColor = [];
-																}
-																options.series[i].backgroundColor.push(options.series[i].data[idx].color);
-															}
-														}
-													}
 
-													options.series[i].data = dataNew;
-													if(AxisX.length > 0){
-														options.xAxis.categories = AxisX;
-													}
-												}
-											} 
-											else if (options.series[i].type == 'pie') {
-												mainTypeChart = 'pie';
-												options.series[i].backgroundColor = options.series[i].colors;
-												let data = [];
-												let labels =[];
-												for (let z = 0; z < options.series[i].data.length; z++) {
-													data.push(options.series[i].data[z].y);
-													labels.push(options.series[i].data[z].name);
-												}
-											   
-												for (let clr = -1; clr < Math.ceil(options.series[i].data.length / options.series[i].backgroundColor.length); clr++) {
-													Array.prototype.push.apply(options.series[i].backgroundColor, options.series[i].backgroundColor);
-												}
-												
-												options.series[i].data = data;
-												options.xAxis.categories = labels;
-											} 
-											else if (options.series[i].type == 'polarArea') {
-												mainTypeChart = 'polarArea';
-												options.series[i].backgroundColor = options.series[i].colors;
-                                         
-												for (let clr = 1; clr < Math.ceil(options.series[i].data.length / options.series[i].backgroundColor.length); clr++) {
-													Array.prototype.push.apply(options.series[i].backgroundColor, options.series[i].backgroundColor);
-												}
-												
-												if (typeof ((options.series[i].data[0])) === 'object') {
-													let dataNew = [];
-													let AxisX = [];
-													for (let idx = 0; idx < options.series[i].data.length; idx++) {
-														if(options.xAxis.type == "datetime"){
-															dataNew.push({
-																x: /*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/,
-																y: options.series[i].data[idx][1]
-															});
-															
-															AxisX.push(/*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/);
-														} else {
-															dataNew.push(options.series[i].data[idx].y);
-															if(options.series[i].data[idx].color != undefined){
-																if(!Array.isArray(options.series[i].backgroundColor)){
-																	options.series[i].backgroundColor = [];
-																}
-																options.series[i].backgroundColor.push(options.series[i].data[idx].color);
-															}
-														}
-													}
+                                            if (options.series[i].type == 'horizontalBar') {
+                                                if (typeof ((options.series[i].data[0])) === 'object') {
+                                                    let dataNew = [];
+                                                    let AxisX = [];
+                                                    for (let idx = 0; idx < options.series[i].data.length; idx++) {
+                                                        if (options.xAxis.type == "datetime") {
+                                                            dataNew.push({
+                                                                x: /*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/,
+                                                                y: options.series[i].data[idx][1]
+                                                            });
 
-													options.series[i].data = dataNew;
-													if(AxisX.length > 0){
-														options.xAxis.categories = AxisX;
-													}
-												}
-											} 
-											else if (options.series[i].type == 'funnel') {
-												mainTypeChart = 'funnel';
-												options.series[i].backgroundColor = options.series[i].colors;
-												for (let clr = 1; clr < Math.ceil(options.series[i].data.length / options.series[i].backgroundColor.length); clr++) {
-													Array.prototype.push.apply(options.series[i].backgroundColor, options.series[i].backgroundColor);
-												}
-												
-												let labels = [];
-												// немного поменяли формат данных
-												for (let j = 0; j < options.series[i].data.length; j++) {
-													labels.push(options.series[i].data[j].name);
-													options.series[i].data[j] = options.series[i].data[j].y;
-													
-												}
-												options.xAxis.categories = labels;
-											} 
-											else if (options.series[i].type == 'arearange' || options.series[i].type == 'areasplinerange' || options.series[i].type == 'columnrange') {
-												
-												if (options.series[i].type == 'areasplinerange') {
-													options.series[i].lineTension = 0.2;
-													options.series[i].type = 'line';
-												} else if (options.series[i].type == 'arearange') {
-													options.series[i].lineTension = 0;
-													options.series[i].type = 'line';
-												}
-												idSeriesOld.push(i); 
-												mainTypeChart = 'bar';
-												arearange = true; 
-												options.series[i].steppedLine = false;
-												options.series[i].tension = 0;
-												options.series[i].stack = 0;
-												delete options.series[i].colors;
-												delete options.series[i].dataLabels;
-												delete options.series[i].fili;
-												//delete options.series[i].lineTension;
-												delete options.series[i].marker;
-												delete options.series[i].name;
-												delete options.series[i].neckHeight;
-												delete options.series[i].neckWidth;
-												delete options.series[i].shadow;
-												delete options.series[i].showLine;
-												delete options.series[i].stacking;
-												delete options.series[i].tooltip;
-												
-												var dataForArearange1 = [],
-													dataForArearange2 = [];
-												var bcolors = [];
-												for (let ind = 0; ind < options.series[i].data.length; ind++) {
-													if(options.series[i].data[ind].y !== undefined){
-														if(options.series[i].data[ind].color !== undefined){
-															bcolors.push(options.series[i].data[ind].color);
-														}
-														options.series[i].data[ind] = options.series[i].data[ind].y
-													}
-													if (options.series[i].type == 'columnrange') {
-														dataForArearange1.push(options.series[i].data[ind][0]);
-														dataForArearange2.push(options.series[i].data[ind][1] - options.series[i].data[ind][0]);
-													} else {
-														dataForArearange1.push(options.series[i].data[ind][0]);
-														dataForArearange2.push(options.series[i].data[ind][1]);
-													}
-												}
-												newSeriesForArearange.push(JSON.parse(JSON.stringify(options.series[i])));
-												newSeriesForArearange.push(JSON.parse(JSON.stringify(options.series[i])));
-											
-												newSeriesForArearange[(newSeriesForArearange.length - 2)].data = dataForArearange1;
-												newSeriesForArearange[newSeriesForArearange.length - 2].fill = 'false';
-												newSeriesForArearange[newSeriesForArearange.length - 2].stack = i;
-											   
-												newSeriesForArearange[(newSeriesForArearange.length - 1)].data = dataForArearange2;
-												newSeriesForArearange[newSeriesForArearange.length - 1].fill = '-1';
-												newSeriesForArearange[newSeriesForArearange.length - 1].stack = i;
-												
-												if (options.series[i].type == 'columnrange') {
-													newSeriesForArearange[(newSeriesForArearange.length - 1)].type = 'bar';
-													newSeriesForArearange[(newSeriesForArearange.length - 2)].type = 'bar';
-													newSeriesForArearange[(newSeriesForArearange.length - 2)].backgroundColor = '#ffffff';
-													newSeriesForArearange[(newSeriesForArearange.length - 1)].backgroundColor = newSeriesForArearange[(newSeriesForArearange.length - 1)].borderColor;
-												}
-												
-												if(bcolors.length > 0){
-													newSeriesForArearange[(newSeriesForArearange.length - 2)].backgroundColor = bcolors;
-													newSeriesForArearange[(newSeriesForArearange.length - 1)].backgroundColor = bcolors;
-												}
-											}
-											else if (typeof ((options.series[i].data[0])) === 'object' && options.series[i].data[0]!=null ) {
-                                            
-												let dataNew = [];
-												var AxisX = [];
-                                          
-												for (let idx = 0; idx < options.series[i].data.length; idx++) {
-													if(!options.series[i].data[idx]){
-															
-													}
-													else {
-														if(options.xAxis.type == "datetime"){
-															dataNew.push({
-																x: /*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/,
-																y: options.series[i].data[idx][1]
-															});
-															
-															options.xAxis.categories.push(/*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/);
-														} else {
-															dataNew.push(options.series[i].data[idx].y);
-															if(options.series[i].data[idx].color != undefined){
-																if(!Array.isArray(options.series[i].backgroundColor)){
-																	options.series[i].backgroundColor = [];
-																}
-																options.series[i].backgroundColor.push(options.series[i].data[idx].color);
-															}
-														}
-													}
-												}
-												options.series[i].data = dataNew;
-											}
-										}
+                                                            AxisX.push(/*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/);
+                                                        } else {
+                                                            dataNew.push(options.series[i].data[idx].y);
+                                                            if (options.series[i].data[idx].color != undefined) {
+                                                                if (!Array.isArray(options.series[i].backgroundColor)) {
+                                                                    options.series[i].backgroundColor = [];
+                                                                }
+                                                                options.series[i].backgroundColor.push(options.series[i].data[idx].color);
+                                                            }
+                                                        }
+                                                    }
+
+                                                    options.series[i].data = dataNew;
+                                                    if (AxisX.length > 0) {
+                                                        options.xAxis.categories = AxisX;
+                                                    }
+                                                }
+
+                                                mainTypeChart = 'horizontalBar';
+                                                hBar = true;
+                                                options.series.data;
+                                            }
+                                            else if (options.series[i].type == 'radar') {
+                                                mainTypeChart = 'radar';
+                                                if (typeof ((options.series[i].data[0])) === 'object') {
+                                                    let dataNew = [];
+                                                    let AxisX = [];
+                                                    for (let idx = 0; idx < options.series[i].data.length; idx++) {
+                                                        if (options.xAxis.type == "datetime") {
+                                                            dataNew.push({
+                                                                x: /*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/,
+                                                                y: options.series[i].data[idx][1]
+                                                            });
+
+                                                            AxisX.push(/*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/);
+                                                        } else {
+                                                            dataNew.push(options.series[i].data[idx].y);
+                                                            if (options.series[i].data[idx].color != undefined) {
+                                                                if (!Array.isArray(options.series[i].backgroundColor)) {
+                                                                    options.series[i].backgroundColor = [];
+                                                                }
+                                                                options.series[i].backgroundColor.push(options.series[i].data[idx].color);
+                                                            }
+                                                        }
+                                                    }
+
+                                                    options.series[i].data = dataNew;
+                                                    if (AxisX.length > 0) {
+                                                        options.xAxis.categories = AxisX;
+                                                    }
+                                                }
+                                            }
+                                            else if (options.series[i].type == 'pie') {
+                                                mainTypeChart = 'pie';
+                                                options.series[i].backgroundColor = options.series[i].colors;
+                                                let data = [];
+                                                let labels = [];
+                                                for (let z = 0; z < options.series[i].data.length; z++) {
+                                                    data.push(options.series[i].data[z].y);
+                                                    labels.push(options.series[i].data[z].name);
+                                                }
+
+                                                for (let clr = -1; clr < Math.ceil(options.series[i].data.length / options.series[i].backgroundColor.length); clr++) {
+                                                    Array.prototype.push.apply(options.series[i].backgroundColor, options.series[i].backgroundColor);
+                                                }
+
+                                                options.series[i].data = data;
+                                                options.xAxis.categories = labels;
+                                            }
+                                            else if (options.series[i].type == 'polarArea') {
+                                                mainTypeChart = 'polarArea';
+                                                options.series[i].backgroundColor = options.series[i].colors;
+
+                                                for (let clr = 1; clr < Math.ceil(options.series[i].data.length / options.series[i].backgroundColor.length); clr++) {
+                                                    Array.prototype.push.apply(options.series[i].backgroundColor, options.series[i].backgroundColor);
+                                                }
+
+                                                if (typeof ((options.series[i].data[0])) === 'object') {
+                                                    let dataNew = [];
+                                                    let AxisX = [];
+                                                    for (let idx = 0; idx < options.series[i].data.length; idx++) {
+                                                        if (options.xAxis.type == "datetime") {
+                                                            dataNew.push({
+                                                                x: /*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/,
+                                                                y: options.series[i].data[idx][1]
+                                                            });
+
+                                                            AxisX.push(/*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/);
+                                                        } else {
+                                                            dataNew.push(options.series[i].data[idx].y);
+                                                            if (options.series[i].data[idx].color != undefined) {
+                                                                if (!Array.isArray(options.series[i].backgroundColor)) {
+                                                                    options.series[i].backgroundColor = [];
+                                                                }
+                                                                options.series[i].backgroundColor.push(options.series[i].data[idx].color);
+                                                            }
+                                                        }
+                                                    }
+
+                                                    options.series[i].data = dataNew;
+                                                    if (AxisX.length > 0) {
+                                                        options.xAxis.categories = AxisX;
+                                                    }
+                                                }
+                                            }
+                                            else if (options.series[i].type == 'funnel') {
+                                                mainTypeChart = 'funnel';
+                                                options.series[i].backgroundColor = options.series[i].colors;
+                                                for (let clr = 1; clr < Math.ceil(options.series[i].data.length / options.series[i].backgroundColor.length); clr++) {
+                                                    Array.prototype.push.apply(options.series[i].backgroundColor, options.series[i].backgroundColor);
+                                                }
+
+                                                let labels = [];
+                                                // немного поменяли формат данных
+                                                for (let j = 0; j < options.series[i].data.length; j++) {
+                                                    labels.push(options.series[i].data[j].name);
+                                                    options.series[i].data[j] = options.series[i].data[j].y;
+
+                                                }
+                                                options.xAxis.categories = labels;
+                                            }
+                                            else if (options.series[i].type == 'arearange' || options.series[i].type == 'areasplinerange' || options.series[i].type == 'columnrange') {
+
+                                                if (options.series[i].type == 'areasplinerange') {
+                                                    options.series[i].lineTension = 0.2;
+                                                    options.series[i].type = 'line';
+                                                } else if (options.series[i].type == 'arearange') {
+                                                    options.series[i].lineTension = 0;
+                                                    options.series[i].type = 'line';
+                                                }
+                                                idSeriesOld.push(i);
+                                                mainTypeChart = 'bar';
+                                                arearange = true;
+                                                options.series[i].steppedLine = false;
+                                                options.series[i].tension = 0;
+                                                options.series[i].stack = 0;
+                                                delete options.series[i].colors;
+                                                delete options.series[i].dataLabels;
+                                                delete options.series[i].fili;
+                                                //delete options.series[i].lineTension;
+                                                delete options.series[i].marker;
+                                                delete options.series[i].name;
+                                                delete options.series[i].neckHeight;
+                                                delete options.series[i].neckWidth;
+                                                delete options.series[i].shadow;
+                                                delete options.series[i].showLine;
+                                                delete options.series[i].stacking;
+                                                delete options.series[i].tooltip;
+
+                                                var dataForArearange1 = [],
+                                                    dataForArearange2 = [];
+                                                var bcolors = [];
+                                                for (let ind = 0; ind < options.series[i].data.length; ind++) {
+                                                    if (options.series[i].data[ind].y !== undefined) {
+                                                        if (options.series[i].data[ind].color !== undefined) {
+                                                            bcolors.push(options.series[i].data[ind].color);
+                                                        }
+                                                        options.series[i].data[ind] = options.series[i].data[ind].y
+                                                    }
+                                                    if (options.series[i].type == 'columnrange') {
+                                                        dataForArearange1.push(options.series[i].data[ind][0]);
+                                                        dataForArearange2.push(options.series[i].data[ind][1] - options.series[i].data[ind][0]);
+                                                    } else {
+                                                        dataForArearange1.push(options.series[i].data[ind][0]);
+                                                        dataForArearange2.push(options.series[i].data[ind][1]);
+                                                    }
+                                                }
+                                                newSeriesForArearange.push(JSON.parse(JSON.stringify(options.series[i])));
+                                                newSeriesForArearange.push(JSON.parse(JSON.stringify(options.series[i])));
+
+                                                newSeriesForArearange[(newSeriesForArearange.length - 2)].data = dataForArearange1;
+                                                newSeriesForArearange[newSeriesForArearange.length - 2].fill = 'false';
+                                                newSeriesForArearange[newSeriesForArearange.length - 2].stack = i;
+
+                                                newSeriesForArearange[(newSeriesForArearange.length - 1)].data = dataForArearange2;
+                                                newSeriesForArearange[newSeriesForArearange.length - 1].fill = '-1';
+                                                newSeriesForArearange[newSeriesForArearange.length - 1].stack = i;
+
+                                                if (options.series[i].type == 'columnrange') {
+                                                    newSeriesForArearange[(newSeriesForArearange.length - 1)].type = 'bar';
+                                                    newSeriesForArearange[(newSeriesForArearange.length - 2)].type = 'bar';
+                                                    newSeriesForArearange[(newSeriesForArearange.length - 2)].backgroundColor = '#ffffff';
+                                                    newSeriesForArearange[(newSeriesForArearange.length - 1)].backgroundColor = newSeriesForArearange[(newSeriesForArearange.length - 1)].borderColor;
+                                                }
+
+                                                if (bcolors.length > 0) {
+                                                    newSeriesForArearange[(newSeriesForArearange.length - 2)].backgroundColor = bcolors;
+                                                    newSeriesForArearange[(newSeriesForArearange.length - 1)].backgroundColor = bcolors;
+                                                }
+                                            }
+                                            else if (typeof ((options.series[i].data[0])) === 'object' && options.series[i].data[0] != null) {
+
+                                                let dataNew = [];
+                                                var AxisX = [];
+
+                                                for (let idx = 0; idx < options.series[i].data.length; idx++) {
+                                                    if (!options.series[i].data[idx]) {
+
+                                                    }
+                                                    else {
+                                                        if (options.xAxis.type == "datetime") {
+                                                            dataNew.push({
+                                                                x: /*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/,
+                                                                y: options.series[i].data[idx][1]
+                                                            });
+
+                                                            options.xAxis.categories.push(/*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/);
+                                                        } else {
+                                                            dataNew.push(options.series[i].data[idx].y);
+                                                            if (options.series[i].data[idx].color != undefined) {
+                                                                if (!Array.isArray(options.series[i].backgroundColor)) {
+                                                                    options.series[i].backgroundColor = [];
+                                                                }
+                                                                options.series[i].backgroundColor.push(options.series[i].data[idx].color);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                options.series[i].data = dataNew;
+                                            }
+                                        }
                                     }
-                                    
+
                                     /*function timeConverter(UNIX_timestamp) {
                                         
                                         var a = new Date(UNIX_timestamp * 1000);
@@ -15479,7 +15484,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 //                                        var min = a.getMinutes();
 //                                        var sec = a.getSeconds();
                                         var hour = a.getHours();
-										var min = a.getMinutes();
+                                        var min = a.getMinutes();
                                         if(hour < 10) {
                                             hour = '0' + hour;
                                         }
@@ -15490,316 +15495,316 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                             date = '0' + date;
                                         }
 //                                        var sec = a.getSeconds();
-										var time = year+'/'+month+'/'+date+' '+hour+'h'+min;
+                                        var time = year+'/'+month+'/'+date+' '+hour+'h'+min;
                                         return time;
                                     }*/
-									
+
                                     for (let i = 0; i < options.series.length; i++) {
                                         if (options.series[i].type == 'line' && hBar == true) {
                                             options.series[i].data = replaceDataSeries(options.series[i].data, options.xAxis.categories);
-                                            if (options.series[i].fill == 'start') {                                               
+                                            if (options.series[i].fill == 'start') {
                                                 options.series[i].fill = 'end';
                                             }
                                         }
                                     }
-                                    
+
                                     var datasets = {};
-                                    
-                                    if(paramPrcnt){
-										if (mainTypeChart == 'funnel') {
-											options.series[0].backgroundColor = options.series[0].backgroundColor.slice(0, options.series[0].data.length);
-											delete options.series[0].borderColor;
-											delete options.series[0].colors;
-											delete options.series[0].dataLabels;
-											delete options.series[0].fill;
-											delete options.series[0].label;
-											delete options.series[0].lineTension;
-											delete options.series[0].marker;
-											delete options.series[0].name;
-											delete options.series[0].neckHeight;
-											delete options.series[0].neckWidth;
-											delete options.series[0].shadow;
-											delete options.series[0].showLine;
-											delete options.series[0].stacking;
-											delete options.series[0].tooltip;
-											delete options.series[0].type;
-											//delete options.series[0].yAxis;
-											datasets = {
-												type: mainTypeChart,
-												data: {
-													datasets: options.series,
-													labels: options.xAxis.categories
-												},
-												options: {
-													sort: 'desc',
-													tooltips: {
-														callbacks: {
-															label: function(tooltipItem, data) {
-																//get the concerned dataset
-																var dataset = data.datasets[tooltipItem.datasetIndex];
-																//calculate the total of this data set
-																var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
-																	return previousValue + currentValue;
-																});
-																//get the current items value
-																var currentValue = dataset.data[tooltipItem.index];
-																//calculate the precentage based on the total and current item, also this does a rough rounding to give a whole number
-																var percentage = Math.floor(((currentValue/total) * 100)+0.5);
 
-																return currentValue + ' (' + percentage + "%)";
-															}
-														}
-													}
-												}
-											}
-										} 
-										else if (mainTypeChart == 'bar' && arearange == true) {
-											for (let i = idSeriesOld.length - 1; i >= 0; i--) {
-												(idSeriesOld[i], 1);
-												options.series.splice(idSeriesOld[i], 1);
-											}
-											
-											Array.prototype.push.apply(options.series, newSeriesForArearange);
-											datasets = {
-												type: mainTypeChart,
-												data: {
-													labels: options.xAxis.categories,
-													datasets: options.series
-												},
-												options: {
-													tooltips: {
-														callbacks: {
-															label: function(tooltipItem, data) {
-																//get the concerned dataset
-																var dataset = data.datasets[tooltipItem.datasetIndex];
-																//calculate the total of this data set
-																var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
-																	return previousValue + currentValue;
-																});
-																//get the current items value
-																var currentValue = dataset.data[tooltipItem.index];
-																//calculate the precentage based on the total and current item, also this does a rough rounding to give a whole number
-																var percentage = Math.floor(((currentValue/total) * 100)+0.5);
+                                    if (paramPrcnt) {
+                                        if (mainTypeChart == 'funnel') {
+                                            options.series[0].backgroundColor = options.series[0].backgroundColor.slice(0, options.series[0].data.length);
+                                            delete options.series[0].borderColor;
+                                            delete options.series[0].colors;
+                                            delete options.series[0].dataLabels;
+                                            delete options.series[0].fill;
+                                            delete options.series[0].label;
+                                            delete options.series[0].lineTension;
+                                            delete options.series[0].marker;
+                                            delete options.series[0].name;
+                                            delete options.series[0].neckHeight;
+                                            delete options.series[0].neckWidth;
+                                            delete options.series[0].shadow;
+                                            delete options.series[0].showLine;
+                                            delete options.series[0].stacking;
+                                            delete options.series[0].tooltip;
+                                            delete options.series[0].type;
+                                            //delete options.series[0].yAxis;
+                                            datasets = {
+                                                type: mainTypeChart,
+                                                data: {
+                                                    datasets: options.series,
+                                                    labels: options.xAxis.categories
+                                                },
+                                                options: {
+                                                    sort: 'desc',
+                                                    tooltips: {
+                                                        callbacks: {
+                                                            label: function (tooltipItem, data) {
+                                                                //get the concerned dataset
+                                                                var dataset = data.datasets[tooltipItem.datasetIndex];
+                                                                //calculate the total of this data set
+                                                                var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                                                                    return previousValue + currentValue;
+                                                                });
+                                                                //get the current items value
+                                                                var currentValue = dataset.data[tooltipItem.index];
+                                                                //calculate the precentage based on the total and current item, also this does a rough rounding to give a whole number
+                                                                var percentage = Math.floor(((currentValue / total) * 100) + 0.5);
 
-																return currentValue + ' (' + percentage + "%)";
-															}
-														}
-													}
-												}
-											}
-										} 
-										else {
-											datasets = {
-												type: mainTypeChart,
-												data: {
-													labels: options.xAxis.categories,
-													datasets: options.series,
-												},
-												options: {
-													scales: {
-														yAxes: [
-															{
-																display: true,
-																ticks: {
-																	beginAtZero: true,
-																}
-															}
-														]
-													},
-													tooltips: {
-                                                       callbacks: {
-                                                            label: function(tooltipItem, data) {
-                                                              //get the concerned dataset
-                                                              var dataset = data.datasets[tooltipItem.datasetIndex];
-                                                              //calculate the total of this data set
-                                                              var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
-                                                                return previousValue + currentValue;
-                                                              });
-                                                              //get the current items value
-                                                              var currentValue = dataset.data[tooltipItem.index];
-                                                              //calculate the precentage based on the total and current item, also this does a rough rounding to give a whole number
-                                                              var percentage = Math.floor(((currentValue/total) * 100)+0.5);
-
-                                                              return currentValue + ' (' + percentage + "%)";
+                                                                return currentValue + ' (' + percentage + "%)";
                                                             }
-														}
-													}
-												}
-											}
-										}    
-                                    }
-                                    else{
-										if (mainTypeChart == 'funnel') {
-											options.series[0].backgroundColor = options.series[0].backgroundColor.slice(0, options.series[0].data.length);
-											delete options.series[0].borderColor;
-											delete options.series[0].colors;
-											delete options.series[0].dataLabels;
-											delete options.series[0].fill;
-											delete options.series[0].label;
-											delete options.series[0].lineTension;
-											delete options.series[0].marker;
-											delete options.series[0].name;
-											delete options.series[0].neckHeight;
-											delete options.series[0].neckWidth;
-											delete options.series[0].shadow;
-											delete options.series[0].showLine;
-											delete options.series[0].stacking;
-											delete options.series[0].tooltip;
-											delete options.series[0].type;
-											//delete options.series[0].yAxis;
-											datasets = {
-												type: mainTypeChart,
-												data: {
-													datasets: options.series,
-													labels: options.xAxis.categories
-												},
-												options: {
-													sort: 'desc'
-												}
-											}
-										} 
-										else if (mainTypeChart == 'bar' && arearange == true) {
-					
-											for (let i = idSeriesOld.length - 1; i >= 0; i--) {
-												(idSeriesOld[i], 1);
-												options.series.splice(idSeriesOld[i], 1);
-											}
-											
-											Array.prototype.push.apply(options.series, newSeriesForArearange);
-											datasets = {
-												type: mainTypeChart,
-												data: {
-													labels: options.xAxis.categories,
-													datasets: options.series
-												},
-												options: {
-													
-												}
-											}
-										} 
-										else {
-											//console.log(options.series);
-											var yAxis = [];
-											for(var i=0; i<options.yAxis.length; i++){
-												options.yAxis[i].display = true;
-												options.yAxis[i].id = 'y'+ i;
-												/*options.yAxis[i].ticks = {
-																beginAtZero: true,
-															};*/
-												yAxis.push(options.yAxis[i]);
-												/*yAxis.push({ticks:{
-																beginAtZero: true,
-												}});*/
-											}
-											
-											var maintainAspectRatio = window.location.href.indexOf("/frame") < 0;
-											var scales;
-											if(mainTypeChart == "radar" || mainTypeChart == "polarArea"){
-												scales = { 	};
-											} else if(mainTypeChart == "horizontalBar"){
-												scales = { xAxes: yAxis };
-											} else {
-												scales = { yAxes: yAxis };
-											}
-											
-											datasets = {
-												type: mainTypeChart,
-												data: {
-													labels: options.xAxis.categories,
-													datasets: options.series,
-												},
-												options: {
-													responsive:true,
-													maintainAspectRatio: maintainAspectRatio,
-													tooltips: {
-														callbacks: {
-															// this callback is used to create the tooltip label
-															label: function(tooltipItem, data) {
-															
-																// get the data label and data value to display
-																// convert the data value to local string so it uses a comma seperated number
-																var dataLabel ='';//data.labels[tooltipItem.index];
-																var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString();
-
-																// make this isn't a multi-line label (e.g. [["label 1 - line 1, "line 2, ], [etc...]])
-																if (Chart.helpers.isArray(dataLabel)) {
-																	// show value on first line of multiline label
-																	// need to clone because we are changing the value
-																	dataLabel = dataLabel.slice();
-																	dataLabel[0] += value;
-																} else {
-																	dataLabel += value;
-																}
-
-																// return the text to display on the tooltip
-																return dataLabel;
-															}
-														}
-													},
-													scales: scales,
-												}
+                                                        }
+                                                    }
+                                                }
                                             }
-										}
+                                        }
+                                        else if (mainTypeChart == 'bar' && arearange == true) {
+                                            for (let i = idSeriesOld.length - 1; i >= 0; i--) {
+                                                (idSeriesOld[i], 1);
+                                                options.series.splice(idSeriesOld[i], 1);
+                                            }
+
+                                            Array.prototype.push.apply(options.series, newSeriesForArearange);
+                                            datasets = {
+                                                type: mainTypeChart,
+                                                data: {
+                                                    labels: options.xAxis.categories,
+                                                    datasets: options.series
+                                                },
+                                                options: {
+                                                    tooltips: {
+                                                        callbacks: {
+                                                            label: function (tooltipItem, data) {
+                                                                //get the concerned dataset
+                                                                var dataset = data.datasets[tooltipItem.datasetIndex];
+                                                                //calculate the total of this data set
+                                                                var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                                                                    return previousValue + currentValue;
+                                                                });
+                                                                //get the current items value
+                                                                var currentValue = dataset.data[tooltipItem.index];
+                                                                //calculate the precentage based on the total and current item, also this does a rough rounding to give a whole number
+                                                                var percentage = Math.floor(((currentValue / total) * 100) + 0.5);
+
+                                                                return currentValue + ' (' + percentage + "%)";
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            datasets = {
+                                                type: mainTypeChart,
+                                                data: {
+                                                    labels: options.xAxis.categories,
+                                                    datasets: options.series,
+                                                },
+                                                options: {
+                                                    scales: {
+                                                        yAxes: [
+                                                            {
+                                                                display: true,
+                                                                ticks: {
+                                                                    beginAtZero: true,
+                                                                }
+                                                            }
+                                                        ]
+                                                    },
+                                                    tooltips: {
+                                                        callbacks: {
+                                                            label: function (tooltipItem, data) {
+                                                                //get the concerned dataset
+                                                                var dataset = data.datasets[tooltipItem.datasetIndex];
+                                                                //calculate the total of this data set
+                                                                var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                                                                    return previousValue + currentValue;
+                                                                });
+                                                                //get the current items value
+                                                                var currentValue = dataset.data[tooltipItem.index];
+                                                                //calculate the precentage based on the total and current item, also this does a rough rounding to give a whole number
+                                                                var percentage = Math.floor(((currentValue / total) * 100) + 0.5);
+
+                                                                return currentValue + ' (' + percentage + "%)";
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
-									
-									datasets.options.legend = options.legend;
-									
-									Chart.scaleService.updateScaleDefaults('category', {
-										ticks: {
-											callback: function(tick) {
-												var characterLimit = options.xAxis.labels.length;
-												if ( tick.length >= characterLimit) {
-													return tick.slice(0, tick.length).substring(0, characterLimit).trim() + '...';
-												} 
-												return tick;
-											}
-										}
-									});
-									
-									if(options.xAxis.type == "datetime"){
-										var unit;
-										if(options.xAxis.timescale != undefined){
-											if(options.xAxis.timescale.indexOf(" ") > 0){
-												unit = options.xAxis.timescale.split(" ")[0];
-											} else {
-												unit = options.xAxis.timescale;
-											}
-											datasets.options.scales.xAxes = [{
-												type: 'time',
-												time: {
-													unit: unit,
-													/*displayFormats: {
-														'millisecond': 'YYYY DD',
-														'second': 'YYYY DD',
-														'minute': 'YYYY DD',
-														'hour': 'YYYY DD',
-														'day': 'MMM DD YYYY',
-														'week': 'MMM DD',
-														'month': 'MMM DD',
-														'quarter': 'MMM DD',
-														'year': 'MMM DD',
-													}*/
-													displayFormats: options.xAxis.dateTimeLabelFormats
-												},
-												ticks: {
-													autoSkip: true,
-													maxTicksLimit: 20
-												}
-											}];
-										} else {
-											datasets.options.scales.xAxes = [{
-												type: 'time',
-												time: {
-													displayFormats: options.xAxis.dateTimeLabelFormats
-												},
-												ticks: {
-													autoSkip: true,
-													maxTicksLimit: 20
-												}
-											}];
-										}
-									}
-                                    
+                                    else {
+                                        if (mainTypeChart == 'funnel') {
+                                            options.series[0].backgroundColor = options.series[0].backgroundColor.slice(0, options.series[0].data.length);
+                                            delete options.series[0].borderColor;
+                                            delete options.series[0].colors;
+                                            delete options.series[0].dataLabels;
+                                            delete options.series[0].fill;
+                                            delete options.series[0].label;
+                                            delete options.series[0].lineTension;
+                                            delete options.series[0].marker;
+                                            delete options.series[0].name;
+                                            delete options.series[0].neckHeight;
+                                            delete options.series[0].neckWidth;
+                                            delete options.series[0].shadow;
+                                            delete options.series[0].showLine;
+                                            delete options.series[0].stacking;
+                                            delete options.series[0].tooltip;
+                                            delete options.series[0].type;
+                                            //delete options.series[0].yAxis;
+                                            datasets = {
+                                                type: mainTypeChart,
+                                                data: {
+                                                    datasets: options.series,
+                                                    labels: options.xAxis.categories
+                                                },
+                                                options: {
+                                                    sort: 'desc'
+                                                }
+                                            }
+                                        }
+                                        else if (mainTypeChart == 'bar' && arearange == true) {
+
+                                            for (let i = idSeriesOld.length - 1; i >= 0; i--) {
+                                                (idSeriesOld[i], 1);
+                                                options.series.splice(idSeriesOld[i], 1);
+                                            }
+
+                                            Array.prototype.push.apply(options.series, newSeriesForArearange);
+                                            datasets = {
+                                                type: mainTypeChart,
+                                                data: {
+                                                    labels: options.xAxis.categories,
+                                                    datasets: options.series
+                                                },
+                                                options: {
+
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            //console.log(options.series);
+                                            var yAxis = [];
+                                            for (var i = 0; i < options.yAxis.length; i++) {
+                                                options.yAxis[i].display = true;
+                                                options.yAxis[i].id = 'y' + i;
+                                                /*options.yAxis[i].ticks = {
+                                                                beginAtZero: true,
+                                                            };*/
+                                                yAxis.push(options.yAxis[i]);
+                                                /*yAxis.push({ticks:{
+                                                                beginAtZero: true,
+                                                }});*/
+                                            }
+
+                                            var maintainAspectRatio = window.location.href.indexOf("/frame") < 0;
+                                            var scales;
+                                            if (mainTypeChart == "radar" || mainTypeChart == "polarArea") {
+                                                scales = {};
+                                            } else if (mainTypeChart == "horizontalBar") {
+                                                scales = { xAxes: yAxis };
+                                            } else {
+                                                scales = { yAxes: yAxis };
+                                            }
+
+                                            datasets = {
+                                                type: mainTypeChart,
+                                                data: {
+                                                    labels: options.xAxis.categories,
+                                                    datasets: options.series,
+                                                },
+                                                options: {
+                                                    responsive: true,
+                                                    maintainAspectRatio: maintainAspectRatio,
+                                                    tooltips: {
+                                                        callbacks: {
+                                                            // this callback is used to create the tooltip label
+                                                            label: function (tooltipItem, data) {
+
+                                                                // get the data label and data value to display
+                                                                // convert the data value to local string so it uses a comma seperated number
+                                                                var dataLabel = '';//data.labels[tooltipItem.index];
+                                                                var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString();
+
+                                                                // make this isn't a multi-line label (e.g. [["label 1 - line 1, "line 2, ], [etc...]])
+                                                                if (Chart.helpers.isArray(dataLabel)) {
+                                                                    // show value on first line of multiline label
+                                                                    // need to clone because we are changing the value
+                                                                    dataLabel = dataLabel.slice();
+                                                                    dataLabel[0] += value;
+                                                                } else {
+                                                                    dataLabel += value;
+                                                                }
+
+                                                                // return the text to display on the tooltip
+                                                                return dataLabel;
+                                                            }
+                                                        }
+                                                    },
+                                                    scales: scales,
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    datasets.options.legend = options.legend;
+
+                                    Chart.scaleService.updateScaleDefaults('category', {
+                                        ticks: {
+                                            callback: function (tick) {
+                                                var characterLimit = options.xAxis.labels.length;
+                                                if (tick.length >= characterLimit) {
+                                                    return tick.slice(0, tick.length).substring(0, characterLimit).trim() + '...';
+                                                }
+                                                return tick;
+                                            }
+                                        }
+                                    });
+
+                                    if (options.xAxis.type == "datetime") {
+                                        var unit;
+                                        if (options.xAxis.timescale != undefined) {
+                                            if (options.xAxis.timescale.indexOf(" ") > 0) {
+                                                unit = options.xAxis.timescale.split(" ")[0];
+                                            } else {
+                                                unit = options.xAxis.timescale;
+                                            }
+                                            datasets.options.scales.xAxes = [{
+                                                type: 'time',
+                                                time: {
+                                                    unit: unit,
+                                                    /*displayFormats: {
+                                                        'millisecond': 'YYYY DD',
+                                                        'second': 'YYYY DD',
+                                                        'minute': 'YYYY DD',
+                                                        'hour': 'YYYY DD',
+                                                        'day': 'MMM DD YYYY',
+                                                        'week': 'MMM DD',
+                                                        'month': 'MMM DD',
+                                                        'quarter': 'MMM DD',
+                                                        'year': 'MMM DD',
+                                                    }*/
+                                                    displayFormats: options.xAxis.dateTimeLabelFormats
+                                                },
+                                                ticks: {
+                                                    autoSkip: true,
+                                                    maxTicksLimit: 20
+                                                }
+                                            }];
+                                        } else {
+                                            datasets.options.scales.xAxes = [{
+                                                type: 'time',
+                                                time: {
+                                                    displayFormats: options.xAxis.dateTimeLabelFormats
+                                                },
+                                                ticks: {
+                                                    autoSkip: true,
+                                                    maxTicksLimit: 20
+                                                }
+                                            }];
+                                        }
+                                    }
+
                                     return datasets;
                                 }
                             } catch (errorMsg) {
@@ -15975,8 +15980,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         ChartHelper.init($scope.context);
                     };
                     for (i = 0; i < datasets.length; i++) {
-                        
-                    
+
+
                         requests.push(D4CAPI.datasets.get($scope.context, datasets[i], {
                             extrametas: true
                         }).success(success));
@@ -16162,7 +16167,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
         return {
             restrict: 'E',
             require: ["d4cChartQuery", "^d4cChart"],
-            controller: ['$scope', function ($scope) {}],
+            controller: ['$scope', function ($scope) { }],
             compile: function () {
                 return {
                     pre: function (scope, element, attrs, ctrls) {
@@ -16236,7 +16241,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
         return {
             restrict: 'E',
             require: ["^d4cChartQuery", "?refineOnClick", "?refineOnClickContext"],
-            controller: ['$scope', '$transclude', function ($scope, $transclude) {}],
+            controller: ['$scope', '$transclude', function ($scope, $transclude) { }],
             link: function (scope, element, attrs, ctrls) {
                 var d4cChartQueryController = ctrls[0],
                     refineOnClickCtrl = ctrls[1] || ctrls[2];
@@ -17525,7 +17530,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     AlgoliaPlaces(userQuery, loc.center.join(',')).then(function success(response) {
                         scope.selectedIndex = 0;
                         scope.suggestions = response.data.hits;
-                    }, function error(response) {});
+                    }, function error(response) { });
                 };
                 scope.expandSearchBox = function () {
                     scope.expanded = true;
@@ -17769,9 +17774,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         }
                     }
                 };
-               
-                
-                
+
+
+
                 var resultPreviewTemplate = '' + '<ul class="d4cwidget-map-search-box__data-search__result-preview">' + '   <li ng-repeat="item in items" class="d4cwidget-map-search-box__data-search__result-preview-line">' + '       <div class="d4cwidget-map-search-box__data-search__result-preview-label">{{item.label}}</div>' + '       <div class="d4cwidget-map-search-box__data-search__result-preview-value">{{item.value}}</div>' + '   </li>' + '</ul>' + '';
                 $scope.getResultPreviewTemplate = function (dataset, record) {
                     var values = [];
@@ -17832,8 +17837,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 gridData: '=',
                 geoDigest: '@',
                 tooltipSort: '@',
-				resourceid: '@',
-				datasetid: '@'
+                resourceid: '@',
+                datasetid: '@'
             },
             replace: true,
             link: function (scope, element, attrs) {
@@ -17847,22 +17852,22 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         scope.$destroy();
                     }
                 };
-                if(scope.map != undefined) scope.map.on('popupclose', destroyPopup);
+                if (scope.map != undefined) scope.map.on('popupclose', destroyPopup);
                 scope.unCloak = function () {
                     jQuery('.ng-leaflet-tooltip-cloak', element).removeClass('ng-leaflet-tooltip-cloak');
                 };
-				/*attrs.$observe('template', function(){
-					scope.refresh();
-				});
-				scope.$watch(function() {
-					return element.attr('template'); 
-				}, function () {
+                /*attrs.$observe('template', function(){
+                    scope.refresh();
+                });
+                scope.$watch(function() {
+                    return element.attr('template'); 
+                }, function () {
                     scope.refresh();
                 }, true);*/
                 if (attrs.template && attrs.template !== '') {
-					if(attrs.template.includes("[[")){
-						attrs.template = attrs.template.replace(/\[/gi, "{").replace(/\]/gi, "}");
-					}
+                    if (attrs.template.includes("[[")) {
+                        attrs.template = attrs.template.replace(/\[/gi, "{").replace(/\]/gi, "}");
+                    }
                     $templateCache.put('custom-tooltip-' + scope.context.dataset.datasetid, attrs.template);
                 } else {
 
@@ -17870,32 +17875,32 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     var metas_extras = scope.context.dataset.metas.extras;
                     var emptyFieldsBoolean = "";
                     for (var i = 0; i < metas_extras.length; i++) {
-                            if( metas_extras[i]["key"] == "disable_fields_empty") {
-                                emptyFieldsBoolean = metas_extras[i]["value"];
-                                break;
-                            }
-                        
+                        if (metas_extras[i]["key"] == "disable_fields_empty") {
+                            emptyFieldsBoolean = metas_extras[i]["value"];
+                            break;
+                        }
+
                     }
 
                     //We hide the values if emptyFieldsBoolean is true
                     $templateCache.put('default-tooltip', '<div class="infoPaneLayout">' +
                         '<h2 class="d4cwidget-map-tooltip__header" ng-show="!!getTitle(record)">' +
-                        '   <span ng-bind="getTitle(record) | shortSummary: 100"></span> ' + 
+                        '   <span ng-bind="getTitle(record) | shortSummary: 100"></span> ' +
                         '</h2>' +
                         '<dl class="d4cwidget-map-tooltip__record-values">' +
-                        '   <dt ng-repeat-start="field in context.dataset.fields|fieldsForVisualization:\'map\'|fieldsFilter:context.dataset.extra_metas.visualization.map_tooltip_fields" ng-show="record.fields[field.name]|isDefined" ' + (emptyFieldsBoolean == 1 ? 'ng-hide="record.fields[field.name] == null || record.fields[field.name] == \'\'"' : '') + ' class="d4cwidget-map-tooltip__field-name" >' + 
-                        '       <span> {{ field.label }} </span>' + 
+                        '   <dt ng-repeat-start="field in context.dataset.fields|fieldsForVisualization:\'map\'|fieldsFilter:context.dataset.extra_metas.visualization.map_tooltip_fields" ng-show="record.fields[field.name]|isDefined" ' + (emptyFieldsBoolean == 1 ? 'ng-hide="record.fields[field.name] == null || record.fields[field.name] == \'\'"' : '') + ' class="d4cwidget-map-tooltip__field-name" >' +
+                        '       <span> {{ field.label }} </span>' +
                         '   </dt>' +
-                        '    <dd ng-repeat-end  ng-switch="field.type" ng-show="record.fields[field.name]|isDefined" ' + (emptyFieldsBoolean == 1 ? 'ng-hide="record.fields[field.name] == null || record.fields[field.name] == \'\'"' : '') + ' class="d4cwidget-map-tooltip__field-value">' + 
-                        '        <span ng-switch-when="geo_point_2d">' + 
-                        '            <d4c-geotooltip width="300" height="300" coords="record.fields[field.name]">'+
-                        '{{ record.fields|formatFieldValue:field:context }}</d4c-geotooltip>' + '        </span>' + 
-                        '<span ng-switch-when="geo_shape">' + 
-                        '   <d4c-geotooltip width="300" height="300" geojson="record.fields[field.name]">{{ record.fields|formatFieldValue:field:context }}'+
+                        '    <dd ng-repeat-end  ng-switch="field.type" ng-show="record.fields[field.name]|isDefined" ' + (emptyFieldsBoolean == 1 ? 'ng-hide="record.fields[field.name] == null || record.fields[field.name] == \'\'"' : '') + ' class="d4cwidget-map-tooltip__field-value">' +
+                        '        <span ng-switch-when="geo_point_2d">' +
+                        '            <d4c-geotooltip width="300" height="300" coords="record.fields[field.name]">' +
+                        '{{ record.fields|formatFieldValue:field:context }}</d4c-geotooltip>' + '        </span>' +
+                        '<span ng-switch-when="geo_shape">' +
+                        '   <d4c-geotooltip width="300" height="300" geojson="record.fields[field.name]">{{ record.fields|formatFieldValue:field:context }}' +
                         '</d4c-geotooltip>' +
-                        '        </span>' + 
-                        '<span ng-switch-when="file">' + 
-                        ' <div ng-if="!context.dataset.isFieldAnnotated(field, \'has_thumbnails\')" ng-bind-html="record.fields|formatFieldValue:field:context"></div>' + 
+                        '        </span>' +
+                        '<span ng-switch-when="file">' +
+                        ' <div ng-if="!context.dataset.isFieldAnnotated(field, \'has_thumbnails\')" ng-bind-html="record.fields|formatFieldValue:field:context"></div>' +
                         ' <div ng-if="context.dataset.isFieldAnnotated(field, \'has_thumbnails\')" ng-bind-html="record.fields[field.name]|displayImageValue:context.dataset.datasetid" style="text-align: center;"></div>' + '        </span>' + '        <span ng-switch-default title="{{record.fields|formatFieldValue:field:context}}" ng-bind-html="record.fields|formatFieldValue:field|imagify|videoify|prettyText|nofollow"></span>' + '    </dd>' + '</dl>' + '</div>');
                 }
             },
@@ -17904,30 +17909,31 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 $scope.records = [];
                 $scope.selectedIndex = 0;
                 var tooltipSort = $scope.tooltipSort;
-				if($scope.context.dataset != null){
-                if (!tooltipSort && $scope.context.dataset.getExtraMeta('visualization', 'map_tooltip_sort_field')) {
-                    tooltipSort = ($scope.context.dataset.getExtraMeta('visualization', 'map_tooltip_sort_direction') || '') + $scope.context.dataset.getExtraMeta('visualization', 'map_tooltip_sort_field');
-                }}
-				if(typeof $scope.resourceid !== 'undefined'){
-					$scope.context.dataset = [];
-					$scope.context.dataset.resourceCSVid = $scope.resourceid;
-					$scope.context.dataset.datasetid = $scope.datasetid;
-					$scope.template = $scope.template.replace(/\[/gi, "{").replace(/\]/gi, "}");
-					var destroyPopup = function (e) {
-						if (e.popup._content === element[0]) {
-							/*if (scope.selectedShapeLayer) {
-								scope.map.removeLayer(scope.selectedShapeLayer);
-							}*/
-							//$scope.map.off('popupclose', destroyPopup);
-							$scope.$destroy();
-						}
-					};
-					//$scope.map.on('popupclose', destroyPopup);
-					$scope.unCloak = function () {
-						//jQuery('.ng-leaflet-tooltip-cloak', element).removeClass('ng-leaflet-tooltip-cloak');
-					};
-					
-				}
+                if ($scope.context.dataset != null) {
+                    if (!tooltipSort && $scope.context.dataset.getExtraMeta('visualization', 'map_tooltip_sort_field')) {
+                        tooltipSort = ($scope.context.dataset.getExtraMeta('visualization', 'map_tooltip_sort_direction') || '') + $scope.context.dataset.getExtraMeta('visualization', 'map_tooltip_sort_field');
+                    }
+                }
+                if (typeof $scope.resourceid !== 'undefined') {
+                    $scope.context.dataset = [];
+                    $scope.context.dataset.resourceCSVid = $scope.resourceid;
+                    $scope.context.dataset.datasetid = $scope.datasetid;
+                    $scope.template = $scope.template.replace(/\[/gi, "{").replace(/\]/gi, "}");
+                    var destroyPopup = function (e) {
+                        if (e.popup._content === element[0]) {
+                            /*if (scope.selectedShapeLayer) {
+                                scope.map.removeLayer(scope.selectedShapeLayer);
+                            }*/
+                            //$scope.map.off('popupclose', destroyPopup);
+                            $scope.$destroy();
+                        }
+                    };
+                    //$scope.map.on('popupclose', destroyPopup);
+                    $scope.unCloak = function () {
+                        //jQuery('.ng-leaflet-tooltip-cloak', element).removeClass('ng-leaflet-tooltip-cloak');
+                    };
+
+                }
                 $scope.moveIndex = function (amount) {
                     var newIndex = ($scope.selectedIndex + amount) % $scope.records.length;
                     if (newIndex < 0) {
@@ -17940,15 +17946,15 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         format: 'json',
                         rows: $scope.RECORD_LIMIT
                     };
-					
+
                     var shapeType = null;
-					
-					if(typeof $scope.resourceid !== 'undefined'){
-						//options.refine = [];
-						//options.refine._id = $scope.recordid;
-						options["refine._id"] = $scope.recordid;
-						shapeType = "Point";
-					}
+
+                    if (typeof $scope.resourceid !== 'undefined') {
+                        //options.refine = [];
+                        //options.refine._id = $scope.recordid;
+                        options["refine._id"] = $scope.recordid;
+                        shapeType = "Point";
+                    }
                     if ($scope.shape) {
                         shapeType = $scope.shape.type;
                     }
@@ -17956,8 +17962,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if ($scope.recordid && shapeType !== 'Point') {
                         options.q = "_id:'" + $scope.recordid + "'";
                     } else if ($scope.geoDigest) {
-                    // End disable
-                    // if ($scope.geoDigest) {
+                        // End disable
+                        // if ($scope.geoDigest) {
                         options.geo_digest = $scope.geoDigest;
                     } else if ($scope.gridData) {
                         if ($scope.gridData['d4c:geo_grid'] !== null) {
@@ -17970,7 +17976,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                     var queryOptions = {};
                     angular.extend(queryOptions, $scope.context.parameters, options);
-                    
+
                     if (tooltipSort) {
                         queryOptions.sort = tooltipSort;
                         D4CAPI.records.search($scope.context, queryOptions).success(function (data) {
@@ -17985,48 +17991,48 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             $scope.selectedIndex = 0;
                             $scope.records = data;
                             $scope.unCloak();
-							if($scope.context.dataset.fields != undefined){
-								var shapeFields = $scope.context.dataset.getFieldsForType('geo_shape');
-								var shapeField;
-								if (shapeFields.length) {
-									shapeField = shapeFields[0].name;
-								}
-								if (shapeField && $scope.gridData && ($scope.gridData['d4c:geo_type'] === 'Polygon' || $scope.gridData['d4c:geo_type'] === 'LineString' || $scope.gridData['d4c:geo_type'] === 'MultiPolygon' || $scope.gridData['d4c:geo_type'] === 'MultiLineString')) {
-									var record = data[0];
-									if (record.fields[shapeField]) {
-										var geojson = record.fields[shapeField];
-										if (geojson.type !== 'Point') {
-											$scope.selectedShapeLayer = L.geoJson(geojson, {
-												fill: false,
-												color: '#CC0000',
-												opacity: 1,
-												dashArray: [5],
-												weight: 2
-											});
-											$scope.map.addLayer($scope.selectedShapeLayer);
-										}
-									}
-								}
-							}
+                            if ($scope.context.dataset.fields != undefined) {
+                                var shapeFields = $scope.context.dataset.getFieldsForType('geo_shape');
+                                var shapeField;
+                                if (shapeFields.length) {
+                                    shapeField = shapeFields[0].name;
+                                }
+                                if (shapeField && $scope.gridData && ($scope.gridData['d4c:geo_type'] === 'Polygon' || $scope.gridData['d4c:geo_type'] === 'LineString' || $scope.gridData['d4c:geo_type'] === 'MultiPolygon' || $scope.gridData['d4c:geo_type'] === 'MultiLineString')) {
+                                    var record = data[0];
+                                    if (record.fields[shapeField]) {
+                                        var geojson = record.fields[shapeField];
+                                        if (geojson.type !== 'Point') {
+                                            $scope.selectedShapeLayer = L.geoJson(geojson, {
+                                                fill: false,
+                                                color: '#CC0000',
+                                                opacity: 1,
+                                                dashArray: [5],
+                                                weight: 2
+                                            });
+                                            $scope.map.addLayer($scope.selectedShapeLayer);
+                                        }
+                                    }
+                                }
+                            }
                         } else {
                             $scope.map.closePopup();
                         }
                     }
                 };
-				$scope.refresh = refresh;
+                $scope.refresh = refresh;
                 $scope.$watch('context.parameters', function () {
                     refresh();
                 }, true);
-				/*$scope.$watch("template", function () {
+                /*$scope.$watch("template", function () {
                     refresh();
                 }, true);*/
-				$scope.updateTemplate = function(){
-					if($scope.template.includes("[[")){
-						$scope.template = $scope.template.replace(/\[/gi, "{").replace(/\]/gi, "}");
-					}
+                $scope.updateTemplate = function () {
+                    if ($scope.template.includes("[[")) {
+                        $scope.template = $scope.template.replace(/\[/gi, "{").replace(/\]/gi, "}");
+                    }
                     $templateCache.put('custom-tooltip-' + $scope.context.dataset.datasetid, $scope.template);
-				}
-                if(typeof $scope.resourceid === 'undefined')$scope.$apply();
+                }
+                if (typeof $scope.resourceid === 'undefined') $scope.$apply();
                 $scope.getTitle = function (record) {
                     if ($scope.context.dataset.extra_metas && $scope.context.dataset.extra_metas.visualization && $scope.context.dataset.extra_metas.visualization.map_tooltip_title) {
                         var titleField = $scope.context.dataset.extra_metas.visualization.map_tooltip_title;
@@ -18037,9 +18043,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     return null;
                 };
                 $scope.fields = angular.copy($scope.context.dataset.fields);
-				$scope.getReportUrl = function (report, record) {
+                $scope.getReportUrl = function (report, record) {
                     var url = report.url;
-					report.parameters.forEach(function (p) {
+                    report.parameters.forEach(function (p) {
                         url += "&" + p + "=" + record.fields[p];
                     });
                     return url;
@@ -18230,30 +18236,30 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         mapOptions.doubleClickZoom = false;
                         mapOptions.scrollWheelZoom = false;
                     }
-					if (scope.context != undefined && scope.context.dataset != undefined && scope.context.dataset.extra_metas != undefined
-					&& scope.context.dataset.extra_metas.visualization != undefined && scope.context.dataset.extra_metas.visualization.default_map != undefined) {
+                    if (scope.context != undefined && scope.context.dataset != undefined && scope.context.dataset.extra_metas != undefined
+                        && scope.context.dataset.extra_metas.visualization != undefined && scope.context.dataset.extra_metas.visualization.default_map != undefined) {
                         mapOptions.basemap = scope.context.dataset.extra_metas.visualization.default_map;
                     }
-					if (scope.context != undefined && scope.context.dataset != undefined && scope.context.dataset.extra_metas != undefined
-					&& scope.context.dataset.extra_metas.visualization != undefined && scope.context.dataset.extra_metas.visualization.overlays != undefined) {
+                    if (scope.context != undefined && scope.context.dataset != undefined && scope.context.dataset.extra_metas != undefined
+                        && scope.context.dataset.extra_metas.visualization != undefined && scope.context.dataset.extra_metas.visualization.overlays != undefined) {
                         var autho = scope.context.dataset.extra_metas.visualization.overlays.split(",");
-						mapOptions.basemapsList = mapOptions.basemapsList.filter(function(value, index, arr){
-							return value.provider != "custom_wms" || autho.indexOf(value.name) != -1;
-						});
+                        mapOptions.basemapsList = mapOptions.basemapsList.filter(function (value, index, arr) {
+                            return value.provider != "custom_wms" || autho.indexOf(value.name) != -1;
+                        });
                     } else {
-						mapOptions.basemapsList = mapOptions.basemapsList.filter(function(value, index, arr){
-							return value.provider != "custom_wms" || value.type != "layer";
-						});
-					}
+                        mapOptions.basemapsList = mapOptions.basemapsList.filter(function (value, index, arr) {
+                            return value.provider != "custom_wms" || value.type != "layer";
+                        });
+                    }
                     resizeMap();
 
                     //Check if dataset has WMS layers available
                     if (scope.context != undefined && scope.context.dataset != undefined && scope.context.dataset.hasWMS()) {
                         mapOptions.customWMSLayers = [];
 
-                        for(let i = 0; i < scope.context.dataset.metas.resources.length; i++){
+                        for (let i = 0; i < scope.context.dataset.metas.resources.length; i++) {
                             var resource = scope.context.dataset.metas.resources[i];
-							if (resource.format.toUpperCase()  == "WMS") {
+                            if (resource.format.toUpperCase() == "WMS") {
                                 var wmsLayer = {
                                     url: resource.url,
                                     name: resource.name,
@@ -18261,7 +18267,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
                                 mapOptions.customWMSLayers.push(wmsLayer);
                             }
-						}
+                        }
 
                     }
 
@@ -18284,7 +18290,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     }
                                 }));
                             }
-                        } catch (e) {}
+                        } catch (e) { }
                     }
                     if (D4CWidgetsConfig.mapGeobox && !scope.searchBox && !isStatic) {
                         var geocoder = L.Control.geocoder({
@@ -18323,7 +18329,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         };
                         map.addControl(geocoder);
                     }
-		    basemapsList: (typeof D4CWidgetsConfig.basemaps === "function" ? D4CWidgetsConfig.basemaps() : D4CWidgetsConfig.basemaps);
+                    basemapsList: (typeof D4CWidgetsConfig.basemaps === "function" ? D4CWidgetsConfig.basemaps() : D4CWidgetsConfig.basemaps);
                     if (toolbarGeolocation && !isStatic) {
                         var geolocateControl = new L.Control.Locate({
                             position: 'topright',
@@ -18734,7 +18740,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             applyDrawnLayer(layer, type);
                             scope.$apply();
                         });
-                        $('#reset-filters').on('click',function(event){
+                        $('#reset-filters').on('click', function (event) {
                             delete scope.mapConfig.drawnArea;
                             scope.$apply();
                         });
@@ -18758,7 +18764,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     searchDatasets();
                                 }
                             }
-                            else if (type="rectangle") {
+                            else if (type = "rectangle") {
                                 var geoJson = layer.toGeoJSON();
                                 var path = D4C.GeoFilter.getGeoJSONPolygonAsPolygonParameter(geoJson.geometry);
                                 scope.mapConfig.drawnArea = {
@@ -18772,7 +18778,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     var req = getReq();
                                     searchDatasets();
                                 }
-                            } 
+                            }
                             else {
                                 var geoJson = layer.toGeoJSON();
                                 var path = D4C.GeoFilter.getGeoJSONPolygonAsPolygonParameter(geoJson.geometry);
@@ -19299,7 +19305,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     });
                 });
             },
-            controller: ['$scope', function ($scope) {}]
+            controller: ['$scope', function ($scope) { }]
         };
     }]);
 }());;
@@ -20744,48 +20750,48 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             }
                         });
                     }
-                    
-					if($scope.context.dataset != null){
-						D4CAPI.records.search($scope.context, options, timeout.promise).success(function (data) {
-							
-							var responsePage = data.parameters.start / data.parameters.rows;
-							if (lastLoadedPage === null && responsePage === 0 || angular.isNumber(lastLoadedPage) && responsePage === lastLoadedPage + 1) {
-								handleResponse(data, responsePage);
-							} else {
-								pagesWaitingHandling[responsePage] = {
-									'callback': handleResponse,
-									'data': data
-								};
-							}
-							if($scope.$parent.$parent.$parent != null){
-								angular.forEach($scope.$parent.$parent.$parent.$parent.$parent.panes, function (p) {
-									//if(p.slug != "information" && p.slug != "export"){
-										p.hidden = false;
-									//}
-								});
-							}
-							
-						}).error(function (data) {
-							if (data) {
-								$scope.error = data.error;
-							}
-							currentRequestsTimeouts.splice(currentRequestsTimeouts.indexOf(timeout), 1);
-							$scope.fetching = false;
-							
-							if($scope.$parent != null && $scope.$parent.$parent != null && $scope.$parent.$parent.$parent != null && $scope.$parent.$parent.$parent.$parent != null
-							&& $scope.$parent.$parent.$parent.$parent.$parent != null){
-								/*var panes = $scope.$parent.$parent.$parent.$parent.$parent.panes;
-								$scope.$parent.$parent.$parent.$parent.$parent.panes= panes.filter(function(p){return (p.slug == "information" || p.slug == "export");});
-								$scope.$parent.$parent.$parent.$parent.$parent.selectTab(panes[0]);*/
-								/*angular.forEach($scope.$parent.$parent.$parent.$parent.$parent.panes, function (p) {
-									if(p.slug != "information" && p.slug != "export"){
-										p.hidden = true;
-									}
-								});*/
-							}
-							
-						});
-					}
+
+                    if ($scope.context.dataset != null) {
+                        D4CAPI.records.search($scope.context, options, timeout.promise).success(function (data) {
+
+                            var responsePage = data.parameters.start / data.parameters.rows;
+                            if (lastLoadedPage === null && responsePage === 0 || angular.isNumber(lastLoadedPage) && responsePage === lastLoadedPage + 1) {
+                                handleResponse(data, responsePage);
+                            } else {
+                                pagesWaitingHandling[responsePage] = {
+                                    'callback': handleResponse,
+                                    'data': data
+                                };
+                            }
+                            if ($scope.$parent.$parent.$parent != null) {
+                                angular.forEach($scope.$parent.$parent.$parent.$parent.$parent.panes, function (p) {
+                                    //if(p.slug != "information" && p.slug != "export"){
+                                    p.hidden = false;
+                                    //}
+                                });
+                            }
+
+                        }).error(function (data) {
+                            if (data) {
+                                $scope.error = data.error;
+                            }
+                            currentRequestsTimeouts.splice(currentRequestsTimeouts.indexOf(timeout), 1);
+                            $scope.fetching = false;
+
+                            if ($scope.$parent != null && $scope.$parent.$parent != null && $scope.$parent.$parent.$parent != null && $scope.$parent.$parent.$parent.$parent != null
+                                && $scope.$parent.$parent.$parent.$parent.$parent != null) {
+                                /*var panes = $scope.$parent.$parent.$parent.$parent.$parent.panes;
+                                $scope.$parent.$parent.$parent.$parent.$parent.panes= panes.filter(function(p){return (p.slug == "information" || p.slug == "export");});
+                                $scope.$parent.$parent.$parent.$parent.$parent.selectTab(panes[0]);*/
+                                /*angular.forEach($scope.$parent.$parent.$parent.$parent.$parent.panes, function (p) {
+                                    if(p.slug != "information" && p.slug != "export"){
+                                        p.hidden = true;
+                                    }
+                                });*/
+                            }
+
+                        });
+                    }
                 };
                 $scope.loadMore = function () {
                     if (!$scope.fetching && !$scope.done && $scope.staticSearchOptions) {
@@ -20856,19 +20862,19 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     tr.appendChild(td);
                     for (var j = 0; j < datasetFields.length; j++) {
                         var field = datasetFields[j];
-						if(field.type == 'geo_point_2d') {
-							var valcoord = record.fields[field.name];
-							if (valcoord.includes(';')) {
-								var coords = valcoord.split(';');
-								coords.map(coord => coord.trim());
-								record.fields[field.name] = coords;
-							}
-							else if (valcoord.includes(',')) {
-								var coords = valcoord.split(',');
-								coords.map(coord => coord.trim());
-								record.fields[field.name] = coords;
-							}
-						}
+                        if (field.type == 'geo_point_2d') {
+                            var valcoord = record.fields[field.name];
+                            if (valcoord.includes(';')) {
+                                var coords = valcoord.split(';');
+                                coords.map(coord => coord.trim());
+                                record.fields[field.name] = coords;
+                            }
+                            else if (valcoord.includes(',')) {
+                                var coords = valcoord.split(',');
+                                coords.map(coord => coord.trim());
+                                record.fields[field.name] = coords;
+                            }
+                        }
                         var fieldValue = $filter('formatFieldValue')(record.fields, field, $scope.context);
                         td = document.createElement('td');
                         td.className = 'd4cwidget-table__cell';
@@ -20919,7 +20925,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 }
                             }
                         }
-                       
+
                         div.appendChild(node);
                     }
                     return tr;
@@ -21032,56 +21038,56 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                 });
                 $scope.context.wait().then(function () {
-                    if($scope.context.dataset != null){
-						if ($scope.displayedFields) {
-							$scope.displayedFieldsArray = D4C.ArrayUtils.fromCSVString($scope.displayedFields);
-						} else {
-							if ($scope.context.dataset.extra_metas && $scope.context.dataset.extra_metas.visualization && angular.isArray($scope.context.dataset.extra_metas.visualization.table_fields) && $scope.context.dataset.extra_metas.visualization.table_fields.length > 0) {
-								$scope.displayedFieldsArray = $scope.context.dataset.extra_metas.visualization.table_fields;
-							} else {
-								$scope.displayedFieldsArray = null;
-							}
-						}
-						if (!$scope.context.parameters.sort && $scope.context.dataset.extra_metas && $scope.context.dataset.extra_metas.visualization && $scope.context.dataset.extra_metas.visualization.table_default_sort_field) {
-							var sortField = $scope.context.dataset.extra_metas.visualization.table_default_sort_field;
-							if ($scope.context.dataset.extra_metas.visualization.table_default_sort_direction === '-') {
-								sortField = '-' + sortField;
-							}
-							$scope.context.parameters.sort = sortField;
-						}
-						$scope.displayDatasetFeedback = $scope.datasetFeedback === 'true' && $scope.context.dataset.getExtraMeta('explore', 'feedback_enabled');
-						$scope.forcedTimezone = $scope.context.dataset.metas.timezone || null;
-						$scope.staticSearchOptions = {
-							rows: $scope.resultsPerPage
-						};
-						DebugLogger.log('table -> dataset watch -> refresh records');
-						var fieldsForVisualization = $filter('fieldsForVisualization')($scope.context.dataset.fields, 'table');
-						datasetFields = $filter('fieldsFilter')(fieldsForVisualization, $scope.displayedFieldsArray);
-						refreshRecords(true);
-					}
+                    if ($scope.context.dataset != null) {
+                        if ($scope.displayedFields) {
+                            $scope.displayedFieldsArray = D4C.ArrayUtils.fromCSVString($scope.displayedFields);
+                        } else {
+                            if ($scope.context.dataset.extra_metas && $scope.context.dataset.extra_metas.visualization && angular.isArray($scope.context.dataset.extra_metas.visualization.table_fields) && $scope.context.dataset.extra_metas.visualization.table_fields.length > 0) {
+                                $scope.displayedFieldsArray = $scope.context.dataset.extra_metas.visualization.table_fields;
+                            } else {
+                                $scope.displayedFieldsArray = null;
+                            }
+                        }
+                        if (!$scope.context.parameters.sort && $scope.context.dataset.extra_metas && $scope.context.dataset.extra_metas.visualization && $scope.context.dataset.extra_metas.visualization.table_default_sort_field) {
+                            var sortField = $scope.context.dataset.extra_metas.visualization.table_default_sort_field;
+                            if ($scope.context.dataset.extra_metas.visualization.table_default_sort_direction === '-') {
+                                sortField = '-' + sortField;
+                            }
+                            $scope.context.parameters.sort = sortField;
+                        }
+                        $scope.displayDatasetFeedback = $scope.datasetFeedback === 'true' && $scope.context.dataset.getExtraMeta('explore', 'feedback_enabled');
+                        $scope.forcedTimezone = $scope.context.dataset.metas.timezone || null;
+                        $scope.staticSearchOptions = {
+                            rows: $scope.resultsPerPage
+                        };
+                        DebugLogger.log('table -> dataset watch -> refresh records');
+                        var fieldsForVisualization = $filter('fieldsForVisualization')($scope.context.dataset.fields, 'table');
+                        datasetFields = $filter('fieldsFilter')(fieldsForVisualization, $scope.displayedFieldsArray);
+                        refreshRecords(true);
+                    }
                     $scope.$watch('context.parameters', function () {
                         DebugLogger.log('table -> searchOptions watch -> refresh records');
                         $scope.layout = [];
                         $scope.working = true;
                         rememberScrollLeft();
                         recordsBody.empty();
-						if(/*datasetFields == undefined &&*/ $scope.context.dataset != null){
-							if ($scope.displayedFields) {
-								$scope.displayedFieldsArray = D4C.ArrayUtils.fromCSVString($scope.displayedFields);
-							} else {
-								if ($scope.context.dataset.extra_metas && $scope.context.dataset.extra_metas.visualization && angular.isArray($scope.context.dataset.extra_metas.visualization.table_fields) && $scope.context.dataset.extra_metas.visualization.table_fields.length > 0) {
-									$scope.displayedFieldsArray = $scope.context.dataset.extra_metas.visualization.table_fields;
-								} else {
-									$scope.displayedFieldsArray = null;
-								}
-							}
-							var fieldsForVisualization = $filter('fieldsForVisualization')($scope.context.dataset.fields, 'table');
-							datasetFields = $filter('fieldsFilter')(fieldsForVisualization, $scope.displayedFieldsArray);
-							$scope.staticSearchOptions = {
-								rows: $scope.resultsPerPage
-							};
+                        if (/*datasetFields == undefined &&*/ $scope.context.dataset != null) {
+                            if ($scope.displayedFields) {
+                                $scope.displayedFieldsArray = D4C.ArrayUtils.fromCSVString($scope.displayedFields);
+                            } else {
+                                if ($scope.context.dataset.extra_metas && $scope.context.dataset.extra_metas.visualization && angular.isArray($scope.context.dataset.extra_metas.visualization.table_fields) && $scope.context.dataset.extra_metas.visualization.table_fields.length > 0) {
+                                    $scope.displayedFieldsArray = $scope.context.dataset.extra_metas.visualization.table_fields;
+                                } else {
+                                    $scope.displayedFieldsArray = null;
+                                }
+                            }
+                            var fieldsForVisualization = $filter('fieldsForVisualization')($scope.context.dataset.fields, 'table');
+                            datasetFields = $filter('fieldsFilter')(fieldsForVisualization, $scope.displayedFieldsArray);
+                            $scope.staticSearchOptions = {
+                                rows: $scope.resultsPerPage
+                            };
                         }
-						refreshRecords(true);
+                        refreshRecords(true);
                     }, true);
                 });
                 var isRtl = ($element.css('direction') === 'rtl');
@@ -21146,6 +21152,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                     return styles;
                 };
+                $scope.$on('show-tab-table', function () {
+                    $scope.layout = [];
+                    $scope.working = true;
+                    $scope.computeLayout();
+                });
                 $scope.computeLayout = function () {
                     var elementHeight;
                     if (!$scope.layout.length && $scope.records.length) {
@@ -21418,7 +21429,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         }
                         unwatch();
                         $scope.$watch(function () {
-                            
+
                             return contexts.map(function (context) {
                                 var contextConfig = getContextConfig(context);
                                 var queryParameter = getQueryParameter(contextConfig);
@@ -21570,14 +21581,14 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 placeholderTo: '@?'
             },
             template: '' + '<div class="d4cwidget d4cwidget-timerange">' +
-             '    <div class="d4cwidget-timerange__from">' + 
-             '        <span class="d4cwidget-timerange__label" ng-bind="labelFrom"></span>' + 
-             '        <input type="text" placeholder="{{ placeholderFrom }}" class="d4cwidget-timerange__input">' + 
-             '        <button type="reset" class="d4cwidget-timerange__reset" ng-show="from" ng-click="resetSearchFrom()" aria-label="Reset search" translate="aria-label">' + '           <i class="fa fa-times-circle" aria-hidden="true"></i>' + '        </button>' + '    </div>' + '    <div class="d4cwidget-timerange__to">' + 
-             '        <span class="d4cwidget-timerange__label" ng-bind="labelTo"></span>' + 
-             '        <input type="text" placeholder="{{ placeholderTo }}" class="d4cwidget-timerange__input">' + 
-             '        <button type="reset" class="d4cwidget-timerange__reset" ng-show="to" ng-click="resetSearchTo()" aria-label="Reset search" translate="aria-label">' + '           <i class="fa fa-times-circle" aria-hidden="true"></i>' + '        </button>' + '    </div>' + '</div>',
-            
+                '    <div class="d4cwidget-timerange__from">' +
+                '        <span class="d4cwidget-timerange__label" ng-bind="labelFrom"></span>' +
+                '        <input type="text" placeholder="{{ placeholderFrom }}" class="d4cwidget-timerange__input">' +
+                '        <button type="reset" class="d4cwidget-timerange__reset" ng-show="from" ng-click="resetSearchFrom()" aria-label="Reset search" translate="aria-label">' + '           <i class="fa fa-times-circle" aria-hidden="true"></i>' + '        </button>' + '    </div>' + '    <div class="d4cwidget-timerange__to">' +
+                '        <span class="d4cwidget-timerange__label" ng-bind="labelTo"></span>' +
+                '        <input type="text" placeholder="{{ placeholderTo }}" class="d4cwidget-timerange__input">' +
+                '        <button type="reset" class="d4cwidget-timerange__reset" ng-show="to" ng-click="resetSearchTo()" aria-label="Reset search" translate="aria-label">' + '           <i class="fa fa-times-circle" aria-hidden="true"></i>' + '        </button>' + '    </div>' + '</div>',
+
 
             link: function (scope, element, attrs) {
                 var formattedSuffix = !angular.isUndefined(scope.suffix) ? ('.' + scope.suffix) : '';
@@ -21698,8 +21709,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     };
                 });
             },
-            controller: ['$scope', '$attrs', '$q', '$compile', '$rootScope', '$parse', function ($scope, $attrs, $q, $compile, $rootScope, $parse) 
-            {
+            controller: ['$scope', '$attrs', '$q', '$compile', '$rootScope', '$parse', function ($scope, $attrs, $q, $compile, $rootScope, $parse) {
                 var contexts = [],
                     conf = {};
                 var formattedSuffix = !angular.isUndefined($scope.suffix) ? ('.' + $scope.suffix) : '';
@@ -21770,8 +21780,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         } else if (nv[0] && !nv[1]) {
                             dates = ['to_date', 'timerange'];
                             angular.forEach(contexts, function (context) {
-                                
-                            context.parameters[getParameterName(context, configurations, 'from_date')] = configurations[context.name]['timefield'] + '<="' + nv[0] + '"';
+
+                                context.parameters[getParameterName(context, configurations, 'from_date')] = configurations[context.name]['timefield'] + '<="' + nv[0] + '"';
 
                                 console.log(context.parameters[getParameterName(context, configurations, 'from_date')]);
                                 deleteUsedDate(context, configurations, dates);
@@ -21779,7 +21789,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         } else if (nv[1] && !nv[0]) {
                             dates = ['from_date', 'timerange'];
                             angular.forEach(contexts, function (context) {
-                            context.parameters[getParameterName(context, configurations, 'to_date')] = configurations[context.name]['timefield'] + '<="' + nv[1] + '"';
+                                context.parameters[getParameterName(context, configurations, 'to_date')] = configurations[context.name]['timefield'] + '<="' + nv[1] + '"';
                                 deleteUsedDate(context, configurations, dates);
                             });
                         } else {
@@ -21798,7 +21808,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     });
                 };
                 var getParameterName = function (context, configurations, type) {
-                    
+
                     return configurations[context.name]['parameter'] + '.' + type + formattedSuffix;
                 };
                 if (contexts.length == 1 && contexts[0].type == 'catalog') {
@@ -22246,7 +22256,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             if (context && context.dataset && context.dataset.metas && context.dataset.metas.timezone) {
                 /*params.timezone = context.dataset.metas.timezone;*/
             } else if (!params.timezone) {
-                /*params.timezone=jstz.determine().name();*/ }
+                /*params.timezone=jstz.determine().name();*/
+            }
             if (context && context.apikey) {
                 params.apikey = context.apikey;
             }
@@ -22284,44 +22295,44 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 return $http.jsonp(url, options);
             }
         };
-		var externalFunctions = {
-			'facets': function (context, parameters, timeout) {
-				var p = JSON.stringify(parameters);
-				p = p.replace(/\//g, "_slash_");
-				parameters = JSON.parse(p);
-				return request(context, fetchPrefix() + '/d4c/api/external/facets/', parameters, timeout);
-			},
-			'get': function (context, datasetID, parameters, timeout) {
-				var p = JSON.stringify(parameters);
-				p = p.replace(/\//g, "_slash_");
-				parameters = JSON.parse(p);
-				return request(context, fetchPrefix() + '/d4c/api/external/get/', parameters, timeout);
-			},
-			'records': function (context, parameters, timeout) {
-				var p = JSON.stringify(parameters);
-				p = p.replace(/\//g, "_slash_");
-				parameters = JSON.parse(p);
-				return request(context, fetchPrefix() + '/d4c/api/external/records/', parameters, timeout);
-			},
-			'boundingbox': function (context, parameters, timeout) {
-				var p = JSON.stringify(parameters);
-				p = p.replace(/\//g, "_slash_");
-				parameters = JSON.parse(p);
-				return request(context, fetchPrefix() + '/d4c/api/external/boundingbox/', parameters, timeout);
-			},
-			'geopreview': function (context, parameters, timeout) {
-				var p = JSON.stringify(parameters);
-				p = p.replace(/\//g, "_slash_");
-				parameters = JSON.parse(p);
-				return request(context, fetchPrefix() + '/d4c/api/external/geopreview/', parameters, timeout);
-			},
-			'geocluster': function (context, parameters, timeout) {
-				var p = JSON.stringify(parameters);
-				p = p.replace(/\//g, "_slash_");
-				parameters = JSON.parse(p);
-				return request(context, fetchPrefix() + '/d4c/api/external/geocluster/', parameters, timeout);
-			}
-		};
+        var externalFunctions = {
+            'facets': function (context, parameters, timeout) {
+                var p = JSON.stringify(parameters);
+                p = p.replace(/\//g, "_slash_");
+                parameters = JSON.parse(p);
+                return request(context, fetchPrefix() + '/d4c/api/external/facets/', parameters, timeout);
+            },
+            'get': function (context, datasetID, parameters, timeout) {
+                var p = JSON.stringify(parameters);
+                p = p.replace(/\//g, "_slash_");
+                parameters = JSON.parse(p);
+                return request(context, fetchPrefix() + '/d4c/api/external/get/', parameters, timeout);
+            },
+            'records': function (context, parameters, timeout) {
+                var p = JSON.stringify(parameters);
+                p = p.replace(/\//g, "_slash_");
+                parameters = JSON.parse(p);
+                return request(context, fetchPrefix() + '/d4c/api/external/records/', parameters, timeout);
+            },
+            'boundingbox': function (context, parameters, timeout) {
+                var p = JSON.stringify(parameters);
+                p = p.replace(/\//g, "_slash_");
+                parameters = JSON.parse(p);
+                return request(context, fetchPrefix() + '/d4c/api/external/boundingbox/', parameters, timeout);
+            },
+            'geopreview': function (context, parameters, timeout) {
+                var p = JSON.stringify(parameters);
+                p = p.replace(/\//g, "_slash_");
+                parameters = JSON.parse(p);
+                return request(context, fetchPrefix() + '/d4c/api/external/geopreview/', parameters, timeout);
+            },
+            'geocluster': function (context, parameters, timeout) {
+                var p = JSON.stringify(parameters);
+                p = p.replace(/\//g, "_slash_");
+                parameters = JSON.parse(p);
+                return request(context, fetchPrefix() + '/d4c/api/external/geocluster/', parameters, timeout);
+            }
+        };
         return {
             'uniqueCall': function (func) {
                 var canceller;
@@ -22359,7 +22370,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 }
                 return root;
             },
-			'external': externalFunctions,
+            'external': externalFunctions,
             'datasets': {
                 'get': function (context, datasetID, parameters, timeout) {
 
@@ -22368,12 +22379,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 },
                 'search': function (context, parameters, timeout) {
                     var queryParameters = angular.extend({}, context.parameters, parameters);
-					if(context.name != "externalcontext"){
-						return request(context, fetchPrefix() + '/d4c/api/datasets/1.0/search/', queryParameters, timeout);
-					} else {
-						if(context.type == "d4c"){ parameters = angular.extend({}, parameters, {resource_id: context.dataset.resourceCSVid});}
-						return externalFunctions.facets(context, angular.extend({}, {'type':context.type, 'url':context.url, 'id':context.dataset.datasetid}, parameters), timeout);
-					}
+                    if (context.name != "externalcontext") {
+                        return request(context, fetchPrefix() + '/d4c/api/datasets/1.0/search/', queryParameters, timeout);
+                    } else {
+                        if (context.type == "d4c") { parameters = angular.extend({}, parameters, { resource_id: context.dataset.resourceCSVid }); }
+                        return externalFunctions.facets(context, angular.extend({}, { 'type': context.type, 'url': context.url, 'id': context.dataset.datasetid }, parameters), timeout);
+                    }
                 },
                 'facets': function (context, facetName, timeout) {
                     var queryParameters = angular.extend({}, context.parameters, {
@@ -22385,9 +22396,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             'records': {
                 'analyze': function (context, parameters, timeout) {
-					var p = JSON.stringify(parameters);
-					p = p.replace(/\//g, "_slash_");
-					parameters = JSON.parse(p);
+                    var p = JSON.stringify(parameters);
+                    p = p.replace(/\//g, "_slash_");
+                    parameters = JSON.parse(p);
                     return request(context, fetchPrefix() + '/d4c/api/records/1.0/analyze/', angular.extend({}, parameters, {
                         dataset: context.dataset.datasetid
                     }), timeout).success(function (data, status, headers, config) {
@@ -22397,85 +22408,85 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     });
                 },
                 'search_simple': function (context, parameters, timeout) {
-					var p = JSON.stringify(parameters);
-					p = p.replace(/\//g, "_slash_");
-					parameters = JSON.parse(p);
+                    var p = JSON.stringify(parameters);
+                    p = p.replace(/\//g, "_slash_");
+                    parameters = JSON.parse(p);
                     return request(context, fetchPrefix() + '/d4c/api/records/1.0/search/', angular.extend({}, parameters, {
                         resource_id: context.dataset.resourceCSVid
                     }), timeout);
                 },
                 'search': function (context, parameters, timeout) {
-					var p = JSON.stringify(parameters);
-					p = p.replace(/\//g, "_slash_");
-					parameters = JSON.parse(p);
-					
-					for (var prop in parameters) { 
-						if(prop.startsWith('refine')) {
-							if(parameters[prop].includes('+')) {
-								parameters[prop] = parameters[prop].replace('+', '_plussign_');
-							}
-						}
-					}
-					
-					if(context.name != "externalcontext"){
-						return request(context, fetchPrefix() + '/d4c/api/records/1.0/download/', angular.extend({}, parameters, {
-							resource_id: context.dataset.resourceCSVid
-						}), timeout);
-					} else {
-						if(context.type == "d4c"){ parameters = angular.extend({}, parameters, {resource_id: context.dataset.resourceCSVid});}
-						return externalFunctions.records(context, angular.extend({}, {'type':context.type, 'url':context.url, 'id':context.dataset.datasetid}, parameters), timeout);
-					}
+                    var p = JSON.stringify(parameters);
+                    p = p.replace(/\//g, "_slash_");
+                    parameters = JSON.parse(p);
+
+                    for (var prop in parameters) {
+                        if (prop.startsWith('refine')) {
+                            if (parameters[prop].includes('+')) {
+                                parameters[prop] = parameters[prop].replace('+', '_plussign_');
+                            }
+                        }
+                    }
+
+                    if (context.name != "externalcontext") {
+                        return request(context, fetchPrefix() + '/d4c/api/records/1.0/download/', angular.extend({}, parameters, {
+                            resource_id: context.dataset.resourceCSVid
+                        }), timeout);
+                    } else {
+                        if (context.type == "d4c") { parameters = angular.extend({}, parameters, { resource_id: context.dataset.resourceCSVid }); }
+                        return externalFunctions.records(context, angular.extend({}, { 'type': context.type, 'url': context.url, 'id': context.dataset.datasetid }, parameters), timeout);
+                    }
                 },
                 'download': function (context, parameters, timeout) {
                     var p = JSON.stringify(parameters);
-					p = p.replace(/\//g, "_slash_");
-					parameters = JSON.parse(p);
-					if(context.name != "externalcontext"){
-						return request(context, fetchPrefix() + '/d4c/api/records/2.0/download/', angular.extend({}, parameters, {
-							resource_id: context.dataset.resourceCSVid
-						}), timeout);
-					} else {
-						if(context.type == "d4c"){ parameters = angular.extend({}, parameters, {resource_id: context.dataset.resourceCSVid});}
-						return externalFunctions.records(context, angular.extend({}, {'type':context.type, 'url':context.url, 'id':context.dataset.datasetid}, parameters), timeout);
-					}
+                    p = p.replace(/\//g, "_slash_");
+                    parameters = JSON.parse(p);
+                    if (context.name != "externalcontext") {
+                        return request(context, fetchPrefix() + '/d4c/api/records/2.0/download/', angular.extend({}, parameters, {
+                            resource_id: context.dataset.resourceCSVid
+                        }), timeout);
+                    } else {
+                        if (context.type == "d4c") { parameters = angular.extend({}, parameters, { resource_id: context.dataset.resourceCSVid }); }
+                        return externalFunctions.records(context, angular.extend({}, { 'type': context.type, 'url': context.url, 'id': context.dataset.datasetid }, parameters), timeout);
+                    }
                 },
                 'geo': function (context, parameters, timeout) {
-					var p = JSON.stringify(parameters);
-					p = p.replace(/\//g, "_slash_");
-					parameters = JSON.parse(p);
-                    if(context.name != "externalcontext"){
-						return request(context, fetchPrefix() + '/d4c/api/records/1.0/geocluster/', angular.extend({}, parameters, {
-							dataset: context.dataset.datasetid
-						}), timeout);
-					} else {
-						return externalFunctions.geocluster(context, angular.extend({}, {'type':context.type, 'url':context.url, 'id':context.dataset.datasetid}, parameters), timeout);
-					}
+                    var p = JSON.stringify(parameters);
+                    p = p.replace(/\//g, "_slash_");
+                    parameters = JSON.parse(p);
+                    if (context.name != "externalcontext") {
+                        return request(context, fetchPrefix() + '/d4c/api/records/1.0/geocluster/', angular.extend({}, parameters, {
+                            dataset: context.dataset.datasetid
+                        }), timeout);
+                    } else {
+                        return externalFunctions.geocluster(context, angular.extend({}, { 'type': context.type, 'url': context.url, 'id': context.dataset.datasetid }, parameters), timeout);
+                    }
                 },
                 'geopreview': function (context, parameters, timeout) {
-					var p = JSON.stringify(parameters);
-					p = p.replace(/\//g, "_slash_");
-					parameters = JSON.parse(p);
-                    if(context.name != "externalcontext"){
-						return request(context, fetchPrefix() + '/d4c/api/records/1.0/geopreview/', angular.extend({}, parameters, {
-							resource_id: context.dataset.resourceCSVid
-						}), timeout);
-					} else {
-						if(context.type == "d4c"){ parameters = angular.extend({}, parameters, {resource_id: context.dataset.resourceCSVid});}
-						return externalFunctions.geopreview(context, angular.extend({}, {'type':context.type, 'url':context.url, 'id':context.dataset.datasetid}, parameters), timeout);
-					}
+                    var p = JSON.stringify(parameters);
+                    p = p.replace(/\//g, "_slash_");
+                    parameters = JSON.parse(p);
+                    if (context.name != "externalcontext") {
+                        return request(context, fetchPrefix() + '/d4c/api/records/1.0/geopreview/', angular.extend({}, parameters, {
+                            resource_id: context.dataset.resourceCSVid
+                        }), timeout);
+                    } else {
+                        if (context.type == "d4c") { parameters = angular.extend({}, parameters, { resource_id: context.dataset.resourceCSVid }); }
+                        return externalFunctions.geopreview(context, angular.extend({}, { 'type': context.type, 'url': context.url, 'id': context.dataset.datasetid }, parameters), timeout);
+                    }
                 },
                 'boundingbox': function (context, parameters, timeout) {
-					var p = JSON.stringify(parameters);
-					p = p.replace(/\//g, "_slash_");
-					parameters = JSON.parse(p);
-					if(context.name != "externalcontext"){
-						return request(context, fetchPrefix() + '/d4c/api/records/1.0/boundingbox/', angular.extend({}, parameters, {
-							resource_id: context.dataset.resourceCSVid
-						}), timeout);
-					} else {
-						if(context.type == "d4c"){ parameters = angular.extend({}, parameters, {resource_id: context.dataset.resourceCSVid});}
-						return externalFunctions.boundingbox(context, angular.extend({}, {'type':context.type, 'url':context.url, 'id':context.dataset.datasetid}, parameters), timeout);
-					}
+                    var p = JSON.stringify(parameters);
+                    p = p.replace(/\//g, "_slash_");
+                    parameters = JSON.parse(p);
+                    if (context.name != "externalcontext") {
+                        return request(context, fetchPrefix() + '/d4c/api/records/1.0/boundingbox/', angular.extend({}, parameters, {
+                            resource_id: context.dataset.resourceCSVid
+                        }), timeout);
+                    } else {
+                        if (context.type == "d4c") { parameters = angular.extend({}, parameters, { resource_id: context.dataset.resourceCSVid }); }
+                        return externalFunctions.boundingbox(context, angular.extend({}, { 'type': context.type, 'url': context.url, 'id': context.dataset.datasetid }, parameters), timeout);
+                    }
                 },
                 'geopolygon': function (context, parameters, timeout) {
                     return request(context, fetchPrefix() + '/d4c/api/records/1.0/geopolygon/', angular.extend({}, parameters, {
@@ -22486,10 +22497,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             'reuses': function (context, parameters, timeout) {
                 return request(context, '/api/reuses/', parameters, timeout);
             },
-			'maps': function (context, parameters, timeout) {
-				return request(context, fetchPrefix() + '/d4c/api/maps/layers/', parameters, timeout);
-			}
-            
+            'maps': function (context, parameters, timeout) {
+                return request(context, fetchPrefix() + '/d4c/api/maps/layers/', parameters, timeout);
+            }
+
         };
     }]);
 }());;
@@ -22618,13 +22629,13 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 type: 'columnrange',
                 group: translate('Area charts'),
                 filter: 'hasNumericField'
-            }, 
-//                               {
-//                label: translate('Treemap'),
-//                type: 'treemap',
-//                group: translate('Special')
-//            }, 
-                               {
+            },
+            //                               {
+            //                label: translate('Treemap'),
+            //                type: 'treemap',
+            //                group: translate('Special')
+            //            }, 
+            {
                 label: translate('Area'),
                 type: 'area',
                 group: translate('Area charts')
@@ -22661,12 +22672,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 type: 'funnel',
                 group: translate('Pyramid charts')
             }
-//                               ,{
-//                label: translate('Boxplot'),
-//                type: 'boxplot',
-//                group: translate('Boxplot charts')
-//            }
-                              ],
+                //                               ,{
+                //                label: translate('Boxplot'),
+                //                type: 'boxplot',
+                //                group: translate('Boxplot charts')
+                //            }
+            ],
             timeserie_precision_tab = ["year", "month", "day", "hour", "minute"],
             advanced_precision_tab = ['month month', 'day day', 'day weekday', 'hour weekday', 'day month', 'hour hour'],
             colorIdx = 0,
@@ -22787,11 +22798,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 }
                 if (field.annotations) {
                     for (var annotation = 0; annotation < field.annotations.length; annotation++) {
-                         //if (field.annotations[annotation].name == 'timeserie_precision') {
+                        //if (field.annotations[annotation].name == 'timeserie_precision') {
                         if (field.description.includes('timeserie_precision')) {
-                           precision = 'minute';
-                            field.type='datetime';
-                           break;
+                            precision = 'minute';
+                            field.type = 'datetime';
+                            break;
                         }
                     }
                 }
@@ -22815,7 +22826,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 for (var i = 0; i < fields[datasetid].length; i++) {
                     var field = fields[datasetid][i];
                     // if (field.type == 'int' || field.type == 'double') {
-                        availableY.push(field);
+                    availableY.push(field);
                     // }
                     if (field.type == 'datetime' || field.type == 'date') {
                         availableX.unshift(field);
@@ -22967,10 +22978,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                 }
                 if (!chart.singleAxis) {
-                    delete(chart.singleAxisLabel);
-                    delete(chart.singleAxisScale);
-                    delete(chart.yRangeMin);
-                    delete(chart.yRangeMax);
+                    delete (chart.singleAxisLabel);
+                    delete (chart.singleAxisScale);
+                    delete (chart.yRangeMin);
+                    delete (chart.yRangeMax);
                 }
                 if (typeof chart.displayLegend === "undefined") {
                     chart.displayLegend = true;
@@ -23007,8 +23018,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 var xType = this.getFieldType(datasetid, xAxis);
                 if (xType == 'date' || xType == 'datetime') {
                     if (!query.timescale || this.getTimescales(datasetid, xAxis, advancedFeatures).map(function (t) {
-                            return t.name;
-                        }).indexOf(query.timescale) === -1) {
+                        return t.name;
+                    }).indexOf(query.timescale) === -1) {
                         query.timescale = 'year';
                         if (advancedFeatures && globalTimescale) {
                             query.timescale = globalTimescale;
@@ -23071,8 +23082,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 } else {
                     if (!conservative && ['COUNT', 'CONSTANT', 'CUSTOM'].indexOf(chart.func) === -1) {
                         if ($.grep(availableY, function (y) {
-                                return y.name === chart.yAxis;
-                            }).length === 0) {
+                            return y.name === chart.yAxis;
+                        }).length === 0) {
                             chart.yAxis = availableY[0].name;
                         }
                     }
@@ -23281,108 +23292,108 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
     var mod = angular.module('d4c-widgets');
     mod.factory("colorScale", ['D4CWidgetsConfig', function (D4CWidgetsConfig) {
         var orderedBrewer = [{
-                label: 'Accent',
-                colors: chroma.brewer.Accent
-            }, {
-                label: 'Dark2',
-                colors: chroma.brewer.Dark2
-            }, {
-                label: 'Pastel2',
-                colors: chroma.brewer.Pastel2
-            }, {
-                label: 'Pastel1',
-                colors: chroma.brewer.Pastel1
-            }, {
-                label: 'Set2',
-                colors: chroma.brewer.Set2
-            }, {
-                label: 'Set1',
-                colors: chroma.brewer.Set1
-            }, {
-                label: 'Paired',
-                colors: chroma.brewer.Paired
-            }, {
-                label: 'Set3',
-                colors: chroma.brewer.Set3
-            }, {
-                label: 'OrRd',
-                colors: chroma.brewer.OrRd.slice(1)
-            }, {
-                label: 'PuBu',
-                colors: chroma.brewer.PuBu.slice(1)
-            }, {
-                label: 'BuPu',
-                colors: chroma.brewer.BuPu.slice(1)
-            }, {
-                label: 'Oranges',
-                colors: chroma.brewer.Oranges.slice(1)
-            }, {
-                label: 'YlOrBr',
-                colors: chroma.brewer.YlOrBr.slice(1)
-            }, {
-                label: 'YlGn',
-                colors: chroma.brewer.YlGn.slice(1)
-            }, {
-                label: 'Reds',
-                colors: chroma.brewer.Reds.slice(1)
-            }, {
-                label: 'RdPu',
-                colors: chroma.brewer.RdPu.slice(1)
-            }, {
-                label: 'Greens',
-                colors: chroma.brewer.Greens.slice(1)
-            }, {
-                label: 'YlGnBu',
-                colors: chroma.brewer.YlGnBu.slice(1)
-            }, {
-                label: 'Purples',
-                colors: chroma.brewer.Purples.slice(1)
-            }, {
-                label: 'GnBu',
-                colors: chroma.brewer.GnBu.slice(1)
-            }, {
-                label: 'Greys',
-                colors: chroma.brewer.Greys.slice(1)
-            }, {
-                label: 'YlOrRd',
-                colors: chroma.brewer.YlOrRd.slice(1)
-            }, {
-                label: 'PuRd',
-                colors: chroma.brewer.PuRd.slice(1)
-            }, {
-                label: 'Blues',
-                colors: chroma.brewer.Blues.slice(1)
-            }, {
-                label: 'PuBuGn',
-                colors: chroma.brewer.PuBuGn.slice(1)
-            }, {
-                label: 'Spectral',
-                colors: chroma.brewer.Spectral
-            }, {
-                label: 'RdYlGn',
-                colors: chroma.brewer.RdYlGn
-            }, {
-                label: 'RdBu',
-                colors: chroma.brewer.RdBu
-            }, {
-                label: 'PiYG',
-                colors: chroma.brewer.PiYG
-            }, {
-                label: 'PRGn',
-                colors: chroma.brewer.PRGn
-            }, {
-                label: 'RdYlBu',
-                colors: chroma.brewer.RdYlBu
-            }, {
-                label: 'BrBG',
-                colors: chroma.brewer.BrBG
-            }, {
-                label: 'RdGy',
-                colors: chroma.brewer.RdGy
-            }, {
-                label: 'PuOr',
-                colors: chroma.brewer.PuOr
-            }],
+            label: 'Accent',
+            colors: chroma.brewer.Accent
+        }, {
+            label: 'Dark2',
+            colors: chroma.brewer.Dark2
+        }, {
+            label: 'Pastel2',
+            colors: chroma.brewer.Pastel2
+        }, {
+            label: 'Pastel1',
+            colors: chroma.brewer.Pastel1
+        }, {
+            label: 'Set2',
+            colors: chroma.brewer.Set2
+        }, {
+            label: 'Set1',
+            colors: chroma.brewer.Set1
+        }, {
+            label: 'Paired',
+            colors: chroma.brewer.Paired
+        }, {
+            label: 'Set3',
+            colors: chroma.brewer.Set3
+        }, {
+            label: 'OrRd',
+            colors: chroma.brewer.OrRd.slice(1)
+        }, {
+            label: 'PuBu',
+            colors: chroma.brewer.PuBu.slice(1)
+        }, {
+            label: 'BuPu',
+            colors: chroma.brewer.BuPu.slice(1)
+        }, {
+            label: 'Oranges',
+            colors: chroma.brewer.Oranges.slice(1)
+        }, {
+            label: 'YlOrBr',
+            colors: chroma.brewer.YlOrBr.slice(1)
+        }, {
+            label: 'YlGn',
+            colors: chroma.brewer.YlGn.slice(1)
+        }, {
+            label: 'Reds',
+            colors: chroma.brewer.Reds.slice(1)
+        }, {
+            label: 'RdPu',
+            colors: chroma.brewer.RdPu.slice(1)
+        }, {
+            label: 'Greens',
+            colors: chroma.brewer.Greens.slice(1)
+        }, {
+            label: 'YlGnBu',
+            colors: chroma.brewer.YlGnBu.slice(1)
+        }, {
+            label: 'Purples',
+            colors: chroma.brewer.Purples.slice(1)
+        }, {
+            label: 'GnBu',
+            colors: chroma.brewer.GnBu.slice(1)
+        }, {
+            label: 'Greys',
+            colors: chroma.brewer.Greys.slice(1)
+        }, {
+            label: 'YlOrRd',
+            colors: chroma.brewer.YlOrRd.slice(1)
+        }, {
+            label: 'PuRd',
+            colors: chroma.brewer.PuRd.slice(1)
+        }, {
+            label: 'Blues',
+            colors: chroma.brewer.Blues.slice(1)
+        }, {
+            label: 'PuBuGn',
+            colors: chroma.brewer.PuBuGn.slice(1)
+        }, {
+            label: 'Spectral',
+            colors: chroma.brewer.Spectral
+        }, {
+            label: 'RdYlGn',
+            colors: chroma.brewer.RdYlGn
+        }, {
+            label: 'RdBu',
+            colors: chroma.brewer.RdBu
+        }, {
+            label: 'PiYG',
+            colors: chroma.brewer.PiYG
+        }, {
+            label: 'PRGn',
+            colors: chroma.brewer.PRGn
+        }, {
+            label: 'RdYlBu',
+            colors: chroma.brewer.RdYlBu
+        }, {
+            label: 'BrBG',
+            colors: chroma.brewer.BrBG
+        }, {
+            label: 'RdGy',
+            colors: chroma.brewer.RdGy
+        }, {
+            label: 'PuOr',
+            colors: chroma.brewer.PuOr
+        }],
             defaultColorSet = 'Set2',
             domainDefaultColorSet = '',
             colorIdx = 0;
@@ -23435,9 +23446,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 brewName = getBrewName(string);
                 if (brewName) {
                     return chroma.brewer[brewName];
-                } else if(string == "range-custom") {
-					return chroma.brewer[Object.keys(chroma.brewer)[0]];
-				} else {
+                } else if (string == "range-custom") {
+                    return chroma.brewer[Object.keys(chroma.brewer)[0]];
+                } else {
                     string = string.replace('custom-', '');
                     string = string.replace('single-', '');
                     return [string, string];
@@ -23558,8 +23569,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         }
                         format = format || 'csv';
                         //var url = this.domainUrl + '/explore/dataset/' + this.dataset.datasetid + '/download/?format=' + format;
-						var url = fetchPrefix() + '/d4c/api/records/2.0/downloadfile/format=' + format;
-						url += '&resource_id=' + this.dataset.resourceCSVid;
+                        var url = fetchPrefix() + '/d4c/api/records/2.0/downloadfile/format=' + format;
+                        url += '&resource_id=' + this.dataset.resourceCSVid;
                         url += this.getQueryStringURL(parameters);
                         return url;
                     },
@@ -23646,7 +23657,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 }
                 return context;
             },
-			getExternalDatasetContext: function (contextName, datasetId, contextParameters, url, type, nhits) {
+            getExternalDatasetContext: function (contextName, datasetId, contextParameters, url, type, nhits) {
                 var deferred = $q.defer();
                 var context = {
                     'wait': function () {
@@ -23673,7 +23684,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         var apiParams = angular.extend({}, this.parameters, {
                             'type': type,
                             'url': url,
-							'id':datasetId
+                            'id': datasetId
                         });
                         D4CAPI.external.facets(this, apiParams).success(function (data) {
                             var isFacetDisjunctive = data.parameters.disjunctive && data.parameters.disjunctive[fieldName];
@@ -23706,43 +23717,43 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     'name': contextName,
                     'type': 'dataset',
                     'url': url,
-					'domainUrl': "",
+                    'domainUrl': "",
                     'type': type,
                     'dataset': null,
                     'parameters': contextParameters,
                     'error': false,
-					'nhits': nhits
+                    'nhits': nhits
                 };
-                
-				var cacheKey = type + '.' + url+ '.' + datasetId;
-				if (angular.isDefined(schemaCache[cacheKey])) {
-					context.dataset = new D4C.Dataset(schemaCache[cacheKey]);
-					deferred.resolve(context.dataset);
-				} else if (angular.isDefined(loadingSchemas[cacheKey])) {
-					loadingSchemas[cacheKey].then(function (response) {
-						context.dataset = new D4C.Dataset(response.data);
-						deferred.resolve(context.dataset);
-					});
-				} else {
-					if(datasetId != ""){
-						loadingSchemas[cacheKey] = D4CAPI.external.get(context, datasetId, {
-							'type': type,
-							'url': url,
-							'id':datasetId
-						});
-						loadingSchemas[cacheKey].success(function (data) {
-							schemaCache[cacheKey] = data;
-							context.dataset = new D4C.Dataset(data);
-							deferred.resolve(context.dataset);
-						}).error(function (data) {
-							context.error = true;
-							deferred.reject("Failed to fetch " + contextName + " context.");
-						});
-					} else {
-						deferred.resolve(context.dataset);
-					}
-				}
-                
+
+                var cacheKey = type + '.' + url + '.' + datasetId;
+                if (angular.isDefined(schemaCache[cacheKey])) {
+                    context.dataset = new D4C.Dataset(schemaCache[cacheKey]);
+                    deferred.resolve(context.dataset);
+                } else if (angular.isDefined(loadingSchemas[cacheKey])) {
+                    loadingSchemas[cacheKey].then(function (response) {
+                        context.dataset = new D4C.Dataset(response.data);
+                        deferred.resolve(context.dataset);
+                    });
+                } else {
+                    if (datasetId != "") {
+                        loadingSchemas[cacheKey] = D4CAPI.external.get(context, datasetId, {
+                            'type': type,
+                            'url': url,
+                            'id': datasetId
+                        });
+                        loadingSchemas[cacheKey].success(function (data) {
+                            schemaCache[cacheKey] = data;
+                            context.dataset = new D4C.Dataset(data);
+                            deferred.resolve(context.dataset);
+                        }).error(function (data) {
+                            context.error = true;
+                            deferred.reject("Failed to fetch " + contextName + " context.");
+                        });
+                    } else {
+                        deferred.resolve(context.dataset);
+                    }
+                }
+
                 return context;
             }
         };
@@ -23873,7 +23884,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             getLocationStructure: function (location) {
                 var tokens = location.split(locationDelimiter);
-                if(tokens.length > 2 ) {
+                if (tokens.length > 2) {
                     return {
                         center: [tokens[1], tokens[2]],
                         zoom: tokens[0]
@@ -24094,9 +24105,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         layer.color = mapMarkerColor;
                     }
                     else {
-                        layer.color = layer.color || layer.context.dataset.getExtraMeta('visualization', 'map_marker_color') || defaultMarkerColor; 
+                        layer.color = layer.color || layer.context.dataset.getExtraMeta('visualization', 'map_marker_color') || defaultMarkerColor;
                     }
-                    layer.picto = layer.picto || layer.context.dataset.getExtraMeta('visualization', 'map_marker_picto') || (layer.marker ? "d4c-circle" : "dot");   
+                    layer.picto = layer.picto || layer.context.dataset.getExtraMeta('visualization', 'map_marker_picto') || (layer.marker ? "d4c-circle" : "dot");
 
                     if (layer.marker) {
                         layer.size = layer.size || 4;
@@ -24183,8 +24194,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                 } else if (layerConfig.color.type === 'choropleth') {
                     var rangesUpperBounds = Object.keys(layerConfig.color.ranges).sort(function (a, b) {
-                            return parseFloat(a) - parseFloat(b);
-                        }),
+                        return parseFloat(a) - parseFloat(b);
+                    }),
                         highestBoundColor = layerConfig.color.ranges[rangesUpperBounds[rangesUpperBounds.length - 1]],
                         splitComplementaryColors = this.getSplitComplementaryColors(highestBoundColor);
                     if (layerConfig.func) {
@@ -24495,8 +24506,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (feature.geometry.type === 'LineString' || feature.geometry.type === 'MultiLineString') {
                             opts.weight = layerConfig.lineWidth;
                             opts.color = service.getRecordColor(record, layerConfig);
-                            if(route_color != null) {
-                                opts.color = "#"+route_color;
+                            if (route_color != null) {
+                                opts.color = "#" + route_color;
                             }
                             console.log("route color ");
                             console.log(route_color);
@@ -24990,7 +25001,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (shape.type === 'Point') {
                             MapLayerHelper.drawPoint(layerConfig, map, [shape.coordinates[1], shape.coordinates[0]], value, shapeLayerGroup, record.geo_digest);
                         } else {
-                            MapLayerHelper.drawShape(layerConfig, map, shape, value, shapeLayerGroup, record.geo_digest,record.route_color);
+                            MapLayerHelper.drawShape(layerConfig, map, shape, value, shapeLayerGroup, record.geo_digest, record.route_color);
                         }
                     }
                     deferred.resolve(shapeLayerGroup);
@@ -25005,47 +25016,47 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
     var mod = angular.module('d4c-widgets');
     mod.service('MapRenderingClustered', ['D4CAPI', 'MapLayerHelper', 'SVGInliner', 'PictoHelper', '$q', function (D4CAPI, MapLayerHelper, SVGInliner, PictoHelper, $q) {
         var clusters_zoom = [
-			287.52457176212977,
-			144.70655184530344,
-			72.43241471102152,
-			36.22389590842861,
-			18.11283031653292,
-			9.056522913512966,
-			4.528274846151116,
-			2.2641390942445736,
-			1.1320697559400856,
-			0.566034904069816,
-			0.28301745529730565,
-			0.14150872805645756,
-			0.07075436407920382,
-			0.035377182045980116,
-			0.01768859102377624,
-			0.00884429551199527,
-			0.00442214775600538,
-			0.0022110738780006713
-		];
-		return {
+            287.52457176212977,
+            144.70655184530344,
+            72.43241471102152,
+            36.22389590842861,
+            18.11283031653292,
+            9.056522913512966,
+            4.528274846151116,
+            2.2641390942445736,
+            1.1320697559400856,
+            0.566034904069816,
+            0.28301745529730565,
+            0.14150872805645756,
+            0.07075436407920382,
+            0.035377182045980116,
+            0.01768859102377624,
+            0.00884429551199527,
+            0.00442214775600538,
+            0.0022110738780006713
+        ];
+        return {
             render: function (layerConfig, map, layerGroup, timeout, showPolygons) {
-				var getClusterZoom = function () {
-					var b = map.getBounds();
-					var l = b._northEast.lng - b._southWest.lng;
-					var L = b._northEast.lat - b._southWest.lat;
-					var d = Math.sqrt(l*l + L*L);
-					var c = closest(d);
-					return clusters_zoom.indexOf(c)+2;
-				};
-				var closest = function(num) {
-					var curr = clusters_zoom[0];
-					var diff = Math.abs (num - curr);
-					for (var val = 0; val < clusters_zoom.length; val++) {
-						var newdiff = Math.abs (num - clusters_zoom[val]);
-						if (newdiff < diff) {
-							diff = newdiff;
-							curr = clusters_zoom[val];
-						}
-					}
-					return curr;
-				}
+                var getClusterZoom = function () {
+                    var b = map.getBounds();
+                    var l = b._northEast.lng - b._southWest.lng;
+                    var L = b._northEast.lat - b._southWest.lat;
+                    var d = Math.sqrt(l * l + L * L);
+                    var c = closest(d);
+                    return clusters_zoom.indexOf(c) + 2;
+                };
+                var closest = function (num) {
+                    var curr = clusters_zoom[0];
+                    var diff = Math.abs(num - curr);
+                    for (var val = 0; val < clusters_zoom.length; val++) {
+                        var newdiff = Math.abs(num - clusters_zoom[val]);
+                        if (newdiff < diff) {
+                            diff = newdiff;
+                            curr = clusters_zoom[val];
+                        }
+                    }
+                    return curr;
+                }
                 var deferred = $q.defer();
                 var parameters = angular.extend({}, layerConfig.context.parameters, {
                     'clusterdistance': 50,
@@ -25195,7 +25206,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (geoJSON.type === 'Point') {
                             MapLayerHelper.drawPoint(layerConfig, map, [geoJSON.coordinates[1], geoJSON.coordinates[0]], record, markerLayerGroup);
                         } else {
-                            MapLayerHelper.drawShape(layerConfig, map, geoJSON, record, markerLayerGroup,record.route_color);
+                            MapLayerHelper.drawShape(layerConfig, map, geoJSON, record, markerLayerGroup, record.route_color);
                         }
                     }
                     deferred.resolve(markerLayerGroup);
@@ -25229,7 +25240,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (shape.geometry != null && shape.geometry.type === 'Point') {
                             MapLayerHelper.drawPoint(layerConfig, map, [shape.geometry.coordinates[1], shape.geometry.coordinates[0]], null, layerGroup, shape.geo_digest);
                         } else {
-                            MapLayerHelper.drawShape(layerConfig, map, shape.geometry, null, layerGroup, shape.geo_digest,shape.route_color);
+                            MapLayerHelper.drawShape(layerConfig, map, shape.geometry, null, layerGroup, shape.geo_digest, shape.route_color);
                         }
                     }
                     deferred.resolve(layerGroup);
@@ -25315,13 +25326,13 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
     var loading = {};
     var loaded = [];
     mod.provider('ModuleLazyLoader', function () {
-        
-        
+
+
         var lazyloading = {
             'highcharts': {
                 'css': [],
                 'js': [
-				    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs/chart.min.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs/chart.min.js"],
                     ["https://code.highcharts.com/6.1.4/highcharts.js"],
                     ["https://code.highcharts.com/6.1.4/modules/no-data-to-display.js"],
                     ["https://code.highcharts.com/6.1.4/highcharts-more.js"],
@@ -25334,12 +25345,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 'js': [
                     ["L@https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"],
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map-fullscreen/map-fullscreen.js", "L.Control.Locate@https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-label/leaflet.label.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map/map.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map/tilelayer.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-control-geocoder/Control.Geocoder.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/vectormarker/vectormarker.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/clustermarker/clustermarker.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-draw/leaflet.draw.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-heat/leaflet-heat.js"],
-					[fetchPrefix() + '/sites/default/files/api/portail_d4c/lib/leaflet-proj4js/GpPluginLeaflet.js']
+                    [fetchPrefix() + '/sites/default/files/api/portail_d4c/lib/leaflet-proj4js/GpPluginLeaflet.js']
                 ]
             },
             'wordcloud': {
                 'css': [],
-                'js': [[fetchPrefix() + '/sites/default/files/api/portail_d4c/lib/wordCloud/d3.v3.min.js'],[fetchPrefix() + '/sites/default/files/api/portail_d4c/lib/wordCloud/d3.layout.cloud.js'],[fetchPrefix() + '/sites/default/files/api/portail_d4c/lib/wordCloud/FileSaver.min.js']]
+                'js': [[fetchPrefix() + '/sites/default/files/api/portail_d4c/lib/wordCloud/d3.v3.min.js'], [fetchPrefix() + '/sites/default/files/api/portail_d4c/lib/wordCloud/d3.layout.cloud.js'], [fetchPrefix() + '/sites/default/files/api/portail_d4c/lib/wordCloud/FileSaver.min.js']]
             },
             'timeline': {
                 'css': [[fetchPrefix() + '/sites/default/files/api/portail_d4c/lib/timeline/timenil.css']],
@@ -25391,7 +25402,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 'js': ['ss@https://cdnjs.cloudflare.com/ajax/libs/simple-statistics/1.0.1/simple_statistics.js']
             },
             'vega': {
-                'js': ["vega@https://cdn.jsdelivr.net/npm/vega@4.2.0", "vl@https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc3", "vegaTooltip@https://cdn.jsdelivr.net/npm/vega-tooltip@0.13.0", ],
+                'js': ["vega@https://cdn.jsdelivr.net/npm/vega@4.2.0", "vl@https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc3", "vegaTooltip@https://cdn.jsdelivr.net/npm/vega-tooltip@0.13.0",],
             },
         };
         this.getConfig = function () {
@@ -27880,7 +27891,7 @@ angular.module("gettext").factory("gettextPlurals", function () {
     }
     $(definer).remove();
     $.support.rtlScrollType = type;
-}(jQuery));; /*! http://mths.be/jsesc v0.5.0 by @mathias */ ;
+}(jQuery));; /*! http://mths.be/jsesc v0.5.0 by @mathias */;
 (function (root) {
     var object = {};
     var hasOwnProperty = object.hasOwnProperty;
@@ -28064,29 +28075,29 @@ angular.module("gettext").factory("gettextPlurals", function () {
     jstz.TimeZone = function (tz_name) {
         'use strict';
         var AMBIGUITIES = {
-                'America/Denver': ['America/Denver', 'America/Mazatlan'],
-                'America/Chicago': ['America/Chicago', 'America/Mexico_City'],
-                'America/Santiago': ['America/Santiago', 'America/Asuncion', 'America/Campo_Grande'],
-                'America/Montevideo': ['America/Montevideo', 'America/Sao_Paulo'],
-                'Asia/Beirut': ['Asia/Amman', 'Asia/Jerusalem', 'Asia/Beirut', 'Europe/Helsinki', 'Asia/Damascus'],
-                'Pacific/Auckland': ['Pacific/Auckland', 'Pacific/Fiji'],
-                'America/Los_Angeles': ['America/Los_Angeles', 'America/Santa_Isabel'],
-                'America/New_York': ['America/Havana', 'America/New_York'],
-                'America/Halifax': ['America/Goose_Bay', 'America/Halifax'],
-                'America/Godthab': ['America/Miquelon', 'America/Godthab'],
-                'Asia/Dubai': ['Europe/Moscow'],
-                'Asia/Dhaka': ['Asia/Yekaterinburg'],
-                'Asia/Jakarta': ['Asia/Omsk'],
-                'Asia/Shanghai': ['Asia/Krasnoyarsk', 'Australia/Perth'],
-                'Asia/Tokyo': ['Asia/Irkutsk'],
-                'Australia/Brisbane': ['Asia/Yakutsk'],
-                'Pacific/Noumea': ['Asia/Vladivostok'],
-                'Pacific/Tarawa': ['Asia/Kamchatka', 'Pacific/Fiji'],
-                'Pacific/Tongatapu': ['Pacific/Apia'],
-                'Asia/Baghdad': ['Europe/Minsk'],
-                'Asia/Baku': ['Asia/Yerevan', 'Asia/Baku'],
-                'Africa/Johannesburg': ['Asia/Gaza', 'Africa/Cairo']
-            },
+            'America/Denver': ['America/Denver', 'America/Mazatlan'],
+            'America/Chicago': ['America/Chicago', 'America/Mexico_City'],
+            'America/Santiago': ['America/Santiago', 'America/Asuncion', 'America/Campo_Grande'],
+            'America/Montevideo': ['America/Montevideo', 'America/Sao_Paulo'],
+            'Asia/Beirut': ['Asia/Amman', 'Asia/Jerusalem', 'Asia/Beirut', 'Europe/Helsinki', 'Asia/Damascus'],
+            'Pacific/Auckland': ['Pacific/Auckland', 'Pacific/Fiji'],
+            'America/Los_Angeles': ['America/Los_Angeles', 'America/Santa_Isabel'],
+            'America/New_York': ['America/Havana', 'America/New_York'],
+            'America/Halifax': ['America/Goose_Bay', 'America/Halifax'],
+            'America/Godthab': ['America/Miquelon', 'America/Godthab'],
+            'Asia/Dubai': ['Europe/Moscow'],
+            'Asia/Dhaka': ['Asia/Yekaterinburg'],
+            'Asia/Jakarta': ['Asia/Omsk'],
+            'Asia/Shanghai': ['Asia/Krasnoyarsk', 'Australia/Perth'],
+            'Asia/Tokyo': ['Asia/Irkutsk'],
+            'Australia/Brisbane': ['Asia/Yakutsk'],
+            'Pacific/Noumea': ['Asia/Vladivostok'],
+            'Pacific/Tarawa': ['Asia/Kamchatka', 'Pacific/Fiji'],
+            'Pacific/Tongatapu': ['Pacific/Apia'],
+            'Asia/Baghdad': ['Europe/Minsk'],
+            'Asia/Baku': ['Asia/Yerevan', 'Asia/Baku'],
+            'Africa/Johannesburg': ['Asia/Gaza', 'Africa/Cairo']
+        },
             timezone_name = tz_name,
             ambiguity_check = function () {
                 var ambiguity_list = AMBIGUITIES[timezone_name],
@@ -28239,8 +28250,8 @@ LazyLoad = (function (doc) {
 
     function load(type, urls, callback, obj, context) {
         var _finish = function () {
-                finish(type);
-            },
+            finish(type);
+        },
             isCSS = type === 'css',
             nodes = [],
             i, len, node, p, pendingUrls, url;
@@ -28395,7 +28406,7 @@ window.Modernizr = (function (window, document, undefined) {
             var args = slice.call(arguments, 1),
                 bound = function () {
                     if (this instanceof bound) {
-                        var F = function () {};
+                        var F = function () { };
                         F.prototype = target.prototype;
                         var self = new F();
                         var result = target.apply(self, args.concat(slice.call(arguments)));
@@ -28630,7 +28641,7 @@ window.Modernizr = (function (window, document, undefined) {
         return "string" == typeof a
     }
 
-    function f() {}
+    function f() { }
 
     function g(a) {
         return !a || "loaded" == a || "complete" == a || "uninitialized" == a
@@ -28737,11 +28748,11 @@ window.Modernizr = (function (window, document, undefined) {
                     }), g(a, j, b, 0, h);
                     else if (Object(a) === a)
                         for (n in m = function () {
-                                var b = 0,
-                                    c;
-                                for (c in a) a.hasOwnProperty(c) && b++;
-                                return b
-                            }(), a) a.hasOwnProperty(n) && (!c && !--m && (d(j) ? j = function () {
+                            var b = 0,
+                                c;
+                            for (c in a) a.hasOwnProperty(c) && b++;
+                            return b
+                        }(), a) a.hasOwnProperty(n) && (!c && !--m && (d(j) ? j = function () {
                             var a = [].slice.call(arguments);
                             k.apply(this, a), l()
                         } : j[n] = function (a) {
@@ -30332,7 +30343,7 @@ Modernizr.addTest('cors', !!(window.XMLHttpRequest && 'withCredentials' in new X
                 var aliasedRequire = require;
                 aliasedRequire('./locale/' + name);
                 getSetGlobalLocale(oldLocale);
-            } catch (e) {}
+            } catch (e) { }
         }
         return locales[name];
     }
@@ -30741,8 +30752,8 @@ Modernizr.addTest('cors', !!(window.XMLHttpRequest && 'withCredentials' in new X
     hooks.createFromInputFallback = deprecate('value provided is not in a recognized RFC2822 or ISO format. moment construction falls back to js Date(), ' + 'which is not reliable across all browsers and versions. Non RFC2822/ISO date formats are ' + 'discouraged and will be removed in an upcoming major release. Please refer to ' + 'http://momentjs.com/guides/#/warnings/js-date/ for more info.', function (config) {
         config._d = new Date(config._i + (config._useUTC ? ' UTC' : ''));
     });
-    hooks.ISO_8601 = function () {};
-    hooks.RFC_2822 = function () {};
+    hooks.ISO_8601 = function () { };
+    hooks.RFC_2822 = function () { };
 
     function configFromStringAndFormat(config) {
         if (config._f === hooks.ISO_8601) {
@@ -31099,7 +31110,7 @@ Modernizr.addTest('cors', !!(window.XMLHttpRequest && 'withCredentials' in new X
     function getDateOffset(m) {
         return -Math.round(m._d.getTimezoneOffset() / 15) * 15;
     }
-    hooks.updateOffset = function () {};
+    hooks.updateOffset = function () { };
 
     function getSetOffset(input, keepLocalTime, keepMinutes) {
         var offset = this._offset || 0,
@@ -32460,12 +32471,12 @@ Modernizr.addTest('cors', !!(window.XMLHttpRequest && 'withCredentials' in new X
                 for (var z = 0; z < M; z++) c[z] = Math.round((c[z - 1] || 0) + 6e4 * c[z]);
                 c[M - 1] = 1 / 0
             }(b, A.length), {
-                name: M[0],
-                abbrs: N(M[1].split(" "), A),
-                offsets: N(z, A),
-                untils: b,
-                population: 0 | M[5]
-            }
+            name: M[0],
+            abbrs: N(M[1].split(" "), A),
+            offsets: N(z, A),
+            untils: b,
+            population: 0 | M[5]
+        }
     }
 
     function W(c) {
@@ -32504,15 +32515,15 @@ Modernizr.addTest('cors', !!(window.XMLHttpRequest && 'withCredentials' in new X
                 if (M) return M;
                 C("Moment Timezone found " + c + " from the Intl api, but did not have that data loaded.")
             }
-        } catch (c) {}
+        } catch (c) { }
         var z, A, b, o = function () {
-                var c, M, z, A = (new Date).getFullYear() - 2,
-                    b = new d(new Date(A, 0, 1)),
-                    o = [b];
-                for (z = 1; z < 48; z++)(M = new d(new Date(A, z, 1))).offset !== b.offset && (c = X(b, M), o.push(c), o.push(new d(new Date(c.at + 6e4)))), b = M;
-                for (z = 0; z < 4; z++) o.push(new d(new Date(A + z, 0, 1))), o.push(new d(new Date(A + z, 6, 1)));
-                return o
-            }(),
+            var c, M, z, A = (new Date).getFullYear() - 2,
+                b = new d(new Date(A, 0, 1)),
+                o = [b];
+            for (z = 1; z < 48; z++)(M = new d(new Date(A, z, 1))).offset !== b.offset && (c = X(b, M), o.push(c), o.push(new d(new Date(c.at + 6e4)))), b = M;
+            for (z = 0; z < 4; z++) o.push(new d(new Date(A + z, 0, 1))), o.push(new d(new Date(A + z, 6, 1)));
+            return o
+        }(),
             p = o.length,
             n = function (c) {
                 var M, z, A, b = c.length,
@@ -32570,7 +32581,7 @@ Modernizr.addTest('cors', !!(window.XMLHttpRequest && 'withCredentials' in new X
             A = u(z),
             b = o.utc.apply(null, M);
         return A && !o.isMoment(c) && E(b) && b.add(A.parse(b), "minutes"), b.tz(z), b
-    }(z < 2 || 2 === z && A < 6) && C("Moment Timezone requires Moment.js >= 2.6.0. You are using Moment.js " + o.version + ". See momentjs.com"), W.prototype = {
+    } (z < 2 || 2 === z && A < 6) && C("Moment Timezone requires Moment.js >= 2.6.0. You are using Moment.js " + o.version + ". See momentjs.com"), W.prototype = {
         _set: function (c) {
             this.name = c.name, this.abbrs = c.abbrs, this.untils = c.untils, this.offsets = c.offsets, this.population = c.population
         },
@@ -33314,25 +33325,25 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                     }
                 }
             };
-			var resourceCSVid = -1;
-			if(dataset.metas.resources != undefined){
-				if(dataset.metas.resources.length > 0){
-					var res = dataset.metas.resources.filter(function (r) {
-						if ((r.mimetype == "text/csv" || r.format.toUpperCase()  == "CSV") && r.datastore_active == true && (selectedResourceId == null || selectedResourceId == r.id)) {//} || r.mimetype == "application/vnd.ms-excel" || r.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-							return r;
-						}
-					});
-					if (res.length > 0) {
-						resourceCSVid = res[res.length - 1].id;
-					}
-				}
-			} else {
-				resourceCSVid = undefined;
-			}
+            var resourceCSVid = -1;
+            if (dataset.metas.resources != undefined) {
+                if (dataset.metas.resources.length > 0) {
+                    var res = dataset.metas.resources.filter(function (r) {
+                        if ((r.mimetype == "text/csv" || r.format.toUpperCase() == "CSV") && r.datastore_active == true && (selectedResourceId == null || selectedResourceId == r.id)) {//} || r.mimetype == "application/vnd.ms-excel" || r.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+                            return r;
+                        }
+                    });
+                    if (res.length > 0) {
+                        resourceCSVid = res[res.length - 1].id;
+                    }
+                }
+            } else {
+                resourceCSVid = undefined;
+            }
             return {
                 datasetid: dataset.datasetid || "preview",
                 resourceCSVid: resourceCSVid,
-				canAnalyze: resourceCSVid != -1,
+                canAnalyze: resourceCSVid != -1,
                 has_records: dataset.has_records,
                 data_visible: dataset.data_visible && resourceCSVid != -1,
                 metas: dataset.metas || {
@@ -33363,9 +33374,9 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                     return (dataset.features && dataset.features.indexOf(featureName) > -1);
                 },
                 hasWMS: function () {
-                    if (dataset != undefined && dataset.metas != undefined && dataset.metas.resources != undefined && dataset.metas.resources.length > 0){
+                    if (dataset != undefined && dataset.metas != undefined && dataset.metas.resources != undefined && dataset.metas.resources.length > 0) {
                         var res = dataset.metas.resources.filter(function (r) {
-                            if (r.format.toUpperCase()  == "WMS") {//} || r.mimetype == "application/vnd.ms-excel" || r.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+                            if (r.format.toUpperCase() == "WMS") {//} || r.mimetype == "application/vnd.ms-excel" || r.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
                                 return true;
                             }
                         });
@@ -33580,7 +33591,7 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                         'D': 'D',
                         'ddd': 'ddd'
                     }
-                } [mode];
+                }[mode];
                 return function (object) {
                     var datePattern = '';
                     if (angular.isObject(object) && ('year' in object || 'month' in object || 'day' in object || 'hour' in object || 'minute' in object || 'weekday' in object)) {
@@ -33626,7 +33637,7 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
             getDateFromXObject: function (x, minDate, alignMonth) {
                 //let key=_.keys(x);
                 //key=key[0];
-               
+
                 if (typeof alignMonth === "undefined") {
                     alignMonth = false;
                 }
@@ -33635,9 +33646,9 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                 var minDay = minDate ? minDate.getUTCDate() : 1;
                 var minHour = minDate ? minDate.getUTCHours() : 0;
                 var minMinute = minDate ? minDate.getUTCMinutes() : 0;
-                
-				//if (angular.isObject(x) && ('year' in x[key] || 'month' in x[key] || 'day' in x[key] || 'hour' in x[key] || 'minute' in x[key] || 'weekday' in x[key] || 'yearday' in x[key])) {
-                 if (angular.isObject(x) && ('year'in x || 'month'in x || 'day'in x || 'hour'in x || 'minute'in x || 'weekday'in x || 'yearday'in x)) {
+
+                //if (angular.isObject(x) && ('year' in x[key] || 'month' in x[key] || 'day' in x[key] || 'hour' in x[key] || 'minute' in x[key] || 'weekday' in x[key] || 'yearday' in x[key])) {
+                if (angular.isObject(x) && ('year' in x || 'month' in x || 'day' in x || 'hour' in x || 'minute' in x || 'weekday' in x || 'yearday' in x)) {
                     /*var date = new Date(Date.UTC(x[key].year || minYear, x[key].month - 1 || 0, x[key].day || 1, x[key].hour || 0, x[key].minute || 0));
                     date.setUTCFullYear(x[key].year || minYear);
                    
@@ -33668,31 +33679,31 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                             }
                         }
                     }*/
-					var date = new Date(Date.UTC(x.year || minYear, x.month - 1 || 0, x.day || 1, x.hour || 0, x.minute || 0));
+                    var date = new Date(Date.UTC(x.year || minYear, x.month - 1 || 0, x.day || 1, x.hour || 0, x.minute || 0));
                     date.setUTCFullYear(x.year || minYear);
-                    if (!('month'in x))
+                    if (!('month' in x))
                         date.setUTCMonth(minMonth);
-                    if (!('day'in x))
+                    if (!('day' in x))
                         date.setUTCDate(minDay);
-                    if (!('hour'in x))
+                    if (!('hour' in x))
                         date.setUTCHours(minHour);
-                    if (!('minute'in x))
+                    if (!('minute' in x))
                         date.setUTCMinutes(minMinute);
-                    if (!('year'in x)) {
-                        if ('weekday'in x) {
+                    if (!('year' in x)) {
+                        if ('weekday' in x) {
                             date.setUTCDate(date.getUTCDate() + 7 - date.getUTCDay() + x.weekday);
                         }
-                        if ('yearday'in x) {
+                        if ('yearday' in x) {
                             date.setUTCDate(0 + x.yearday);
                         }
                     }
-                    if ('day'in x) {
+                    if ('day' in x) {
                         if (x.day == 29 && x.month == 2 && !x.year) {
                             date.setUTCDate(28);
                             date.setUTCMonth(1);
                         }
                     } else {
-                        if ('month'in x) {
+                        if ('month' in x) {
                             if (alignMonth) {
                                 date.setUTCDate(1);
                             } else {
@@ -33700,13 +33711,13 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                             }
                         }
                     }
-                      
+
                     return date;
-               }
-                
-                
-                
-                
+                }
+
+
+
+
             },
             getTimescaleProperties: function (timescale) {
                 var details = {
