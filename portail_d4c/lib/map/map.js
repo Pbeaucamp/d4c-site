@@ -42,7 +42,7 @@ L.D4CMap = L.Map.extend({
                 this.options.basemap,
                 this.options.disableAttribution,
                 this.options.attributionSeparator,
-                false,
+                true,
                 this.options.customWMSLayers
             );
         }
@@ -114,6 +114,7 @@ L.D4CMap = L.Map.extend({
                     type: 'layer',
                     attribution: '',
                     layers: customWMS.name,
+                    tile_format: 'image/png',
                 }
 
                 layer = new L.D4CWMSTileLayer({
@@ -128,7 +129,7 @@ L.D4CMap = L.Map.extend({
                 }
                 layer.basemapLabel = customWMS.name;
                 layer.basemapId = customWMS.name;
-                layer.options.opacity = 0.6;
+                layer.options.opacity = 0.8;
                 overlays.push(layer);
             }
         }

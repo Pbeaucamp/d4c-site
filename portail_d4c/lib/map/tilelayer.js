@@ -238,6 +238,7 @@ L.D4CWMSTileLayer = L.TileLayer.WMS.extend({
         }
 		layerOptions.crs = basemap.crs;
 		layerOptions.version = "1.3.0";
+        layerOptions.transparent = true;
         attrib = this._addAttributionPart(attrib, basemap.attribution);
         attrib = this._addAttributionPart(attrib, appendAttribution);
 
