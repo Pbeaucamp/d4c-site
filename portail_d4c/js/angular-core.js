@@ -18065,6 +18065,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 syncToUrl: '@',
                 syncToObject: '=',
                 location: '@',
+                customBounds: '@',
                 basemap: '@',
                 staticMap: '@',
                 noRefit: '@',
@@ -18200,6 +18201,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     scope.mapContext.location = scope.mapContext.location || scope.location;
                 } else if (scope.mapConfig && scope.mapConfig.mapPresets && scope.mapConfig.mapPresets.location) {
                     scope.mapContext.location = scope.mapContext.location || scope.mapConfig.mapPresets.location;
+                }
+                if (scope.customBounds) {
+                    scope.mapContext.bounds = scope.customBounds;
                 }
                 if (scope.basemap) {
                     scope.mapContext.basemap = scope.mapContext.basemap || scope.basemap;
@@ -18440,11 +18444,22 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         map.addControl(drawControl);
                     }
                     scope.map = map;
-                    var setInitialMapView = function (location) {
+                    var setInitialMapView = function (location, bounds) {
                         var deferred = $q.defer();
                         if (location && typeof location !== 'boolean') {
-                            var loc = MapHelper.getLocationStructure(location);
-                            scope.map.setView(loc.center, loc.zoom);
+                            if (bounds) {
+                                var bounds = bounds.split(",");
+                    
+                                var northEast = new L.LatLng(parseFloat(bounds[1]), parseFloat(bounds[0])),
+                                    southWest = new L.LatLng(parseFloat(bounds[2]), parseFloat(bounds[3])),
+                                    bounds = new L.LatLngBounds(southWest, northEast);
+                                map.fitBounds(bounds);
+                            }
+                            else {
+                                var loc = MapHelper.getLocationStructure(location);
+                                scope.map.setView(loc.center, loc.zoom);
+                            }
+
                             waitForVisibleContexts().then(function () {
                                 refreshData(false);
                             });
@@ -18474,7 +18489,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         }
                         return deferred.promise;
                     };
-                    setInitialMapView(scope.mapContext.location).then(function () {
+                    setInitialMapView(scope.mapContext.location, scope.mapContext.bounds).then(function () {
                         scope.initialLoading = false;
                         onViewportMove(scope.map);
                         if (!isStatic) {
