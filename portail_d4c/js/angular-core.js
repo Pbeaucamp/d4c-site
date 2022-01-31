@@ -18746,7 +18746,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         });
                         scope.map.on('draw:deleted', function () {
                             delete scope.mapConfig.drawnArea;
-                            resetFilters()
+                            if (typeof resetFilters === "function") { 
+                                resetFilters();
+                            }
                             scope.$apply();
                         });
                         var applyDrawnLayer = function (layer, type) {

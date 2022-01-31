@@ -883,12 +883,16 @@ function createDataset(data){
     $('#datasets').prepend('<div div class="dataset col-md-6 col-sm-12 col-xs-12 content-body" data-theme="' + theme[0] +'" data-orga="' + id_orga /*+'" data-reuses="'+ nb_reuses*/  +'" data-id="' + id +'" data-time="' + date.getTime() /*+'" data-views="' + nbViews + '" data-downloads="' + nbDownloads + '" data-records="' + nbRecords*/ + '" data-analyse="'+analyseDefault+'" data-imported="' + (lastUpdateDate !=  null ? lastUpdateDate.getTime() : '') +'" style="background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.41)), url('+imgBck+') center center no-repeat; background-size: cover;" >'+
     	'<div class="box_1"><div style="display: flex; flex-direction:row">'+
 			'<div>' + imageThemes + '</div>'+
-			'<div class="box_4"><div class="inner"><div class="dataset-h2"><a href="' + fetchPrefix() + '/visualisation/?id=' + id + '' + analyseDefault + '"' + targetValue + '> ' + data.title + ' </a></div></div></div></div>'+
-                           
+			// Modification custom SPOT
+			'<div class="box_4"><div class="inner"><div class="dataset-h2"><a target="_blank" href="' + data.url + '"> ' + data.title + ' </a></div></div></div></div>'+
+            // '<div class="box_4"><div class="inner"><div class="dataset-h2"><a href="' + fetchPrefix() + '/visualisation/?id=' + id + '' + analyseDefault + '"' + targetValue + '> ' + data.title + ' </a></div></div></div></div>'+
+			               
             '<div class="inner"><p class="data-desc">' + description + '</p>'+ listeFormat +'</div>' +
 				'<div class="infos inner">' + 
-					'<ul><li class="titre">Producteur</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul>' +
-					'<ul><li class="titre">Date modification</li><li class="info">' + (lastUpdateDate != null ? lastUpdateDate.toLocaleDateString() : '') + (lastUpdateDate != null ? ' ' + lastUpdateDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '') + '</ul>'+ /*li_granularite + li_reuses +*/
+					// Modification custom SPOT
+					'<ul><li class="titre">Origine du site</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul>' +
+					// '<ul><li class="titre">Producteur</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul>' +
+					// '<ul><li class="titre">Date modification</li><li class="info">' + (lastUpdateDate != null ? lastUpdateDate.toLocaleDateString() : '') + (lastUpdateDate != null ? ' ' + lastUpdateDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '') + '</ul>'+ /*li_granularite + li_reuses +*/
 					'<ul class="jetons">' + tagList +'</ul>' + 
 				'</div>' +               
     		'</div>'+     
