@@ -72,142 +72,159 @@ $(document).ready(function(){
 			filtreProducteur.push(selectedOrganisation);
 		}
 	}
-	searchDatasets();
-	getThemes();
-	//getOrgas();
 	
-	$("#search-form").submit(function(e) {
-	   searchDatasets();
-	   e.preventDefault();
-	});
+	$.ajax(fetchPrefix() + '/d4c/api/themes/',
+	{
+		type: 'POST',
+		dataType: 'json',
+		cache : true,
+		success: function (res) {
+			themes = res;
 
-	$('#datasets').on('click','h2',function(){
-		window.location.href = fetchPrefix() + '/visualisation?id=' + $(this).data('name')+''+$(this).data('analyse');		
-	});
-	
-	$('#datasets ').on('click','.jetons .tag',function(){
-		tag = $(this).text();
-		filtreTags.push(tag);
-		searchDatasets();
-	});
+			loadDatasets();
+		},
+		error: function (e) {
+			console.log("ERROR: ", e);
 
-	$('#list-producteur').on('click','li',function(){
-		var prod = $(this).data('orga');
-		if(filtreProducteur.indexOf(prod) != -1){
-			filtreProducteur.splice(filtreProducteur.indexOf(prod));
-		} else {
-			filtreProducteur.push(prod);
+			loadDatasets();
 		}
-		searchDatasets();
 	});
-    
-
-    $('#list-theme').on('click','li',function(){
-		var theme = $(this).data('theme');
-		if(filtreTheme.indexOf(theme) != -1){
-			filtreTheme.splice(filtreTheme.indexOf(theme));
-		} else {
-			filtreTheme.push(theme);
-		}
-        searchDatasets();
-	});
-    
-	/*$('#list-format').on('click','li',function(){
-		var format = $(this).data('format');
-		filtrerFormat(format);
-	});*/
-	
-	$('#list-tag').on('click','li',function(){
-		var tag = $(this).data('tag');
-		if(filtreTags.indexOf(tag) != -1){
-			filtreTags.splice(filtreTags.indexOf(tag));
-		} else {
-			filtreTags.push(tag);
-		}
-		searchDatasets();
-	});
-	
-	$('#list-visu').on('click','li',function(){
-		var visu = $(this).data('visu');
-		if(filtreVisu.indexOf(visu) != -1){
-			filtreVisu.splice(filtreVisu.indexOf(visu));
-		} else {
-			filtreVisu.push(visu);
-		}
-		searchDatasets();
-	});
-
-	$('#reset-filters').on('click',function(event){
-
-		resetFilters();
-	});
-
-
-	$('.jetons').on('click','span',function(){
-
-
-        if(typeof $(this).parent().data("orga") != "undefined"){
-			for (var j= 0; j < filtreProducteur.length; j++) {
-				if(filtreProducteur[j] == $(this).parent().data('orga')){
-					filtreProducteur.splice(j,1);
-				}
-			}
-            
-			$('#input-producteur').val(filtreProducteur.join(";"));
-		}
-        else if(typeof $(this).parent().data("themes") != "undefined"){
-			for (var j= 0; j < filtreTheme.length; j++) {
-				if(filtreTheme[j] == $(this).parent().data('themes')){
-					filtreTheme.splice(j,1);
-				}
-			}
-            
-			$('#input-theme').val(filtreTheme.join(";"));
-		}
-
-        /*else if(typeof $(this).parent().data("format") != "undefined"){
-			for (var l= 0; l < filtreFormats.length; l++) {
-				if(filtreFormats[l] == $(this).parent().data('format')){
-					filtreFormats.splice(l,1);
-				}
-			}
-			$('#input-format').val(filtreFormats.join(";"));
-		} */
-        else if(typeof $(this).parent().data("tag") != "undefined"){
-			for (var m= 0; m < filtreTags.length; m++) {
-				if(filtreTags[m] == $(this).parent().data('tag')){
-					filtreTags.splice(m,1);
-				}
-			}
-			$('#input-tag').val(filtreTags.join(";"));
-		}
-		else if(typeof $(this).parent().data("visu") != "undefined"){
-			for (var m= 0; m < filtreVisu.length; m++) {
-				if(filtreVisu[m] == $(this).parent().data('visu')){
-					filtreVisu.splice(m,1);
-				}
-			}
-			$('#input-visu').val(filtreVisu.join(";"));
-		}
-		else if(typeof $(this).parent().data("search") != "undefined"){
-			$('#search-form input').val("");
-		}		
-		
-		$(this).parent().remove();
-		searchDatasets();
-	});
-
-	$('#filter select').change(function(){
-		searchDatasets();
-	});
-    
-	$('#list-cat li').on('click', function(e){ 
-		var cat = $(this).data('cat');
-		var req = getReq();
-		window.location.href = fetchPrefix() + '/d4c/api/datasets/2.0/download/' + cat + "/" + req;
-	});
-	
 });
+
+function loadDatasets() {
+	searchDatasets();
+
+	$("#search-form").submit(function(e) {
+		searchDatasets();
+		e.preventDefault();
+	 });
+ 
+	 $('#datasets').on('click','h2',function(){
+		 window.location.href = fetchPrefix() + '/visualisation?id=' + $(this).data('name')+''+$(this).data('analyse');		
+	 });
+	 
+	 $('#datasets ').on('click','.jetons .tag',function(){
+		 tag = $(this).text();
+		 filtreTags.push(tag);
+		 searchDatasets();
+	 });
+ 
+	 $('#list-producteur').on('click','li',function(){
+		 var prod = $(this).data('orga');
+		 if(filtreProducteur.indexOf(prod) != -1){
+			 filtreProducteur.splice(filtreProducteur.indexOf(prod));
+		 } else {
+			 filtreProducteur.push(prod);
+		 }
+		 searchDatasets();
+	 });
+	 
+ 
+	 $('#list-theme').on('click','li',function(){
+		 var theme = $(this).data('theme');
+		 if(filtreTheme.indexOf(theme) != -1){
+			 filtreTheme.splice(filtreTheme.indexOf(theme));
+		 } else {
+			 filtreTheme.push(theme);
+		 }
+		 searchDatasets();
+	 });
+	 
+	 /*$('#list-format').on('click','li',function(){
+		 var format = $(this).data('format');
+		 filtrerFormat(format);
+	 });*/
+	 
+	 $('#list-tag').on('click','li',function(){
+		 var tag = $(this).data('tag');
+		 if(filtreTags.indexOf(tag) != -1){
+			 filtreTags.splice(filtreTags.indexOf(tag));
+		 } else {
+			 filtreTags.push(tag);
+		 }
+		 searchDatasets();
+	 });
+	 
+	 $('#list-visu').on('click','li',function(){
+		 var visu = $(this).data('visu');
+		 if(filtreVisu.indexOf(visu) != -1){
+			 filtreVisu.splice(filtreVisu.indexOf(visu));
+		 } else {
+			 filtreVisu.push(visu);
+		 }
+		 searchDatasets();
+	 });
+ 
+	 $('#reset-filters').on('click',function(event){
+ 
+		 resetFilters();
+	 });
+ 
+ 
+	 $('.jetons').on('click','span',function(){
+ 
+ 
+		 if(typeof $(this).parent().data("orga") != "undefined"){
+			 for (var j= 0; j < filtreProducteur.length; j++) {
+				 if(filtreProducteur[j] == $(this).parent().data('orga')){
+					 filtreProducteur.splice(j,1);
+				 }
+			 }
+			 
+			 $('#input-producteur').val(filtreProducteur.join(";"));
+		 }
+		 else if(typeof $(this).parent().data("themes") != "undefined"){
+			 for (var j= 0; j < filtreTheme.length; j++) {
+				 if(filtreTheme[j] == $(this).parent().data('themes')){
+					 filtreTheme.splice(j,1);
+				 }
+			 }
+			 
+			 $('#input-theme').val(filtreTheme.join(";"));
+		 }
+ 
+		 /*else if(typeof $(this).parent().data("format") != "undefined"){
+			 for (var l= 0; l < filtreFormats.length; l++) {
+				 if(filtreFormats[l] == $(this).parent().data('format')){
+					 filtreFormats.splice(l,1);
+				 }
+			 }
+			 $('#input-format').val(filtreFormats.join(";"));
+		 } */
+		 else if(typeof $(this).parent().data("tag") != "undefined"){
+			 for (var m= 0; m < filtreTags.length; m++) {
+				 if(filtreTags[m] == $(this).parent().data('tag')){
+					 filtreTags.splice(m,1);
+				 }
+			 }
+			 $('#input-tag').val(filtreTags.join(";"));
+		 }
+		 else if(typeof $(this).parent().data("visu") != "undefined"){
+			 for (var m= 0; m < filtreVisu.length; m++) {
+				 if(filtreVisu[m] == $(this).parent().data('visu')){
+					 filtreVisu.splice(m,1);
+				 }
+			 }
+			 $('#input-visu').val(filtreVisu.join(";"));
+		 }
+		 else if(typeof $(this).parent().data("search") != "undefined"){
+			 $('#search-form input').val("");
+		 }		
+		 
+		 $(this).parent().remove();
+		 searchDatasets();
+	 });
+ 
+	 $('#filter select').change(function(){
+		 searchDatasets();
+	 });
+	 
+	 $('#list-cat li').on('click', function(e){ 
+		 var cat = $(this).data('cat');
+		 var req = getReq();
+		 window.location.href = fetchPrefix() + '/d4c/api/datasets/2.0/download/' + cat + "/" + req;
+	 });
+}
 
 
 
@@ -384,21 +401,6 @@ function changeUrl(requete){
 	});
 	
 }*/
-
-function getThemes(){
-	$.ajax(fetchPrefix() + '/d4c/api/themes/',
-	{
-		type: 'POST',
-		dataType: 'json',
-		cache : true,
-		success: function (res) {
-			themes = res;
-		},
-		error: function (e) {
-			console.log("ERROR: ", e);
-		}
-	});
-}
 
 /*function getOrgas(){
 	$.ajax(fetchPrefix() + '/d4c/api/organizations/all_fields=true',
