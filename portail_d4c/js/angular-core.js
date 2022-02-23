@@ -9688,7 +9688,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         tabsCtrl.addPane(scope.struct, position);
                     }
                     // If we have a WMS, we have the feature geo
-                    else if (scope.struct.slug == "map" && ctx.dataset.hasWMS()) {
+                    else if ((scope.struct.slug == "map" || scope.struct.slug == "share" || scope.struct.slug == "embed" || scope.struct.slug == "widget") && ctx.dataset.hasWMS()) {
                         tabsCtrl.addPane(scope.struct, position);
                     }
                 } else {

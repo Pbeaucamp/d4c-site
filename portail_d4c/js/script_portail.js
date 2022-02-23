@@ -664,7 +664,7 @@ function isSelected(filters, item) {
 function setActiveFilters() {
 	var hasActifFilters = false;
 
-	if (!hasSelectedOrganization()) {
+	if (!isMarqueBlanche()) {
 		$.each(filtreProducteur, function(i, orga){
 			hasActifFilters = true;
 			$('#filter').find('.jetons').append('<li data-orga="' + orga + '">'+ orgas.filter(function(o){ return o.name == orga; })[0].title +' <span class="glyphicon glyphicon-remove"></span></li>');
