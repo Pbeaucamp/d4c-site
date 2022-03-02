@@ -100,9 +100,10 @@ L.D4CMap = L.Map.extend({
             for (var i = 0; i < customWMSLayers.length; i++) {
                 var customWMS = customWMSLayers[i];
                 var url = customWMS.url;
-                if (url && url.indexOf("?") > -1) {
-                    url = url.slice(0, url.indexOf('?'));
-                }
+                //Keeping parameters in the url
+                // if (url && url.indexOf("?") > -1) {
+                //     url = url.slice(0, url.indexOf('?'));
+                // }
 
                 var customWMSBaseMap = {
                     name: customWMS.name,

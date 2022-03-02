@@ -69,7 +69,9 @@ $(document).ready(function(){
 	if (isMarqueBlanche()){
 		var selectedOrganisation = $('#selected-organization').val();
 		if (selectedOrganisation != null) {
-			filtreProducteur.push(selectedOrganisation);
+			if (filtreProducteur.indexOf(selectedOrganisation) == -1){
+				filtreProducteur.push(selectedOrganisation);
+			}
 		}
 	}
 	
