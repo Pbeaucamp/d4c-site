@@ -98,40 +98,58 @@ L.D4CMap = L.Map.extend({
 
         if (customWMSLayers != undefined) {
             for (var i = 0; i < customWMSLayers.length; i++) {
-                var customWMS = customWMSLayers[i];
-                var url = customWMS.url;
-                //Keeping parameters in the url
-                // if (url && url.indexOf("?") > -1) {
-                //     url = url.slice(0, url.indexOf('?'));
-                // }
+                try {
+                    var customWMS = customWMSLayers[i];
+                    // var url = customWMS.url;
+                    //Keeping parameters in the url
+                    // if (url && url.indexOf("?") > -1) {
+                    //     url = url.slice(0, url.indexOf('?'));
+                    // }
 
-                var customWMSBaseMap = {
-                    name: customWMS.name,
-                    label: customWMS.name,
-                    provider: 'custom_wms',
-                    url: url,
-                    minZoom: 1,
-                    maxZoom: 19,
-                    type: 'layer',
-                    attribution: '',
-                    layers: customWMS.name,
-                    tile_format: 'image/png',
-                }
+                    //We remove some parameters if present
+                    var url = new URL(customWMS.url);
+                    var search_params = url.searchParams;
+                    search_params.delete('SERVICE');
+                    search_params.delete('service');
+                    search_params.delete('REQUEST');
+                    search_params.delete('request');
 
-                layer = new L.D4CWMSTileLayer({
-                    basemap: customWMSBaseMap,
-                    prependAttribution: prependAttribution,
-                    appendAttribution: appendAttribution,
-                    disableAttribution: disableAttribution,
-                    attributionSeparator: attributionSeparator
-                });
-                if (typeof layer.options.minZoom !== 'number') {
-                    layer.options.minZoom = 2;
+                    //Try to use a proxy
+                    // let proxyUrl = 'https://www.datagrandest.fr/tools/proxy/?url=' + url;
+
+                    var customWMSBaseMap = {
+                        name: customWMS.name,
+                        label: customWMS.name,
+                        provider: 'custom_wms',
+                        url: url.toString(),
+                        minZoom: 1,
+                        maxZoom: 19,
+                        type: 'layer',
+                        attribution: '',
+                        layers: customWMS.name,
+                        tile_format: 'image/png',
+                    }
+
+                    layer = new L.D4CWMSTileLayer({
+                        basemap: customWMSBaseMap,
+                        prependAttribution: prependAttribution,
+                        appendAttribution: appendAttribution,
+                        disableAttribution: disableAttribution,
+                        attributionSeparator: attributionSeparator
+                    });
+                    if (typeof layer.options.minZoom !== 'number') {
+                        layer.options.minZoom = 2;
+                    }
+                    layer.basemapLabel = customWMS.name;
+                    layer.basemapId = customWMS.name;
+                    layer.options.opacity = 0.8;
+                    layer.display = customWMS.display;
+                    overlays.push(layer);
+                } catch (error) {
+                    console.error(error);
+                    // expected output: ReferenceError: nonExistentFunction is not defined
+                    // Note - error messages will vary depending on browser
                 }
-                layer.basemapLabel = customWMS.name;
-                layer.basemapId = customWMS.name;
-                layer.options.opacity = 0.8;
-                overlays.push(layer);
             }
         }
 
@@ -147,7 +165,9 @@ L.D4CMap = L.Map.extend({
             for (var j = 0; j < overlays.length; j++) {
                 layer = overlays[j];
                 layersControl.addOverlay(layer, layer.basemapLabel);
-                if (showAllOverlays) this.addLayer(layer);
+                if (showAllOverlays && layer.display) {
+                    this.addLayer(layer);
+                }
             }
             this.addControl(layersControl);
         }

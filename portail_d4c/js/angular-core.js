@@ -18268,12 +18268,15 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if (scope.context != undefined && scope.context.dataset != undefined && scope.context.dataset.hasWMS()) {
                         mapOptions.customWMSLayers = [];
 
+                        var displayLayer = !scope.context.dataset.hasFeature('geo');
+
                         for (let i = 0; i < scope.context.dataset.metas.resources.length; i++) {
                             var resource = scope.context.dataset.metas.resources[i];
                             if (resource.format.toUpperCase() == "WMS") {
                                 var wmsLayer = {
                                     url: resource.url,
                                     name: resource.name,
+                                    display: displayLayer,
                                 };
 
                                 mapOptions.customWMSLayers.push(wmsLayer);
