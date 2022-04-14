@@ -58,11 +58,11 @@ Copyright (c) 2014 - Opendatasoft
                             <span translate="" translate-n="catalogcontext.nhits" translate-plural="datasets">dataset</span>
                         </h1>
                         <d4c-facets context="catalogcontext">
-                            <d4c-facet name="source_domain_title" title="{{ &#39;Domain&#39;|translate }}"></d4c-facet>
+                            <!-- <d4c-facet name="source_domain_title" title="{{ &#39;Domain&#39;|translate }}"></d4c-facet>
                             <d4c-facet name="modified" title="{{ &#39;Modified&#39;|translate }}"></d4c-facet>
                             <d4c-facet name="publisher" title="{{ &#39;Publisher&#39;|translate }}"></d4c-facet>
-                            <d4c-facet name="keyword" title="{{ &#39;Keyword&#39;|translate }}"></d4c-facet>
-                            <d4c-facet name="theme" title="{{ &#39;Theme&#39;|translate }}"></d4c-facet>
+                            <d4c-facet name="keyword" title="{{ &#39;Keyword&#39;|translate }}"></d4c-facet> -->
+                            <d4c-facet name="themes" title="{{ &#39;Theme&#39;|translate }}"></d4c-facet>
                         </d4c-facets>
                         <style type="text/css">
         
@@ -92,7 +92,7 @@ Copyright (c) 2014 - Opendatasoft
                         }
                         
                         </style>
-                         <div class="ng-scope" ng-app="d4c-widgets">
+                         <!-- <div class="ng-scope" ng-app="d4c-widgets">
                         
                         <d4c-dataset-context style="height:100px" communesinfocom94contour-dataset="communes-infocom-94-contour" communesinfocom94contour-parameters="{'id':'b8b96201-6e89-42f0-b48b-7eec54c1a6de'}" context="communesinfocom94contour" class="ng-scope">
                                     <div class="row" >
@@ -107,19 +107,19 @@ Copyright (c) 2014 - Opendatasoft
                                             </div>
                                         </div>
                                     </div>
-                        </d4c-dataset-context></div>
+                        </d4c-dataset-context></div> -->
                     </div>
                 </div>
                 <div class="two-thirds col-sm-8">
                     <div class="">
                         <d4c-text-search context="catalogcontext" class="d4c-dataset-selection-list__catalog-search" placeholder="Find a dataset..."></d4c-text-search>
-                        <div class="d4c-dataset-selection-list__catalog-sort">
+                        <!-- <div class="d4c-dataset-selection-list__catalog-sort">
                             <i class="icon-sort-by-attributes fa fa-sort-amount-desc"></i>
                             <select ng-model="catalogcontext.parameters.sort" class="d4c-dataset-selection-list__catalog-sort-selector">
                                 <option value="modified" translate="">Last modification</option>
                                 <option value="title" translate="">Title</option>
                             </select>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="d4c-dataset-selection-list__items" d4c-results="items" d4c-results-context="catalogcontext" d4c-results-max="10">
                         <div class="d4c-dataset-selection-list__spinner" ng-show="loading">

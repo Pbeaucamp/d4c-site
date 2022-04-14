@@ -9684,11 +9684,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 if (ctx != undefined && ctx.dataset != undefined) {
                     var canAnalyze = ctx.dataset.canAnalyze;
 
-                    if (canAnalyze || scope.struct.slug == "information" || scope.struct.slug == "export") {
+                    if (canAnalyze || scope.struct.slug == "information" || scope.struct.slug == "export" || scope.struct.slug == "reuses") {
                         tabsCtrl.addPane(scope.struct, position);
                     }
                     // If we have a WMS, we have the feature geo
-                    else if (scope.struct.slug == "map" && ctx.dataset.hasWMS()) {
+                    else if ((scope.struct.slug == "map" || scope.struct.slug == "share" || scope.struct.slug == "embed" || scope.struct.slug == "widget") && ctx.dataset.hasWMS()) {
                         tabsCtrl.addPane(scope.struct, position);
                     }
                 } else {
@@ -15148,6 +15148,13 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
                                     options.legend.display = options.legend.enabled;
 
+                                    // Try to sort legend but it does not work as is
+                                    // Need to modify chart.min.js in lib to add after e.filter on buildLabels e.sort&&(i = i.sort(function(a,b){return e.sort(a,b,t.chart.data)}))
+                                    // options.legend.labels = {};
+                                    // options.legend.labels.sort = function(a, b) { 
+                                    //     return b.datasetIndex > a.datasetIndex ? -1 : 1; 
+                                    // };
+
                                     for (let f = 0; f < options.series.length; f++) {
                                         try {
                                             //if(typeof(options.series[f].data[0].y)==='object'){
@@ -18065,6 +18072,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 syncToUrl: '@',
                 syncToObject: '=',
                 location: '@',
+                customBounds: '@',
                 basemap: '@',
                 staticMap: '@',
                 noRefit: '@',
@@ -18201,6 +18209,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 } else if (scope.mapConfig && scope.mapConfig.mapPresets && scope.mapConfig.mapPresets.location) {
                     scope.mapContext.location = scope.mapContext.location || scope.mapConfig.mapPresets.location;
                 }
+                if (scope.customBounds) {
+                    scope.mapContext.bounds = scope.customBounds;
+                }
                 if (scope.basemap) {
                     scope.mapContext.basemap = scope.mapContext.basemap || scope.basemap;
                 } else if (scope.mapConfig && scope.mapConfig.mapPresets && scope.mapConfig.mapPresets.basemap) {
@@ -18257,12 +18268,15 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if (scope.context != undefined && scope.context.dataset != undefined && scope.context.dataset.hasWMS()) {
                         mapOptions.customWMSLayers = [];
 
+                        var displayLayer = !scope.context.dataset.hasFeature('geo');
+
                         for (let i = 0; i < scope.context.dataset.metas.resources.length; i++) {
                             var resource = scope.context.dataset.metas.resources[i];
                             if (resource.format.toUpperCase() == "WMS") {
                                 var wmsLayer = {
                                     url: resource.url,
                                     name: resource.name,
+                                    display: displayLayer,
                                 };
 
                                 mapOptions.customWMSLayers.push(wmsLayer);
@@ -18440,11 +18454,22 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         map.addControl(drawControl);
                     }
                     scope.map = map;
-                    var setInitialMapView = function (location) {
+                    var setInitialMapView = function (location, bounds) {
                         var deferred = $q.defer();
                         if (location && typeof location !== 'boolean') {
-                            var loc = MapHelper.getLocationStructure(location);
-                            scope.map.setView(loc.center, loc.zoom);
+                            if (bounds) {
+                                var bounds = bounds.split(",");
+                    
+                                var northEast = new L.LatLng(parseFloat(bounds[1]), parseFloat(bounds[0])),
+                                    southWest = new L.LatLng(parseFloat(bounds[2]), parseFloat(bounds[3])),
+                                    bounds = new L.LatLngBounds(southWest, northEast);
+                                map.fitBounds(bounds);
+                            }
+                            else {
+                                var loc = MapHelper.getLocationStructure(location);
+                                scope.map.setView(loc.center, loc.zoom);
+                            }
+
                             waitForVisibleContexts().then(function () {
                                 refreshData(false);
                             });
@@ -18474,7 +18499,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         }
                         return deferred.promise;
                     };
-                    setInitialMapView(scope.mapContext.location).then(function () {
+                    setInitialMapView(scope.mapContext.location, scope.mapContext.bounds).then(function () {
                         scope.initialLoading = false;
                         onViewportMove(scope.map);
                         if (!isStatic) {

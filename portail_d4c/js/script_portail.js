@@ -69,145 +69,164 @@ $(document).ready(function(){
 	if (isMarqueBlanche()){
 		var selectedOrganisation = $('#selected-organization').val();
 		if (selectedOrganisation != null) {
-			filtreProducteur.push(selectedOrganisation);
+			if (filtreProducteur.indexOf(selectedOrganisation) == -1){
+				filtreProducteur.push(selectedOrganisation);
+			}
 		}
 	}
-	searchDatasets();
-	getThemes();
-	//getOrgas();
 	
-	$("#search-form").submit(function(e) {
-	   searchDatasets();
-	   e.preventDefault();
-	});
+	$.ajax(fetchPrefix() + '/d4c/api/themes/',
+	{
+		type: 'POST',
+		dataType: 'json',
+		cache : true,
+		success: function (res) {
+			themes = res;
 
-	$('#datasets').on('click','h2',function(){
-		window.location.href = fetchPrefix() + '/visualisation?id=' + $(this).data('id')+''+$(this).data('analyse');		
-	});
-	
-	$('#datasets ').on('click','.jetons .tag',function(){
-		tag = $(this).text();
-		filtreTags.push(tag);
-		searchDatasets();
-	});
+			loadDatasets();
+		},
+		error: function (e) {
+			console.log("ERROR: ", e);
 
-	$('#list-producteur').on('click','li',function(){
-		var prod = $(this).data('orga');
-		if(filtreProducteur.indexOf(prod) != -1){
-			filtreProducteur.splice(filtreProducteur.indexOf(prod));
-		} else {
-			filtreProducteur.push(prod);
+			loadDatasets();
 		}
-		searchDatasets();
 	});
-    
-
-    $('#list-theme').on('click','li',function(){
-		var theme = $(this).data('theme');
-		if(filtreTheme.indexOf(theme) != -1){
-			filtreTheme.splice(filtreTheme.indexOf(theme));
-		} else {
-			filtreTheme.push(theme);
-		}
-        searchDatasets();
-	});
-    
-	/*$('#list-format').on('click','li',function(){
-		var format = $(this).data('format');
-		filtrerFormat(format);
-	});*/
-	
-	$('#list-tag').on('click','li',function(){
-		var tag = $(this).data('tag');
-		if(filtreTags.indexOf(tag) != -1){
-			filtreTags.splice(filtreTags.indexOf(tag));
-		} else {
-			filtreTags.push(tag);
-		}
-		searchDatasets();
-	});
-	
-	$('#list-visu').on('click','li',function(){
-		var visu = $(this).data('visu');
-		if(filtreVisu.indexOf(visu) != -1){
-			filtreVisu.splice(filtreVisu.indexOf(visu));
-		} else {
-			filtreVisu.push(visu);
-		}
-		searchDatasets();
-	});
-
-	$('#reset-filters').on('click',function(event){
-
-		resetFilters();
-	});
-
-
-	$('.jetons').on('click','span',function(){
-
-
-        if(typeof $(this).parent().data("orga") != "undefined"){
-			for (var j= 0; j < filtreProducteur.length; j++) {
-				if(filtreProducteur[j] == $(this).parent().data('orga')){
-					filtreProducteur.splice(j,1);
-				}
-			}
-            
-			$('#input-producteur').val(filtreProducteur.join(";"));
-		}
-        else if(typeof $(this).parent().data("themes") != "undefined"){
-			for (var j= 0; j < filtreTheme.length; j++) {
-				if(filtreTheme[j] == $(this).parent().data('themes')){
-					filtreTheme.splice(j,1);
-				}
-			}
-            
-			$('#input-theme').val(filtreTheme.join(";"));
-		}
-
-        /*else if(typeof $(this).parent().data("format") != "undefined"){
-			for (var l= 0; l < filtreFormats.length; l++) {
-				if(filtreFormats[l] == $(this).parent().data('format')){
-					filtreFormats.splice(l,1);
-				}
-			}
-			$('#input-format').val(filtreFormats.join(";"));
-		} */
-        else if(typeof $(this).parent().data("tag") != "undefined"){
-			for (var m= 0; m < filtreTags.length; m++) {
-				if(filtreTags[m] == $(this).parent().data('tag')){
-					filtreTags.splice(m,1);
-				}
-			}
-			$('#input-tag').val(filtreTags.join(";"));
-		}
-		else if(typeof $(this).parent().data("visu") != "undefined"){
-			for (var m= 0; m < filtreVisu.length; m++) {
-				if(filtreVisu[m] == $(this).parent().data('visu')){
-					filtreVisu.splice(m,1);
-				}
-			}
-			$('#input-visu').val(filtreVisu.join(";"));
-		}
-		else if(typeof $(this).parent().data("search") != "undefined"){
-			$('#search-form input').val("");
-		}		
-		
-		$(this).parent().remove();
-		searchDatasets();
-	});
-
-	$('#filter select').change(function(){
-		searchDatasets();
-	});
-    
-	$('#list-cat li').on('click', function(e){ 
-		var cat = $(this).data('cat');
-		var req = getReq();
-		window.location.href = fetchPrefix() + '/d4c/api/datasets/2.0/download/' + cat + "/" + req;
-	});
-	
 });
+
+function loadDatasets() {
+	searchDatasets();
+
+	$("#search-form").submit(function(e) {
+		searchDatasets();
+		e.preventDefault();
+	 });
+ 
+	 $('#datasets').on('click','h2',function(){
+		 window.location.href = fetchPrefix() + '/visualisation?id=' + $(this).data('name')+''+$(this).data('analyse');		
+	 });
+	 
+	 $('#datasets ').on('click','.jetons .tag',function(){
+		 tag = $(this).text();
+		 filtreTags.push(tag);
+		 searchDatasets();
+	 });
+ 
+	 $('#list-producteur').on('click','li',function(){
+		 var prod = $(this).data('orga');
+		 if(filtreProducteur.indexOf(prod) != -1){
+			 filtreProducteur.splice(filtreProducteur.indexOf(prod));
+		 } else {
+			 filtreProducteur.push(prod);
+		 }
+		 searchDatasets();
+	 });
+	 
+ 
+	 $('#list-theme').on('click','li',function(){
+		 var theme = $(this).data('theme');
+		 if(filtreTheme.indexOf(theme) != -1){
+			 filtreTheme.splice(filtreTheme.indexOf(theme));
+		 } else {
+			 filtreTheme.push(theme);
+		 }
+		 searchDatasets();
+	 });
+	 
+	 /*$('#list-format').on('click','li',function(){
+		 var format = $(this).data('format');
+		 filtrerFormat(format);
+	 });*/
+	 
+	 $('#list-tag').on('click','li',function(){
+		 var tag = $(this).data('tag');
+		 if(filtreTags.indexOf(tag) != -1){
+			 filtreTags.splice(filtreTags.indexOf(tag));
+		 } else {
+			 filtreTags.push(tag);
+		 }
+		 searchDatasets();
+	 });
+	 
+	 $('#list-visu').on('click','li',function(){
+		 var visu = $(this).data('visu');
+		 if(filtreVisu.indexOf(visu) != -1){
+			 filtreVisu.splice(filtreVisu.indexOf(visu));
+		 } else {
+			 filtreVisu.push(visu);
+		 }
+		 searchDatasets();
+	 });
+ 
+	 $('#reset-filters').on('click',function(event){
+ 
+		 resetFilters();
+	 });
+ 
+ 
+	 $('.jetons').on('click','span',function(){
+ 
+ 
+		 if(typeof $(this).parent().data("orga") != "undefined"){
+			 for (var j= 0; j < filtreProducteur.length; j++) {
+				 if(filtreProducteur[j] == $(this).parent().data('orga')){
+					 filtreProducteur.splice(j,1);
+				 }
+			 }
+			 
+			 $('#input-producteur').val(filtreProducteur.join(";"));
+		 }
+		 else if(typeof $(this).parent().data("themes") != "undefined"){
+			 for (var j= 0; j < filtreTheme.length; j++) {
+				 if(filtreTheme[j] == $(this).parent().data('themes')){
+					 filtreTheme.splice(j,1);
+				 }
+			 }
+			 
+			 $('#input-theme').val(filtreTheme.join(";"));
+		 }
+ 
+		 /*else if(typeof $(this).parent().data("format") != "undefined"){
+			 for (var l= 0; l < filtreFormats.length; l++) {
+				 if(filtreFormats[l] == $(this).parent().data('format')){
+					 filtreFormats.splice(l,1);
+				 }
+			 }
+			 $('#input-format').val(filtreFormats.join(";"));
+		 } */
+		 else if(typeof $(this).parent().data("tag") != "undefined"){
+			 for (var m= 0; m < filtreTags.length; m++) {
+				 if(filtreTags[m] == $(this).parent().data('tag')){
+					 filtreTags.splice(m,1);
+				 }
+			 }
+			 $('#input-tag').val(filtreTags.join(";"));
+		 }
+		 else if(typeof $(this).parent().data("visu") != "undefined"){
+			 for (var m= 0; m < filtreVisu.length; m++) {
+				 if(filtreVisu[m] == $(this).parent().data('visu')){
+					 filtreVisu.splice(m,1);
+				 }
+			 }
+			 $('#input-visu').val(filtreVisu.join(";"));
+		 }
+		 else if(typeof $(this).parent().data("search") != "undefined"){
+			 $('#search-form input').val("");
+		 }		
+		 
+		 $(this).parent().remove();
+		 searchDatasets();
+	 });
+ 
+	 $('#filter select').change(function(){
+		 searchDatasets();
+	 });
+	 
+	 $('#list-cat li').on('click', function(e){ 
+		 var cat = $(this).data('cat');
+		 var req = getReq();
+		 window.location.href = fetchPrefix() + '/d4c/api/datasets/2.0/download/' + cat + "/" + req;
+	 });
+}
 
 
 
@@ -384,21 +403,6 @@ function changeUrl(requete){
 	});
 	
 }*/
-
-function getThemes(){
-	$.ajax(fetchPrefix() + '/d4c/api/themes/',
-	{
-		type: 'POST',
-		dataType: 'json',
-		cache : true,
-		success: function (res) {
-			themes = res;
-		},
-		error: function (e) {
-			console.log("ERROR: ", e);
-		}
-	});
-}
 
 /*function getOrgas(){
 	$.ajax(fetchPrefix() + '/d4c/api/organizations/all_fields=true',
@@ -662,7 +666,7 @@ function isSelected(filters, item) {
 function setActiveFilters() {
 	var hasActifFilters = false;
 
-	if (!hasSelectedOrganization()) {
+	if (!isMarqueBlanche()) {
 		$.each(filtreProducteur, function(i, orga){
 			hasActifFilters = true;
 			$('#filter').find('.jetons').append('<li data-orga="' + orga + '">'+ orgas.filter(function(o){ return o.name == orga; })[0].title +' <span class="glyphicon glyphicon-remove"></span></li>');
@@ -761,6 +765,8 @@ function createDataset(data){
 
 	////////////
 	var id = data.id;
+	// We set the name as ID to open the dataset
+	var name = data.name;
     
 	///////////
 	var description = data.notes != null ? data.notes : '';
@@ -802,15 +808,15 @@ function createDataset(data){
     
 	//visus
 	
-    let api_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/api/?id=' + id + '"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "api"; })[0].picto + '" aria-hidden="true"></i>' +features.filter(function(o){ return o.name == "api"; })[0].label + '</a></p>'; 
-    let analize_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/analyze/?id='+id+''+analyseDefault+'"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "analyze"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "analyze"; })[0].label + '</a></p>';
-    let table_vis ='<p><a href ="' + fetchPrefix() + '/visualisation/table/?id='+id+''+analyseDefault+'"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "table"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "table"; })[0].label + '</a></p>';
-    let timeline_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/timeline/?id='+id+''+analyseDefault+'"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "timeline"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "timeline"; })[0].label + '</a></p>';
-    let map_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/map/?id='+id+'"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "geo"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "geo"; })[0].label + '</a></p>';
-    let wordcloud_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/wordcloud/?id='+id+''+analyseDefault+'"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "wordcloud"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "wordcloud"; })[0].label + '</a></p>';
-    let image_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/images/?id='+id+'"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "image"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "image"; })[0].label + '</a></p>';
-    let calendar_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/calendar/?id='+id+'"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "calendar"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "calendar"; })[0].label + '</a></p>';
-    let export_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/export/?id='+id+''+analyseDefault+'"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "export"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "export"; })[0].label + '</a></p>';
+    let api_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/api/?id=' + name + '"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "api"; })[0].picto + '" aria-hidden="true"></i>' +features.filter(function(o){ return o.name == "api"; })[0].label + '</a></p>'; 
+    let analize_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/analyze/?id=' + name + ''+analyseDefault+'"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "analyze"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "analyze"; })[0].label + '</a></p>';
+    let table_vis ='<p><a href ="' + fetchPrefix() + '/visualisation/table/?id=' + name + ''+analyseDefault+'"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "table"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "table"; })[0].label + '</a></p>';
+    let timeline_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/timeline/?id=' + name + ''+analyseDefault+'"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "timeline"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "timeline"; })[0].label + '</a></p>';
+    let map_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/map/?id=' + name + '"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "geo"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "geo"; })[0].label + '</a></p>';
+    let wordcloud_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/wordcloud/?id=' + name + ''+analyseDefault+'"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "wordcloud"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "wordcloud"; })[0].label + '</a></p>';
+    let image_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/images/?id=' + name + '"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "image"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "image"; })[0].label + '</a></p>';
+    let calendar_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/calendar/?id=' + name + '"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "calendar"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "calendar"; })[0].label + '</a></p>';
+    let export_vis= '<p><a href ="' + fetchPrefix() + '/visualisation/export/?id=' + name + ''+analyseDefault+'"' + targetValue + '><i class="fa ' + features.filter(function(o){ return o.name == "export"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function(o){ return o.name == "export"; })[0].label + '</a></p>';
     
    
 	let rightPanel= '';
@@ -849,11 +855,11 @@ function createDataset(data){
 						let titleCustomView = data.metas.custom_view.title;
 						// let custom_view_vis;
 						if (titleCustomView) {
-							let custom_view_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>'+titleCustomView+'</a></p>';
+							let custom_view_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id=' + name + '"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>'+titleCustomView+'</a></p>';
 							vis = custom_view_vis;
 						}
 						else {
-							let custom_view_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id='+id+'"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>Vue personnalisée</a></p>';
+							let custom_view_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/' + encodeURIComponent(data.metas.custom_view.slug).replace('%20','+') + '/?id=' + name + '"><i class="fa fa-'+data.metas.custom_view.icon+'" aria-hidden="true"></i>Vue personnalisée</a></p>';
 							vis = custom_view_vis;
 						}
 						break;
@@ -883,10 +889,8 @@ function createDataset(data){
     $('#datasets').prepend('<div div class="dataset col-md-6 col-sm-12 col-xs-12 content-body" data-theme="' + theme[0] +'" data-orga="' + id_orga /*+'" data-reuses="'+ nb_reuses*/  +'" data-id="' + id +'" data-time="' + date.getTime() /*+'" data-views="' + nbViews + '" data-downloads="' + nbDownloads + '" data-records="' + nbRecords*/ + '" data-analyse="'+analyseDefault+'" data-imported="' + (lastUpdateDate !=  null ? lastUpdateDate.getTime() : '') +'" style="background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.41)), url('+imgBck+') center center no-repeat; background-size: cover;" >'+
     	'<div class="box_1"><div style="display: flex; flex-direction:row">'+
 			'<div>' + imageThemes + '</div>'+
-			// Modification custom SPOT
-			'<div class="box_4"><div class="inner"><div class="dataset-h2"><a target="_blank" href="' + data.url + '"> ' + data.title + ' </a></div></div></div></div>'+
-            // '<div class="box_4"><div class="inner"><div class="dataset-h2"><a href="' + fetchPrefix() + '/visualisation/?id=' + id + '' + analyseDefault + '"' + targetValue + '> ' + data.title + ' </a></div></div></div></div>'+
-			               
+			'<div class="box_4"><div class="inner"><div class="dataset-h2"><a href="' + fetchPrefix() + '/visualisation/?id=' + name + '' + analyseDefault + '"' + targetValue + '> ' + data.title + ' </a></div></div></div></div>'+
+                           
             '<div class="inner"><p class="data-desc">' + description + '</p>'+ listeFormat +'</div>' +
 				'<div class="infos inner">' + 
 					// Modification custom SPOT

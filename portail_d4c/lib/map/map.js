@@ -42,29 +42,29 @@ L.D4CMap = L.Map.extend({
                 this.options.basemap,
                 this.options.disableAttribution,
                 this.options.attributionSeparator,
-				false,
+                true,
                 this.options.customWMSLayers
             );
         }
     },
-    _setTilesProvider: function(basemapsList, prependAttribution, appendAttribution, selectedBasemap, disableAttribution, attributionSeparator, showAllOverlays, customWMSLayers) {
+    _setTilesProvider: function (basemapsList, prependAttribution, appendAttribution, selectedBasemap, disableAttribution, attributionSeparator, showAllOverlays, customWMSLayers) {
         // OSM Free (don't use in production)
         //var tilesUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
         //var attrib = 'Map data © OpenStreetMap contributors';
         //var tileLayer = new L.TileLayer(tilesUrl, {minZoom: 8, maxZoom: 18, attribution: attrib});
-		showAllOverlays = showAllOverlays || false;
+        showAllOverlays = showAllOverlays || false;
         var layers = [];
         var overlays = [];
         var layer;
-        for (var i=0; i<basemapsList.length; i++) {
+        for (var i = 0; i < basemapsList.length; i++) {
             var basemap = basemapsList[i];
             if (basemap.provider === 'custom_wms') {
-				//basemap.crs = L.geoportalCRS.EPSG2154;
-				//var resolutions = [0.05291677250021167, 0.13229193125052918, 0.19843789687579377, 0.26458386250105836, 0.5291677250021167, 1.3229193125052918, 1.9843789687579376, 2.6458386250105836, 3.3072982812632294, 3.9687579375158752, 6.614596562526459, 13.229193125052918, 19.843789687579378, 26.458386250105836, 33.0729828126323].reverse();					
-				//customOptions.crs._scales = [125000, 100000, 75000, 50000, 25000, 15000, 12500, 10000, 7500, 5000, 2000, 1000, 750, 500, 200];					
-				//var origin = [-35597500, 48953100];	
-				//var bounds = L.bounds(L.point(926196.8437584117, 6838579.0594), L.point(942696.8439000174, 6853968.9932));//[926196.8437584117, 6838579.0594, 942696.8439000174, 6853968.9932];	
-				//basemap.crs = new L.Proj.CRS("EPSG:2154","+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs", { origin:origin, resolutions:resolutions, bounds:bounds});
+                //basemap.crs = L.geoportalCRS.EPSG2154;
+                //var resolutions = [0.05291677250021167, 0.13229193125052918, 0.19843789687579377, 0.26458386250105836, 0.5291677250021167, 1.3229193125052918, 1.9843789687579376, 2.6458386250105836, 3.3072982812632294, 3.9687579375158752, 6.614596562526459, 13.229193125052918, 19.843789687579378, 26.458386250105836, 33.0729828126323].reverse();					
+                //customOptions.crs._scales = [125000, 100000, 75000, 50000, 25000, 15000, 12500, 10000, 7500, 5000, 2000, 1000, 750, 500, 200];					
+                //var origin = [-35597500, 48953100];	
+                //var bounds = L.bounds(L.point(926196.8437584117, 6838579.0594), L.point(942696.8439000174, 6853968.9932));//[926196.8437584117, 6838579.0594, 942696.8439000174, 6853968.9932];	
+                //basemap.crs = new L.Proj.CRS("EPSG:2154","+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs", { origin:origin, resolutions:resolutions, bounds:bounds});
                 layer = new L.D4CWMSTileLayer({
                     basemap: basemap,
                     prependAttribution: prependAttribution,
@@ -86,50 +86,70 @@ L.D4CMap = L.Map.extend({
             }
             layer.basemapLabel = basemap.label;
             layer.basemapId = basemap.id || basemap.name;
-			
-			if (basemap.provider === 'custom_wms' && basemap.type == "layer") {
-				layer.options.opacity = 0.6;
-				overlays.push(layer);
-			} else {
-				layers.push(layer);
-			}
-            
+
+            if (basemap.provider === 'custom_wms' && basemap.type == "layer") {
+                layer.options.opacity = 0.6;
+                overlays.push(layer);
+            } else {
+                layers.push(layer);
+            }
+
         }
 
         if (customWMSLayers != undefined) {
-            for (var i=0; i<customWMSLayers.length; i++) {
-                var customWMS = customWMSLayers[i];
-                var url = customWMS.url;
-                if (url && url.indexOf("?") > -1) {
-                    url = url.slice(0, url.indexOf('?'));
-                }
+            for (var i = 0; i < customWMSLayers.length; i++) {
+                try {
+                    var customWMS = customWMSLayers[i];
+                    // var url = customWMS.url;
+                    //Keeping parameters in the url
+                    // if (url && url.indexOf("?") > -1) {
+                    //     url = url.slice(0, url.indexOf('?'));
+                    // }
 
-                var customWMSBaseMap = {
-                    name: customWMS.name,
-                    label: customWMS.name,
-                    provider: 'custom_wms',
-                    url: url,
-                    minZoom: 1,
-                    maxZoom: 19,
-                    type: 'layer',
-                    attribution: '',
-                    layers: customWMS.name,
-                }
+                    //We remove some parameters if present
+                    var url = new URL(customWMS.url);
+                    var search_params = url.searchParams;
+                    search_params.delete('SERVICE');
+                    search_params.delete('service');
+                    search_params.delete('REQUEST');
+                    search_params.delete('request');
 
-                layer = new L.D4CWMSTileLayer({
-                    basemap: customWMSBaseMap,
-                    prependAttribution: prependAttribution,
-                    appendAttribution: appendAttribution,
-                    disableAttribution: disableAttribution,
-                    attributionSeparator: attributionSeparator
-                });
-                if (typeof layer.options.minZoom !== 'number') {
-                    layer.options.minZoom = 2;
+                    //Try to use a proxy
+                    // let proxyUrl = 'https://www.datagrandest.fr/tools/proxy/?url=' + url;
+
+                    var customWMSBaseMap = {
+                        name: customWMS.name,
+                        label: customWMS.name,
+                        provider: 'custom_wms',
+                        url: url.toString(),
+                        minZoom: 1,
+                        maxZoom: 19,
+                        type: 'layer',
+                        attribution: '',
+                        layers: customWMS.name,
+                        tile_format: 'image/png',
+                    }
+
+                    layer = new L.D4CWMSTileLayer({
+                        basemap: customWMSBaseMap,
+                        prependAttribution: prependAttribution,
+                        appendAttribution: appendAttribution,
+                        disableAttribution: disableAttribution,
+                        attributionSeparator: attributionSeparator
+                    });
+                    if (typeof layer.options.minZoom !== 'number') {
+                        layer.options.minZoom = 2;
+                    }
+                    layer.basemapLabel = customWMS.name;
+                    layer.basemapId = customWMS.name;
+                    layer.options.opacity = 0.8;
+                    layer.display = customWMS.display;
+                    overlays.push(layer);
+                } catch (error) {
+                    console.error(error);
+                    // expected output: ReferenceError: nonExistentFunction is not defined
+                    // Note - error messages will vary depending on browser
                 }
-                layer.basemapLabel = customWMS.name;
-                layer.basemapId = customWMS.name;
-                layer.options.opacity = 0.6;
-                overlays.push(layer);
             }
         }
 
@@ -138,21 +158,23 @@ L.D4CMap = L.Map.extend({
             var layersControl = new L.Control.Layers(null, null, {
                 position: 'bottomleft'
             });
-            for (var j=0; j<layers.length; j++) {
+            for (var j = 0; j < layers.length; j++) {
                 layer = layers[j];
                 layersControl.addBaseLayer(layer, layer.basemapLabel);
             }
-            for (var j=0; j<overlays.length; j++) {
+            for (var j = 0; j < overlays.length; j++) {
                 layer = overlays[j];
                 layersControl.addOverlay(layer, layer.basemapLabel);
-				if(showAllOverlays) this.addLayer(layer);
+                if (showAllOverlays && layer.display) {
+                    this.addLayer(layer);
+                }
             }
             this.addControl(layersControl);
         }
 
         // Adding the default basemap
         if (selectedBasemap) {
-            var selectedLayer = layers.filter(function(layer) { return layer.basemapId === selectedBasemap; });
+            var selectedLayer = layers.filter(function (layer) { return layer.basemapId === selectedBasemap; });
             if (selectedLayer.length > 0) {
                 this.addLayer(selectedLayer[0]);
             } else {
@@ -163,47 +185,47 @@ L.D4CMap = L.Map.extend({
         }
 
     },
-	
-	_changeCRS: function(crs, maxBounds) {
-		if(this._loaded) {
-			var bbox = this.getBounds();
-		}
-		this.options.crs = crs;
-		this.options.maxBounds = maxBounds;
-		if(this._loaded) {
-			//this._initialTopLeftPoint = this._getNewTopLeftPoint(this.getCenter());
-			 this.setView(this.getCenter(),this.getZoom());
-			 this.fitBounds(bbox);
-			/*var corner1 = L.latLng(crs.options.bounds.min.x, crs.options.bounds.min.y),
-				corner2 = L.latLng(crs.options.bounds.max.x, crs.options.bounds.max.y),
-				bounds = L.latLngBounds(corner1, corner2);
-			try{this.setMaxBounds(bounds);} catch(error){}*/
-			//this.options.maxBounds = [[crs.options.bounds.min.x, crs.options.bounds.min.y], [crs.options.bounds.max.x, crs.options.bounds.max.y]];
-		}
-	},
-	
-	addLayer: function(layer) {
-		if(layer.basemapId != undefined && layer instanceof L.D4CTileLayer){
-			var crs, bounds;
-			if(layer.options.basemap.crs == "EPSG:2154"){
-				crs = new L.Proj.CRS("EPSG:2154",
-						"+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs", 
-						{ 
-						origin:layer.options.basemap.origin, 
-						resolutions:layer.options.basemap.resolutions,
-						matrixWidths:layer.options.basemap.matrixWidths,
-						matrixHeights:layer.options.basemap.matrixHeights
-						//bounds: L.bounds(L.point(layer.options.basemap.bbox[0], layer.options.basemap.bbox[1]), L.point(layer.options.basemap.bbox[2], layer.options.basemap.bbox[3]))
-						});
-				bounds = undefined;
-				} else {
-				crs = L.CRS.EPSG3857;
-				var corner1 = L.latLng(-90, -240),
-				corner2 = L.latLng(90, 240),
-				bounds = L.latLngBounds(corner1, corner2);
-			}
-			this._changeCRS(crs, bounds);
-		}
-		L.Map.prototype.addLayer.call(this, layer);
-	}
+
+    _changeCRS: function (crs, maxBounds) {
+        if (this._loaded) {
+            var bbox = this.getBounds();
+        }
+        this.options.crs = crs;
+        this.options.maxBounds = maxBounds;
+        if (this._loaded) {
+            //this._initialTopLeftPoint = this._getNewTopLeftPoint(this.getCenter());
+            this.setView(this.getCenter(), this.getZoom());
+            this.fitBounds(bbox);
+            /*var corner1 = L.latLng(crs.options.bounds.min.x, crs.options.bounds.min.y),
+                corner2 = L.latLng(crs.options.bounds.max.x, crs.options.bounds.max.y),
+                bounds = L.latLngBounds(corner1, corner2);
+            try{this.setMaxBounds(bounds);} catch(error){}*/
+            //this.options.maxBounds = [[crs.options.bounds.min.x, crs.options.bounds.min.y], [crs.options.bounds.max.x, crs.options.bounds.max.y]];
+        }
+    },
+
+    addLayer: function (layer) {
+        if (layer.basemapId != undefined && layer instanceof L.D4CTileLayer) {
+            var crs, bounds;
+            if (layer.options.basemap.crs == "EPSG:2154") {
+                crs = new L.Proj.CRS("EPSG:2154",
+                    "+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs",
+                    {
+                        origin: layer.options.basemap.origin,
+                        resolutions: layer.options.basemap.resolutions,
+                        matrixWidths: layer.options.basemap.matrixWidths,
+                        matrixHeights: layer.options.basemap.matrixHeights
+                        //bounds: L.bounds(L.point(layer.options.basemap.bbox[0], layer.options.basemap.bbox[1]), L.point(layer.options.basemap.bbox[2], layer.options.basemap.bbox[3]))
+                    });
+                bounds = undefined;
+            } else {
+                crs = L.CRS.EPSG3857;
+                var corner1 = L.latLng(-90, -240),
+                    corner2 = L.latLng(90, 240),
+                    bounds = L.latLngBounds(corner1, corner2);
+            }
+            this._changeCRS(crs, bounds);
+        }
+        L.Map.prototype.addLayer.call(this, layer);
+    }
 });
