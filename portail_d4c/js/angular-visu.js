@@ -256,6 +256,113 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
 ;(function() {
     'use strict';
     var app = angular.module('d4c.frontend');
+    app.directive('d4cDatasetRating', function() {
+        return {
+            restrict: 'E',
+            replace: true,
+            template: '' 
+                        + '<div>'
+                        + '  <div>'
+                        + '    <i id="star-one" class="fa"></i>'
+                        + '    <i id="star-two" class="fa"></i>'
+                        + '    <i id="star-three" class="fa"></i>'
+                        + '    <i id="star-four" class="fa"></i>'
+                        + '    <i id="star-five" class="fa"></i>'
+                        + '  </div>'
+                        + '  <p id="votes-description"></p>'
+                        + '  <p ng-if="!loggedIn">You need to be registered and logged in to rate a dataset.</p>'
+                        + '  <div ng-if="loggedIn" class="d4c-dataset-rating">'
+                        + '    <p>Ma note</p>'
+                        + '    <i id="my-star-one" ng-click="vote(1)" class="fa fa-star-o"></i>'
+                        + '    <i id="my-star-two" ng-click="vote(2)" class="fa fa-star-o"></i>'
+                        + '    <i id="my-star-three" ng-click="vote(3)" class="fa fa-star-o"></i>'
+                        + '    <i id="my-star-four" ng-click="vote(4)" class="fa fa-star-o"></i>'
+                        + '    <i id="my-star-five" ng-click="vote(5)" class="fa fa-star-o"></i>'
+                        + '  </div>'
+                        + '</div>',
+            scope: {
+                preset: '=',
+                datasetId: '@',
+                loggedIn: '='
+            },
+            controller: function($scope, CoreAPI) {
+                let numberOfVotes = Math.floor(Math.random() * (25 - 5 + 1) + 5);
+                // Create an array
+                let stars = [];
+                for (let i = 0; i < numberOfVotes; i++) {
+                    // Generate random number between 1 and 5
+                    let randomNumber = Math.floor(Math.random() * (5 - 1 + 1) + 1);
+                    // Put the number in the stars array
+                    stars.push(randomNumber);
+                }
+                // Calculate the average
+                let sum = stars.reduce((a, b) => a + b, 0);
+                let average = sum / stars.length;
+                // Round the average to the nearest 0.5
+                average = Math.round(average * 2) / 2;
+
+                //Add text to votes-description
+                $("#votes-description").text(average + "/5 (" + numberOfVotes + " votes)");
+
+                $("#star-one").addClass(average >= 1 ? "fa-star" : average >= 0.5 ? "fa-star-half-o" : "fa-star-o");
+                $("#star-two").addClass(average >= 2 ? "fa-star" : average >= 1.5 ? "fa-star-half-o" : "fa-star-o");
+                $("#star-three").addClass(average >= 3 ? "fa-star" : average >= 2.5 ? "fa-star-half-o" : "fa-star-o");
+                $("#star-four").addClass(average >= 4 ? "fa-star" : average >= 3.5 ? "fa-star-half-o" : "fa-star-o");
+                $("#star-five").addClass(average >= 5 ? "fa-star" : average >= 4.5 ? "fa-star-half-o" : "fa-star-o");
+
+                let hasVote = false;
+
+                $scope.vote = function(value) {
+                    if (!hasVote) {
+                        //Add the value to the stars array and recalculate the average
+                        stars.push(value);
+                    }
+                    else {
+                        //Remove last value from stars
+                        stars.pop();
+                        stars.push(value);
+                    }
+                    hasVote = true;
+
+                    let sum = stars.reduce((a, b) => a + b, 0);
+                    let average = sum / stars.length;
+                    // Round the average to the nearest 0.5
+                    average = Math.round(average * 2) / 2;
+
+                    //Replace the text of votes-description
+                    $("#votes-description").text(average + "/5 (" + stars.length + " votes)");
+
+                    $("#star-one").removeClass("fa-star").removeClass("fa-star-half-o").removeClass("fa-star-o");
+                    $("#star-two").removeClass("fa-star").removeClass("fa-star-half-o").removeClass("fa-star-o");
+                    $("#star-three").removeClass("fa-star").removeClass("fa-star-half-o").removeClass("fa-star-o");
+                    $("#star-four").removeClass("fa-star").removeClass("fa-star-half-o").removeClass("fa-star-o");
+                    $("#star-five").removeClass("fa-star").removeClass("fa-star-half-o").removeClass("fa-star-o");
+
+                    $("#star-one").addClass(average >= 1 ? "fa-star" : average >= 0.5 ? "fa-star-half-o" : "fa-star-o");
+                    $("#star-two").addClass(average >= 2 ? "fa-star" : average >= 1.5 ? "fa-star-half-o" : "fa-star-o");
+                    $("#star-three").addClass(average >= 3 ? "fa-star" : average >= 2.5 ? "fa-star-half-o" : "fa-star-o");
+                    $("#star-four").addClass(average >= 4 ? "fa-star" : average >= 3.5 ? "fa-star-half-o" : "fa-star-o");
+                    $("#star-five").addClass(average >= 5 ? "fa-star" : average >= 4.5 ? "fa-star-half-o" : "fa-star-o");
+
+                    $("#my-star-one").addClass(value >= 1 ? "fa-star" : "fa-star-o");
+                    $("#my-star-one").removeClass(value >= 1 ? "fa-star-o" : "fa-star");
+                    $("#my-star-two").addClass(value >= 2 ? "fa-star" : "fa-star-o");
+                    $("#my-star-two").removeClass(value >= 2 ? "fa-star-o" : "fa-star");
+                    $("#my-star-three").addClass(value >= 3 ? "fa-star" : "fa-star-o");
+                    $("#my-star-three").removeClass(value >= 3 ? "fa-star-o" : "fa-star");
+                    $("#my-star-four").addClass(value >= 4 ? "fa-star" : "fa-star-o");
+                    $("#my-star-four").removeClass(value >= 4 ? "fa-star-o" : "fa-star");
+                    $("#my-star-five").addClass(value >= 5 ? "fa-star" : "fa-star-o");
+                    $("#my-star-five").removeClass(value >= 5 ? "fa-star-o" : "fa-star");
+                }
+                ;
+            }
+        };
+    });
+}());
+;(function() {
+    'use strict';
+    var app = angular.module('d4c.frontend');
     app.directive('d4cDatasetAttachments', function() {
         return {
             restrict: 'E',

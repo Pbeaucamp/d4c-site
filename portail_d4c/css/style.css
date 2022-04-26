@@ -802,3 +802,42 @@ body{
     padding-right: .5rem!important;
     padding-left: .5rem!important;
 }
+
+/** Rating **/
+.d4c-dataset-rating i, .d4c-dataset-rating i:hover ~ i {
+    color: #222;
+    text-shadow: none;
+    transition: color 200ms,
+                text-shadow 200ms;
+    /* This will remove the delay when
+       moving the cursor left or right
+       within the set of stars. */
+    transition-delay: 0;
+}
+
+.d4c-dataset-rating:hover i, .d4c-dataset-rating-full {
+    color: #fc0;
+    text-shadow: #fc0 0 0 20px;
+}
+
+.d4c-dataset-rating:hover i:nth-child(2) {
+    transition-delay: 30ms;
+}
+  
+.d4c-dataset-rating:hover i:nth-child(3) {
+    transition-delay: 60ms;
+}
+  
+.d4c-dataset-rating:hover i:nth-child(4) {
+    transition-delay: 90ms;
+}
+  
+.d4c-dataset-rating:hover i:nth-child(5) {
+    transition-delay: 120ms;
+}
+  
+  /* Miscellaneous styles. */
+.d4c-dataset-rating i {
+    cursor: pointer;
+    font-style: normal;
+}

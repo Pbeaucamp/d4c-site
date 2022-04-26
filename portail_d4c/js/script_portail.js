@@ -894,9 +894,9 @@ function createDataset(data){
             '<div class="inner"><p class="data-desc">' + description + '</p>'+ listeFormat +'</div>' +
 				'<div class="infos inner">' + 
 					// Modification custom SPOT
-					'<ul><li class="titre">Origine du site</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul>' +
-					// '<ul><li class="titre">Producteur</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul>' +
-					// '<ul><li class="titre">Date modification</li><li class="info">' + (lastUpdateDate != null ? lastUpdateDate.toLocaleDateString() : '') + (lastUpdateDate != null ? ' ' + lastUpdateDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '') + '</ul>'+ /*li_granularite + li_reuses +*/
+					//'<ul><li class="titre">Origine du site</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul>' +
+					'<ul><li class="titre">Producteur</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul>' +
+					'<ul><li class="titre">Date modification</li><li class="info">' + (lastUpdateDate != null ? lastUpdateDate.toLocaleDateString() : '') + (lastUpdateDate != null ? ' ' + lastUpdateDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '') + '</ul>'+ /*li_granularite + li_reuses +*/
 					'<ul class="jetons">' + tagList +'</ul>' + 
 				'</div>' +               
     		'</div>'+     
