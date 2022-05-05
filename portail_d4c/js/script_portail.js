@@ -766,6 +766,8 @@ function createDataset(data) {
 	// We set the name as ID to open the dataset
 	var name = data.name;
 
+	var private = data.private ? '<span class="dataset-private label label-inverse"><i class="lock fa fa-lock"></i>Private</span>' : '';
+
 	///////////
 	var description = data.notes != null ? data.notes : '';
 	if (description.indexOf("__Origine__") != -1) {
@@ -888,7 +890,7 @@ function createDataset(data) {
     	'<div class="box_1"><div style="display: flex; flex-direction:row">'+
 			'<div>' + imageThemes + '</div>'+
 			'<div class="box_4"><div class="inner"><div class="dataset-h2"><a href="' + fetchPrefix() + '/visualisation/?id=' + name + '' + analyseDefault + '"' + targetValue + '> ' + data.title + ' </a></div></div></div></div>'+
-                           
+            private +               
             '<div class="inner"><p class="data-desc">' + description + '</p>'+ listeFormat +'</div>' +
 				'<div class="infos inner">' + 
 					// Modification custom SPOT
