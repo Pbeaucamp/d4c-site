@@ -1157,6 +1157,95 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             a.layers.push(json);
             openPostForm("mapfishapp/", JSON.stringify(a))
         };
+        $scope.editData = function() {
+            var options = {}
+            jQuery.extend(options, $scope.staticSearchOptions, $scope.ctx.parameters,  {
+                resource_id: $scope.ctx.dataset.resourceCSVid
+            });
+
+            var datasetId = $scope.ctx.dataset.datasetid;
+            var resourceId = $scope.ctx.dataset.resourceCSVid;
+
+            var editorFields = [];
+            editorFields.push({
+                name: '_id',
+                target: 0
+            });
+
+            var tableColumns = [];
+            tableColumns.push({
+                name: '_id',
+                data: '_id'
+            });
+
+            var fields = [];
+            fields.push('_id');
+            for (var i = 0; i < $scope.ctx.dataset.fields.length; i++) {
+                var field = $scope.ctx.dataset.fields[i];
+
+                editorFields.push({
+                    name: field.name,
+                    target: (i + 1)
+                });
+                tableColumns.push({
+                    name: field.name,
+                    data: field.name
+                });
+
+                fields.push(field.name);
+            }
+            fields = fields.join(',');
+
+            var editor = new $.fn.dataTable.Editor( {
+                ajax: 'd4c/api/datatable/manage',
+                table: '#edit_table',
+                fields: editorFields
+            } );
+        
+            var table = $('#edit_table').DataTable( {
+                scrollY: 200,
+                deferRender: true,
+                scroller: true,
+                scrollX: true,
+                dom: 'Bfrtip',
+                ajax: {
+                    url: 'd4c/api/datatable/manage',
+                    data: {
+                        'id': datasetId,
+                        'resource_id': resourceId,
+                        'fields': fields
+                        // 'fields': 'adm_lb_nom,adr_lb_add1,adr_lb_add2,adr_lb_add3,adr_lb_lieu,adr_nm_cp,code_insee,com_cd_insee,coord,date_maj,emr_dt,emr_lb_systeme,generation,geo_point_2d,id,nat_id,sta_nm_anfr,sta_nm_dpt,statut,sup_id,sup_nm_haut,tpo_id'
+                    }
+                },
+                columns: tableColumns,
+                select: true,
+                lengthChange: false,
+                buttons: [
+                    { extend: 'create', editor: editor },
+                    { extend: 'edit',   editor: editor },
+                    { extend: 'remove', editor: editor }
+                ]
+            } );
+
+
+            // $('#edit_table').DataTable( {
+            //     "processing": true,
+            //     "serverSide": true,
+            //     "scrollX": true,
+            //     "scrollY": true,
+            //     ajax: {
+            //         url: fetchPrefix() + 'd4c/api/datatable/view',
+            //         dataSrc: 'records',
+            //         data: {
+            //             'id': '0509_datatable_v1',
+            //             'resource_id': 'cd0bb6c2-0f86-4faf-b722-d2284a5431e6',
+            //             'fields': 'adm_lb_nom,adr_lb_add1,adr_lb_add2,adr_lb_add3,adr_lb_lieu,adr_nm_cp,code_insee,com_cd_insee,coord,date_maj,emr_dt,emr_lb_systeme,generation,geo_point_2d,id,nat_id,sta_nm_anfr,sta_nm_dpt,statut,sup_id,sup_nm_haut,tpo_id'
+            //         }
+            //     },
+            //     columnDefs: fields,
+            //     columns: columns
+            // });
+        };
         $scope.visualizeResource = function(datasetId, resourceId) {
             window.location.search = '?id=' + datasetId + '&resourceId=' + resourceId;
         };
