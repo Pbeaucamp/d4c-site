@@ -22,19 +22,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-;if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.exports === exports) {
+; if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.exports === exports) {
     module.exports = 'monospaced.elastic';
 }
 angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
     append: ''
-}).directive('msdElastic', ['$timeout', '$window', 'msdElasticConfig', function($timeout, $window, config) {
+}).directive('msdElastic', ['$timeout', '$window', 'msdElasticConfig', function ($timeout, $window, config) {
     'use strict';
     return {
         require: 'ngModel',
         restrict: 'A, C',
-        link: function(scope, element, attrs, ngModel) {
+        link: function (scope, element, attrs, ngModel) {
             var ta = element[0]
-              , $ta = element;
+                , $ta = element;
             if (ta.nodeName !== 'TEXTAREA' || !$window.getComputedStyle) {
                 return;
             }
@@ -67,7 +67,7 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                 var mirrorStyle = mirrorInitStyle;
                 mirrored = ta;
                 taStyle = getComputedStyle(ta);
-                angular.forEach(copyStyle, function(val) {
+                angular.forEach(copyStyle, function (val) {
                     mirrorStyle += val + ':' + taStyle.getPropertyValue(val) + ';';
                 });
                 mirror.setAttribute('style', mirrorStyle);
@@ -100,7 +100,7 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                         scope.$emit('elastic:resize', $ta, taHeight, mirrorHeight);
                         ta.style.height = mirrorHeight + 'px';
                     }
-                    $timeout(function() {
+                    $timeout(function () {
                         active = false;
                     }, 1);
                 }
@@ -109,23 +109,23 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                 active = false;
                 adjust();
             }
-            if ('onpropertychange'in ta && 'oninput'in ta) {
+            if ('onpropertychange' in ta && 'oninput' in ta) {
                 ta['oninput'] = ta.onkeyup = adjust;
             } else {
                 ta['oninput'] = adjust;
             }
             $win.bind('resize', forceAdjust);
-            scope.$watch(function() {
+            scope.$watch(function () {
                 return ngModel.$modelValue;
-            }, function(newValue) {
+            }, function (newValue) {
                 forceAdjust();
             });
-            scope.$on('elastic:adjust', function() {
+            scope.$on('elastic:adjust', function () {
                 initMirror();
                 forceAdjust();
             });
             $timeout(adjust);
-            scope.$on('$destroy', function() {
+            scope.$on('$destroy', function () {
                 $mirror.remove();
                 $win.unbind('resize', forceAdjust);
             });
@@ -133,10 +133,10 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
     };
 }
 ]);
-;(function() {
+; (function () {
     'use strict';
     var module = angular.module('d4c-widgets');
-    module.directive('swaggerUi', ['ModuleLazyLoader', '$timeout', function(ModuleLazyLoader, $timeout) {
+    module.directive('swaggerUi', ['ModuleLazyLoader', '$timeout', function (ModuleLazyLoader, $timeout) {
         return {
             restrict: 'A',
             template: '<div class="swagger-section"><div id="swagger-ui-container" class="swagger-ui-wrap"></div></div>',
@@ -144,34 +144,34 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                 url: '@?',
                 specs: '=?'
             },
-            link: function(scope, element, attr) {
-                ModuleLazyLoader('swagger-ui').then(function() {
+            link: function (scope, element, attr) {
+                ModuleLazyLoader('swagger-ui').then(function () {
                     var swaggerOptions = {
                         url: null,
                         dom_id: "swagger-ui-container",
                         supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
                         validatorUrl: null,
                         docExpansion: 'list',
-                        onComplete: function(swaggerApi, swaggerUi) {
-                            $timeout(function() {
+                        onComplete: function (swaggerApi, swaggerUi) {
+                            $timeout(function () {
                                 SwaggerTranslator.translate();
                             }, 0);
-                            $('pre code').each(function(i, e) {
+                            $('pre code').each(function (i, e) {
                                 hljs.highlightBlock(e)
                             });
                         },
-                        onFailure: function(data) {
+                        onFailure: function (data) {
                             console.log("Unable to Load SwaggerUI");
                         }
                     };
-                    scope.$watch('specs', function(specs) {
+                    scope.$watch('specs', function (specs) {
                         if (specs) {
                             swaggerOptions.spec = specs;
                             var swaggerUi = new SwaggerUi(swaggerOptions);
                             swaggerUi.load();
                         }
                     });
-                    scope.$watch('url', function(url) {
+                    scope.$watch('url', function (url) {
                         if (url) {
                             swaggerOptions.url = url;
                             if (swaggerOptions.specs) {
@@ -187,19 +187,19 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
     }
     ]);
 }());
-;(function() {
+; (function () {
     var mod = angular.module('d4c.frontend', ['d4c', 'monospaced.elastic']);
-    mod.config(['$provide', function($provide) {
-        $provide.decorator('$browser', function($delegate) {
+    mod.config(['$provide', function ($provide) {
+        $provide.decorator('$browser', function ($delegate) {
             var superUrl = $delegate.url;
-            $delegate.url = function(url, replace) {
+            $delegate.url = function (url, replace) {
                 if (url !== undefined) {
                     return superUrl(url.replace(/\%20/g, "+").replace(/@/g, "%40"), replace);
                 } else {
                     return superUrl().replace(/\+/g, "%20").replace(/\%40/g, "@");
                 }
             }
-            ;
+                ;
             return $delegate;
         });
     }
@@ -210,7 +210,7 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
         'icon': 'tachometer'
     });
     var app = angular.module('d4c-widgets');
-    app.config(function(D4CWidgetsConfigProvider) {
+    app.config(function (D4CWidgetsConfigProvider) {
         D4CWidgetsConfigProvider.setConfig({
             customAPIHeaders: {
                 "D4C-API-Analytics-App": "explore"
@@ -218,10 +218,10 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
         });
     });
 }());
-;(function() {
+; (function () {
     'use strict';
     var app = angular.module('d4c.frontend');
-    app.directive('d4cDatasetSubscription', function() {
+    app.directive('d4cDatasetSubscription', function () {
         return {
             restrict: 'E',
             replace: true,
@@ -231,61 +231,61 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                 datasetId: '@',
                 loggedIn: '='
             },
-            controller: function($scope, CoreAPI) {
+            controller: function ($scope, CoreAPI) {
                 $scope.subscribed = $scope.preset || false;
                 $scope.working = false;
-                $scope.toggle = function() {
+                $scope.toggle = function () {
                     $scope.working = true;
                     if ($scope.subscribed) {
-                        CoreAPI.account.subscriptions.datasets.unsubscribe($scope.datasetId).success(function() {
+                        CoreAPI.account.subscriptions.datasets.unsubscribe($scope.datasetId).success(function () {
                             $scope.subscribed = false;
                             $scope.working = false;
                         });
                     } else {
-                        CoreAPI.account.subscriptions.datasets.subscribe($scope.datasetId).success(function() {
+                        CoreAPI.account.subscriptions.datasets.subscribe($scope.datasetId).success(function () {
                             $scope.subscribed = true;
                             $scope.working = false;
                         });
                     }
                 }
-                ;
+                    ;
             }
         };
     });
 }());
-;(function() {
+; (function () {
     'use strict';
     var app = angular.module('d4c.frontend');
-    app.directive('d4cDatasetRating', function() {
+    app.directive('d4cDatasetRating', function () {
         return {
             restrict: 'E',
             replace: true,
-            template: '' 
-                        + '<div>'
-                        + '  <div>'
-                        + '    <i id="star-one" class="fa"></i>'
-                        + '    <i id="star-two" class="fa"></i>'
-                        + '    <i id="star-three" class="fa"></i>'
-                        + '    <i id="star-four" class="fa"></i>'
-                        + '    <i id="star-five" class="fa"></i>'
-                        + '  </div>'
-                        + '  <p id="votes-description"></p>'
-                        + '  <p ng-if="!loggedIn">You need to be registered and logged in to rate a dataset.</p>'
-                        + '  <div ng-if="loggedIn" class="d4c-dataset-rating">'
-                        + '    <p>Ma note</p>'
-                        + '    <i id="my-star-one" ng-click="vote(1)" class="fa fa-star-o"></i>'
-                        + '    <i id="my-star-two" ng-click="vote(2)" class="fa fa-star-o"></i>'
-                        + '    <i id="my-star-three" ng-click="vote(3)" class="fa fa-star-o"></i>'
-                        + '    <i id="my-star-four" ng-click="vote(4)" class="fa fa-star-o"></i>'
-                        + '    <i id="my-star-five" ng-click="vote(5)" class="fa fa-star-o"></i>'
-                        + '  </div>'
-                        + '</div>',
+            template: ''
+                + '<div>'
+                + '  <div>'
+                + '    <i id="star-one" class="fa"></i>'
+                + '    <i id="star-two" class="fa"></i>'
+                + '    <i id="star-three" class="fa"></i>'
+                + '    <i id="star-four" class="fa"></i>'
+                + '    <i id="star-five" class="fa"></i>'
+                + '  </div>'
+                + '  <p id="votes-description"></p>'
+                + '  <p ng-if="!loggedIn">You need to be registered and logged in to rate a dataset.</p>'
+                + '  <div ng-if="loggedIn" class="d4c-dataset-rating">'
+                + '    <p>Ma note</p>'
+                + '    <i id="my-star-one" ng-click="vote(1)" class="fa fa-star-o"></i>'
+                + '    <i id="my-star-two" ng-click="vote(2)" class="fa fa-star-o"></i>'
+                + '    <i id="my-star-three" ng-click="vote(3)" class="fa fa-star-o"></i>'
+                + '    <i id="my-star-four" ng-click="vote(4)" class="fa fa-star-o"></i>'
+                + '    <i id="my-star-five" ng-click="vote(5)" class="fa fa-star-o"></i>'
+                + '  </div>'
+                + '</div>',
             scope: {
                 preset: '=',
                 datasetId: '@',
                 loggedIn: '='
             },
-            controller: function($scope, CoreAPI) {
+            controller: function ($scope, CoreAPI) {
                 let numberOfVotes = Math.floor(Math.random() * (25 - 5 + 1) + 5);
                 // Create an array
                 let stars = [];
@@ -312,7 +312,7 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
 
                 let hasVote = false;
 
-                $scope.vote = function(value) {
+                $scope.vote = function (value) {
                     if (!hasVote) {
                         //Add the value to the stars array and recalculate the average
                         stars.push(value);
@@ -355,15 +355,15 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                     $("#my-star-five").addClass(value >= 5 ? "fa-star" : "fa-star-o");
                     $("#my-star-five").removeClass(value >= 5 ? "fa-star-o" : "fa-star");
                 }
-                ;
+                    ;
             }
         };
     });
 }());
-;(function() {
+; (function () {
     'use strict';
     var app = angular.module('d4c.frontend');
-    app.directive('d4cDatasetAttachments', function() {
+    app.directive('d4cDatasetAttachments', function () {
         return {
             restrict: 'E',
             replace: true,
@@ -374,10 +374,10 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
         };
     });
 }());
-;(function() {
+; (function () {
     'use strict';
     var app = angular.module('d4c.frontend');
-    app.directive('d4cDatasetReuses', ['d4cNotificationService', '$http', 'config', 'AssetHelper', 'ReuseAPI', 'translate', 'd4cReCaptcha', function(d4cNotificationService, $http, config, AssetHelper, ReuseAPI, translate, d4cReCaptcha) {
+    app.directive('d4cDatasetReuses', ['d4cNotificationService', '$http', 'config', 'AssetHelper', 'ReuseAPI', 'translate', 'd4cReCaptcha', function (d4cNotificationService, $http, config, AssetHelper, ReuseAPI, translate, d4cReCaptcha) {
         var formDataSupported = typeof FormData != 'undefined';
         return {
             restrict: 'E',
@@ -392,11 +392,11 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                 datasetTitle: '@'
             },
             templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/dataset-reuses.html',
-            link: function(scope, element) {
+            link: function (scope, element) {
                 if (!formDataSupported) {
                     element.find('.choice_or, .d4c-reuses__upload-button').hide();
                 }
-                element.find('.d4c-reuses__upload-button').on('click', function(e) {
+                element.find('.d4c-reuses__upload-button').on('click', function (e) {
                     $(element).find('input[type=file]')[0].click();
                 });
                 var recaptchaPubKey = scope.recaptchaPubKey || config.RECAPTCHA_PUBLIC_KEY;
@@ -410,7 +410,7 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                     idea: "Idée"
                 };
             },
-            controller: function($scope, $element) {
+            controller: function ($scope, $element) {
                 $scope.display_reuses = true;
                 $scope.submitAllow = $scope.anonymousReuse || $scope.loggedIn;
                 $scope.reuseForm = false;
@@ -420,16 +420,16 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                 $scope.error = false;
                 $scope.extraReuses = false;
                 $scope.uploadedFile = false;
-                $scope.toggleExtraReuses = function() {
+                $scope.toggleExtraReuses = function () {
                     $scope.extraReuses = !$scope.extraReuses;
                 }
-                ;
-                $scope.toogleReuseForm = function() {
+                    ;
+                $scope.toogleReuseForm = function () {
                     $scope.reuseForm = !$scope.reuseForm;
                 }
-                ;
-                $scope.upload = function(element) {
-                    $scope.$apply(function() {
+                    ;
+                $scope.upload = function (element) {
+                    $scope.$apply(function () {
                         $scope.reuse.file = element.files[0] || null;
                         $scope.uploadedFile = !!element.files[0];
                     });
@@ -437,8 +437,8 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                     input.val(element.files[0] ? element.files[0].name : '');
                     input.prop('disabled', !!element.files[0]);
                 }
-                ;
-                $scope.reset = function() {
+                    ;
+                $scope.reset = function () {
                     $scope.reuse.file = null;
                     $scope.uploadedFile = false;
                     $element.find('.d4c-reuses__upload-input').val('');
@@ -446,11 +446,11 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                     input.val('');
                     input.prop('disabled', false);
                 }
-                ;
-                $scope.$watch('reuse.thumbnail', function(nv) {
+                    ;
+                $scope.$watch('reuse.thumbnail', function (nv) {
                     $element.find('.d4c-reuses__upload-button').prop('disabled', nv);
                 });
-                $scope.submitReuse = function() {
+                $scope.submitReuse = function () {
                     $scope.inProgress = true;
                     $scope.reuse.recaptcha = !$scope.loggedIn ? $scope.getRecaptchaValues() : {};
                     var data = angular.copy($scope.reuse);
@@ -458,7 +458,7 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                     data.dataset_title = $scope.datasetTitle;
                     delete data.recaptcha;
                     delete data.file;
-                    var success = function(data) {
+                    var success = function (data) {
                         $scope.dirty = false;
                         $scope.inProgress = false;
                         $scope.error = false;
@@ -468,7 +468,7 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                             $scope.success = translate('Your reuse will be reviewed soon.');
                         }
                     };
-                    var error = function(data) {
+                    var error = function (data) {
                         $scope.inProgress = false;
                         $scope.success = false;
                         d4cNotificationService.markNotificationAsHandled(data);
@@ -492,8 +492,8 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                         }).success(success).error(error);
                     }
                 }
-                ;
-                $scope.$watch('reuse', function(nv, ov) {
+                    ;
+                $scope.$watch('reuse', function (nv, ov) {
                     if (nv !== ov) {
                         $scope.dirty = true;
                         if ($scope.success) {
@@ -504,9 +504,9 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                         }
                     }
                 }, true);
-                ReuseAPI.list().success(function(data) {
+                ReuseAPI.list().success(function (data) {
                     $scope.reuses = data.reuses;
-                }).error(function(data) {
+                }).error(function (data) {
                     if (data.errorcode === 90001) {
                         d4cNotificationService.markNotificationAsHandled(data);
                         $scope.reuses = [];
@@ -517,10 +517,10 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
     }
     ]);
 }());
-;(function() {
+; (function () {
     'use strict';
     var app = angular.module('d4c.frontend');
-    app.directive('d4cDatasetMetadataBlock', function() {
+    app.directive('d4cDatasetMetadataBlock', function () {
         return {
             restrict: 'E',
             replace: true,
@@ -530,11 +530,11 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                 blacklist: '='
             },
             template: '' + '<div class="d4c-dataset-metadata-block">' + '    <div class="d4c-dataset-metadata-block__metadata" ng-repeat="meta in schema" ng-if="values[meta.name]" ng-switch="meta.name">' + '        <div class="d4c-dataset-metadata-block__metadata-name" ng-bind="translate(meta.label)"></div>' + '        <div class="d4c-dataset-metadata-block__metadata-value d4c-dataset-metadata-block__metadata-value--license" ng-switch-when="license" ng-bind-html="values[meta.name]|formatMeta:meta.type|prettyText|licenseLink|nofollow"></div>' + '        <div class="d4c-dataset-metadata-block__metadata-value" ng-switch-when="geographic_area"><d4c-dataset-metadata-geographic-area geojson-shape="values[meta.name]"></d4c-dataset-metadata-geographic-area></div>' + '        <div class="d4c-dataset-metadata-block__metadata-value" ng-switch-when="language" ng-bind-html="values[meta.name]|isocode_to_language"></div>' + '        <div class="d4c-dataset-metadata-block__metadata-value d4c-dataset-metadata-block__metadata-value--default" ng-switch-default ng-bind-html="values[meta.name]|formatMeta:meta.type|prettyText|licenseLink|nofollow"></div>' + '    </div>' + '</dl>',
-            controller: function($scope, translate) {
+            controller: function ($scope, translate) {
                 $scope.translate = translate;
                 $scope.schema = angular.copy($scope.metadataSchema);
                 if ($scope.blacklist) {
-                    $scope.schema = $scope.metadataSchema.filter(function(meta) {
+                    $scope.schema = $scope.metadataSchema.filter(function (meta) {
                         return $scope.blacklist.indexOf(meta.name) === -1;
                     });
                 } else {
@@ -543,7 +543,7 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
             }
         };
     });
-    app.directive('d4cDatasetMetadataBlockSelector', function() {
+    app.directive('d4cDatasetMetadataBlockSelector', function () {
         return {
             restrict: 'E',
             replace: true,
@@ -552,10 +552,10 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                 values: '='
             },
             template: '<div class="d4c-dataset-metadata-block-selector">' + '    <div ng-repeat="tpl in metadataTemplates" ng-show="tpl.name != \'semantic\' && values[tpl.name]">' + '       <h3>{{ tpl.title }}</h3>' + '       <d4c-dataset-metadata-block metadata-schema="tpl.schema" values="values[tpl.name]"></d4c-dataset-metadata-block>' + '    </div>' + '</div>',
-            controller: function($scope) {}
+            controller: function ($scope) { }
         };
     });
-    app.directive('d4cDatasetMetadataGeographicArea', function(ModuleLazyLoader, D4CWidgetsConfig) {
+    app.directive('d4cDatasetMetadataGeographicArea', function (ModuleLazyLoader, D4CWidgetsConfig) {
         return {
             restrict: 'E',
             replace: true,
@@ -563,9 +563,9 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
                 geojsonShape: '='
             },
             template: '<div class="d4c-dataset-metadata-block__geographic-area"></div>',
-            link: function(scope, element) {
-                ModuleLazyLoader('leaflet').then(function() {
-                    var map = new L.D4CMap(element[0],{
+            link: function (scope, element) {
+                ModuleLazyLoader('leaflet').then(function () {
+                    var map = new L.D4CMap(element[0], {
                         scrollWheelZoom: false,
                         basemapsList: [D4CWidgetsConfig.basemaps[0]],
                         disableAttribution: true
@@ -582,17 +582,17 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
         };
     });
 }());
-;(function() {
+; (function () {
     'use strict';
     var app = angular.module('d4c.frontend');
-    app.directive('d4cDatasetApiConsole', function() {
+    app.directive('d4cDatasetApiConsole', function () {
         return {
             restrict: 'E',
             templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/dataset-api-console.html',
             scope: {
                 context: '='
             },
-            controller: function($location, $scope, DebugLogger, ServiceDescription, SearchAPI) {
+            controller: function ($location, $scope, DebugLogger, ServiceDescription, SearchAPI) {
                 DebugLogger.log('init api');
                 $scope.specs = false;
                 /*if($scope.context.dataset&&$scope.context.dataset.features.indexOf('api')!==-1){$scope.apiProxy=true;if($scope.context.dataset.extra_metas.explore.swagger_specifications){$scope.specs=JSON.parse($scope.context.dataset.extra_metas.explore.swagger_specifications);}else{SearchAPI.services.list($scope.context.dataset.datasetid).success(function(data){$scope.entrypoints=data;});}
@@ -601,7 +601,7 @@ return;}*/
                     parameters: {}
                 };
                 $scope.service = ServiceDescription;
-                var hierarchicalArrayToParams = function(service, params) {
+                var hierarchicalArrayToParams = function (service, params) {
                     var paramName, key;
                     for (var i = 0; i < service.parameters.length; i++) {
                         var parameter = service.parameters[i];
@@ -625,7 +625,7 @@ return;}*/
                         }
                     }
                 };
-                var hierarchicalParamsToArray = function(service, params) {
+                var hierarchicalParamsToArray = function (service, params) {
                     var key;
                     for (var i = 0; i < service.parameters.length; i++) {
                         var parameter = service.parameters[i];
@@ -644,13 +644,13 @@ return;}*/
                         }
                     }
                 };
-                var watchApiParams = function(searchOptions) {
+                var watchApiParams = function (searchOptions) {
                     DebugLogger.log('api -> api.parameters watch -> refresh', $scope.api.parameters, searchOptions);
                     $.extend(searchOptions, $scope.api.parameters);
                     hierarchicalArrayToParams($scope.service, searchOptions);
                     DebugLogger.log('api -> api.parameters watch -> done', $scope.api.parameters, searchOptions);
                 };
-                var watchSearchOptions = function(apiParams) {
+                var watchSearchOptions = function (apiParams) {
                     var key;
                     DebugLogger.log('api -> searchOptions watch -> refresh', apiParams, $scope.context.parameters);
                     for (key in apiParams) {
@@ -661,7 +661,7 @@ return;}*/
                     hierarchicalParamsToArray($scope.service, apiParams);
                     DebugLogger.log('api -> searchOptions watch -> done', apiParams, $scope.context.parameters);
                 };
-                $scope.$watch('[api.parameters, context.parameters]', function(newValue, oldValue) {
+                $scope.$watch('[api.parameters, context.parameters]', function (newValue, oldValue) {
                     var apiParams = newValue[0];
                     var searchOptions = newValue[1];
                     if (!angular.equals(newValue[0], oldValue[0])) {
@@ -670,14 +670,14 @@ return;}*/
                         watchSearchOptions(apiParams);
                     }
                 }, true);
-                var unwatchSchema = $scope.$watch('context.dataset', function(newValue) {
+                var unwatchSchema = $scope.$watch('context.dataset', function (newValue) {
                     if (newValue && newValue.datasetid) {
                         unwatchSchema();
                         $scope.staticSearchOptions = {
                             dataset: $scope.context.dataset.datasetid,
                             facet: []
                         };
-                        angular.forEach($scope.context.dataset.fields, function(field) {
+                        angular.forEach($scope.context.dataset.fields, function (field) {
                             if (field.annotations) {
                                 for (var a = 0; a < field.annotations.length; a++) {
                                     var anno = field.annotations[a];
@@ -695,7 +695,7 @@ return;}*/
             }
         };
     });
-    app.factory('RecordsSearchParameters', ['translate', function(translate) {
+    app.factory('RecordsSearchParameters', ['translate', function (translate) {
         return [{
             'name': 'dataset',
             'readonly': true,
@@ -704,7 +704,7 @@ return;}*/
             'name': 'q',
             'helptext': translate('Full-text query')
         }/*,{'name':'lang','helptext':translate('2-letters language code for linguistic text features')}*/
-        , {
+            , {
             'name': 'rows',
             'type': 'integer',
             'default': 10,
@@ -730,7 +730,7 @@ return;}*/
         ];
     }
     ]);
-    app.factory('ServiceDescription', ['RecordsSearchParameters', function(RecordsSearchParameters) {
+    app.factory('ServiceDescription', ['RecordsSearchParameters', function (RecordsSearchParameters) {
         return {
             id: 'records_search',
             label: 'Records Search',
@@ -742,10 +742,10 @@ return;}*/
     }
     ]);
 }());
-;(function() {
+; (function () {
     'use strict';
     var app = angular.module('d4c.frontend');
-    app.directive('d4cDatasetApiProxyConsole', function() {
+    app.directive('d4cDatasetApiProxyConsole', function () {
         return {
             restrict: 'E',
             templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/dataset-api-proxy-console.html',
@@ -754,16 +754,16 @@ return;}*/
                 needConditionsAccepted: '=?',
                 conditionsVersion: '=?'
             },
-            controller: function($location, $scope, DebugLogger, ServiceDescription, SearchAPI, config) {
+            controller: function ($location, $scope, DebugLogger, ServiceDescription, SearchAPI, config) {
                 $scope.config = config;
             }
         };
     });
 }());
-;(function() {
+; (function () {
     'use strict';
     var mod = angular.module('d4c.frontend');
-    mod.directive("d4cDatasetExport", ['EPSG', function(EPSG) {
+    mod.directive("d4cDatasetExport", ['EPSG', function (EPSG) {
         return {
             restrict: 'E',
             templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/dataset-export.html',
@@ -777,24 +777,24 @@ return;}*/
                 xiti: '=?'
             },
             replace: true,
-            controller: function($scope, config, DebugLogger, SearchAPI) {
+            controller: function ($scope, config, DebugLogger, SearchAPI) {
                 DebugLogger.log('export table');
                 $scope.config = config;
                 $scope.exportParameters = {};
                 $scope.snapshotList = [];
-                $scope.context.wait().then(function() {
+                $scope.context.wait().then(function () {
                     if ($scope.snapshots) {
-                        SearchAPI.snapshots.list($scope.context.dataset.datasetid).success(function(data) {
+                        SearchAPI.snapshots.list($scope.context.dataset.datasetid).success(function (data) {
                             $scope.snapshotList = data;
                         });
                     }
                 });
                 $scope.downloadTrackers = [];
                 if ($scope.xiti) {
-                    var xitiANXTracker = function(event, format, searchOptions) {
+                    var xitiANXTracker = function (event, format, searchOptions) {
                         var clickPage = window.xtpage + '::export::' + format;
                         if (searchOptions) {
-                            angular.forEach(searchOptions, function(value, key) {
+                            angular.forEach(searchOptions, function (value, key) {
                                 if (value && (key === 'q' || key.indexOf('refine.') === 0 || key.indexOf('geofilter.polygon') === 0)) {
                                     clickPage += '::' + encodeURIComponent(key) + '-' + encodeURIComponent(value);
                                 }
@@ -809,7 +809,7 @@ return;}*/
                         label: 'WGS84 (EPSG:4326)',
                         value: ''
                     }];
-                    angular.forEach($scope.context.dataset.extra_metas.exporters.additional_projections, function(epsg) {
+                    angular.forEach($scope.context.dataset.extra_metas.exporters.additional_projections, function (epsg) {
                         $scope.epsgList.push({
                             label: EPSG.nameFromEPSG(epsg),
                             value: epsg
@@ -821,13 +821,13 @@ return;}*/
         };
     }
     ]);
-    mod.directive('d4cDatasetExportLink', function() {
-        var encodeURIValue = function(key, value) {
+    mod.directive('d4cDatasetExportLink', function () {
+        var encodeURIValue = function (key, value) {
             if (angular.isString(value)) {
                 return '&' + key + '=' + encodeURIComponent(value);
             } else {
                 var qs = '';
-                angular.forEach(value, function(singleVal) {
+                angular.forEach(value, function (singleVal) {
                     qs += '&' + key + '=' + encodeURIComponent(singleVal);
                 });
                 return qs;
@@ -847,12 +847,12 @@ return;}*/
             },
             replace: true,
             transclude: true,
-            controller: ['$scope', function($scope) {
+            controller: ['$scope', function ($scope) {
                 var relevantParameters = ['q', 'geofilter.distance', 'geofilter.polygon', 'refine.', 'exclude.', 'disjunctive.'];
                 var filterParameters = ['q', 'geofilter.distance', 'geofilter.polygon', 'refine.', 'exclude.'];
-                var getSearchQueryString = function() {
+                var getSearchQueryString = function () {
                     var filteredParameters = {};
-                    Object.keys($scope.context.parameters).map(function(key) {
+                    Object.keys($scope.context.parameters).map(function (key) {
                         var i = 0;
                         for (; i < relevantParameters.length; i++) {
                             if (key.startsWith(relevantParameters[i])) {
@@ -866,7 +866,7 @@ return;}*/
                     filteredParameters = JSON.parse(p);
                     return D4C.URLUtils.getAPIQueryString(filteredParameters);
                 };
-                $scope.isDataFiltered = function() {
+                $scope.isDataFiltered = function () {
                     for (var key in $scope.context.parameters) {
                         for (var i = 0; i < filterParameters.length; i++) {
                             var relevantName = filterParameters[i];
@@ -877,8 +877,8 @@ return;}*/
                     }
                     return false;
                 }
-                ;
-                $scope.buildUrl = function(includeFilters) {
+                    ;
+                $scope.buildUrl = function (includeFilters) {
                     var url = fetchPrefix() + '/d4c/api/records/2.0/downloadfile/format=' + $scope.formatExtension;
                     if (includeFilters)
                         url += '&' + getSearchQueryString();
@@ -893,38 +893,38 @@ return;}*/
                     if (['csv', 'xls'].indexOf($scope.formatExtension) > -1) {
                         url += '&use_labels_for_header=true&user_defined_fields=true';
                     }
-                    angular.forEach($scope.exportParameters, function(value, key) {
+                    angular.forEach($scope.exportParameters, function (value, key) {
                         if (value !== '' && value !== null) {
                             url += encodeURIValue(key, value);
                         }
                     });
                     return url;
                 }
-                ;
-                $scope.triggerTrackers = function(event, includeFilters) {
+                    ;
+                $scope.triggerTrackers = function (event, includeFilters) {
                     updateNbDownload($scope.context.dataset.datasetid);
                     /*if(!$scope.downloadTrackers){return;}
 for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](event,$scope.formatExtension,includeFilters?$scope.context.parameters:null);}*/
                 }
-                ;
-                $scope.isDatasetAboveLimit = function() {
+                    ;
+                $scope.isDatasetAboveLimit = function () {
                     return $scope.recordsLimit && ($scope.context.dataset.metas.records_count > $scope.recordsLimit);
                 }
-                ;
-                $scope.isCurrentDataAboveLimit = function() {
+                    ;
+                $scope.isCurrentDataAboveLimit = function () {
                     return $scope.recordsLimit && ($scope.nhits > $scope.recordsLimit);
                 }
-                ;
+                    ;
             }
             ]
         };
     });
-    mod.directive('d4cMandatoryLicense', ['translate', function(translate) {
-        var isAccepted = function(storagePrefix, conditionsVersion, dataLicense) {
+    mod.directive('d4cMandatoryLicense', ['translate', function (translate) {
+        var isAccepted = function (storagePrefix, conditionsVersion, dataLicense) {
             var key = storagePrefix + '@accepted_conditions@' + conditionsVersion + '@' + dataLicense;
             return localStorage.getItem(key);
         };
-        var setAccepted = function(storagePrefix, conditionsVersion, dataLicense) {
+        var setAccepted = function (storagePrefix, conditionsVersion, dataLicense) {
             var cleanupList = [];
             for (var i = 0; i < localStorage.length; i++) {
                 var itemKey = localStorage.key(i);
@@ -952,7 +952,7 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             replace: true,
             transclude: true,
             template: '' + '<div class="d4c-dataset-export__mandatory-license">' + '    <div ng-transclude></div>' + '    <div class="d4c-dataset-export__mandatory-license__license-content">' + '        <p>' + '            <span>{{actionText}}, <span translate>you need to accept the portal\'s <a href="/conditions">terms of use</a></span><span ng-hide="licenseName">.</span></span>' + '            <span ng-if="licenseName">' + '                <span translate>and the dataset\'s license</span>' + '                (<span ng-bind-html="licenseName|prettyText|licenseLink"></span>).' + '            </span>' + '        </p>' + '        <button class="d4c-button" type="button" ' + '                ng-click="accept()" >' + '            <i class="fa fa-check" aria-hidden="true"></i>' + '            <span translate>I accept the portal\'s terms of use and the license applicable to the dataset.</span>' + '        </button>' + '    </div>' + '</div>',
-            link: function(scope, element) {
+            link: function (scope, element) {
                 var protectedElement = angular.element(element.children()[0]);
                 var overlayElement = angular.element(element.children()[1]);
                 if (scope.action === 'api') {
@@ -968,12 +968,12 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                     } else {
                         overlayElement.css('display', 'none');
                     }
-                    scope.accept = function() {
+                    scope.accept = function () {
                         setAccepted(scope.storagePrefix, scope.conditionsVersion || '', scope.licenseName || '');
                         overlayElement.css('display', 'none');
                         protectedElement.css('visibility', 'visible');
                     }
-                    ;
+                        ;
                 } else {
                     overlayElement.css('display', 'none');
                 }
@@ -982,10 +982,10 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
     }
     ]);
 }());
-;(function() {
+; (function () {
     'use strict';
     var app = angular.module('d4c.frontend');
-    app.directive('disqus', ['$location', '$window', 'config', function($location, $window, config) {
+    app.directive('disqus', ['$location', '$window', 'config', function ($location, $window, config) {
         function disqus() {
             var dsq = document.createElement('script');
             dsq.type = 'text/javascript';
@@ -1001,17 +1001,17 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                 'dataset': '='
             },
             template: '<div id="disqus_thread"></div>',
-            link: function(scope) {
-                scope.$watch('[shortname, dataset]', function() {
+            link: function (scope) {
+                scope.$watch('[shortname, dataset]', function () {
                     if (scope.shortname && scope.dataset && scope.dataset.datasetid) {
                         $window.disqus_shortname = scope.shortname;
                         $window.disqus_identifier = scope.dataset.datasetid;
                         $window.disqus_title = scope.dataset.metas.title;
                         $window.disqus_url = $location.absUrl();
-                        $window.disqus_config = function() {
+                        $window.disqus_config = function () {
                             this.language = config.LANGUAGE;
                         }
-                        ;
+                            ;
                         disqus();
                     }
                 }, true);
@@ -1019,7 +1019,7 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
         };
     }
     ]);
-    app.directive('disqusCount', ['$http', 'DebugLogger', function($http, DebugLogger) {
+    app.directive('disqusCount', ['$http', 'DebugLogger', function ($http, DebugLogger) {
         function getApiUrl(api, api_key, forum, ident) {
             return 'https://disqus.com/api/3.0/' + api + '.jsonp' + '?api_key=' + api_key + '&forum=' + forum + '&thread=ident:' + ident + '&callback=JSON_CALLBACK';
         }
@@ -1028,18 +1028,18 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
         }
         return {
             restrict: 'A',
-            controller: function($scope, $element, $attrs) {
+            controller: function ($scope, $element, $attrs) {
                 $scope.disqus = {
                     'count': 0
                 };
                 $scope.apiKey = $attrs.disqusApiKey;
                 $scope.shortname = $attrs.disqusShortname;
                 $scope.datasetId = $attrs.disqusDatasetid;
-                $scope.$watch('[apiKey, shortname, datasetId]', function() {
+                $scope.$watch('[apiKey, shortname, datasetId]', function () {
                     if ($scope.apiKey && $scope.shortname && $scope.datasetId) {
                         var url = getThreadsApiUrl($scope.apiKey, $scope.shortname, $scope.datasetId);
                         DebugLogger.log(url.replace('jsonp', 'json').substr(0, url.indexOf('&callback') - 1));
-                        $http.jsonp(url).success(function(data) {
+                        $http.jsonp(url).success(function (data) {
                             if (data.code === 0) {
                                 DebugLogger.log('Disqus identifiers:', data.response.identifiers);
                                 $scope.disqus.count = data.response.posts;
@@ -1052,26 +1052,26 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
     }
     ]);
 }());
-;(function() {
+; (function () {
     'use strict';
     var mod = angular.module('d4c.frontend');
-    mod.controller('ExploreDatasetController', ['$scope', 'SearchAPI', 'DefaultCustomViewConfig', function($scope, SearchAPI, DefaultCustomViewConfig) {
-        $scope.$watch('ctx.parameters.tab', function(nv, ov) {
+    mod.controller('ExploreDatasetController', ['$scope', 'SearchAPI', 'DefaultCustomViewConfig', function ($scope, SearchAPI, DefaultCustomViewConfig) {
+        $scope.$watch('ctx.parameters.tab', function (nv, ov) {
             if (nv) {
                 delete $scope.ctx.parameters.tab;
                 $scope.$broadcast('selectTab', 'main', nv);
             }
         });
         $scope.DefaultCustomViewConfig = DefaultCustomViewConfig;
-        SearchAPI.metadata.basic().success(function(data) {
+        SearchAPI.metadata.basic().success(function (data) {
             $scope.basicTemplate = data.schema;
         });
-        SearchAPI.metadata.interop().success(function(data) {
+        SearchAPI.metadata.interop().success(function (data) {
             $scope.interopTemplates = data;
         });
-        var sendVisualizationAnalytics = function(vizType) {
+        var sendVisualizationAnalytics = function (vizType) {
             if (window.ga) {
-                ga(function() {
+                ga(function () {
                     var trackers = ga.getAll();
                     for (var i = 0; i < trackers.length; ++i) {
                         var tracker = trackers[i];
@@ -1082,10 +1082,10 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             }
         };
         var mobileParametersUnwatcher;
-        $scope.toggleMobileFilters = function() {
+        $scope.toggleMobileFilters = function () {
             $scope.toggleState.expandedFilters = !$scope.toggleState.expandedFilters;
             if ($scope.toggleState.expandedFilters) {
-                mobileParametersUnwatcher = $scope.$watch('ctx.parameters', function(nv, ov) {
+                mobileParametersUnwatcher = $scope.$watch('ctx.parameters', function (nv, ov) {
                     if (!angular.equals(nv, ov)) {
                         $scope.toggleMobileFilters();
                     }
@@ -1094,7 +1094,7 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                 mobileParametersUnwatcher();
             }
         };
-        $scope.extendFilters = function(closeOnly) {
+        $scope.extendFilters = function (closeOnly) {
             if (closeOnly) {
                 $scope.toggleState.expandedFilters = true;
             }
@@ -1109,7 +1109,7 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
         var tabsInitialized = false;
         var tabName = '';
         var displayFilters = false;
-        $scope.$on('tabSelected', function(e, args) {
+        $scope.$on('tabSelected', function (e, args) {
             tabName = args.selection;
             if (!tabsInitialized) {
                 tabsInitialized = true;
@@ -1119,7 +1119,7 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                 sendVisualizationAnalytics(args.selection);
             }
         });
-        $scope.canDisplayFilters = function() {
+        $scope.canDisplayFilters = function () {
             if (tabName === 'table' || tabName === 'map' || tabName === 'analyze' || tabName === 'calendar' || tabName === 'cloud' || tabName === 'timeline' || tabName === 'export' || tabName === 'api') {
                 displayFilters = $scope.ctx.dataset.has_records && $scope.ctx.dataset.data_visible;
             }
@@ -1128,28 +1128,28 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             }
             return displayFilters;
         };
-        $scope.canAccessData = function() {
+        $scope.canAccessData = function () {
             return $scope.ctx.dataset.has_records && $scope.ctx.dataset.data_visible;
         };
-        $scope.canAccessServices = function() {
+        $scope.canAccessServices = function () {
             return $scope.ctx.dataset.hasFeature('api') && $scope.ctx.dataset.data_visible;
         };
-        var openPostForm = function(toolName, jsonParameter) {
+        var openPostForm = function (toolName, jsonParameter) {
             var a = $('\x3cform action\x3d"/' + toolName + '" method\x3d"POST" target\x3d"_blank"\x3e\x3c/form\x3e')
-              , b = $('\x3cinput name\x3d"data" /\x3e');
+                , b = $('\x3cinput name\x3d"data" /\x3e');
             a.appendTo("body");
             a.append(b);
             b.val(jsonParameter);
             a.submit();
             a.remove();
         };
-        $scope.openMapfishapp = function(layerName, serviceUrl, format) {
+        $scope.openMapfishapp = function (layerName, serviceUrl, format) {
             var json = {
                 layername: layerName,
                 owstype: "WMS",
                 owsurl: serviceUrl
             };
-            
+
             var a = {
                 services: [],
                 layers: []
@@ -1157,9 +1157,9 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             a.layers.push(json);
             openPostForm("mapfishapp/", JSON.stringify(a))
         };
-        $scope.editData = function() {
+        $scope.editData = function () {
             var options = {}
-            jQuery.extend(options, $scope.staticSearchOptions, $scope.ctx.parameters,  {
+            jQuery.extend(options, $scope.staticSearchOptions, $scope.ctx.parameters, {
                 resource_id: $scope.ctx.dataset.resourceCSVid
             });
 
@@ -1167,28 +1167,16 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             var resourceId = $scope.ctx.dataset.resourceCSVid;
 
             var editorFields = [];
-            editorFields.push({
-                name: '_id',
-                target: 0
-            });
-
             var tableColumns = [];
-            tableColumns.push({
-                name: '_id',
-                data: '_id'
-            });
-
             var fields = [];
-            fields.push('_id');
             for (var i = 0; i < $scope.ctx.dataset.fields.length; i++) {
                 var field = $scope.ctx.dataset.fields[i];
 
                 editorFields.push({
                     name: field.name,
-                    target: (i + 1)
+                    label: field.name
                 });
                 tableColumns.push({
-                    name: field.name,
                     data: field.name
                 });
 
@@ -1196,13 +1184,13 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             }
             fields = fields.join(',');
 
-            var editor = new $.fn.dataTable.Editor( {
-                ajax: 'd4c/api/datatable/manage',
+            var editor = new $.fn.dataTable.Editor({
+                ajax: 'd4c/api/datatable/manage?datasetId=' + datasetId + '&resourceId=' + resourceId + '&fields=' + fields,
                 table: '#edit_table',
                 fields: editorFields
-            } );
-        
-            var table = $('#edit_table').DataTable( {
+            });
+
+            $('#edit_table').DataTable({
                 scrollY: 200,
                 deferRender: true,
                 scroller: true,
@@ -1211,10 +1199,9 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                 ajax: {
                     url: 'd4c/api/datatable/manage',
                     data: {
-                        'id': datasetId,
-                        'resource_id': resourceId,
+                        'datasetId': datasetId,
+                        'resourceId': resourceId,
                         'fields': fields
-                        // 'fields': 'adm_lb_nom,adr_lb_add1,adr_lb_add2,adr_lb_add3,adr_lb_lieu,adr_nm_cp,code_insee,com_cd_insee,coord,date_maj,emr_dt,emr_lb_systeme,generation,geo_point_2d,id,nat_id,sta_nm_anfr,sta_nm_dpt,statut,sup_id,sup_nm_haut,tpo_id'
                     }
                 },
                 columns: tableColumns,
@@ -1222,34 +1209,15 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                 lengthChange: false,
                 buttons: [
                     { extend: 'create', editor: editor },
-                    { extend: 'edit',   editor: editor },
+                    { extend: 'edit', editor: editor },
                     { extend: 'remove', editor: editor }
                 ]
-            } );
-
-
-            // $('#edit_table').DataTable( {
-            //     "processing": true,
-            //     "serverSide": true,
-            //     "scrollX": true,
-            //     "scrollY": true,
-            //     ajax: {
-            //         url: fetchPrefix() + 'd4c/api/datatable/view',
-            //         dataSrc: 'records',
-            //         data: {
-            //             'id': '0509_datatable_v1',
-            //             'resource_id': 'cd0bb6c2-0f86-4faf-b722-d2284a5431e6',
-            //             'fields': 'adm_lb_nom,adr_lb_add1,adr_lb_add2,adr_lb_add3,adr_lb_lieu,adr_nm_cp,code_insee,com_cd_insee,coord,date_maj,emr_dt,emr_lb_systeme,generation,geo_point_2d,id,nat_id,sta_nm_anfr,sta_nm_dpt,statut,sup_id,sup_nm_haut,tpo_id'
-            //         }
-            //     },
-            //     columnDefs: fields,
-            //     columns: columns
-            // });
+            });
         };
-        $scope.visualizeResource = function(datasetId, resourceId) {
+        $scope.visualizeResource = function (datasetId, resourceId) {
             window.location.search = '?id=' + datasetId + '&resourceId=' + resourceId;
         };
-        $scope.downloadResource = function(serviceWMSUrl, serviceWFSUrl, format) {
+        $scope.downloadResource = function (serviceWMSUrl, serviceWFSUrl, format) {
             var type = $("#d4c-select-download-resource :selected")[0].parentNode.label;
             if (type == 'WMS') {
                 window.open(serviceWMSUrl + format, '_blank');
@@ -1258,19 +1226,19 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                 window.open(serviceWFSUrl + format, '_blank');
             }
         };
-        $scope.goBackToSearch = function() {
+        $scope.goBackToSearch = function () {
             window.location.href = fetchPrefix() + '/portail';
         };
     }
     ]);
 }());
-;(function() {
+; (function () {
     'use strict';
     var mod = angular.module('d4c.frontend');
-    mod.service('d4cReCaptcha', ['$window', '$document', function($window, $document) {
-        return function(element, recaptchaPubKey, lang) {
+    mod.service('d4cReCaptcha', ['$window', '$document', function ($window, $document) {
+        return function (element, recaptchaPubKey, lang) {
             var recaptchaWidgetId;
-            var initCaptcha = function() {
+            var initCaptcha = function () {
                 var recaptchaWidgetId = grecaptcha.render(element, {
                     'sitekey': recaptchaPubKey
                 });
@@ -1278,7 +1246,7 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                     renderedCallback(recaptchaWidgetId);
                 }
             };
-            $($window).on('recaptchaReady', function() {
+            $($window).on('recaptchaReady', function () {
                 initCaptcha();
             });
             var parent = $document[0].getElementsByTagName('script')[0];
@@ -1290,13 +1258,13 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             recaptchascript.src = 'https://www.google.com/recaptcha/api.js?render=explicit&onload=recaptchaReadyCallback&hl=' + lang;
             parent.parentNode.insertBefore(onloadscript, parent);
             onloadscript.parentNode.insertBefore(recaptchascript, onloadscript);
-            return function() {
+            return function () {
                 return {
                     response: grecaptcha.getResponse(recaptchaWidgetId)
                 };
             }
         }
-        ;
+            ;
     }
     ]);
 }());
