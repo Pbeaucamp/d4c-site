@@ -868,3 +868,78 @@ body{
 .label-inverse {
     background-color: #555555;
 }
+
+/* Details */
+details {
+    display: flex;
+    border-radius: 5px;
+    overflow: hidden;
+    background: rgba(var(--main-color),5%) !important;
+    border-left: 15px solid rgb(var(--main-color)) !important;;
+    padding: 15px;
+    margin-top: 15px;
+    color: #0E1C4E !important;
+}
+summary, details > div {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: flex-start;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1rem;
+    padding: 1rem 1rem 1rem 1.75rem;
+    cursor: pointer;
+}
+summary, .summary {
+    font-family: 'Roboto Slab';
+    flex-direction: row;
+}
+details > div {
+    text-align: center;
+	display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+details > div > a > img {
+    max-width: 100%;
+    height: auto;
+    width: 50%;
+    margin-bottom: 0.25rem;
+}
+details > div > a {
+	background: white;
+    width: 8.895rem;
+    height: 8.895rem;
+    line-height: .95rem !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    text-decoration: none !important;
+    color: rgb(var(--text-color)) !important;
+}
+details > div > a > span {
+	font-size: .85rem;
+    width: 80%;
+    text-align: center;
+}
+details.gris > summary:focus, details.gris > summary::selection {
+	outline: solid 3px rgb(var(--main-color));
+}
+details > div > a:hover {
+    background-color: rgb(var(--secondary-color));
+}
+summary::before {
+    cursor: pointer;
+    position: absolute;
+    display: inline-flex;
+    left: 1rem;
+    content: '+';
+	transition: all .5s ease-in-out;
+}
+details[open] summary::before {
+	transform: rotate(45deg);
+}

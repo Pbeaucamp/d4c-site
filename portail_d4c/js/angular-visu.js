@@ -1158,6 +1158,8 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             openPostForm("mapfishapp/", JSON.stringify(a))
         };
         $scope.editData = function () {
+            $("#edit_table").css("display", "block");
+
             var options = {}
             jQuery.extend(options, $scope.staticSearchOptions, $scope.ctx.parameters, {
                 resource_id: $scope.ctx.dataset.resourceCSVid
@@ -1172,15 +1174,24 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             for (var i = 0; i < $scope.ctx.dataset.fields.length; i++) {
                 var field = $scope.ctx.dataset.fields[i];
 
-                editorFields.push({
-                    name: field.name,
-                    label: field.name
-                });
-                tableColumns.push({
-                    data: field.name
-                });
-
-                fields.push(field.name);
+                var annotations = field.annotations;
+                if (annotations) {
+                    for (var j = 0; j < annotations.length; j++) {
+                        var annotation = annotations[j];
+                        if (annotation.name === 'can_edit') {
+                            editorFields.push({
+                                name: field.name,
+                                label: field.name
+                            });
+                            tableColumns.push({
+                                data: field.name
+                            });
+            
+                            fields.push(field.name);
+                            break;
+                        }
+                    }
+                }
             }
             fields = fields.join(',');
 
