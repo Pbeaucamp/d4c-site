@@ -1206,6 +1206,7 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                 deferRender: true,
                 scroller: true,
                 scrollX: true,
+                autoWidth: true,
                 dom: 'Bfrtip',
                 ajax: {
                     url: 'd4c/api/datatable/manage',
