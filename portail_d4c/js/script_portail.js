@@ -301,6 +301,9 @@ function loadParameters() {
 			if (part[0] == "organization") {
 				filtreProducteur = values;
 			} else if (part[0] == "tags") {
+				$.each(values, function (i, v) {
+					values[i] = v.replace(/\"/g, "");
+				});
 				filtreTags = values;
 			} else if (part[0] == "themes") {
 				$.each(values, function (i, v) {

@@ -4648,6 +4648,17 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
             'save_url': API_PATH + config.ID_DATASET + '/reuses/'
         };
     }]);
+    app.factory('VisualizationAPI', ['APIXHRService', 'config', function (APIXHRService, config) {
+        var API_PATH = fetchPrefix() + '/d4c/api/v1';
+        return {
+            'list': function () {
+                return APIXHRService('GET', API_PATH + '/visualization/', {});
+            },
+            'save': function (data) {
+                return APIXHRService('POST', API_PATH + '/visualization/', data);
+            }
+        };
+    }]);
     app.factory("DebugLogger", ['$window', 'config', function ($window, config) {
         return {
             log: function () {
@@ -7466,7 +7477,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 (function () {
     'use strict';
     var mod = angular.module('d4c.core');
-    mod.directive('d4cEmbedControl', ['$location', 'translate', 'WidgetCodeBuilder', function ($location, translate, WidgetCodeBuilder) {
+    mod.directive('d4cEmbedControl', ['$location', 'translate', 'WidgetCodeBuilder', 'VisualizationAPI', function ($location, translate, WidgetCodeBuilder, VisualizationAPI) {
         function buildWidgetCode(embedType, context) {
             if (embedType === "cartograph") {
                 return "";
@@ -7520,7 +7531,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 defaultCollapse: '@',
                 context: '=?',
                 forceEmbedDatasetCard: '=',
-                widgetCode: '=?'
+                widgetCode: '=?',
+                loggedIn: '='
             },
             templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/embed_control.html',
             controller: function ($scope, $timeout) {
@@ -7558,6 +7570,25 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 };
                 $scope.mapOptions = {
                     scrollWheelZoom: false
+                };
+                $scope.saveEmbed = function ($visualizationName, $shareUrl, $iframe, $widget) {
+                    var saveEmbedAPI = VisualizationAPI.save;
+
+                    var data = {
+                        'datasetId': $scope.context.dataset.datasetid,
+                        'embedType': $scope.embedType,
+                        'visualizationName': $visualizationName,
+                        'shareUrl': $shareUrl,
+                        'iframe': $iframe,
+                        'widget': $widget,
+                    }
+
+                    saveEmbedAPI(data).success(function (data) {
+                       $scope.saved = true;
+                    });
+                };
+                $scope.reinitSave = function () {
+                    $scope.saved = false;
                 };
                 var _computeShareUrl = function (url, embedType) {
                     if (embedType === 'cartograph') {
@@ -22419,6 +22450,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         'facet': facetName
                     });
                     return request(context, fetchPrefix() + '/d4c/api/datasets/1.0/search/', queryParameters, timeout);
+                },
+                'save_embed': function (context, parameters, timeout) {
+                    return request(context, fetchPrefix() + '/d4c/api/dataset/visualization/save', angular.extend({}, parameters, {
+                        dataset_id: context.dataset.id
+                    }), timeout);
                 }
             },
             'records': {
@@ -22526,7 +22562,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             'maps': function (context, parameters, timeout) {
                 return request(context, fetchPrefix() + '/d4c/api/maps/layers/', parameters, timeout);
-            }
+            },
 
         };
     }]);

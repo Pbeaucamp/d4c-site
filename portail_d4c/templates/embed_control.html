@@ -6,6 +6,25 @@ Copyright (c) 2014 - Opendatasoft
 -->
     <d4c-tabs sync-to-url="false" layout="simple-nav" collapsible="defaultCollapse == 'true'" default-collapsed="defaultCollapse == 'true'">
 
+        <d4c-pane title="Save" translate="title" ng-if="loggedIn">
+            <div ng-if="!saved">
+                <input ng-model="visualizationName" type="text" translate="placeholder" placeholder="Visualization name">
+                <button class="d4c-button d4c-button--primary d4c-modal__action"
+                        ng-click="saveEmbed(visualizationName, share_url, '&lt;iframe src=&quot;' + embed_url + '&quot; width=&quot;' + size.width + '&quot; height=&quot;' + size.height + '&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;', widgetCode)"
+                        type="button">
+                    <span translate>Save</span>
+                </button>
+            </div>
+
+            <div ng-if="saved">
+                <span translate>The visualization has been saved.</span>
+                <button class="d4c-button d4c-modal__action"
+                        ng-click="reinitSave()"
+                        type="button">
+                    <span translate>Nouvelle sauvegarde</span>
+                </button>
+            </div>
+        </d4c-pane>
 
         <d4c-pane title="Share" translate="title">
             <d4c-clipboard-input value="share_url" input-width="fluid" type="url"></d4c-clipboard-input>
