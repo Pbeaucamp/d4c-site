@@ -15181,10 +15181,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
                                     // Try to sort legend but it does not work as is
                                     // Need to modify chart.min.js in lib to add after e.filter on buildLabels e.sort&&(i = i.sort(function(a,b){return e.sort(a,b,t.chart.data)}))
-                                    // options.legend.labels = {};
-                                    // options.legend.labels.sort = function(a, b) { 
-                                    //     return b.datasetIndex > a.datasetIndex ? -1 : 1; 
-                                    // };
+                                    options.legend.labels = {};
+                                    options.legend.labels.sort = function(a, b) { 
+                                        // return b.datasetIndex > a.datasetIndex ? -1 : 1;
+                                        return a.text.localeCompare(b.text);
+                                    };
 
                                     for (let f = 0; f < options.series.length; f++) {
                                         try {
