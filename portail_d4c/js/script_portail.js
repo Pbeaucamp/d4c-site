@@ -1,6 +1,7 @@
 //var filtreLicence = [];
 var filtreProducteur = [];
 var filtreTheme = [];
+var filtreType = [];
 var filtreGranularite = [];
 var filtreFormats = [];
 var filtreTags = [];
@@ -15,6 +16,7 @@ var filtreMapCoord = [];
 
 var canReplaceUrl;
 var themes = [];
+var types = [];
 var orgas = [];
 var features = [
 	{ name: "table", label: "Tableau", picto: "fa-table" },
@@ -121,6 +123,16 @@ function loadDatasets() {
 		searchDatasets();
 	});
 
+	$('#list-type').on('click', 'li', function () {
+		var type = $(this).data('type');
+		if (filtreType.indexOf(type) != -1) {
+			filtreType.splice(filtreType.indexOf(type));
+		} else {
+			filtreType.push(type);
+		}
+		searchDatasets();
+	});
+
 
 	$('#list-theme').on('click', 'li', function () {
 		var theme = $(this).data('theme');
@@ -183,6 +195,15 @@ function loadDatasets() {
 			}
 
 			$('#input-theme').val(filtreTheme.join(";"));
+		}
+		else if (typeof $(this).parent().data("type") != "undefined") {
+			for (var j = 0; j < filtreType.length; j++) {
+				if (filtreType[j] == $(this).parent().data('type')) {
+					filtreType.splice(j, 1);
+				}
+			}
+
+			$('#input-type').val(filtreType.join(";"));
 		}
 
 		/*else if(typeof $(this).parent().data("format") != "undefined"){
@@ -315,6 +336,16 @@ function loadParameters() {
 					values[i] = v.replace(/\*/g, "");
 				});
 				filtreVisu = values;
+			} else if (part[0] == "data_rgpd" || part[0] == "limesurvey" || part[0] == "api") {
+				if (part[0] == "data_rgpd") {
+					filtreType.push("RGPD");
+				}
+				else if (part[0] == "limesurvey") {
+					filtreType.push("LimeSurvey");
+				}
+				else if (part[0] == "api") {
+					filtreType.push("API");
+				}
 			}
 		});
 	} else if (theme != undefined) {
@@ -348,6 +379,7 @@ function resetFilters() {
 	filtreTags = [];
 	filtreVisu = [];
 	filtreTheme = [];
+	filtreType = [];
 	filtreMapCoord = [];
 	$('#input-map-coordinate').val('');
 	$('#search-form input').val('');
@@ -487,6 +519,19 @@ function getReq() {
 	if (filtreVisu.length > 0) {
 		fqArr.push("features:(*" + filtreVisu.join("* OR *") + "*)");
 	}
+	if (filtreType.length > 0) {
+		$.each(filtreType, function (i, t) {
+			if (t == "RGPD") {
+				fqArr.push("data_rgpd:(1)");
+			}
+			else if (t == "LimeSurvey") {
+				fqArr.push("limesurvey:(1)");
+			}
+			else if (t == "API") {
+				fqArr.push("api:(1)");
+			}
+		});
+	}
 
 	if ($('#input-map-coordinate').val() != "") {
 		var inputmapcoord = $('#input-map-coordinate').val();
@@ -562,6 +607,7 @@ function renderResult(json) {
 	$('#list-format').find('li').remove();
 	$('#list-tag').find('li').remove();
 	$('#list-theme').find('li').remove();
+	$('#list-type').find('li').remove();
 	$('#list-visu').find('li').remove();
 	$('.alert-info').remove();
 	$('#datasets').find('.dataset').each(function () {
@@ -648,6 +694,16 @@ function renderResult(json) {
 		}
 	});
 
+	//type facet
+	var type_facet = ["RGPD", "LimeSurvey", "API"];
+	$.each(type_facet, function (i, t) {
+		var selectedCss = isSelected(filtreType, t);
+		var type = t;
+		if (type.length > 0) {
+			$('#list-type').append('<li class="list-item ' + selectedCss + '" data-type="' + t + '">' + type + '</li>');
+		}
+	});
+
 
 	//filtres actifs
 	setActiveFilters();
@@ -658,7 +714,7 @@ function renderResult(json) {
 function isSelected(filters, item) {
 	for (i = 0; i < filters.length; i++) {
 		var filter = filters[i];
-		if (filter == item.name) {
+		if (filter == item || filter == item.name) {
 			return "selected";
 		}
 	}
@@ -689,6 +745,10 @@ function setActiveFilters() {
 		hasActifFilters = true;
 		var feat = features.filter(function (o) { return o.name == visu; });
 		$('#filter').find('.jetons').append('<li data-visu="' + visu + '">' + '<i class="fa ' + feat[0].picto + '" aria-hidden="true"></i>' + feat[0].label + ' <span class="glyphicon glyphicon-remove"></span></li>');
+	});
+	$.each(filtreType, function (i, type) {
+		hasActifFilters = true;
+		$('#filter').find('.jetons').append('<li data-type="' + type + '">' + type + ' <span class="glyphicon glyphicon-remove"></span></li>');
 	});
 
 	var searchValue = getSearchValue()
