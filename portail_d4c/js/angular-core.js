@@ -24546,6 +24546,28 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         size: layerConfig.size,
                         clickable: clickable,
                     });
+
+                    var displayFieldsValue = "";
+
+                    var mapDisplayFields = layerConfig.context.dataset.getFieldsMapDisplay();
+                    if (mapDisplayFields) {
+                        for (var i = 0; i < mapDisplayFields.length; ++i) {
+                            var fieldName = mapDisplayFields[i].name;
+                            var value = record.fields[fieldName];
+
+                            displayFieldsValue += displayFieldsValue.length === 0 ? value : " " + value;
+                        }
+                    }
+                    if (!(displayFieldsValue.length === 0)) {
+                        L.marker(coords, {
+                            icon: L.divIcon({
+                                className: 'label',
+                                html: '<span class="leaflet-label leaflet-label-position">' + displayFieldsValue + '</span>',
+                                iconSize: [100, 40]
+                            })
+                        }).addTo(map);
+                    }
+
                     targetLayer.addLayer(singleMarker);
                     if (clickable) {
                         if (angular.isObject(record)) {
@@ -24556,7 +24578,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                 });
             },
-            drawShape: function (layerConfig, map, geoJSON, record, targetLayer, geoDigest, route_color) {
+            drawShape: function (layerConfig, map, geoJSON, record, targetLayer, geoDigest, route_color, mapDisplay) {
                 var service = this;
                 var clickable = layerConfig.refineOnClick || (angular.isDefined(layerConfig.tooltipDisabled) ? !layerConfig.tooltipDisabled : true);
                 var shapeLayer = new L.GeoJSON(geoJSON, {
@@ -24609,6 +24631,17 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         return opts;
                     }
                 });
+
+                if (mapDisplay != null) {
+                    var label = L.marker(shapeLayer.getBounds().getCenter(), {
+                        icon: L.divIcon({
+                            className: 'label',
+                            html: '<span class="leaflet-label leaflet-label-position">' + mapDisplay.join(" ") + '</span>',
+                            iconSize: [100, 40]
+                        })
+                    }).addTo(map);
+                }
+
                 if (clickable) {
                     if (angular.isObject(record)) {
                         service.bindTooltip(map, shapeLayer, layerConfig, geoJSON, record.recordid);
@@ -25065,7 +25098,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (shape.type === 'Point') {
                             MapLayerHelper.drawPoint(layerConfig, map, [shape.coordinates[1], shape.coordinates[0]], value, shapeLayerGroup, record.geo_digest);
                         } else {
-                            MapLayerHelper.drawShape(layerConfig, map, shape, value, shapeLayerGroup, record.geo_digest, record.route_color);
+                            MapLayerHelper.drawShape(layerConfig, map, shape, value, shapeLayerGroup, record.geo_digest, record.route_color, record.map_display);
                         }
                     }
                     deferred.resolve(shapeLayerGroup);
@@ -25244,6 +25277,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 if (layerConfig.color.field) {
                     includedFields.push(layerConfig.color.field);
                 }
+                var mapDisplayFields = layerConfig.context.dataset.getFieldsMapDisplay();
+                if (mapDisplayFields) {
+                    for (var i = 0; i < mapDisplayFields.length; ++i) {
+                        includedFields.push(mapDisplayFields[i].name);
+                    }
+                }
                 parameters.fields = includedFields.join(',');
                 D4CAPI.records.download(layerConfig.context, parameters, timeout.promise).success(function (data) {
                     layerConfig._incomplete = false;
@@ -25270,7 +25309,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (geoJSON.type === 'Point') {
                             MapLayerHelper.drawPoint(layerConfig, map, [geoJSON.coordinates[1], geoJSON.coordinates[0]], record, markerLayerGroup);
                         } else {
-                            MapLayerHelper.drawShape(layerConfig, map, geoJSON, record, markerLayerGroup, record.route_color);
+                            MapLayerHelper.drawShape(layerConfig, map, geoJSON, record, markerLayerGroup, record.route_color, record.map_display);
                         }
                     }
                     deferred.resolve(markerLayerGroup);
@@ -25304,7 +25343,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (shape.geometry != null && shape.geometry.type === 'Point') {
                             MapLayerHelper.drawPoint(layerConfig, map, [shape.geometry.coordinates[1], shape.geometry.coordinates[0]], null, layerGroup, shape.geo_digest);
                         } else {
-                            MapLayerHelper.drawShape(layerConfig, map, shape.geometry, null, layerGroup, shape.geo_digest, shape.route_color);
+                            MapLayerHelper.drawShape(layerConfig, map, shape.geometry, null, layerGroup, shape.geo_digest, shape.route_color, shape.map_display);
                         }
                     }
                     deferred.resolve(layerGroup);
@@ -33533,6 +33572,16 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                     for (var i = 0; i < this.fields.length; i++) {
                         var field = this.fields[i];
                         if (field.type === fieldType) {
+                            fields.push(field);
+                        }
+                    }
+                    return fields;
+                },
+                getFieldsMapDisplay: function () {
+                    var fields = [];
+                    for (var i = 0; i < this.fields.length; i++) {
+                        var field = this.fields[i];
+                        if (!(field.annotations  === undefined) && field.annotations[0].name === 'mapDisplay') {
                             fields.push(field);
                         }
                     }
