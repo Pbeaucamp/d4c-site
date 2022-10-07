@@ -1200,6 +1200,30 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                     }
                 }
             }
+
+            // If no column has been set as can_edit, we put all the columns
+            if (fields.length == 0) {
+                for (var i = 0; i < $scope.ctx.dataset.fields.length; i++) {
+                    var field = $scope.ctx.dataset.fields[i];
+    
+                    editorFields.push({
+                        name: field.name,
+                        label: field.name
+                    });
+                    tableColumns.push({
+                        data: field.name
+                    });
+                    if (field.name == 'geo_shape') {
+                        columnDefs.push({
+                            targets: tableColumns.length - 1,
+                            render: $.fn.dataTable.render.ellipsis( 100 )
+                        });
+                    }
+    
+                    fields.push(field.name);
+                }
+            }
+
             fields = fields.join(',');
 
             var editor = new $.fn.dataTable.Editor({

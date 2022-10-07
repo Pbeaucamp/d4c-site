@@ -9715,7 +9715,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 if (ctx != undefined && ctx.dataset != undefined) {
                     var canAnalyze = ctx.dataset.canAnalyze;
 
-                    if (canAnalyze || scope.struct.slug == "information" || scope.struct.slug == "export" || scope.struct.slug == "reuses") {
+                    if (canAnalyze || scope.struct.slug == "information" || scope.struct.slug == "visualization" ||scope.struct.slug == "export" || scope.struct.slug == "reuses") {
                         tabsCtrl.addPane(scope.struct, position);
                     }
                     // If we have a WMS, we have the feature geo
