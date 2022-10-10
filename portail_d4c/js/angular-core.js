@@ -4649,13 +4649,13 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
         };
     }]);
     app.factory('VisualizationAPI', ['APIXHRService', 'config', function (APIXHRService, config) {
-        var API_PATH = fetchPrefix() + '/d4c/api/v1';
+        var API_PATH = fetchPrefix() + '/d4c/api/v1/visualization/';
         return {
             'list': function () {
-                return APIXHRService('GET', API_PATH + '/visualization/', {});
+                return APIXHRService('GET', API_PATH, {});
             },
             'save': function (data) {
-                return APIXHRService('POST', API_PATH + '/visualization/', data);
+                return APIXHRService('POST', API_PATH, data);
             }
         };
     }]);
