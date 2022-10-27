@@ -14041,6 +14041,30 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 options.xAxis.type = "category";
                 options.xAxis.categories = [];
             }
+            // Present in angular-corekkk.js ? Not used for now
+            // if (periodic === "month") {
+            //     options.xAxis.labels.format = "{value: %B}";
+            // } else if (periodic === "weekday") {
+            //     options.xAxis.labels.format = "{value: %A}";
+            //     if (precision === "hour") {
+            //         options.xAxis.labels.format = "{value: %A %Hh}";
+            //     }
+            // } else if (periodic === "day") {
+            //     options.xAxis.labels.format = "{value: %d}";
+            // } else if (periodic === "hour") {
+            //     options.xAxis.labels.format = "{value: %H}";
+            // }
+            // if (!precision) {
+            //     options.xAxis.labels.formatter = function () {
+            //         if (this.value.length > parameters.labelsXLength) {
+            //             return '<span title="' + this.value.replace('"', '') + '" alt="' + this.value.replace('"', '') + '">' + this.value.substring(0, parameters.labelsXLength - 3) + '...' + "</span>";
+            //         } else {
+            //             return this.value;
+            //         }
+            //     };
+            // } else {
+            //     options.xAxis.labels.useHTML = false;
+            // }
             if (parameters.singleAxis) {
                 var yAxisParameters = {
                     color: "#000000",
@@ -17155,7 +17179,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                 }, true);
                 var refreshRecords = function (globalSearch) {
-                    var DOWNLOAD_CAP = 200;
+                    var DOWNLOAD_CAP = 2000000;
                     var SHAPEPREVIEW_HIGHCAP = 500000;
                     var POLYGONCLUSTERS_HIGHCAP = 500000;
                     var refresh = function (data) {
@@ -24817,7 +24841,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         'geofilter.bbox': D4C.GeoFilter.getBoundsAsBboxParameter(map.getBounds())
                     });
                     D4CAPI.records.boundingbox(layerConfig.context, parameters).success(function (data) {
-                        var DOWNLOAD_CAP = 200;
+                        var DOWNLOAD_CAP = 2000000;
                         var SHAPEPREVIEW_HIGHCAP = 500000;
                         var POLYGONCLUSTERS_HIGHCAP = 500000;
                         var returnPolygons = (data.count < POLYGONCLUSTERS_HIGHCAP);
@@ -25258,7 +25282,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 var deferred = $q.defer();
                 var markerLayerGroup = layerGroup;
                 var parameters = angular.extend({}, layerConfig.context.parameters, {
-                    'rows': 1000,
+                    'rows': 5000,
                     'format': 'json',
                     'geo_simplify': true,
                     'geo_simplify_zoom': map.getZoom(),
@@ -25327,7 +25351,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             render: function (layerConfig, map, layerGroup, timeout) {
                 var deferred = $q.defer();
                 var parameters = angular.extend({}, layerConfig.context.parameters, {
-                    'rows': 1000,
+                    'rows': 5000,
                     'clusterprecision': map.getZoom(),
                     'geofilter.bbox': D4C.GeoFilter.getBoundsAsBboxParameter(map.getBounds())
                 });
@@ -34602,9 +34626,3 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
         window.CustomEvent = CustomEvent;
     }
 }());
-
-
-
-
-
-
