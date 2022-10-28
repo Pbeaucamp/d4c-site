@@ -234,8 +234,41 @@ d4c.config(function (D4CWidgetsConfigProvider, ModuleLazyLoaderProvider) {
 		'js': ['he@lib/he/he.js']
 	};
 	loadingConfig.leaflet = {
-		'css': ["lib/leaflet/leaflet.css", "lib/map-fullscreen/map-fullscreen.css", "lib/leaflet-locatecontrol/L.Control.Locate.css", "lib/leaflet-control-geocoder/Control.Geocoder.css", "lib/vectormarker/vectormarker.css", "lib/clustermarker/clustermarker.css", "lib/leaflet-label/leaflet.label.css", "lib/leaflet-draw/leaflet.draw.css"],
-		'js': [["L@lib/leaflet/leaflet.js"], ["L.Control.D4CMapFullscreen@lib/map-fullscreen/map-fullscreen.js", "L.Control.Locate@lib/leaflet-locatecontrol/L.Control.Locate.js", "L.Label@lib/leaflet-label/leaflet.label.js", "L.D4CMap@lib/map/map.js", "L.D4CTileLayer@lib/map/tilelayer.js", "L.Control.Geocoder@lib/leaflet-control-geocoder/Control.Geocoder.js", "L.VectorMarker@lib/vectormarker/vectormarker.js", "L.ClusterMarker@lib/clustermarker/clustermarker.js", "L.UtfGrid@lib/leaflet-utfgrid/leaflet.utfgrid.js", "L.Draw@lib/leaflet-draw/leaflet.draw.js", "L.BundleTileLayer@lib/bundletilelayer/bundletilelayer.js", "L.HeatLayer@lib/leaflet-heat/leaflet-heat.js"],['lib/leaflet-proj4js/GpPluginLeaflet.js']]
+		'css': [
+			"lib/leaflet/leaflet.css", 
+			"lib/map-fullscreen/map-fullscreen.css", 
+			"lib/leaflet-locatecontrol/L.Control.Locate.css", 
+			"lib/leaflet-control-geocoder/Control.Geocoder.css", 
+			"lib/vectormarker/vectormarker.css", 
+			"lib/clustermarker/clustermarker.css", 
+			"lib/leaflet-label/leaflet.label.css", 
+			"lib/leaflet-draw/leaflet.draw.css", 
+			"lib/leaflet-markercluster/MarkerCluster.css", 
+			"lib/leaflet-markercluster/MarkerCluster.Default.css"
+		],
+		'js': [
+			[
+				"L@lib/leaflet/leaflet.js"
+			], 
+			[
+				"L.Control.D4CMapFullscreen@lib/map-fullscreen/map-fullscreen.js", 
+				"L.Control.Locate@lib/leaflet-locatecontrol/L.Control.Locate.js", 
+				"L.Label@lib/leaflet-label/leaflet.label.js", 
+				"L.D4CMap@lib/map/map.js", 
+				"L.D4CTileLayer@lib/map/tilelayer.js", 
+				"L.Control.Geocoder@lib/leaflet-control-geocoder/Control.Geocoder.js", 
+				"L.VectorMarker@lib/vectormarker/vectormarker.js", 
+				"L.ClusterMarker@lib/clustermarker/clustermarker.js", 
+				"L.UtfGrid@lib/leaflet-utfgrid/leaflet.utfgrid.js", 
+				"L.Draw@lib/leaflet-draw/leaflet.draw.js", 
+				"L.BundleTileLayer@lib/bundletilelayer/bundletilelayer.js", 
+				"L.HeatLayer@lib/leaflet-heat/leaflet-heat.js", 
+				"L.MarkerClusterGroup@lib/leaflet-markercluster/leaflet.markercluster.js"
+			],
+			[
+				'lib/leaflet-proj4js/GpPluginLeaflet.js'
+			]
+		]
 	};
 	loadingConfig.vega.js = ['lib/vega-4.2.0/vega.min.js', 'lib/vega-lite-3.0.0-rc3/vega-lite.min.js', 'lib/vega-tooltip-0.13.0/vega-tooltip.min.js', ];
 });
