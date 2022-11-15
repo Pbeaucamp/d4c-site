@@ -506,7 +506,7 @@ SOFTWARE.
                 mapObject: '=',
                 mapStorage: '='
             },
-            controller: ['$scope', '$location', function($scope, $location) {
+            controller: ['$scope', '$location', 'WidgetCodeBuilder', function($scope, $location, WidgetCodeBuilder) {
                 $scope.working = false;
                 $scope.interfaceMode = 'edition';
                 $scope.placeholder = translate('Type your map name here');
@@ -529,6 +529,11 @@ SOFTWARE.
                 }
                 ;
                 $scope.persistMapFirstTime = function(onSuccess) {
+                    //We generate and save the widget code
+                    if (!$scope.hasUnknownDataset) {
+                        $scope.mapObject.widgetCode = WidgetCodeBuilder.buildMapbuilderWidgetCode($scope.mapObject.value);
+                    }
+
                     $scope.mapStorage.persistStorage($scope.mapObject).then(function(result) {
                         var slug = result[0]
                           , lastModified = result[1];
@@ -552,6 +557,12 @@ SOFTWARE.
                 $scope.saveMap = function() {
                     if ($scope.mapStorage.isPersisted()) {
                         $scope.working = true;
+
+                        //We generate and save the widget code
+                        if (!$scope.hasUnknownDataset) {
+                            $scope.mapObject.widgetCode = WidgetCodeBuilder.buildMapbuilderWidgetCode($scope.mapObject.value);
+                        }
+
                         $scope.mapStorage.saveConfiguration($scope.mapObject).then(function(lastModified) {
                             $scope.working = false;
                             $scope.lastModified = lastModified;
