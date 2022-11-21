@@ -4648,6 +4648,17 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
             'save_url': API_PATH + config.ID_DATASET + '/reuses/'
         };
     }]);
+    app.factory('VisualizationAPI', ['APIXHRService', 'config', function (APIXHRService, config) {
+        var API_PATH = fetchPrefix() + '/d4c/api/v1/visualization/';
+        return {
+            'list': function () {
+                return APIXHRService('GET', API_PATH, {});
+            },
+            'save': function (data) {
+                return APIXHRService('POST', API_PATH, data);
+            }
+        };
+    }]);
     app.factory("DebugLogger", ['$window', 'config', function ($window, config) {
         return {
             log: function () {
@@ -7466,7 +7477,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 (function () {
     'use strict';
     var mod = angular.module('d4c.core');
-    mod.directive('d4cEmbedControl', ['$location', 'translate', 'WidgetCodeBuilder', function ($location, translate, WidgetCodeBuilder) {
+    mod.directive('d4cEmbedControl', ['$location', 'translate', 'WidgetCodeBuilder', 'VisualizationAPI', function ($location, translate, WidgetCodeBuilder, VisualizationAPI) {
         function buildWidgetCode(embedType, context) {
             if (embedType === "cartograph") {
                 return "";
@@ -7520,7 +7531,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 defaultCollapse: '@',
                 context: '=?',
                 forceEmbedDatasetCard: '=',
-                widgetCode: '=?'
+                widgetCode: '=?',
+                loggedIn: '='
             },
             templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/embed_control.html',
             controller: function ($scope, $timeout) {
@@ -7558,6 +7570,25 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 };
                 $scope.mapOptions = {
                     scrollWheelZoom: false
+                };
+                $scope.saveEmbed = function ($visualizationName, $shareUrl, $iframe, $widget) {
+                    var saveEmbedAPI = VisualizationAPI.save;
+
+                    var data = {
+                        'datasetId': $scope.context.dataset.datasetid,
+                        'embedType': $scope.embedType,
+                        'visualizationName': $visualizationName,
+                        'shareUrl': $shareUrl,
+                        'iframe': $iframe,
+                        'widget': $widget,
+                    }
+
+                    saveEmbedAPI(data).success(function (data) {
+                       $scope.saved = true;
+                    });
+                };
+                $scope.reinitSave = function () {
+                    $scope.saved = false;
                 };
                 var _computeShareUrl = function (url, embedType) {
                     if (embedType === 'cartograph') {
@@ -9684,7 +9715,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 if (ctx != undefined && ctx.dataset != undefined) {
                     var canAnalyze = ctx.dataset.canAnalyze;
 
-                    if (canAnalyze || scope.struct.slug == "information" || scope.struct.slug == "export" || scope.struct.slug == "reuses") {
+                    if (canAnalyze || scope.struct.slug == "information" || scope.struct.slug == "visualization" ||scope.struct.slug == "export" || scope.struct.slug == "reuses") {
                         tabsCtrl.addPane(scope.struct, position);
                     }
                     // If we have a WMS, we have the feature geo
@@ -14010,6 +14041,30 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 options.xAxis.type = "category";
                 options.xAxis.categories = [];
             }
+            // Present in angular-corekkk.js ? Not used for now
+            // if (periodic === "month") {
+            //     options.xAxis.labels.format = "{value: %B}";
+            // } else if (periodic === "weekday") {
+            //     options.xAxis.labels.format = "{value: %A}";
+            //     if (precision === "hour") {
+            //         options.xAxis.labels.format = "{value: %A %Hh}";
+            //     }
+            // } else if (periodic === "day") {
+            //     options.xAxis.labels.format = "{value: %d}";
+            // } else if (periodic === "hour") {
+            //     options.xAxis.labels.format = "{value: %H}";
+            // }
+            // if (!precision) {
+            //     options.xAxis.labels.formatter = function () {
+            //         if (this.value.length > parameters.labelsXLength) {
+            //             return '<span title="' + this.value.replace('"', '') + '" alt="' + this.value.replace('"', '') + '">' + this.value.substring(0, parameters.labelsXLength - 3) + '...' + "</span>";
+            //         } else {
+            //             return this.value;
+            //         }
+            //     };
+            // } else {
+            //     options.xAxis.labels.useHTML = false;
+            // }
             if (parameters.singleAxis) {
                 var yAxisParameters = {
                     color: "#000000",
@@ -15150,10 +15205,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
                                     // Try to sort legend but it does not work as is
                                     // Need to modify chart.min.js in lib to add after e.filter on buildLabels e.sort&&(i = i.sort(function(a,b){return e.sort(a,b,t.chart.data)}))
-                                    // options.legend.labels = {};
-                                    // options.legend.labels.sort = function(a, b) { 
-                                    //     return b.datasetIndex > a.datasetIndex ? -1 : 1; 
-                                    // };
+                                    options.legend.labels = {};
+                                    options.legend.labels.sort = function(a, b) { 
+                                        // return b.datasetIndex > a.datasetIndex ? -1 : 1;
+                                        return a.text.localeCompare(b.text);
+                                    };
 
                                     for (let f = 0; f < options.series.length; f++) {
                                         try {
@@ -17123,7 +17179,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                 }, true);
                 var refreshRecords = function (globalSearch) {
-                    var DOWNLOAD_CAP = 200;
+                    var DOWNLOAD_CAP = 20000;
                     var SHAPEPREVIEW_HIGHCAP = 500000;
                     var POLYGONCLUSTERS_HIGHCAP = 500000;
                     var refresh = function (data) {
@@ -22419,6 +22475,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         'facet': facetName
                     });
                     return request(context, fetchPrefix() + '/d4c/api/datasets/1.0/search/', queryParameters, timeout);
+                },
+                'save_embed': function (context, parameters, timeout) {
+                    return request(context, fetchPrefix() + '/d4c/api/dataset/visualization/save', angular.extend({}, parameters, {
+                        dataset_id: context.dataset.id
+                    }), timeout);
                 }
             },
             'records': {
@@ -22526,7 +22587,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             'maps': function (context, parameters, timeout) {
                 return request(context, fetchPrefix() + '/d4c/api/maps/layers/', parameters, timeout);
-            }
+            },
 
         };
     }]);
@@ -24497,7 +24558,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 }
                 return yOffset;
             },
-            drawPoint: function (layerConfig, map, coords, record, targetLayer, geoDigest) {
+            drawPoint: function (layerConfig, map, coords, record, targetLayer, geoDigest, markerClusterGroup) {
                 var service = this;
                 SVGInliner.getPromise(PictoHelper.mapPictoToURL(layerConfig.picto, layerConfig.context), layerConfig.marker ? 'white' : service.getRecordColor(record, layerConfig)).then(function (svg) {
                     var clickable = layerConfig.refineOnClick || (angular.isDefined(layerConfig.tooltipDisabled) ? !layerConfig.tooltipDisabled : true);
@@ -24509,7 +24570,34 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         size: layerConfig.size,
                         clickable: clickable,
                     });
-                    targetLayer.addLayer(singleMarker);
+
+                    var displayFieldsValue = "";
+
+                    var mapDisplayFields = layerConfig.context.dataset.getFieldsMapDisplay();
+                    if (mapDisplayFields) {
+                        for (var i = 0; i < mapDisplayFields.length; ++i) {
+                            var fieldName = mapDisplayFields[i].name;
+                            var value = record.fields[fieldName];
+
+                            displayFieldsValue += displayFieldsValue.length === 0 ? value : " " + value;
+                        }
+                    }
+                    if (!(displayFieldsValue.length === 0)) {
+                        L.marker(coords, {
+                            icon: L.divIcon({
+                                className: 'label',
+                                html: '<span class="leaflet-label leaflet-label-position">' + displayFieldsValue + '</span>',
+                                iconSize: [100, 40]
+                            })
+                        }).addTo(map);
+                    }
+
+                    if (markerClusterGroup) {
+                        markerClusterGroup.addLayer(singleMarker);
+                    }
+                    else {
+                        targetLayer.addLayer(singleMarker);
+                    }
                     if (clickable) {
                         if (angular.isObject(record)) {
                             service.bindTooltip(map, singleMarker, layerConfig, coords, record.recordid);
@@ -24519,7 +24607,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                 });
             },
-            drawShape: function (layerConfig, map, geoJSON, record, targetLayer, geoDigest, route_color) {
+            drawShape: function (layerConfig, map, geoJSON, record, targetLayer, geoDigest, route_color, mapDisplay) {
                 var service = this;
                 var clickable = layerConfig.refineOnClick || (angular.isDefined(layerConfig.tooltipDisabled) ? !layerConfig.tooltipDisabled : true);
                 var shapeLayer = new L.GeoJSON(geoJSON, {
@@ -24572,6 +24660,17 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         return opts;
                     }
                 });
+
+                if (mapDisplay != null) {
+                    var label = L.marker(shapeLayer.getBounds().getCenter(), {
+                        icon: L.divIcon({
+                            className: 'label',
+                            html: '<span class="leaflet-label leaflet-label-position">' + mapDisplay.join(" ") + '</span>',
+                            iconSize: [100, 40]
+                        })
+                    }).addTo(map);
+                }
+
                 if (clickable) {
                     if (angular.isObject(record)) {
                         service.bindTooltip(map, shapeLayer, layerConfig, geoJSON, record.recordid);
@@ -24747,7 +24846,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         'geofilter.bbox': D4C.GeoFilter.getBoundsAsBboxParameter(map.getBounds())
                     });
                     D4CAPI.records.boundingbox(layerConfig.context, parameters).success(function (data) {
-                        var DOWNLOAD_CAP = 200;
+                        var DOWNLOAD_CAP = 20000;
                         var SHAPEPREVIEW_HIGHCAP = 500000;
                         var POLYGONCLUSTERS_HIGHCAP = 500000;
                         var returnPolygons = (data.count < POLYGONCLUSTERS_HIGHCAP);
@@ -25028,7 +25127,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (shape.type === 'Point') {
                             MapLayerHelper.drawPoint(layerConfig, map, [shape.coordinates[1], shape.coordinates[0]], value, shapeLayerGroup, record.geo_digest);
                         } else {
-                            MapLayerHelper.drawShape(layerConfig, map, shape, value, shapeLayerGroup, record.geo_digest, record.route_color);
+                            MapLayerHelper.drawShape(layerConfig, map, shape, value, shapeLayerGroup, record.geo_digest, record.route_color, record.map_display);
                         }
                     }
                     deferred.resolve(shapeLayerGroup);
@@ -25188,7 +25287,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 var deferred = $q.defer();
                 var markerLayerGroup = layerGroup;
                 var parameters = angular.extend({}, layerConfig.context.parameters, {
-                    'rows': 1000,
+                    'rows': 20000,
                     'format': 'json',
                     'geo_simplify': true,
                     'geo_simplify_zoom': map.getZoom(),
@@ -25207,12 +25306,21 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 if (layerConfig.color.field) {
                     includedFields.push(layerConfig.color.field);
                 }
+                var mapDisplayFields = layerConfig.context.dataset.getFieldsMapDisplay();
+                if (mapDisplayFields) {
+                    for (var i = 0; i < mapDisplayFields.length; ++i) {
+                        includedFields.push(mapDisplayFields[i].name);
+                    }
+                }
                 parameters.fields = includedFields.join(',');
                 D4CAPI.records.download(layerConfig.context, parameters, timeout.promise).success(function (data) {
                     layerConfig._incomplete = false;
                     if (data.length >= parameters.rows) {
                         layerConfig._incomplete = true;
                     }
+
+                    var markerClusterGroup = L.markerClusterGroup();
+                    var hasMarkerClusterGroup = false;
                     for (var i = 0; i < data.length; i++) {
                         var record = data[i];
                         var geoJSON;
@@ -25231,10 +25339,15 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             return;
                         }
                         if (geoJSON.type === 'Point') {
-                            MapLayerHelper.drawPoint(layerConfig, map, [geoJSON.coordinates[1], geoJSON.coordinates[0]], record, markerLayerGroup);
+                            hasMarkerClusterGroup = true;
+                            MapLayerHelper.drawPoint(layerConfig, map, [geoJSON.coordinates[1], geoJSON.coordinates[0]], record, markerLayerGroup, null, markerClusterGroup);
                         } else {
-                            MapLayerHelper.drawShape(layerConfig, map, geoJSON, record, markerLayerGroup, record.route_color);
+                            MapLayerHelper.drawShape(layerConfig, map, geoJSON, record, markerLayerGroup, record.route_color, record.map_display);
                         }
+                    }
+
+                    if (hasMarkerClusterGroup) {
+                        layerGroup.addLayer(markerClusterGroup);
                     }
                     deferred.resolve(markerLayerGroup);
                 });
@@ -25251,7 +25364,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             render: function (layerConfig, map, layerGroup, timeout) {
                 var deferred = $q.defer();
                 var parameters = angular.extend({}, layerConfig.context.parameters, {
-                    'rows': 1000,
+                    'rows': 20000,
                     'clusterprecision': map.getZoom(),
                     'geofilter.bbox': D4C.GeoFilter.getBoundsAsBboxParameter(map.getBounds())
                 });
@@ -25267,7 +25380,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (shape.geometry != null && shape.geometry.type === 'Point') {
                             MapLayerHelper.drawPoint(layerConfig, map, [shape.geometry.coordinates[1], shape.geometry.coordinates[0]], null, layerGroup, shape.geo_digest);
                         } else {
-                            MapLayerHelper.drawShape(layerConfig, map, shape.geometry, null, layerGroup, shape.geo_digest, shape.route_color);
+                            MapLayerHelper.drawShape(layerConfig, map, shape.geometry, null, layerGroup, shape.geo_digest, shape.route_color, shape.map_display);
                         }
                     }
                     deferred.resolve(layerGroup);
@@ -25368,11 +25481,38 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 ]
             },
             'leaflet': {
-                'css': ["https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map-fullscreen/map-fullscreen.css", "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.css", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-control-geocoder/Control.Geocoder.css", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/vectormarker/vectormarker.css", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/clustermarker/clustermarker.css", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-label/leaflet.label.css", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-draw/leaflet.draw.css"],
+                'css': [
+                    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css", 
+                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map-fullscreen/map-fullscreen.css", 
+                    "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.css", 
+                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-control-geocoder/Control.Geocoder.css", 
+                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/vectormarker/vectormarker.css", 
+                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/clustermarker/clustermarker.css", 
+                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-label/leaflet.label.css", 
+                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-draw/leaflet.draw.css",
+                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/MarkerCluster.css",
+                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/MarkerCluster.Default.css"
+                ],
                 'js': [
-                    ["L@https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"],
-                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map-fullscreen/map-fullscreen.js", "L.Control.Locate@https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-label/leaflet.label.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map/map.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map/tilelayer.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-control-geocoder/Control.Geocoder.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/vectormarker/vectormarker.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/clustermarker/clustermarker.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-draw/leaflet.draw.js", fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-heat/leaflet-heat.js"],
-                    [fetchPrefix() + '/sites/default/files/api/portail_d4c/lib/leaflet-proj4js/GpPluginLeaflet.js']
+                    [
+                        "L@https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"
+                    ],
+                    [
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map-fullscreen/map-fullscreen.js", 
+                        "L.Control.Locate@https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.js", 
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-label/leaflet.label.js", 
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map/map.js", 
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map/tilelayer.js", 
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-control-geocoder/Control.Geocoder.js", 
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/vectormarker/vectormarker.js", 
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/clustermarker/clustermarker.js", 
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-draw/leaflet.draw.js", 
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-heat/leaflet-heat.js",
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/leaflet.markercluster.js"
+                    ],
+                    [
+                        fetchPrefix() + '/sites/default/files/api/portail_d4c/lib/leaflet-proj4js/GpPluginLeaflet.js'
+                    ]
                 ]
             },
             'wordcloud': {
@@ -33501,6 +33641,16 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                     }
                     return fields;
                 },
+                getFieldsMapDisplay: function () {
+                    var fields = [];
+                    for (var i = 0; i < this.fields.length; i++) {
+                        var field = this.fields[i];
+                        if (!(field.annotations  === undefined) && field.annotations[0].name === 'mapDisplay') {
+                            fields.push(field);
+                        }
+                    }
+                    return fields;
+                },
                 hasNumericField: function () {
                     for (var i = 0; i < this.fields.length; i++) {
                         var field = this.fields[i];
@@ -34516,9 +34666,3 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
         window.CustomEvent = CustomEvent;
     }
 }());
-
-
-
-
-
-

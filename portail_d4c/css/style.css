@@ -943,3 +943,7 @@ summary::before {
 details[open] summary::before {
 	transform: rotate(45deg);
 }
+
+.leaflet-label-position {
+    margin-left: 55px;
+}

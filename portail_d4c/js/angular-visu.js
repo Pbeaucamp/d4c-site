@@ -1170,6 +1170,7 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
 
             var editorFields = [];
             var tableColumns = [];
+            var columnDefs = [];
             var fields = [];
             for (var i = 0; i < $scope.ctx.dataset.fields.length; i++) {
                 var field = $scope.ctx.dataset.fields[i];
@@ -1186,6 +1187,12 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                             tableColumns.push({
                                 data: field.name
                             });
+                            if (field.name == 'geo_shape') {
+                                columnDefs.push({
+                                    targets: tableColumns.length - 1,
+                                    render: $.fn.dataTable.render.ellipsis( 100 )
+                                });
+                            }
             
                             fields.push(field.name);
                             break;
@@ -1193,6 +1200,30 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                     }
                 }
             }
+
+            // If no column has been set as can_edit, we put all the columns
+            if (fields.length == 0) {
+                for (var i = 0; i < $scope.ctx.dataset.fields.length; i++) {
+                    var field = $scope.ctx.dataset.fields[i];
+    
+                    editorFields.push({
+                        name: field.name,
+                        label: field.name
+                    });
+                    tableColumns.push({
+                        data: field.name
+                    });
+                    if (field.name == 'geo_shape') {
+                        columnDefs.push({
+                            targets: tableColumns.length - 1,
+                            render: $.fn.dataTable.render.ellipsis( 100 )
+                        });
+                    }
+    
+                    fields.push(field.name);
+                }
+            }
+
             fields = fields.join(',');
 
             var editor = new $.fn.dataTable.Editor({
@@ -1204,9 +1235,9 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             $('#edit_table').DataTable({
                 scrollY: 200,
                 deferRender: true,
-                scroller: true,
+                scroller: false,
                 scrollX: true,
-                autoWidth: true,
+                autoWidth: false,
                 dom: 'Bfrtip',
                 ajax: {
                     url: 'd4c/api/datatable/manage',
@@ -1217,8 +1248,9 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                     }
                 },
                 columns: tableColumns,
+                columnDefs: columnDefs,
                 select: true,
-                lengthChange: false,
+                lengthChange: true,
                 buttons: [
                     { extend: 'create', editor: editor },
                     { extend: 'edit', editor: editor },

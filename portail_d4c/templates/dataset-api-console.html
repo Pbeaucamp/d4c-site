@@ -5,7 +5,7 @@ ods-widgets -- https://github.com/opendatasoft/ods-widgets
 Copyright (c) 2014 - Opendatasoft
 -->
     <div class="d4c-dataset-api-console__tab-header">
-        <p ng-if="!apiProxy"><translate>This dataset can be consumed via an API that allows to search and download records using various criteria exposed in the console below.</translate><br><translate>Take a look at the <a href="/data4citizen/api" target="_blank"><i class="icon-book"></i> API page</a> to try the other API services!</translate></p>
+        <p ng-if="!apiProxy"><translate>This dataset can be consumed via an API that allows to search and download records using various criteria exposed in the console below.</translate><br><translate>Take a look at the <a href="/d4c/api" target="_blank"><i class="icon-book"></i> API page</a> to try the other API services!</translate></p>
         <p translate ng-if="apiProxy">This dataset can be consumed via an API.</p>
     </div>
     <d4c-api-console ng-if="!apiProxy && service" service="service" api="api" auto-request="true" autocomplete-facet="staticSearchOptions.facet"></d4c-api-console>

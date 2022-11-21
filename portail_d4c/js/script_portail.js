@@ -1,6 +1,7 @@
 //var filtreLicence = [];
 var filtreProducteur = [];
 var filtreTheme = [];
+var filtreType = [];
 var filtreGranularite = [];
 var filtreFormats = [];
 var filtreTags = [];
@@ -15,6 +16,7 @@ var filtreMapCoord = [];
 
 var canReplaceUrl;
 var themes = [];
+var types = [];
 var orgas = [];
 var features = [
 	{ name: "table", label: "Tableau", picto: "fa-table" },
@@ -121,6 +123,16 @@ function loadDatasets() {
 		searchDatasets();
 	});
 
+	$('#list-type').on('click', 'li', function () {
+		var type = $(this).data('type');
+		if (filtreType.indexOf(type) != -1) {
+			filtreType.splice(filtreType.indexOf(type));
+		} else {
+			filtreType.push(type);
+		}
+		searchDatasets();
+	});
+
 
 	$('#list-theme').on('click', 'li', function () {
 		var theme = $(this).data('theme');
@@ -183,6 +195,15 @@ function loadDatasets() {
 			}
 
 			$('#input-theme').val(filtreTheme.join(";"));
+		}
+		else if (typeof $(this).parent().data("type") != "undefined") {
+			for (var j = 0; j < filtreType.length; j++) {
+				if (filtreType[j] == $(this).parent().data('type')) {
+					filtreType.splice(j, 1);
+				}
+			}
+
+			$('#input-type').val(filtreType.join(";"));
 		}
 
 		/*else if(typeof $(this).parent().data("format") != "undefined"){
@@ -301,6 +322,9 @@ function loadParameters() {
 			if (part[0] == "organization") {
 				filtreProducteur = values;
 			} else if (part[0] == "tags") {
+				$.each(values, function (i, v) {
+					values[i] = v.replace(/\"/g, "");
+				});
 				filtreTags = values;
 			} else if (part[0] == "themes") {
 				$.each(values, function (i, v) {
@@ -312,6 +336,16 @@ function loadParameters() {
 					values[i] = v.replace(/\*/g, "");
 				});
 				filtreVisu = values;
+			} else if (part[0] == "data_rgpd" || part[0] == "limesurvey" || part[0] == "api") {
+				if (part[0] == "data_rgpd") {
+					filtreType.push("RGPD");
+				}
+				else if (part[0] == "limesurvey") {
+					filtreType.push("LimeSurvey");
+				}
+				else if (part[0] == "api") {
+					filtreType.push("API");
+				}
 			}
 		});
 	} else if (theme != undefined) {
@@ -345,6 +379,7 @@ function resetFilters() {
 	filtreTags = [];
 	filtreVisu = [];
 	filtreTheme = [];
+	filtreType = [];
 	filtreMapCoord = [];
 	$('#input-map-coordinate').val('');
 	$('#search-form input').val('');
@@ -484,6 +519,19 @@ function getReq() {
 	if (filtreVisu.length > 0) {
 		fqArr.push("features:(*" + filtreVisu.join("* OR *") + "*)");
 	}
+	if (filtreType.length > 0) {
+		$.each(filtreType, function (i, t) {
+			if (t == "RGPD") {
+				fqArr.push("data_rgpd:(1)");
+			}
+			else if (t == "LimeSurvey") {
+				fqArr.push("limesurvey:(1)");
+			}
+			else if (t == "API") {
+				fqArr.push("api:(1)");
+			}
+		});
+	}
 
 	if ($('#input-map-coordinate').val() != "") {
 		var inputmapcoord = $('#input-map-coordinate').val();
@@ -559,6 +607,7 @@ function renderResult(json) {
 	$('#list-format').find('li').remove();
 	$('#list-tag').find('li').remove();
 	$('#list-theme').find('li').remove();
+	$('#list-type').find('li').remove();
 	$('#list-visu').find('li').remove();
 	$('.alert-info').remove();
 	$('#datasets').find('.dataset').each(function () {
@@ -574,7 +623,7 @@ function renderResult(json) {
 	var numDataset = 0;
 
 	if (json == null || json.result.count == 0) {
-		$('#datasets').append('<div class="alert alert-info">Aucun jeu de données trouvé</div>');
+		$('#datasets').append('<div class="alert alert-info">Aucunne connaissance trouvée</div>');
 
 		setActiveFilters();
 
@@ -645,6 +694,16 @@ function renderResult(json) {
 		}
 	});
 
+	//type facet
+	var type_facet = ["RGPD", "LimeSurvey", "API"];
+	$.each(type_facet, function (i, t) {
+		var selectedCss = isSelected(filtreType, t);
+		var type = t;
+		if (type.length > 0) {
+			$('#list-type').append('<li class="list-item ' + selectedCss + '" data-type="' + t + '">' + type + '</li>');
+		}
+	});
+
 
 	//filtres actifs
 	setActiveFilters();
@@ -655,7 +714,7 @@ function renderResult(json) {
 function isSelected(filters, item) {
 	for (i = 0; i < filters.length; i++) {
 		var filter = filters[i];
-		if (filter == item.name) {
+		if (filter == item || filter == item.name) {
 			return "selected";
 		}
 	}
@@ -686,6 +745,10 @@ function setActiveFilters() {
 		hasActifFilters = true;
 		var feat = features.filter(function (o) { return o.name == visu; });
 		$('#filter').find('.jetons').append('<li data-visu="' + visu + '">' + '<i class="fa ' + feat[0].picto + '" aria-hidden="true"></i>' + feat[0].label + ' <span class="glyphicon glyphicon-remove"></span></li>');
+	});
+	$.each(filtreType, function (i, type) {
+		hasActifFilters = true;
+		$('#filter').find('.jetons').append('<li data-type="' + type + '">' + type + ' <span class="glyphicon glyphicon-remove"></span></li>');
 	});
 
 	var searchValue = getSearchValue()
@@ -883,25 +946,36 @@ function createDataset(data) {
 
 	//theme = accentsTidy(theme.replace(new RegExp(", ", 'g'),"-").replace(new RegExp(",", 'g'),"-").replace(new RegExp(" ", 'g'),"-"));
 	var imageThemes = buildImageThemes(theme);
-   
-    
-    
-    $('#datasets').prepend('<div div class="dataset col-md-6 col-sm-12 col-xs-12 content-body" data-theme="' + theme[0] +'" data-orga="' + id_orga /*+'" data-reuses="'+ nb_reuses*/  +'" data-id="' + id +'" data-time="' + date.getTime() /*+'" data-views="' + nbViews + '" data-downloads="' + nbDownloads + '" data-records="' + nbRecords*/ + '" data-analyse="'+analyseDefault+'" data-imported="' + (lastUpdateDate !=  null ? lastUpdateDate.getTime() : '') +'" style="background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.41)), url('+imgBck+') center center no-repeat; background-size: cover;" >'+
-    	'<div class="box_1"><div style="display: flex; flex-direction:row">'+
-			'<div>' + imageThemes + '</div>'+
-			'<div class="box_4"><div class="inner"><div class="dataset-h2"><a href="' + fetchPrefix() + '/visualisation/?id=' + name + '' + analyseDefault + '"' + targetValue + '> ' + data.title + ' </a></div></div></div></div>'+
-            private +               
-            '<div class="inner"><p class="data-desc">' + description + '</p>'+ listeFormat +'</div>' +
-				'<div class="infos inner">' + 
-					// Modification custom SPOT
-					//'<ul><li class="titre">Origine du site</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul>' +
-					'<ul><li class="titre">Producteur</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul>' +
-					'<ul><li class="titre">Date modification</li><li class="info">' + (lastUpdateDate != null ? lastUpdateDate.toLocaleDateString() : '') + (lastUpdateDate != null ? ' ' + lastUpdateDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '') + '</ul>'+ /*li_granularite + li_reuses +*/
-					'<ul class="jetons">' + tagList +'</ul>' + 
-				'</div>' +               
-    		'</div>'+     
-    	'<div class="box_2">'+rightPanel+'</div>'+
-    '</div>');
+
+    $('#datasets').prepend(
+		'<div div class="dataset col-md-6 col-sm-12 col-xs-12 content-body" data-theme="' + theme[0] +'" data-orga="' + id_orga /*+'" data-reuses="'+ nb_reuses*/  +'" data-id="' + id +'" data-time="' + date.getTime() /*+'" data-views="' + nbViews + '" data-downloads="' + nbDownloads + '" data-records="' + nbRecords*/ + '" data-analyse="' + analyseDefault + '" data-imported="' + (lastUpdateDate !=  null ? lastUpdateDate.getTime() : '') + '" style="background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.41)), url(' + imgBck + ') center center no-repeat; background-size: cover;" >' +
+    		'<div class="box_1">' + 
+				'<a href="' + fetchPrefix() + '/visualisation/?id=' + name + '' + analyseDefault + '"' + targetValue + '>' +
+					'<div style="display: flex; flex-direction:row">' +
+						'<div class="portail-theme">' + imageThemes + '</div>' +
+						'<div class="box_4">' + 
+							'<div class="inner">' + 
+								'<div class="dataset-h2">' + 
+									data.title + 
+									// '<a href="' + fetchPrefix() + '/visualisation/?id=' + name + '' + analyseDefault + '"' + targetValue + '> ' + data.title + ' </a>' + 
+								'</div>' + 
+							'</div>' + 
+						'</div>' + 
+					'</div>' +
+					private +               
+					'<div class="inner"><p class="data-desc">' + description + '</p>' + listeFormat + '</div>' +
+					'<div class="infos inner">' + 
+						// Modification custom SPOT
+						//'<ul><li class="titre">Origine du site</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul>' +
+						'<ul><li class="titre">Producteur</li><li class="info" id="nomOrga">' + data.organization.title + '</li></ul>' +
+						'<ul><li class="titre">Date modification</li><li class="info">' + (lastUpdateDate != null ? lastUpdateDate.toLocaleDateString() : '') + (lastUpdateDate != null ? ' ' + lastUpdateDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '') + '</ul>'+ /*li_granularite + li_reuses +*/
+						'<ul class="jetons">' + tagList + '</ul>' + 
+					'</div>' + 
+				'</a>' +      
+			'</div>'+     
+			'<div class="box_2">' + rightPanel + '</div>'+
+    	'</div>'
+	);
 
 }
 
