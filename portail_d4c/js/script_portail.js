@@ -883,6 +883,7 @@ function createDataset(data) {
 
 
 	let rightPanel = '';
+	let donVisualiseTab = data.extras.filter(function (t) { return t.key == "dont_visualize_tab" })[0];
 	$.each(features, function (i, f) {
 		if (f.name == "export") {
 			rightPanel += export_vis;
@@ -891,10 +892,12 @@ function createDataset(data) {
 				var vis;
 				switch (f.name) {
 					case 'api':
-						vis = api_vis;
+						//we check if analize is hidden
+						vis = donVisualiseTab === undefined || donVisualiseTab.value.indexOf("api") == -1 ? api_vis : "";
 						break;
 					case 'analyze':
-						vis = analize_vis;
+						//we check if analize is hidden
+						vis = donVisualiseTab === undefined || donVisualiseTab.value.indexOf("analize") == -1 ? analize_vis : "";
 						break;
 					case 'table':
 						vis = table_vis;
