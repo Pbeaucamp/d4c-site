@@ -7575,7 +7575,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     var saveEmbedAPI = VisualizationAPI.save;
 
                     var data = {
-                        'datasetId': $scope.context.dataset.datasetid,
+                        'datasetId': $scope.context != undefined ? $scope.context.dataset.datasetid : undefined,
                         'embedType': $scope.embedType,
                         'visualizationName': $visualizationName,
                         'shareUrl': $shareUrl,

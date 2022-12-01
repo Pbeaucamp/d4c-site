@@ -506,7 +506,7 @@ SOFTWARE.
                 mapObject: '=',
                 mapStorage: '='
             },
-            controller: ['$scope', '$location', 'WidgetCodeBuilder', function($scope, $location, WidgetCodeBuilder) {
+            controller: ['$scope', '$location', 'WidgetCodeBuilder', 'MapbuilderHelper', function($scope, $location, WidgetCodeBuilder, MapbuilderHelper) {
                 $scope.working = false;
                 $scope.interfaceMode = 'edition';
                 $scope.placeholder = translate('Type your map name here');
@@ -529,11 +529,6 @@ SOFTWARE.
                 }
                 ;
                 $scope.persistMapFirstTime = function(onSuccess) {
-                    //We generate and save the widget code
-                    if (!$scope.hasUnknownDataset) {
-                        $scope.mapObject.widgetCode = WidgetCodeBuilder.buildMapbuilderWidgetCode($scope.mapObject.value);
-                    }
-
                     $scope.mapStorage.persistStorage($scope.mapObject).then(function(result) {
                         var slug = result[0]
                           , lastModified = result[1];
@@ -542,6 +537,14 @@ SOFTWARE.
                         $scope.mapObject.persist_id = slug;
                         $location.path('/' + slug + '/edit/');
                         if (onSuccess) {
+                            
+                            //We generate and save the widget code
+                            if (!$scope.hasUnknownDataset) {
+                                $scope.mapObject.widgetCode = WidgetCodeBuilder.buildMapbuilderWidgetCode($scope.mapObject.value);
+                                $scope.mapObject.directLink = MapbuilderHelper.getMapURL();
+                                $scope.mapObject.embedCode = $scope.embedCode;
+                            }
+
                             onSuccess();
                         }
                     });
@@ -561,6 +564,8 @@ SOFTWARE.
                         //We generate and save the widget code
                         if (!$scope.hasUnknownDataset) {
                             $scope.mapObject.widgetCode = WidgetCodeBuilder.buildMapbuilderWidgetCode($scope.mapObject.value);
+                            $scope.mapObject.directLink = MapbuilderHelper.getMapURL();
+                            $scope.mapObject.embedCode = $scope.embedCode;
                         }
 
                         $scope.mapStorage.saveConfiguration($scope.mapObject).then(function(lastModified) {
@@ -1023,7 +1028,7 @@ SOFTWARE.
                 };
                 var _computeEmbedUrl = function(url) {
                     if (angular.isDefined(url)) {
-                        url = url.replace('/map/', '/map/embed/');
+                        url = url.replace('/carte/', '/carte/frame/');
                     }
                     return url;
                 };
