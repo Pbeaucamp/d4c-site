@@ -24661,7 +24661,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                 });
 
-                if (mapDisplay != null) {
+                if (mapDisplay != null && mapDisplay.length > 0) {
                     var label = L.marker(shapeLayer.getBounds().getCenter(), {
                         icon: L.divIcon({
                             className: 'label',
