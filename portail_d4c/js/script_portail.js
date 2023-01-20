@@ -947,6 +947,9 @@ function createDataset(data) {
 	//theme = accentsTidy(theme.replace(new RegExp(", ", 'g'),"-").replace(new RegExp(",", 'g'),"-").replace(new RegExp(" ", 'g'),"-"));
 	var imageThemes = buildImageThemes(theme);
 
+	var datasetRecordsCount = buildDatasetRecordsCount(data);
+	var datasetSize = buildDatasetSize(data);
+
     $('#datasets').prepend(
 		'<div div class="dataset col-md-6 col-sm-12 col-xs-12 content-body" data-theme="' + theme[0] +'" data-orga="' + id_orga /*+'" data-reuses="'+ nb_reuses*/  +'" data-id="' + id +'" data-time="' + date.getTime() /*+'" data-views="' + nbViews + '" data-downloads="' + nbDownloads + '" data-records="' + nbRecords*/ + '" data-analyse="' + analyseDefault + '" data-imported="' + (lastUpdateDate !=  null ? lastUpdateDate.getTime() : '') + '" style="background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.41)), url(' + imgBck + ') center center no-repeat; background-size: cover;" >' +
     		'<div class="box_1">' + 
@@ -969,6 +972,8 @@ function createDataset(data) {
 						//'<ul><li class="titre">Origine du site</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul>' +
 						'<ul><li class="titre">Producteur</li><li class="info" id="nomOrga">' + data.organization.title + '</li></ul>' +
 						'<ul><li class="titre">Date modification</li><li class="info">' + (lastUpdateDate != null ? lastUpdateDate.toLocaleDateString() : '') + (lastUpdateDate != null ? ' ' + lastUpdateDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '') + '</ul>'+ /*li_granularite + li_reuses +*/
+						datasetRecordsCount +
+						datasetSize +
 						'<ul class="jetons">' + tagList + '</ul>' + 
 					'</div>' + 
 				'</a>' +      
@@ -976,7 +981,16 @@ function createDataset(data) {
 			'<div class="box_2">' + rightPanel + '</div>'+
     	'</div>'
 	);
+}
 
+function buildDatasetRecordsCount(data) {
+	var recordsCount = data.extras.filter(function (t) { return t.key == "records_count" })[0];
+	return recordsCount ? '<ul><li class="titre">Nombre de lignes</li><li class="info">' + parseInt(recordsCount.value) + '</ul>' : '';
+}
+
+function buildDatasetSize(data) {
+	var size = data.extras.filter(function (t) { return t.key == "dataset_size" })[0];
+	return size ? '<ul><li class="titre">Taille en mo</li><li class="info">' + size.value + '</ul>' : '';
 }
 
 function hasWMS(dataset) {
