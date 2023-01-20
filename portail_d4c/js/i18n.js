@@ -263,7 +263,8 @@ d4c.config(function (D4CWidgetsConfigProvider, ModuleLazyLoaderProvider) {
 				"L.Draw@lib/leaflet-draw/leaflet.draw.js", 
 				"L.BundleTileLayer@lib/bundletilelayer/bundletilelayer.js", 
 				"L.HeatLayer@lib/leaflet-heat/leaflet-heat.js", 
-				"L.MarkerClusterGroup@lib/leaflet-markercluster/leaflet.markercluster.js"
+				"L.MarkerClusterGroup@lib/leaflet-markercluster/leaflet.markercluster.js",
+				"L.Control.EasyPrint@lib/leaflet-easyprint/bundle.js"
 			],
 			[
 				'lib/leaflet-proj4js/GpPluginLeaflet.js'

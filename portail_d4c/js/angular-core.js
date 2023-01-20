@@ -18343,6 +18343,13 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
                     var map = new L.D4CMap(element.children()[0].children[0], mapOptions);
                     map.addControl(new L.Control.Scale());
+                    map.addControl(new L.easyPrint({
+                        title: 'Exporter la carte',
+                        position: 'bottomright',
+                        exportOnly: true,
+                        filename: 'carte_export',
+                        sizeModes: ['A4Portrait', 'A4Landscape']
+                    }));
                     if (!isStatic) {
                         map.addControl(new L.Control.Zoom({
                             position: 'topright',
@@ -25509,7 +25516,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/clustermarker/clustermarker.js", 
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-draw/leaflet.draw.js", 
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-heat/leaflet-heat.js",
-                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/leaflet.markercluster.js"
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/leaflet.markercluster.js",
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-easyprint/bundle.js"
                     ],
                     [
                         fetchPrefix() + '/sites/default/files/api/portail_d4c/lib/leaflet-proj4js/GpPluginLeaflet.js'
