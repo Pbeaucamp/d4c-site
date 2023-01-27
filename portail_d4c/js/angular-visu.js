@@ -1227,7 +1227,7 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             fields = fields.join(',');
 
             var editor = new $.fn.dataTable.Editor({
-                ajax: 'd4c/api/datatable/manage?datasetId=' + datasetId + '&resourceId=' + resourceId + '&fields=' + fields,
+                ajax: 'd4c/api/datatable/manage?datasetId=' + datasetId + '&resource_id=' + resourceId + '&fields=' + fields,
                 table: '#edit_table',
                 fields: editorFields
             });
@@ -1243,7 +1243,7 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                     url: 'd4c/api/datatable/manage',
                     data: {
                         'datasetId': datasetId,
-                        'resourceId': resourceId,
+                        'resource_id': resourceId,
                         'fields': fields
                     }
                 },
@@ -1259,7 +1259,7 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             });
         };
         $scope.visualizeResource = function (datasetId, resourceId) {
-            window.location.search = '?id=' + datasetId + '&resourceId=' + resourceId;
+            window.location.search = '?id=' + datasetId + '&resource_id=' + resourceId;
         };
         $scope.downloadResource = function (serviceWMSUrl, serviceWFSUrl, format) {
             var type = $("#d4c-select-download-resource :selected")[0].parentNode.label;
@@ -1272,6 +1272,9 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
         };
         $scope.goBackToSearch = function () {
             window.location.href = fetchPrefix() + '/portail';
+        };
+        $scope.validateData = function (contractId) {
+
         };
     }
     ]);
