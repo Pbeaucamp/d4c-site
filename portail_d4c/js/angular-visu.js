@@ -1238,6 +1238,9 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                 scroller: false,
                 scrollX: true,
                 autoWidth: false,
+                language: {
+                    url: fetchPrefix() + '/sites/default/files/api/portail_d4c/localisation/fr-FR.json'
+                },
                 dom: 'Bfrtip',
                 ajax: {
                     url: 'd4c/api/datatable/manage',
