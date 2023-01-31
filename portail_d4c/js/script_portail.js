@@ -245,7 +245,23 @@ function loadDatasets() {
 	$('#list-cat li').on('click', function (e) {
 		var cat = $(this).data('cat');
 		var req = getReq();
-		window.location.href = fetchPrefix() + '/d4c/api/datasets/2.0/download/' + cat + "/" + req;
+		if (cat == "zip") {
+			// Ajax call with wait
+			$.ajax({
+				url: fetchPrefix() + '/d4c/api/datasets/2.0/download/' + cat + "/" + req,
+				type: 'GET',
+				beforeSend: function () {
+					$('#wait').show();
+				}
+			}).done(function (data) {
+				$('#wait').hide();
+				window.location.href = data;
+			}
+			);
+		}
+		else {
+			window.location.href = fetchPrefix() + '/d4c/api/datasets/2.0/download/' + cat + "/" + req;
+		}
 	});
 }
 
