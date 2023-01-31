@@ -512,10 +512,17 @@ SOFTWARE.
                 $scope.placeholder = translate('Type your map name here');
                 var mapConfigurationProperties = ['searchBox', 'toolbarFullscreen', 'toolbarGeolocation', 'autoGeolocation', 'layerSelection'];
                 $scope.startMapConfiguration = function(event) {
-                    $scope.mapConfiguration = angular.copy($scope.mapObject.value);
-                    angular.forEach(Object.keys($scope.mapConfiguration), function(property) {
-                        if (mapConfigurationProperties.indexOf(property) === -1) {
-                            delete mapConfigurationProperties[property];
+                    // $scope.mapConfiguration = angular.copy($scope.mapObject.value);
+                    // angular.forEach(Object.keys($scope.mapConfiguration), function(property) {
+                    //     if (mapConfigurationProperties.indexOf(property) === -1) {
+                    //         delete mapConfigurationProperties[property];
+                    //     }
+                    // });
+
+                    $scope.mapConfiguration = {};
+                    mapConfigurationProperties.forEach(function(property) {
+                        if ($scope.mapObject.value.hasOwnProperty(property)) {
+                            $scope.mapConfiguration[property] = $scope.mapObject.value[property];
                         }
                     });
                     $scope.showConfigurationModal(event);

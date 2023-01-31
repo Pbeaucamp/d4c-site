@@ -16742,6 +16742,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     serviceUrl: "https://nominatim.openstreetmap.org/",
                                     geocodingQueryParams: {
                                         "accept-language": language || 'en',
+                                        "countrycodes": language,
                                         "polygon_geojson": true
                                     }
                                 })
@@ -18377,6 +18378,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 serviceUrl: "https://nominatim.openstreetmap.org/",
                                 geocodingQueryParams: {
                                     "accept-language": D4CWidgetsConfig.language || 'en',
+                                    "countrycodes": D4CWidgetsConfig.language,
                                     "polygon_geojson": true
                                 }
                             })
