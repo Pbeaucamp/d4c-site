@@ -247,17 +247,27 @@ function loadDatasets() {
 		var req = getReq();
 		if (cat == "zip") {
 			// Ajax call with wait
-			$.ajax({
-				url: fetchPrefix() + '/d4c/api/datasets/2.0/download/' + cat + "/" + req,
+			$.ajax(fetchPrefix() + '/d4c/api/datasets/2.0/download/' + cat + "/" + req,
+			{
 				type: 'GET',
+				dataType: 'json',
 				beforeSend: function () {
-					$('#wait').show();
+					loading(true);
+				},
+				success: function (data) {
+					loading(false);
+					if (data.status == "error") {
+						alert(data.message);
+					}
+					else {
+						window.location.href = data.filename;
+					}
+				},
+				error: function (e) {
+					loading(false);
+					alert("Une erreur est survenue lors de la récupération des données (" + e.responseText + "). Veuillez réessayer ultérieurement.");
 				}
-			}).done(function (data) {
-				$('#wait').hide();
-				window.location.href = data;
-			}
-			);
+			});
 		}
 		else {
 			window.location.href = fetchPrefix() + '/d4c/api/datasets/2.0/download/' + cat + "/" + req;
