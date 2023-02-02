@@ -246,7 +246,6 @@ function loadDatasets() {
 		var cat = $(this).data('cat');
 		var req = getReq();
 		if (cat == "zip") {
-			// Ajax call with wait
 			$.ajax(fetchPrefix() + '/d4c/api/datasets/2.0/download/' + cat + "/" + req,
 			{
 				type: 'GET',

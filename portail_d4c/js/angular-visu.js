@@ -1276,8 +1276,28 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
         $scope.goBackToSearch = function () {
             window.location.href = fetchPrefix() + '/portail';
         };
-        $scope.validateData = function (contractId) {
-
+        $scope.validateData = function (contractId, datasetId, resourceId) {
+            $.ajax(fetchPrefix() + '/databfc/ro/datavalidation?contractId=' + contractId + '&datasetId=' + datasetId + '&resourceId=' + resourceId,
+			{
+				type: 'GET',
+				dataType: 'json',
+				beforeSend: function () {
+                    $scope.loading = true;
+				},
+				success: function (data) {
+                    $scope.loading = false;
+					if (data.status == "error") {
+						alert(data.message);
+					}
+					else {
+                        window.location.href = fetchPrefix() + '/visualisation?id=' + datasetId + '&resource_id=' + resourceId;
+					}
+				},
+				error: function (e) {
+                    $scope.loading = false;
+					alert("Une erreur est survenue lors de la validation des données (" + e.responseText + "). Veuillez réessayer ultérieurement.");
+				}
+			});
         };
     }
     ]);
