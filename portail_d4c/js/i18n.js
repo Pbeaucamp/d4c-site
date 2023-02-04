@@ -244,7 +244,8 @@ d4c.config(function (D4CWidgetsConfigProvider, ModuleLazyLoaderProvider) {
 			"lib/leaflet-label/leaflet.label.css", 
 			"lib/leaflet-draw/leaflet.draw.css", 
 			"lib/leaflet-markercluster/MarkerCluster.css", 
-			"lib/leaflet-markercluster/MarkerCluster.Default.css"
+			"lib/leaflet-markercluster/MarkerCluster.Default.css", 
+			"lib/leaflet-measure/leaflet-measure.css"
 		],
 		'js': [
 			[
@@ -264,7 +265,8 @@ d4c.config(function (D4CWidgetsConfigProvider, ModuleLazyLoaderProvider) {
 				"L.BundleTileLayer@lib/bundletilelayer/bundletilelayer.js", 
 				"L.HeatLayer@lib/leaflet-heat/leaflet-heat.js", 
 				"L.MarkerClusterGroup@lib/leaflet-markercluster/leaflet.markercluster.js",
-				"L.Control.EasyPrint@lib/leaflet-easyprint/bundle.js"
+				"L.Control.EasyPrint@lib/leaflet-easyprint/bundle.js",
+				"L.Control.Measure@lib/leaflet-measure/leaflet-measure.fr.js"
 			],
 			[
 				'lib/leaflet-proj4js/GpPluginLeaflet.js'

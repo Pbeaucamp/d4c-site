@@ -18351,6 +18351,15 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         filename: 'carte_export',
                         sizeModes: ['A4Portrait', 'A4Landscape']
                     }));
+                    map.addControl(new L.Control.Measure({
+                        position: 'bottomright',
+                        primaryLengthUnit: 'meters',
+                        secondaryLengthUnit: 'kilometers',
+                        primaryAreaUnit: 'hectares',
+                        secondaryAreaUnit: undefined,
+                        activeColor: '#cf3008',
+                        completedColor: '#942203'
+                    }));
                     if (!isStatic) {
                         map.addControl(new L.Control.Zoom({
                             position: 'topright',
@@ -25519,7 +25528,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-draw/leaflet.draw.js", 
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-heat/leaflet-heat.js",
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/leaflet.markercluster.js",
-                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-easyprint/bundle.js"
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-easyprint/bundle.js",
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-measure/leaflet-measure.fr.js"
                     ],
                     [
                         fetchPrefix() + '/sites/default/files/api/portail_d4c/lib/leaflet-proj4js/GpPluginLeaflet.js'
