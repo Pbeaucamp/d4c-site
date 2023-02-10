@@ -361,9 +361,12 @@ function loadParameters() {
 					values[i] = v.replace(/\*/g, "");
 				});
 				filtreVisu = values;
-			} else if (part[0] == "data_rgpd" || part[0] == "limesurvey" || part[0] == "api") {
+			} else if (part[0] == "data_rgpd" || part[0] == "data_interop" || part[0] == "limesurvey" || part[0] == "api") {
 				if (part[0] == "data_rgpd") {
 					filtreType.push("RGPD");
+				}
+				else if (part[0] == "data_interop") {
+					filtreType.push("INTEROPERABILITE");
 				}
 				else if (part[0] == "limesurvey") {
 					filtreType.push("LimeSurvey");
@@ -549,6 +552,9 @@ function getReq() {
 			if (t == "RGPD") {
 				fqArr.push("data_rgpd:(1)");
 			}
+			else if (t == "INTEROPERABILITE") {
+				fqArr.push("data_interop:(1)");
+			}
 			else if (t == "LimeSurvey") {
 				fqArr.push("limesurvey:(1)");
 			}
@@ -720,7 +726,7 @@ function renderResult(json) {
 	});
 
 	//type facet
-	var type_facet = ["RGPD", "LimeSurvey", "API"];
+	var type_facet = ["RGPD", "INTEROPERABILITE", "LimeSurvey", "API"];
 	$.each(type_facet, function (i, t) {
 		var selectedCss = isSelected(filtreType, t);
 		var type = t;
