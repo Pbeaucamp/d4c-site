@@ -4656,6 +4656,9 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
             },
             'save': function (data) {
                 return APIXHRService('POST', API_PATH, data);
+            },
+            'update': function (data) {
+                return APIXHRService('PUT', API_PATH, data);
             }
         };
     }]);
@@ -7532,7 +7535,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 context: '=?',
                 forceEmbedDatasetCard: '=',
                 widgetCode: '=?',
-                loggedIn: '='
+                loggedIn: '=',
+                visualizationId: '=',
             },
             templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/embed_control.html',
             controller: function ($scope, $timeout) {
@@ -7571,24 +7575,40 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 $scope.mapOptions = {
                     scrollWheelZoom: false
                 };
-                $scope.saveEmbed = function ($visualizationName, $shareUrl, $iframe, $widget) {
+                $scope.saveEmbed = function (visualizationName, shareUrl, iframe, widget) {
                     var saveEmbedAPI = VisualizationAPI.save;
 
                     var data = {
                         'datasetId': $scope.context != undefined ? $scope.context.dataset.datasetid : undefined,
                         'embedType': $scope.embedType,
-                        'visualizationName': $visualizationName,
-                        'shareUrl': $shareUrl,
-                        'iframe': $iframe,
-                        'widget': $widget,
+                        'visualizationName': visualizationName,
+                        'shareUrl': shareUrl,
+                        'iframe': iframe,
+                        'widget': widget,
                     }
 
                     saveEmbedAPI(data).success(function (data) {
                        $scope.saved = true;
+                       $scope.visualizationId = data.result.visualizationId;
+
+                       window.location.href = '/databfc/ro/datasets/manage/dataset?data4citizen-type=visualization&entity-id=' + data.result.visualizationId;
                     });
                 };
-                $scope.reinitSave = function () {
-                    $scope.saved = false;
+                $scope.updateEmbed = function (visuId, shareUrl, iframe, widget) {
+                    var updateEmbedAPI = VisualizationAPI.update;
+
+                    var data = {
+                        'visualizationId': visuId,
+                        'embedType': $scope.embedType,
+                        'shareUrl': shareUrl,
+                        'iframe': iframe,
+                        'widget': widget,
+                    }
+
+                    updateEmbedAPI(data).success(function (data) {
+                       $scope.saved = true;
+                       $scope.visualizationId = data.result.visualizationId;
+                    });
                 };
                 var _computeShareUrl = function (url, embedType) {
                     if (embedType === 'cartograph') {
@@ -9715,7 +9735,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 if (ctx != undefined && ctx.dataset != undefined) {
                     var canAnalyze = ctx.dataset.canAnalyze;
 
-                    if (canAnalyze || scope.struct.slug == "information" || scope.struct.slug == "visualization" ||scope.struct.slug == "export" || scope.struct.slug == "reuses") {
+                    if (canAnalyze || scope.struct.slug == "information" || scope.struct.slug == "visualization" ||scope.struct.slug == "export" || scope.struct.slug == "reuses" || scope.struct.slug == "admin") {
                         tabsCtrl.addPane(scope.struct, position);
                     }
                     // If we have a WMS, we have the feature geo
