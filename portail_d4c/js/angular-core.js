@@ -7588,10 +7588,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
 
                     saveEmbedAPI(data).success(function (data) {
-                       $scope.saved = true;
-                       $scope.visualizationId = data.result.visualizationId;
+                        $scope.saved = true;
+                        $scope.visualizationId = data.result.visualizationId;
 
-                       window.location.href = '/databfc/ro/datasets/manage/dataset?data4citizen-type=visualization&entity-id=' + data.result.visualizationId;
+                        // Encode visualizationName to avoid special characters
+                        visualizationName = encodeURIComponent(visualizationName);
+                        window.location.href = '/databfc/ro/datasets/manage/dataset?data4citizen-type=visualization&entity-id=' + data.result.visualizationId + '&dataset-title=' + visualizationName;
                     });
                 };
                 $scope.updateEmbed = function (visuId, shareUrl, iframe, widget) {

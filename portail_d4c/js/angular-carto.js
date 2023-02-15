@@ -122,7 +122,7 @@ SOFTWARE.
             var deferred = $q.defer();
             MapbuilderAPI.create(configurationString).then(function(response) {
                 var data = response.data;
-                deferred.resolve([data.persist_id, data.last_modification]);
+                deferred.resolve([data.persist_id, data.last_modification, data.visualizationId]);
             });
             return deferred.promise;
         }
@@ -177,12 +177,13 @@ SOFTWARE.
                         saveNewConfigurationToServer(config).then(function(result) {
                             deleteConfigurationFromLocalStorage(slug);
                             var newSlug = result[0]
-                              , lastModified = result[1];
+                              , lastModified = result[1]
+                              , visualizationId = result[2];
                             slug = newSlug;
                             onPersistStorageCallbacks.forEach(function(callback) {
                                 callback(slug);
                             });
-                            deferred.resolve([newSlug, lastModified]);
+                            deferred.resolve([newSlug, lastModified, visualizationId]);
                         });
                         return deferred.promise;
                     },
@@ -510,6 +511,8 @@ SOFTWARE.
                 $scope.working = false;
                 $scope.interfaceMode = 'edition';
                 $scope.placeholder = translate('Type your map name here');
+                $scope.visualizationId = $scope.mapObject != null ? $scope.mapObject.visualizationId : null;
+                $scope.publishDatasetId = $scope.mapObject != null ? $scope.mapObject.publishDatasetId : null;
                 var mapConfigurationProperties = ['searchBox', 'toolbarFullscreen', 'toolbarGeolocation', 'autoGeolocation', 'layerSelection'];
                 $scope.startMapConfiguration = function(event) {
                     // $scope.mapConfiguration = angular.copy($scope.mapObject.value);
@@ -538,17 +541,21 @@ SOFTWARE.
                 $scope.persistMapFirstTime = function(onSuccess) {
                     $scope.mapStorage.persistStorage($scope.mapObject).then(function(result) {
                         var slug = result[0]
-                          , lastModified = result[1];
+                          , lastModified = result[1]
+                          , visualizationId = result[2];
                         $scope.working = false;
                         $scope.lastModified = lastModified;
                         $scope.mapObject.persist_id = slug;
+                        $scope.visualizationId = visualizationId;
                         $location.path('/' + slug + '/edit/');
                         if (onSuccess) {
+
+                            $scope.mapObject.visualizationId = $scope.visualizationId;
                             
                             //We generate and save the widget code
                             if (!$scope.hasUnknownDataset) {
                                 $scope.mapObject.widgetCode = WidgetCodeBuilder.buildMapbuilderWidgetCode($scope.mapObject.value);
-                                $scope.mapObject.directLink = MapbuilderHelper.getMapURL();
+                                $scope.mapObject.directLink = _computeEmbedUrl(MapbuilderHelper.getMapURL());
                                 $scope.mapObject.embedCode = $scope.embedCode;
                             }
 
@@ -557,6 +564,12 @@ SOFTWARE.
                     });
                 }
                 ;
+                var _computeEmbedUrl = function(url) {
+                    if (angular.isDefined(url)) {
+                        url = url.replace('/carte/', '/carte/frame/');
+                    }
+                    return url;
+                };
                 var saveMapFirstTime = function() {
                     $scope.working = true;
                     $scope.persistMapFirstTime(function() {
@@ -568,10 +581,12 @@ SOFTWARE.
                     if ($scope.mapStorage.isPersisted()) {
                         $scope.working = true;
 
+                        $scope.mapObject.visualizationId = $scope.visualizationId;
+
                         //We generate and save the widget code
                         if (!$scope.hasUnknownDataset) {
                             $scope.mapObject.widgetCode = WidgetCodeBuilder.buildMapbuilderWidgetCode($scope.mapObject.value);
-                            $scope.mapObject.directLink = MapbuilderHelper.getMapURL();
+                            $scope.mapObject.directLink = _computeEmbedUrl(MapbuilderHelper.getMapURL());
                             $scope.mapObject.embedCode = $scope.embedCode;
                         }
 
@@ -591,8 +606,21 @@ SOFTWARE.
                             }
                         });
                     }
-                }
-                ;
+                };
+                $scope.createDataset = function() {
+                    $scope.saveMap();
+                    
+                    var visualizationId = $scope.visualizationId;
+                    var visualizationName = $scope.mapObject.title;
+
+                    // Encode visualizationName to avoid special characters
+                    visualizationName = encodeURIComponent(visualizationName);
+                    window.location.href = '/databfc/ro/datasets/manage/dataset?data4citizen-type=visualization&entity-id=' + visualizationId + '&dataset-title=' + visualizationName;
+                };
+                $scope.openDataset = function() {
+                    var datasetId = $scope.publishDatasetId;
+                    window.location.href = '/visualisation/?id=' + datasetId;
+                };
                 $scope.triggerButton = function(e) {
                     e.preventDefault();
                     if ($scope.mapObject.title && !$scope.working && ($scope.dirty || !$scope.mapStorage.isPersisted())) {

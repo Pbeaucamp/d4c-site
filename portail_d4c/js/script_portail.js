@@ -852,7 +852,7 @@ function createDataset(data) {
 	let partKeywords = buildPartKeywords(data);
 	let partTools = buildPartTools(isBackOffice, hasDataBfc, datasetName, data);
 	let partQuickAccess = buildPartQuickAccess(hasDataBfc, data, datasetName, analyseDefault, targetValue);
-	let partDataValidation = buildPartDataValidation(isBackOffice, data);
+	let partDataValidation = buildPartDataValidation(isBackOffice, datasetId, data);
 
     $('#datasets').prepend(
 		'<div div class="dataset col-md-6 col-sm-12 col-xs-12 content-body" data-theme="' + theme[0] +'" data-orga="' + organizationId + '" data-id="' + datasetId +'" data-time="' + date.getTime() + '" data-analyse="' + analyseDefault + '" data-imported="' + (lastUpdateDate !=  null ? lastUpdateDate.getTime() : '') + '" style="background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.41)), url(' + imgBck + ') center center no-repeat; background-size: cover;" >' +
@@ -919,10 +919,15 @@ function changeVisibility(datasetId) {
 		}),
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
+		beforeSend: function () {
+			loading(true);
+		},
 		success: function (data) {
+			loading(false);
 			console.log("Visibility changed");
 		},
 		error: function (data) {
+			loading(false);
 			// If it doesn't work, we revert the checkbox
 			$('#chkVisibility-' + datasetId).prop('checked', !private);
 		}
@@ -959,7 +964,7 @@ function buildPartProperties(data, organizationTitle, lastUpdateDate) {
 	}
 	else if (data4citizenType == 'visualization') {
 		if (data.visualization != null && data.visualization.type != null) {
-			if (data.visualization.type == 'analyse' || data.visualization.type == 'chartbuilder') {
+			if (data.visualization.type == 'analyze' || data.visualization.type == 'chartbuilder') {
 				datasetType = 'Graphique';
 			}
 			else if (data.visualization.type == 'cartograph' || data.visualization.type == 'map') {
@@ -1048,9 +1053,14 @@ function buildPartTools(isBackOffice, hasDataBfc, datasetName, data) {
 		'</div>';
 }
 
-function buildPartDataValidation(isBackOffice, data) {
+function buildPartDataValidation(isBackOffice, datasetId, data) {
+	var contractId = data.extras.filter(function (t) { return t.key == "vanilla_contract" })[0];
+	contractId = contractId != null ? contractId.value : '';
+
 	var dataValidation = data.extras.filter(function (t) { return t.key == "data_validation" })[0];
 	dataValidation = dataValidation != null ? dataValidation.value : '';
+
+	var selectedResourceId = getLastDataResource(data);
 
 	if (!dataValidation || dataValidation == '') {
 		return '';
@@ -1085,16 +1095,19 @@ function buildPartDataValidation(isBackOffice, data) {
 		}
 	}
 
-	schemas = schemas.join(', ');
+	var schemasAsString = schemas.join(', ');
 
 	var partInterop = '<p title="' + columnsInterop + '">Nb Interopérable : ' + nbColumnsInterop + '</p>';
 	var partRgpd = '<p title="' + columnsRgpd + '">RGPD : ' + nbColumnsRgpd + '</p>';
-	var partDataValidation = '<p title="' + schemas + '">Validé : ' + (isSchemaValid == null ? 'n/a' : (isSchemaValid ? 'OK' : 'NOK')) + '</p>';
+	var partDataValidation = '<p title="' + schemasAsString + '">Validé : ' + (isSchemaValid == null ? 'n/a' : (isSchemaValid ? 'OK' : 'NOK')) + '</p>';
 
 	if (isBackOffice) {
-		partInterop += '<a class="dataset-tool" href="javascript:launchDataValidation(\'interop_schema\')"><i class="fa fa-recycle fa-2xl" title="Lancer le contrôle des données intéropérables" alt="Lancer le contrôle des données intéropérables"></i></a>';
-		partRgpd += '<a class="dataset-tool" href="javascript:launchDataValidation(\'rgpd_schema\')"><i class="fa fa-recycle fa-2xl" title="Lancer le contrôle des données RGPD" alt="Lancer le contrôle des données RGPD"></i></a>';
-		partDataValidation += '<a class="dataset-tool" href="javascript:launchDataValidation(\'schemas\')"><i class="fa fa-recycle fa-2xl" title="Lancer le contrôle des données" alt="Lancer le contrôle des données"></i></a>';
+		partInterop += '<a class="dataset-tool" href="javascript:validateData(' + contractId + ', \'' + datasetId + '\', \'' + selectedResourceId + '\', \'interop_schema\')"><i class="fa fa-recycle fa-2xl" title="Lancer le contrôle des données intéropérables" alt="Lancer le contrôle des données intéropérables"></i></a>';
+		partRgpd += '<a class="dataset-tool" href="javascript:validateData(' + contractId + ', \'' + datasetId + '\', \'' + selectedResourceId + '\', \'rgpd_schema\')"><i class="fa fa-recycle fa-2xl" title="Lancer le contrôle des données RGPD" alt="Lancer le contrôle des données RGPD"></i></a>';
+		
+		if (schemas.length > 0) {
+			partDataValidation += '<a class="dataset-tool" href="javascript:validateData(' + contractId + ', \'' + datasetId + '\', \'' + selectedResourceId + '\', \'' + schemasAsString + '\')"><i class="fa fa-recycle fa-2xl" title="Lancer le contrôle des données" alt="Lancer le contrôle des données"></i></a>';
+		}
 	}
 
 	return '<div class="dataset-data-validation">' + 
@@ -1104,23 +1117,28 @@ function buildPartDataValidation(isBackOffice, data) {
 		'</div>';
 }
 
-function launchDataValidation(schema) {
-	console.log(schema);
-	// $.ajax({
-	// 	url: fetchPrefix() + '/d4c/api/dataset/validate',
-	// 	type: 'POST',
-	// 	data: JSON.stringify({
-	// 		schema: schema
-	// 	}),
-	// 	contentType: 'application/json; charset=utf-8',
-	// 	dataType: 'json',
-	// 	success: function (data) {
-	// 		console.log("Validation launched");
-	// 	},
-	// 	error: function (data) {
-	// 		console.log("Validation failed");
-	// 	}
-	// });
+function validateData(contractId, datasetId, resourceId, schemas) {
+	$.ajax(fetchPrefix() + '/databfc/ro/datavalidation?contractId=' + contractId + '&datasetId=' + datasetId + '&resourceId=' + resourceId + '&schemas=' + schemas,
+	{
+		type: 'GET',
+		dataType: 'json',
+		beforeSend: function () {
+			loading(true);
+		},
+		success: function (data) {
+			loading(false);
+			if (data.status == "error") {
+				alert(data.message);
+			}
+			else {
+				alert("La validation des données a été effectuée avec succès.");
+			}
+		},
+		error: function (e) {
+			loading(false);
+			alert("Une erreur est survenue lors de la validation des données (" + e.responseText + "). Veuillez réessayer ultérieurement.");
+		}
+	});
 }
 
 function buildPartQuickAccess(hasDataBfc, data, datasetName, analyseDefault, targetValue) {
@@ -1227,6 +1245,18 @@ function hasWMS(dataset) {
 		return res.length > 0;
 	}
 	return false;
+}
+
+function getLastDataResource(dataset) {
+	var lastResource = null;
+	if (dataset != undefined && dataset.resources != undefined && dataset.resources.length > 0) {
+		dataset.resources.forEach(element => {
+			if (element.mimetype == "text/csv" && element.datastore_active == true) {
+				lastResource = element.id;
+			}
+		});
+	}
+	return lastResource;
 }
 
 function strip(html) {
