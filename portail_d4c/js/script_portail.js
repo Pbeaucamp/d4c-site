@@ -15,6 +15,7 @@ var records_counts;
 var filtreMapCoord = [];
 
 var canReplaceUrl;
+var platformInformations = null;
 var themes = [];
 var types = [];
 var orgas = [];
@@ -34,36 +35,6 @@ var features = [
 var goToPage = 0;
 var rows = 12;
 $(document).ready(function () {
-
-	/*
-	$("#barreRecherche input").autocomplete({
-		source: function(request, response) {
-				var results = $.ui.autocomplete.filter(listeSource, request.term); 
-				var resultats = results.slice(0,10);
-				//console.log(resultats);
-				// for (var i = 0; i < resultats.length; i++) {
-				// 	resultats[i] = resultats[i].replace(request.term,'<b>'+request.term+'</b>');
-				// }
-
-				response(resultats);
-			},
-		select : function(event,ui){
-			$('#search-form input').val(ui.item.value);
-			if(listeProducteur.indexOf(ui.item.label) != -1)
-			{
-				var idProd = listeIdProducteur[listeProducteur.indexOf(ui.item.label)];
-				searchDatasets(null, idProd,true,false);
-			}
-			else
-			{
-				searchDatasets(null, "text",true,true);
-			}
-		}
-	});
-	*/
-
-	//autoComplete();
-
 	canReplaceUrl = window.history && window.history.pushState;
 
 	loadParameters();
@@ -77,23 +48,37 @@ $(document).ready(function () {
 		}
 	}
 
-	$.ajax(fetchPrefix() + '/d4c/api/themes/',
-		{
-			type: 'POST',
-			dataType: 'json',
-			cache: true,
-			success: function (res) {
-				themes = res;
-
-				loadDatasets();
-			},
-			error: function (e) {
-				console.log("ERROR: ", e);
-
-				loadDatasets();
-			}
-		});
+	loadThemesPlatformInfosAndDatasets();
 });
+
+function loadThemesPlatformInfosAndDatasets() {
+	$.ajax(fetchPrefix() + '/d4c/api/themes/', {
+		type: 'POST',
+		dataType: 'json',
+		cache: true,
+		success: function (res) {
+			loadPlatformInfosAndDatasets();
+		},
+		error: function (e) {
+			loadPlatformInfosAndDatasets();
+		}
+	});
+}
+
+function loadPlatformInfosAndDatasets() {
+	$.ajax(fetchPrefix() + '/d4c/api/platform/informations', {
+		type: 'GET',
+		dataType: 'json',
+		success: function (res) {
+			platformInformations = res;
+			loadDatasets();
+		},
+		error: function (e) {
+			console.log("ERROR: ", e);
+			loadDatasets();
+		}
+	});
+}
 
 function loadDatasets() {
 	searchDatasets();
@@ -385,7 +370,6 @@ function loadParameters() {
 			filtreTags.push(tag);
 		}
 	}
-
 }
 
 
@@ -797,83 +781,44 @@ function setActiveFilters() {
 }
 
 function createDataset(data) {
+	var backOffice = getQueryVariable('backoffice');
+	backOffice != null && backOffice == 'true';
 
-	var name_orga = data.organization.title;
-	var id_orga = data.organization.id;
+	var isBackOffice = backOffice && platformInformations != null && platformInformations.isUserConnected && (platformInformations.isUserAdmin || platformInformations.isUserRo);
+	var hasDataBfc = platformInformations.isDataBfc;
 
-	/*var reuses = data.extras.filter(function(element){
-		return element.key == 'utilisations';
-	});
+	var datasetId = data.id;
+	var datasetTitle = data.title;
+	var datasetName = data.name;
+	var description = data.notes;
 
-	var li_reuses = "";
-	var nb_reuses = 0;
+	var private = data.private;
 
-	if(reuses != undefined && reuses.length != 0)
-	{
-		if(reuses[0].value != 0)
-		{
-			li_reuses = '<ul><li class="titre">Réutilisations</li><li class="info">' + reuses[0].value + '</li></ul>';
-			nb_reuses = reuses[0].value;
-		}
-			
-		
-	}*/
+	var theme = data.extras.filter(function (t) { return t.key == "themes" })[0];
+	if (theme && theme.value) {
+		theme = jQuery.parseJSON(theme.value);
+	}
+	else {
+		theme = ["default"];
+	}
+
+	var organizationId = data.organization.id;
+	var organizationTitle = data.organization.title;
 
 	var modif = data.metadata_modified;
-	var date = new Date(Date.UTC(modif.substring(0, 4), +modif.substring(5, 7) - 1, +modif.substring(8, 10), +modif.substring(11, 13), +modif.substring(14, 16)));
-	// var heure = (date.toLocaleTimeString()).substring(0,5);
-
-	// var imported = data.metadata_imported;
-	// if(imported != undefined){
-	// 	imported = new Date(Date.UTC(imported.substring(0,4),+imported.substring(5,7) - 1,+imported.substring(8,10),+imported.substring(11,13),+imported.substring(14,16)));
-	// } else {
-	// 	imported = new Date();
-	// }
-
-	//Define last data update date
-	var lastUpdateDate;
+	var date = new Date(modif);
+	var lastUpdateDate = date;
 	for (let i = 0; i < data.resources.length; i++) {
 		let resource = data.resources[i];
 		let currentDataDate = resource.last_modified;
-		if (!currentDataDate) {
-			currentDataDate = resource.created;
-		}
-
-		if (!lastUpdateDate) {
+		// Checking if the resource has a date and if it's the most recent
+		if (currentDataDate && (!lastUpdateDate || currentDataDate > lastUpdateDate)) {
 			lastUpdateDate = currentDataDate;
 		}
 	}
-	if (lastUpdateDate) {
-		lastUpdateDate = new Date(Date.UTC(lastUpdateDate.substring(0, 4), +lastUpdateDate.substring(5, 7) - 1, +lastUpdateDate.substring(8, 10), +lastUpdateDate.substring(11, 13), +lastUpdateDate.substring(14, 16)));
-	}
+	// We format the date
+	lastUpdateDate = new Date(lastUpdateDate);
 
-	/////////////
-	var tagList = "";
-
-	for (var i = 0; i < data.tags.length; i++) {
-		var tag = data.tags[i].name;
-		tagList += '<li class="tag">' + tag + '</li>';
-	}
-
-	////////////
-	var id = data.id;
-	// We set the name as ID to open the dataset
-	var name = data.name;
-
-	var private = data.private ? '<span class="dataset-private label label-inverse"><i class="lock fa fa-lock"></i>Private</span>' : '';
-
-	///////////
-	var description = data.notes != null ? data.notes : '';
-	if (description.indexOf("__Origine__") != -1) {
-		description = description.substring(0, description.indexOf("__Origine__"));
-	}
-	//We remove HTML tags
-	description = strip(description);
-	description = description.substring(0, 80) + "...";
-
-	var listeFormat = '<ul class="listeFormat"></ul>';
-
-	//console.log(data);
 
 	let analyseDefault = '';
 	let imgBck = fetchPrefix() + '/sites/default/files/img_backgr/default.svg';
@@ -890,7 +835,6 @@ function createDataset(data) {
 
 	//Check if dataset has features geo or hasWMS to display map
 	let hasGeo = data.metas != undefined && data.metas.features != undefined && data.metas.features.indexOf("geo") != -1;
-	// let featureGeo = myFeatures.filter(function(o){ return o.name == "geo"; })[0];
 	if (!hasGeo && hasWMS(data)) {
 		data.metas.features.push("geo");
 	}
@@ -901,23 +845,280 @@ function createDataset(data) {
 	}
 
 	//visus
+	let partTitle = buildPartTitle(datasetTitle, theme);
+	let partPrivate = buildPartPrivate(isBackOffice, datasetId, private);
+	let partDescription = buildPartDescription(description);
+	let partProperties = buildPartProperties(data, organizationTitle, lastUpdateDate);
+	let partKeywords = buildPartKeywords(data);
+	let partTools = buildPartTools(isBackOffice, hasDataBfc, datasetName, data);
+	let partQuickAccess = buildPartQuickAccess(hasDataBfc, data, datasetName, analyseDefault, targetValue);
+	let partDataValidation = buildPartDataValidation(data);
 
-	let api_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/api/?id=' + name + '"' + targetValue + '><i class="fa ' + features.filter(function (o) { return o.name == "api"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function (o) { return o.name == "api"; })[0].label + '</a></p>';
-	let analize_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/analyze/?id=' + name + '' + analyseDefault + '"' + targetValue + '><i class="fa ' + features.filter(function (o) { return o.name == "analyze"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function (o) { return o.name == "analyze"; })[0].label + '</a></p>';
-	let table_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/table/?id=' + name + '' + analyseDefault + '"' + targetValue + '><i class="fa ' + features.filter(function (o) { return o.name == "table"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function (o) { return o.name == "table"; })[0].label + '</a></p>';
-	let timeline_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/timeline/?id=' + name + '' + analyseDefault + '"' + targetValue + '><i class="fa ' + features.filter(function (o) { return o.name == "timeline"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function (o) { return o.name == "timeline"; })[0].label + '</a></p>';
-	let map_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/map/?id=' + name + '"' + targetValue + '><i class="fa ' + features.filter(function (o) { return o.name == "geo"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function (o) { return o.name == "geo"; })[0].label + '</a></p>';
-	let wordcloud_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/wordcloud/?id=' + name + '' + analyseDefault + '"' + targetValue + '><i class="fa ' + features.filter(function (o) { return o.name == "wordcloud"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function (o) { return o.name == "wordcloud"; })[0].label + '</a></p>';
-	let image_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/images/?id=' + name + '"' + targetValue + '><i class="fa ' + features.filter(function (o) { return o.name == "image"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function (o) { return o.name == "image"; })[0].label + '</a></p>';
-	let calendar_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/calendar/?id=' + name + '"' + targetValue + '><i class="fa ' + features.filter(function (o) { return o.name == "calendar"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function (o) { return o.name == "calendar"; })[0].label + '</a></p>';
-	let export_vis = '<p><a href ="' + fetchPrefix() + '/visualisation/export/?id=' + name + '' + analyseDefault + '"' + targetValue + '><i class="fa ' + features.filter(function (o) { return o.name == "export"; })[0].picto + '" aria-hidden="true"></i>' + features.filter(function (o) { return o.name == "export"; })[0].label + '</a></p>';
+    $('#datasets').prepend(
+		'<div div class="dataset col-md-6 col-sm-12 col-xs-12 content-body" data-theme="' + theme[0] +'" data-orga="' + organizationId + '" data-id="' + datasetId +'" data-time="' + date.getTime() + '" data-analyse="' + analyseDefault + '" data-imported="' + (lastUpdateDate !=  null ? lastUpdateDate.getTime() : '') + '" style="background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.41)), url(' + imgBck + ') center center no-repeat; background-size: cover;" >' +
+			'<div class="dataset-content flex-container">' +
+				'<div class="dataset-informations flex">' +
+					'<a href="' + fetchPrefix() + '/visualisation/?id=' + datasetName + '' + analyseDefault + '"' + targetValue + '>' +
+						partTitle + 
+					'</a>' + 
+					partPrivate +
+					'<div class="dataset-informations-center flex-container">' +               
+						partDescription +
+						partProperties + 
+					'</div>' +
+					partKeywords + 
+				'</div>' +
+				partTools +
+			'</div>' +
+			partQuickAccess +
+			partDataValidation +
+		'</div>'
+	);
+}
 
+function buildPartTitle(datasetTitle, theme) {
+	var themesPart = buildImageThemes(theme);
 
-	let rightPanel = '';
+	return '<div class="flex-container">' +
+		'<div class="dataset-themes">' + themesPart + '</div>' +
+		'<div class="box_4">' + 
+			'<div class="inner">' + 
+				'<div class="dataset-h2">' + 
+					datasetTitle +
+				'</div>' + 
+			'</div>' + 
+		'</div>' + 
+	'</div>';
+}
+
+function buildPartPrivate(isBackOffice, datasetId, private) {
+	if (isBackOffice) {
+		return '<label class="switch">' +
+			'	<input id="chkVisibility-' + datasetId + '" type="checkbox" ' + (private ? '' : 'checked') + ' onclick="changeVisibility(\'' + datasetId + '\');">' +
+			'	<div class="slider round"></div>' +
+			'</label>';
+	}
+	else {
+		return private ? '<span class="dataset-private label label-inverse"><i class="lock fa fa-lock"></i>Private</span>' : '';
+	}
+}
+
+function changeVisibility(datasetId) {
+	var private = true;
+	if ($('#chkVisibility-' + datasetId).is(":checked")) {
+		private = false;
+	}
+
+	// Calll ajax to change the visibility of the dataset
+	$.ajax({
+		url: fetchPrefix() + '/d4c/api/dataset/manage',
+		type: 'POST',
+		data: JSON.stringify({
+			dataset_id: datasetId,
+			private: private
+		}),
+		contentType: 'application/json; charset=utf-8',
+		dataType: 'json',
+		success: function (data) {
+			console.log("Visibility changed");
+		},
+		error: function (data) {
+			// If it doesn't work, we revert the checkbox
+			$('#chkVisibility-' + datasetId).prop('checked', !private);
+		}
+	});
+}
+
+function buildPartDescription(description) {
+	var description = description != null ? description : '';
+	if (description.indexOf("__Origine__") != -1) {
+		description = description.substring(0, description.indexOf("__Origine__"));
+	}
+	//We remove HTML tags
+	description = strip(description);
+	description = description != '' ? description.substring(0, 100) + "..." : '';
+
+	return '<div class="dataset-description" style="overflow: hidden ;">' +
+		'	<div class="dataset-description-text">' + description + '</div>' + 
+		'</div>';
+}
+
+function buildPartProperties(data, organizationTitle, lastUpdateDate) {
+	var data4citizenType = data.extras.filter(function (t) { return t.key == "data4citizen-type" })[0];
+	data4citizenType = data4citizenType != null ? data4citizenType.value : '';
+
+	var datasetType = '';
+	if (data4citizenType == 'api') {
+		datasetType = 'API';
+	}
+	else if (data4citizenType == 'sftp') {
+		datasetType = 'SFTP';
+	}
+	else if (data4citizenType == 'limesurvey') {
+		datasetType = 'Limesurvey';
+	}
+	else if (data4citizenType == 'visualization') {
+		if (data.visualization != null && data.visualization.type != null) {
+			if (data.visualization.type == 'analyse' || data.visualization.type == 'chartbuilder') {
+				datasetType = 'Graphique';
+			}
+			else if (data.visualization.type == 'cartograph' || data.visualization.type == 'map') {
+				datasetType = 'Carte';
+			}
+			else if (data.visualization.type == 'table') {
+				datasetType = 'Tableau';
+			}
+			else {
+				datasetType = 'Visualisation';
+			}
+		}
+		else {
+			datasetType = 'Visualisation';
+		}
+	}
+	else if (data4citizenType == 'tdb') {
+		datasetType = 'Tableau de bord';
+	}
+	else {
+		let hasGeo = data.metas != undefined && data.metas.features != undefined && data.metas.features.indexOf("geo") != -1;
+		datasetType = hasGeo || hasWMS(data) ? 'Carte' : 'Données';
+	}
+
+	var recordsCount = data.extras.filter(function (t) { return t.key == "records_count" })[0];
+	var reuses = data.nb_reuses;
+
+	return '<div class="dataset-informations-table">' + 
+		'	<table class="flex table table-striped table-bordered table-condensed">' +
+		'		<tr><td>Propriétaire</td><td colspan="3">' + organizationTitle + '</td></tr>' +
+		'		<tr><td>Modification</td><td colspan="3">' + (lastUpdateDate != null ? lastUpdateDate.toLocaleDateString() : '') + '</td></tr>' +
+		'		<tr><td>Type</td><td colspan="3">' + datasetType + '</td></tr>' +
+		'		<tr>' + 
+		'			<td>Nb lignes</td><td>' + (recordsCount != null ? parseInt(recordsCount.value) : '') + '</td>' +
+		'			<td>Usages</td><td>' + (reuses != null ? reuses : '') + '</td>' +
+		'		</tr>' +
+		'	</table>' +
+		'</div>';
+}
+
+function buildPartKeywords(data) {
+	var keywords = "";
+	for (var i = 0; i < data.tags.length; i++) {
+		var tag = data.tags[i].name;
+		keywords += '<li class="tag">' + tag + '</li>';
+	}
+
+	return '<ul class="jetons">' + keywords + '</ul>';
+}
+
+function buildPartTools(isBackOffice, hasDataBfc, datasetName, data) {
+	if (!isBackOffice) {
+		return '';
+	}
+
+	var datasetType = data.extras.filter(function (t) { return t.key == "data4citizen-type" })[0];
+	datasetType = datasetType != null ? datasetType.value : '';
+
+	var editDatasetUrl = "/admin/config/data4citizen/editMetaDataForm?id=" + datasetName;
+	if (hasDataBfc) {
+		if (datasetType == 'kpi') {
+			editDatasetUrl = "/databfc/ro/kpis/manage?dataset-id=" + datasetName;
+		}
+		else {
+			editDatasetUrl = "/databfc/ro/datasets/manage/dataset?dataset-id=" + datasetName + "&data4citizen-type=" + datasetType;
+		}
+	}
+
+	var toolEdit = '<a class="dataset-tool" href="' + editDatasetUrl + '" target="_blank" rel="noopener noreferrer"><i class="fa fa-pen-to-square fa-2xl" title="Editer la connaissance" alt="Editer la connaissance"></i></a>';
+	var copyDatasetId = '<a class="dataset-tool" href="javascript:copyValue(\'' + datasetName + '\')"><i class="fa fa-share-from-square fa-2xl" title="Copier l\'ID de la connaissance" alt="Copier l\'ID de la connaissance"></i></a>';
+
+	var visualization = data.visualization;
+	if (visualization) {
+		var shareUrl = visualization.share_url;
+		var widget = visualization.widget;
+
+		var copyShareUrl = '<a class="dataset-tool" href="javascript:copyValue(\'' + shareUrl + '\')"><i class="fa fa-link fa-2xl" title="Copier l\'URL Iframe de la connaissance" alt="Copier l\'URL Iframe de la connaissance"></i></a>';	
+		var copyWidget = '<a class="dataset-tool" href="javascript:copyValue(\'' + widget + '\')"><i class="fa fa-copy fa-2xl" title="Copier le widget de la connaissance" alt="Copier le widget de la connaissance"></i></a>';	
+	}
+
+	return '<div class="dataset-tools flex-container">' +
+			toolEdit +
+			copyDatasetId +
+			(copyShareUrl ? copyShareUrl : '') +
+			(copyWidget ? copyWidget : '') +
+		'</div>';
+}
+
+function buildPartDataValidation(data) {
+	var dataValidation = data.extras.filter(function (t) { return t.key == "data_validation" })[0];
+	dataValidation = dataValidation != null ? dataValidation.value : '';
+
+	if (!dataValidation || dataValidation == '') {
+		return '';
+	}
+
+	dataValidation = JSON.parse(dataValidation);
+
+	var nbColumnsRgpd = 0;
+	var columnsRgpd = '';
+
+	var nbColumnsInterop = 0;
+	var columnsInterop = '';
+
+	var isSchemaValid = null;
+	var schemas = [];
+	for (var i = 0; i < dataValidation.schemaValidationResults.length; i++) {
+		var schemaValidation = dataValidation.schemaValidationResults[i];
+
+		if (schemaValidation.schema == 'rgpd_schema') {
+			nbColumnsRgpd = schemaValidation.columnsWithError != null ? schemaValidation.columnsWithError.length : 0;
+			columnsRgpd = schemaValidation.columnsWithError != null ? schemaValidation.columnsWithError.join(', ') : '';
+		}
+		else if (schemaValidation.schema == 'interop_schema') {
+			nbColumnsInterop = schemaValidation.columnsWithError != null ? schemaValidation.columnsWithError.length : 0;
+			columnsInterop = schemaValidation.columnsWithError != null ? schemaValidation.columnsWithError.join(', ') : '';
+		}
+		else if (isSchemaValid == null || isSchemaValid == true) {
+			var nbLinesError = schemaValidation.nbLinesError;
+			isSchemaValid = nbLinesError == 0;
+
+			schemas.push(schemaValidation.schema);
+		}
+	}
+
+	schemas = schemas.join(', ');
+
+	var partInterop = '<p title="' + columnsInterop + '">Nb Interopérable : ' + nbColumnsInterop + '</p>';
+	var partRgpd = '<p title="' + columnsRgpd + '">RGPD : ' + nbColumnsRgpd + '</p>';
+	var partDataValidation = '<p title="' + schemas + '">Validé : ' + (isSchemaValid == null ? 'n/a' : (isSchemaValid ? 'OK' : 'NOK')) + '</p>';
+
+	return '<div class="dataset-data-validation">' + 
+			partInterop +
+			partRgpd +
+			partDataValidation +
+		'</div>';
+}
+
+function buildPartQuickAccess(hasDataBfc, data, datasetName, analyseDefault, targetValue) {
+	if (hasDataBfc) {
+		return '';
+	}
+
+	var api_vis = buildDatasetQuickAccess('api', datasetName, '', targetValue);
+	var analize_vis = buildDatasetQuickAccess('analyze', datasetName, analyseDefault, targetValue);
+	var table_vis = buildDatasetQuickAccess('table', datasetName, analyseDefault, targetValue);
+	var timeline_vis = buildDatasetQuickAccess('timeline', datasetName, analyseDefault, targetValue);
+	var map_vis = buildDatasetQuickAccess('map', datasetName, '', targetValue);
+	var wordcloud_vis = buildDatasetQuickAccess('wordcloud', datasetName, analyseDefault, targetValue);
+	var image_vis = buildDatasetQuickAccess('images', datasetName, '', targetValue);
+	var calendar_vis = buildDatasetQuickAccess('calendar', datasetName, '', targetValue);
+	var export_vis = buildDatasetQuickAccess('export', datasetName, analyseDefault, targetValue);
+
+	let quickAccess = '';
 	$.each(features, function (i, f) {
 		if (f.name == "export") {
-			rightPanel += export_vis;
-		} else {
+			quickAccess += export_vis;
+		}
+		else {
 			if (data.metas != undefined && data.metas.features != undefined && data.metas.features.indexOf(f.name) != -1) {
 				var vis;
 				switch (f.name) {
@@ -960,69 +1161,36 @@ function createDataset(data) {
 					default:
 						vis = '';
 				}
-				rightPanel += vis;
+				quickAccess += vis;
 			}
 		}
-
 	});
 
-
-	var theme = data.extras.filter(function (t) { return t.key == "themes" })[0];
-	if (theme && theme.value) {
-		theme = jQuery.parseJSON(theme.value);
-	}
-	else {
-		theme = ["default"];
-	}
-
-	//theme = accentsTidy(theme.replace(new RegExp(", ", 'g'),"-").replace(new RegExp(",", 'g'),"-").replace(new RegExp(" ", 'g'),"-"));
-	var imageThemes = buildImageThemes(theme);
-
-	var datasetRecordsCount = buildDatasetRecordsCount(data);
-	var datasetSize = buildDatasetSize(data);
-
-    $('#datasets').prepend(
-		'<div div class="dataset col-md-6 col-sm-12 col-xs-12 content-body" data-theme="' + theme[0] +'" data-orga="' + id_orga /*+'" data-reuses="'+ nb_reuses*/  +'" data-id="' + id +'" data-time="' + date.getTime() /*+'" data-views="' + nbViews + '" data-downloads="' + nbDownloads + '" data-records="' + nbRecords*/ + '" data-analyse="' + analyseDefault + '" data-imported="' + (lastUpdateDate !=  null ? lastUpdateDate.getTime() : '') + '" style="background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.41)), url(' + imgBck + ') center center no-repeat; background-size: cover;" >' +
-    		'<div class="box_1">' + 
-				'<a href="' + fetchPrefix() + '/visualisation/?id=' + name + '' + analyseDefault + '"' + targetValue + '>' +
-					'<div style="display: flex; flex-direction:row">' +
-						'<div class="portail-theme">' + imageThemes + '</div>' +
-						'<div class="box_4">' + 
-							'<div class="inner">' + 
-								'<div class="dataset-h2">' + 
-									data.title + 
-									// '<a href="' + fetchPrefix() + '/visualisation/?id=' + name + '' + analyseDefault + '"' + targetValue + '> ' + data.title + ' </a>' + 
-								'</div>' + 
-							'</div>' + 
-						'</div>' + 
-					'</div>' +
-					private +               
-					'<div class="inner"><p class="data-desc">' + description + '</p>' + listeFormat + '</div>' +
-					'<div class="infos inner">' + 
-						// Modification custom SPOT
-						//'<ul><li class="titre">Origine du site</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul>' +
-						'<ul><li class="titre">Producteur</li><li class="info" id="nomOrga">' + data.organization.title + '</li></ul>' +
-						'<ul><li class="titre">Date modification</li><li class="info">' + (lastUpdateDate != null ? lastUpdateDate.toLocaleDateString() : '') + (lastUpdateDate != null ? ' ' + lastUpdateDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '') + '</ul>'+ /*li_granularite + li_reuses +*/
-						datasetRecordsCount +
-						datasetSize +
-						'<ul class="jetons">' + tagList + '</ul>' + 
-					'</div>' + 
-				'</a>' +      
-			'</div>'+     
-			'<div class="box_2">' + rightPanel + '</div>'+
-    	'</div>'
-	);
+	return '<div class="dataset-quickaccess">' + quickAccess + '</div>';
 }
 
-function buildDatasetRecordsCount(data) {
-	var recordsCount = data.extras.filter(function (t) { return t.key == "records_count" })[0];
-	return recordsCount ? '<ul><li class="titre">Nombre de lignes</li><li class="info">' + parseInt(recordsCount.value) + '</ul>' : '';
+function buildDatasetQuickAccess(slug, datasetName, analyseDefault, targetValue) {
+	var type = slug == 'map' ? 'geo' : (slug == 'images' ? 'image' : slug);
+
+	var picto = features.filter(function (o) { return o.name == type; })[0].picto;
+	var label = features.filter(function (o) { return o.name == type; })[0].label;
+
+	return '<p>'
+		+ '	<a href ="' + fetchPrefix() + '/visualisation/' + slug + '/?id=' + datasetName + analyseDefault + '"' + targetValue + '>'
+		+ '		<i class="fa ' + picto + '" aria-hidden="true"></i>' + label
+		+ '	</a>'
+		+ '</p>';
 }
 
-function buildDatasetSize(data) {
-	var size = data.extras.filter(function (t) { return t.key == "dataset_size" })[0];
-	return size ? '<ul><li class="titre">Taille en mo</li><li class="info">' + size.value + '</ul>' : '';
-}
+// function buildDatasetRecordsCount(data) {
+// 	var recordsCount = data.extras.filter(function (t) { return t.key == "records_count" })[0];
+// 	return recordsCount ? '<ul><li class="titre">Nombre de lignes</li><li class="info">' + parseInt(recordsCount.value) + '</ul>' : '';
+// }
+
+// function buildDatasetSize(data) {
+// 	var size = data.extras.filter(function (t) { return t.key == "dataset_size" })[0];
+// 	return size ? '<ul><li class="titre">Taille en mo</li><li class="info">' + size.value + '</ul>' : '';
+// }
 
 function hasWMS(dataset) {
 	if (dataset != undefined && dataset.resources != undefined && dataset.resources.length > 0) {
@@ -1043,23 +1211,23 @@ function strip(html) {
 
 
 function buildImageThemes(selectedThemes) {
-	var imageThemes = '';
+	// We set the first image and we add the others as a number in the corner
 
+	var mainThemeImage = '';
+	var nbThemesSup = 0;
 	for (var i = 0; i < selectedThemes.length; i++) {
-		var theme = selectedThemes[i];
+		if (i == 0) {
+			var theme = selectedThemes[i];
+			var selectedTheme = themes.filter(function (o) { return o.title == theme; });
 
-		var selectedTheme = themes.filter(function (o) { return o.title == theme; });
-		if (selectedTheme.length > 0) {
-			var url_img_them = selectedTheme[0].url;
+			mainThemeImage = selectedTheme.length > 0 ? selectedTheme[0].url : "";
 		}
 		else {
-			var url_img_them = "";
+			nbThemesSup++;
 		}
-
-		imageThemes = imageThemes + '<div style=" background-image: url(' + url_img_them + '); margin-top: 10px;  display: inline-block; width: 30px; height: 30px; background-repeat: no-repeat; background-size: contain; vertical-align: middle; margin-right: 8px;"></div>';
 	}
 
-	return imageThemes;
+	return '<div class="dataset-theme-image" style="background-image: url(' + mainThemeImage + ');">' + (nbThemesSup > 0 ? '<span class="dataset-theme-nb">+ ' + nbThemesSup + '</span>' : '') + '</div>';
 }
 
 function getUrl(name) {
