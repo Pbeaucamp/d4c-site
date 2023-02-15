@@ -852,7 +852,7 @@ function createDataset(data) {
 	let partKeywords = buildPartKeywords(data);
 	let partTools = buildPartTools(isBackOffice, hasDataBfc, datasetName, data);
 	let partQuickAccess = buildPartQuickAccess(hasDataBfc, data, datasetName, analyseDefault, targetValue);
-	let partDataValidation = buildPartDataValidation(data);
+	let partDataValidation = buildPartDataValidation(isBackOffice, data);
 
     $('#datasets').prepend(
 		'<div div class="dataset col-md-6 col-sm-12 col-xs-12 content-body" data-theme="' + theme[0] +'" data-orga="' + organizationId + '" data-id="' + datasetId +'" data-time="' + date.getTime() + '" data-analyse="' + analyseDefault + '" data-imported="' + (lastUpdateDate !=  null ? lastUpdateDate.getTime() : '') + '" style="background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.41)), url(' + imgBck + ') center center no-repeat; background-size: cover;" >' +
@@ -1048,7 +1048,7 @@ function buildPartTools(isBackOffice, hasDataBfc, datasetName, data) {
 		'</div>';
 }
 
-function buildPartDataValidation(data) {
+function buildPartDataValidation(isBackOffice, data) {
 	var dataValidation = data.extras.filter(function (t) { return t.key == "data_validation" })[0];
 	dataValidation = dataValidation != null ? dataValidation.value : '';
 
@@ -1091,11 +1091,36 @@ function buildPartDataValidation(data) {
 	var partRgpd = '<p title="' + columnsRgpd + '">RGPD : ' + nbColumnsRgpd + '</p>';
 	var partDataValidation = '<p title="' + schemas + '">Validé : ' + (isSchemaValid == null ? 'n/a' : (isSchemaValid ? 'OK' : 'NOK')) + '</p>';
 
+	if (isBackOffice) {
+		partInterop += '<a class="dataset-tool" href="javascript:launchDataValidation(\'interop_schema\')"><i class="fa fa-recycle fa-2xl" title="Lancer le contrôle des données intéropérables" alt="Lancer le contrôle des données intéropérables"></i></a>';
+		partRgpd += '<a class="dataset-tool" href="javascript:launchDataValidation(\'rgpd_schema\')"><i class="fa fa-recycle fa-2xl" title="Lancer le contrôle des données RGPD" alt="Lancer le contrôle des données RGPD"></i></a>';
+		partDataValidation += '<a class="dataset-tool" href="javascript:launchDataValidation(\'schemas\')"><i class="fa fa-recycle fa-2xl" title="Lancer le contrôle des données" alt="Lancer le contrôle des données"></i></a>';
+	}
+
 	return '<div class="dataset-data-validation">' + 
 			partInterop +
 			partRgpd +
 			partDataValidation +
 		'</div>';
+}
+
+function launchDataValidation(schema) {
+	console.log(schema);
+	// $.ajax({
+	// 	url: fetchPrefix() + '/d4c/api/dataset/validate',
+	// 	type: 'POST',
+	// 	data: JSON.stringify({
+	// 		schema: schema
+	// 	}),
+	// 	contentType: 'application/json; charset=utf-8',
+	// 	dataType: 'json',
+	// 	success: function (data) {
+	// 		console.log("Validation launched");
+	// 	},
+	// 	error: function (data) {
+	// 		console.log("Validation failed");
+	// 	}
+	// });
 }
 
 function buildPartQuickAccess(hasDataBfc, data, datasetName, analyseDefault, targetValue) {
