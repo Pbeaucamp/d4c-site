@@ -57,6 +57,7 @@ function loadThemesPlatformInfosAndDatasets() {
 		dataType: 'json',
 		cache: true,
 		success: function (res) {
+			themes = res;
 			loadPlatformInfosAndDatasets();
 		},
 		error: function (e) {
