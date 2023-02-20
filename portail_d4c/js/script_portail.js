@@ -1064,7 +1064,7 @@ function buildPartDataValidation(isBackOffice, datasetId, data) {
 	var selectedResourceId = getLastDataResource(data);
 
 	if (!dataValidation || dataValidation == '') {
-		return '';
+		return '<div class="dataset-data-validation"></div>';
 	}
 
 	dataValidation = JSON.parse(dataValidation);
