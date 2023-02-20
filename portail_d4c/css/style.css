@@ -91,13 +91,6 @@
       width: 49%;
       margin-left : 1%;
   }
-  
-  #main.widget-opendata .dataset:hover
-  {
-      border-left : 3px solid #e42529;
-      padding-left: 8px;
-  }
-  
   #main.widget-opendata #pagination
   {
       width : 100%;
@@ -476,21 +469,16 @@
 
   #main.widget-opendata .dataset
   {
-      margin-bottom: 1%;
-      padding-left: 10px;
-      height: auto;
-      /*display: inline-block;*/
-      /*max-height: 250px;*/
-      /*overflow : hidden;*/
-      /*transition: border 1s ease;*/
+      height: unset;
       border-radius: 3px;
-    
-      border : 1px solid rgba(124, 121, 121, 0.27);
-      width: 49%;
-      margin-left : 1%;
+      border: 1px solid rgba(124, 121, 121, 0.27);
       display: flex;
-      align-items: stretch;
-      
+      justify-content: stretch;
+      flex-direction: column;
+      margin: 0 !important;
+      padding: 0 !important;
+      align-self: stretch;
+      overflow: hidden;
   }
   
   
@@ -839,7 +827,7 @@
   
   /* Private dataset */
   .dataset-private {
-      margin-right: 10px;
+      margin: 8px 10px !important;
       text-transform: uppercase;
   }
   
@@ -1100,6 +1088,9 @@
       margin: 0.1875rem 0.3125rem;
       font-size: 11px;
   }
+  .dataset-content {
+      height: 100%;
+  }
 
   .dataset-data-validation {
     display: flex;
@@ -1108,6 +1099,7 @@
     justify-content: center;
     background: rgb(var(--accents));
     padding: 4px 10px;
+    height: 29px;
   }
   .dataset-data-validation p {
     margin: 0 !important;
