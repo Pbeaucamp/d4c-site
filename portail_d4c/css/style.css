@@ -473,6 +473,7 @@
   {
       font-size : 13px;
   }
+
   #main.widget-opendata .dataset
   {
       margin-bottom: 1%;
@@ -1026,12 +1027,19 @@
   .dataset-tools {
       background-color: rgb(var(--arriere-plan),.25);
       flex-direction: column;
+      padding: 8px;
+      gap: 8px;
   }
   
   .dataset-tool {
-      padding: 8px;
-      font-size: 10px;
+      font-size: 14px;
+      line-height: 1;
       color: rgb(var(--texte)) !important;
+  }
+  .dataset-tool > i {
+    font-size: inherit;
+    line-height: inherit;
+    vertical-align: middle;
   }
   
   .dataset-theme-image {
@@ -1041,10 +1049,15 @@
       background-repeat: no-repeat;
       background-size: contain;
       vertical-align: middle;
-      margin: 0 !important;
+      position: relative;
+      margin-right: 15px !important;
+      margin-top: 15px !important;
+      margin-bottom: 0 !important;
+      margin-left: 0 !important;
   }
   
   .dataset-theme-nb {
+      position: absolute;
       font-size: 9px;
       width: 19px;
       padding: 3px;
@@ -1054,6 +1067,8 @@
       border-radius: 50%;
       color: white;
       background-color: rgb(var(--bouton));
+      right: -15px;
+      top: -15px;
   }
   
   .dataset-quickaccess {
@@ -1085,7 +1100,25 @@
       margin: 0.1875rem 0.3125rem;
       font-size: 11px;
   }
-  
+
+  .dataset-data-validation {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    background: rgb(var(--accents));
+    padding: 4px 10px;
+  }
+  .dataset-data-validation p {
+    margin: 0 !important;
+  }
+  .dataset-data-validation p:not(:first-child) {
+    padding-left: 16px;
+  }
+  .dataset-data-validation a {
+    padding-left: 6px;
+  }
+
   /* Switch part */
   
   .switch {
