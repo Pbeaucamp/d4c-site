@@ -900,7 +900,7 @@ function buildPartPrivate(isBackOffice, datasetId, private) {
 			'</label>';
 	}
 	else {
-		return private ? '<span class="dataset-private label label-inverse"><i class="lock fa fa-lock"></i>Private</span>' : '';
+		return private ? '<span class="dataset-private label label-inverse"><i class="lock fa fa-lock"></i>Privé</span>' : '';
 	}
 }
 
