@@ -585,30 +585,19 @@ function searchDatasets(page) {
 	var req = getReq();
 
 	changeUrl(req);
-	//$.ajax(ckan + '/api/action/package_search?' + requete + '&rows=1000'  + pertinence,
-	$.ajax(fetchPrefix() + '/d4c/api/datasets/2.0/search/' + req,
-		{
-			type: 'POST',
-			dataType: 'json',
-			cache: true,
-			success: function (data) {
-				orgas = data.all_organizations;
-				loading(false);
-				renderResult(data);
-			},
-			error: function (e) {
-				console.log("ERROR: ", e);
-			}
-		});
-	/*$.ajax(fetchPrefix() + '/d4c/api/datasets/2.0/records/count/' + encodeURIComponent(requete) + '&rows=10000'  + pertinence,
-	{
+	$.ajax(fetchPrefix() + '/d4c/api/datasets/2.0/search/' + req, {
 		type: 'POST',
 		dataType: 'json',
-		cache : true,
+		cache: true,
 		success: function (data) {
-			records_counts = data;
+			orgas = data.all_organizations;
+			loading(false);
+			renderResult(data);
+		},
+		error: function (e) {
+			console.log("ERROR: ", e);
 		}
-	});*/
+	});
 }
 
 accentsTidy = function (s) {
@@ -823,6 +812,7 @@ function createDataset(data) {
 
 	let analyseDefault = '';
 	let imgBck = fetchPrefix() + '/sites/default/files/img_backgr/default.svg';
+	let isRgpd = false;
 
 	for (let i = 0; i < data.extras.length; i++) {
 		if (data.extras[i].key == 'analyse_default') {
@@ -831,6 +821,10 @@ function createDataset(data) {
 
 		if (data.extras[i].key == 'img_backgr') {
 			imgBck = data.extras[i].value;
+		}
+
+		if (data.extras[i].key == 'data_rgpd') {
+			isRgpd = data.extras[i].value == '1';
 		}
 	}
 
@@ -847,7 +841,7 @@ function createDataset(data) {
 
 	//visus
 	let partTitle = buildPartTitle(datasetTitle, theme);
-	let partPrivate = buildPartPrivate(isBackOffice, datasetId, private);
+	let partPrivate = buildPartPrivate(isBackOffice, datasetId, private, isRgpd);
 	let partDescription = buildPartDescription(description);
 	let partProperties = buildPartProperties(data, organizationTitle, lastUpdateDate);
 	let partKeywords = buildPartKeywords(data);
@@ -892,10 +886,10 @@ function buildPartTitle(datasetTitle, theme) {
 	'</div>';
 }
 
-function buildPartPrivate(isBackOffice, datasetId, private) {
+function buildPartPrivate(isBackOffice, datasetId, private, isRgpd) {
 	if (isBackOffice) {
 		return '<label class="switch">' +
-			'	<input id="chkVisibility-' + datasetId + '" type="checkbox" ' + (private ? '' : 'checked') + ' onclick="changeVisibility(\'' + datasetId + '\');">' +
+			'	<input id="chkVisibility-' + datasetId + '" type="checkbox" ' + (private ? '' : 'checked') + ' onclick="confirmChangeVisibility(\'' + datasetId + '\', ' + isRgpd + ');">' +
 			'	<div class="slider round"></div>' +
 			'</label>';
 	}
@@ -904,12 +898,30 @@ function buildPartPrivate(isBackOffice, datasetId, private) {
 	}
 }
 
-function changeVisibility(datasetId) {
+function confirmChangeVisibility(datasetId, isRgpd) {
 	var private = true;
 	if ($('#chkVisibility-' + datasetId).is(":checked")) {
 		private = false;
 	}
 
+	// Add confirm message dialog
+	if (!private && isRgpd) {
+		var messageRgpd = platformInformations.messageRgpd != null && platformInformations.messageRgpd != '' ? platformInformations.messageRgpd : 'Ce jeu de données contient des données personnelles. Êtes-vous sûr de vouloir le rendre public ?';
+
+		// Checking if the dataset has rgpd
+		if (confirm(messageRgpd)) {
+			changeVisibility(datasetId, private);
+		}
+		else {
+			$('#chkVisibility-' + datasetId).prop('checked', private);
+		}
+	}
+	else {
+		changeVisibility(datasetId, private);
+	}
+}
+
+function changeVisibility(datasetId, private) {
 	// Calll ajax to change the visibility of the dataset
 	$.ajax({
 		url: fetchPrefix() + '/d4c/api/dataset/manage',
@@ -930,7 +942,7 @@ function changeVisibility(datasetId) {
 		error: function (data) {
 			loading(false);
 			// If it doesn't work, we revert the checkbox
-			$('#chkVisibility-' + datasetId).prop('checked', !private);
+			$('#chkVisibility-' + datasetId).prop('checked', private);
 		}
 	});
 }
