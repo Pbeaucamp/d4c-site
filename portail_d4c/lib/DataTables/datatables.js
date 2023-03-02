@@ -4,20 +4,20 @@
  *
  * To rebuild or modify this file with the latest versions of the included
  * software please visit:
- *   https://datatables.net/download/#dt/dt-1.12.1/e-2.0.8/b-2.2.3/fh-3.2.3/sc-2.0.6/sl-1.4.0
+ *   https://datatables.net/download/#dt/dt-1.13.3/e-2.1.1/b-2.3.5/b-print-2.3.5/fh-3.3.1/sc-2.1.0/sl-1.6.1
  *
  * Included libraries:
- *   DataTables 1.12.1, Editor 2.0.8, Buttons 2.2.3, FixedHeader 3.2.3, Scroller 2.0.6, Select 1.4.0
+ *   DataTables 1.13.3, Editor 2.1.1, Buttons 2.3.5, Print view 2.3.5, FixedHeader 3.3.1, Scroller 2.1.0, Select 1.6.1
  */
 
-/*! DataTables 1.12.1
- * ©2008-2022 SpryMedia Ltd - datatables.net/license
+/*! DataTables 1.13.3
+ * ©2008-2023 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     DataTables
  * @description Paginate, search and order HTML tables
- * @version     1.12.1
+ * @version     1.13.3
  * @author      SpryMedia Ltd
  * @contact     www.datatables.net
  * @copyright   SpryMedia Ltd.
@@ -1162,6 +1162,10 @@
 				$( rowOne[0] ).children('th, td').each( function (i, cell) {
 					var col = oSettings.aoColumns[i];
 			
+					if (! col) {
+						_fnLog( oSettings, 0, 'Incorrect column count', 18 );
+					}
+			
 					if ( col.mData === i ) {
 						var sort = a( cell, 'sort' ) || a( cell, 'order' );
 						var filter = a( cell, 'filter' ) || a( cell, 'search' );
@@ -1378,7 +1382,12 @@
 	
 	
 	var _isNumber = function ( d, decimalPoint, formatted ) {
-		var strType = typeof d === 'string';
+		let type = typeof d;
+		var strType = type === 'string';
+	
+		if ( type === 'number' || type === 'bigint') {
+			return true;
+		}
 	
 		// If empty return immediately so there must be a number if it is a
 		// formatted string (this stops the string "k", or "kr", etc being detected
@@ -3166,6 +3175,11 @@
 				create = nTrIn ? false : true;
 	
 				nTd = create ? document.createElement( oCol.sCellType ) : anTds[i];
+	
+				if (! nTd) {
+					_fnLog( oSettings, 0, 'Incorrect column count', 18 );
+				}
+	
 				nTd._DT_CellIndex = {
 					row: iRow,
 					column: i
@@ -3316,10 +3330,16 @@
 	
 			for ( i=0, ien=cells.length ; i<ien ; i++ ) {
 				column = columns[i];
-				column.nTf = cells[i].cell;
 	
-				if ( column.sClass ) {
-					$(column.nTf).addClass( column.sClass );
+				if (column) {
+					column.nTf = cells[i].cell;
+		
+					if ( column.sClass ) {
+						$(column.nTf).addClass( column.sClass );
+					}
+				}
+				else {
+					_fnLog( oSettings, 0, 'Incorrect column count', 18 );
 				}
 			}
 		}
@@ -5079,6 +5099,10 @@
 				_fnDraw( settings );
 			}
 		}
+		else {
+			// No change event - paging was called, but no change
+			_fnCallbackFire( settings, null, 'page-nc', [settings] );
+		}
 	
 		return changed;
 	}
@@ -5095,7 +5119,8 @@
 	{
 		return $('<div/>', {
 				'id': ! settings.aanFeatures.r ? settings.sTableId+'_processing' : null,
-				'class': settings.oClasses.sProcessing
+				'class': settings.oClasses.sProcessing,
+				'role': 'status'
 			} )
 			.html( settings.oLanguage.sProcessing )
 			.append('<div><div></div><div></div><div></div><div></div></div>')
@@ -6770,8 +6795,15 @@
 	
 		if ( eventName !== null ) {
 			var e = $.Event( eventName+'.dt' );
+			var table = $(settings.nTable);
 	
-			$(settings.nTable).trigger( e, args );
+			table.trigger( e, args );
+	
+			// If not yet attached to the document, trigger the event
+			// on the body directly to sort of simulate the bubble
+			if (table.parents('body').length === 0) {
+				$('body').trigger( e, args );
+			}
 	
 			ret.push( e.result );
 		}
@@ -7237,7 +7269,7 @@
 	
 		pluck: function ( prop )
 		{
-			let fn = DataTable.util.get(prop);
+			var fn = DataTable.util.get(prop);
 	
 			return this.map( function ( el ) {
 				return fn(el);
@@ -8334,8 +8366,11 @@
 	
 	$(document).on('plugin-init.dt', function (e, context) {
 		var api = new _Api( context );
+		var namespace = 'on-plugin-init';
+		var stateSaveParamsEvent = 'stateSaveParams.' + namespace;
+		var destroyEvent = 'destroy. ' + namespace;
 	
-		api.on( 'stateSaveParams', function ( e, settings, d ) {
+		api.on( stateSaveParamsEvent, function ( e, settings, d ) {
 			// This could be more compact with the API, but it is a lot faster as a simple
 			// internal loop
 			var idFn = settings.rowIdFn;
@@ -8349,7 +8384,11 @@
 			}
 	
 			d.childRows = ids;
-		})
+		});
+	
+		api.on( destroyEvent, function () {
+			api.off(stateSaveParamsEvent + ' ' + destroyEvent);
+		});
 	
 		var loaded = api.state.loaded();
 	
@@ -9670,7 +9709,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.12.1";
+	DataTable.version = "1.13.3";
 	
 	/**
 	 * Private data store, containing all of the settings objects that are
@@ -14094,7 +14133,7 @@
 		 *
 		 *  @type string
 		 */
-		build:"dt/dt-1.12.1/e-2.0.8/b-2.2.3/fh-3.2.3/sc-2.0.6/sl-1.4.0",
+		build:"dt/dt-1.13.3/e-2.1.1/b-2.3.5/b-print-2.3.5/fh-3.3.1/sc-2.1.0/sl-1.6.1",
 	
 	
 		/**
@@ -14732,7 +14771,7 @@
 				var classes = settings.oClasses;
 				var lang = settings.oLanguage.oPaginate;
 				var aria = settings.oLanguage.oAria.paginate || {};
-				var btnDisplay, btnClass, counter=0;
+				var btnDisplay, btnClass;
 	
 				var attach = function( container, buttons ) {
 					var i, ien, node, button, tabIndex;
@@ -14803,11 +14842,18 @@
 							}
 	
 							if ( btnDisplay !== null ) {
-								node = $('<a>', {
+								var tag = settings.oInit.pagingTag || 'a';
+								var disabled = btnClass.indexOf(disabledClass) !== -1;
+			
+	
+								node = $('<'+tag+'>', {
 										'class': classes.sPageButton+' '+btnClass,
 										'aria-controls': settings.sTableId,
+										'aria-disabled': disabled ? 'true' : null,
 										'aria-label': aria[ button ],
-										'data-dt-idx': counter,
+										'aria-role': 'link',
+										'aria-current': btnClass === classes.sPageButtonActive ? 'page' : null,
+										'data-dt-idx': button,
 										'tabindex': tabIndex,
 										'id': idx === 0 && typeof button === 'string' ?
 											settings.sTableId +'_'+ button :
@@ -14819,8 +14865,6 @@
 								_fnBindAction(
 									node, {action: button}, clickHandler
 								);
-	
-								counter++;
 							}
 						}
 					}
@@ -14939,6 +14983,12 @@
 	var __numericReplace = function ( d, decimalPlace, re1, re2 ) {
 		if ( d !== 0 && (!d || d === '-') ) {
 			return -Infinity;
+		}
+		
+		let type = typeof d;
+	
+		if (type === 'number' || type === 'bigint') {
+			return d;
 		}
 	
 		// If a decimal place other than `.` is used, it needs to be given to the
@@ -15165,7 +15215,7 @@
 			}
 		}
 		else if (window.luxon) {
-			dt = format
+			dt = format && typeof d === 'string'
 				? window.luxon.DateTime.fromFormat( d, format )
 				: window.luxon.DateTime.fromISO( d );
 	
@@ -15587,7 +15637,7 @@
 	$.each( DataTable, function ( prop, val ) {
 		$.fn.DataTable[ prop ] = val;
 	} );
-	
+
 	return DataTable;
 }));
 
@@ -15607,67 +15657,19 @@
 		// CommonJS
 		module.exports = function (root, $) {
 			if ( ! root ) {
+				// CommonJS environments without a window global must pass a
+				// root. This will give an error otherwise
 				root = window;
 			}
 
-			if ( ! $ || ! $.fn.dataTable ) {
-				// Require DataTables, which attaches to jQuery, including
-				// jQuery if needed and have a $ property so we can access the
-				// jQuery object that is used
-				$ = require('datatables.net')(root, $).$;
+			if ( ! $ ) {
+				$ = typeof window !== 'undefined' ? // jQuery's factory checks for a global window
+					require('jquery') :
+					require('jquery')( root );
 			}
 
-			return factory( $, root, root.document );
-		};
-	}
-	else {
-		// Browser
-		factory( jQuery, window, document );
-	}
-}(function( $, window, document, undefined ) {
-
-return $.fn.dataTable;
-
-}));
-
-
-/*! DataTables Editor v2.0.8
- *
- * ©2012-2022 SpryMedia Ltd, all rights reserved.
- * License: editor.datatables.net/license
- */
-
-/**
- * @summary     DataTables Editor
- * @description Editing library for DataTables
- * @version     2.0.8
- * @file        dataTables.editor.js
- * @author      SpryMedia Ltd
- * @contact     www.datatables.net/contact
- */
-
-/*jslint evil: true, undef: true, browser: true */
-/*globals jQuery,alert,console */
-
-(function( factory ){
-	// @jscrambler disable *
-	if ( typeof define === 'function' && define.amd ) {
-		// AMD
-		// @jscrambler disable *
-		define( ['jquery', 'datatables.net'], function ( $ ) {
-			return factory( $, window, document );
-		} );
-	}
-	else if ( typeof exports === 'object' ) {
-		// CommonJS
-		// @jscrambler disable *
-		module.exports = function (root, $) {
-			if ( ! root ) {
-				root = window;
-			}
-
-			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net')(root, $).$;
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net')(root, $);
 			}
 
 			return factory( $, root, root.document );
@@ -15682,9 +15684,55 @@ return $.fn.dataTable;
 var DataTable = $.fn.dataTable;
 
 
-if ( ! DataTable || ! DataTable.versionCheck || ! DataTable.versionCheck('1.10.20') ) {
-	throw new Error('Editor requires DataTables 1.10.20 or newer');
-}
+
+
+
+return DataTable;
+}));
+
+
+/*! DataTables Editor v2.1.1
+ *
+ * ©2012-2023 SpryMedia Ltd, all rights reserved.
+ * License: editor.datatables.net/license
+ */
+
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net'], function ( $ ) {
+			return factory( $, window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		module.exports = function (root, $) {
+			if ( ! root ) {
+				// CommonJS environments without a window global must pass a
+				// root. This will give an error otherwise
+				root = window;
+			}
+
+			if ( ! $ ) {
+				$ = typeof window !== 'undefined' ? // jQuery's factory checks for a global window
+					require('jquery') :
+					require('jquery')( root );
+			}
+
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net')(root, $);
+			}
+
+			return factory( $, root, root.document );
+		};
+	}
+	else {
+		// Browser
+		factory( jQuery, window, document );
+	}
+}(function( $, window, document, undefined ) {
+'use strict';
+var DataTable = $.fn.dataTable;
 
 var formOptions = {
     buttons: true,
@@ -16205,6 +16253,7 @@ var settings = {
     actionName: 'action',
     ajax: null,
     bubbleNodes: [],
+    bubbleBottom: false,
     closeCb: null,
     closeIcb: null,
     dataSource: null,
@@ -16235,8 +16284,8 @@ var settings = {
     unique: 0
 };
 
-var DataTable$5 = $.fn.dataTable;
-var DtInternalApi = DataTable$5.ext.oApi;
+var DataTable$6 = $.fn.dataTable;
+var DtInternalApi = DataTable$6.ext.oApi;
 function objectKeys(o) {
     var out = [];
     for (var key in o) {
@@ -16544,13 +16593,15 @@ var dataSource$1 = {
         var attachFields = [];
         var attach = [];
         var displayFields = {};
+        var tbody = dt.table(undefined).body();
         for (var i = 0, ien = dt.columns(':visible').count(); i < ien; i++) {
             var visIdx = dt.column(i + ':visible').index();
             var td = $('<td>').appendTo(tr);
             var fields = _dtFieldsFromIdx(dt, this.s.fields, visIdx, true);
-            var cell = dt.cell(':eq(0)', visIdx).node();
-            if (cell) {
-                td.addClass(cell.className);
+            var settings = dt.settings()[0];
+            var className = settings.aoColumns[visIdx].sClass;
+            if (className) {
+                td.addClass(className);
             }
             if (Object.keys(fields).length) {
                 attachFields.push(Object.keys(fields));
@@ -16559,10 +16610,14 @@ var dataSource$1 = {
             }
         }
         var append = function () {
+            // Remove the data empty message
+            if (dt.page.info().recordsDisplay === 0) {
+                $(tbody).empty();
+            }
             var action = insertPoint === 'end'
                 ? 'appendTo'
                 : 'prependTo';
-            tr[action](dt.table(undefined).body());
+            tr[action](tbody);
         };
         this.__dtFakeRow = tr;
         // Insert into the table
@@ -16585,6 +16640,10 @@ var dataSource$1 = {
         dt.off('draw.dte-createInline');
         this.__dtFakeRow.remove();
         this.__dtFakeRow = null;
+        // Restore data empty row
+        if (dt.page.info().recordsDisplay === 0) {
+            dt.draw(false);
+        }
     },
     // get idSrc, fields to edit, data and node for each item
     fields: function (identifier) {
@@ -16844,7 +16903,9 @@ var dataSource = {
     remove: function (identifier, fields) {
         // If there is an element with an ID property matching the identifier,
         // remove it
-        _htmlId(identifier).remove();
+        if (identifier !== 'keyless') {
+            _htmlId(identifier).remove();
+        }
     }
 };
 
@@ -17066,6 +17127,13 @@ var classNames = {
          * Liner for the header content
          */
         content: 'DTE_Header_Content',
+        /**
+         * Title tag
+         */
+        title: {
+            tag: null,
+            class: ''
+        },
         /**
          * Container for the header elements
          */
@@ -17383,19 +17451,20 @@ var self = {
     },
 };
 
-var DataTable$4 = $.fn.dataTable;
+var DataTable$5 = $.fn.dataTable;
 /**
  * Add a new field to the from. This is the method that is called automatically when
- * fields are given in the initialisation objects as {@link Editor.defaults.fields}.
+ * fields are given in the initialisation objects as `Editor.defaults.fields`.
  *
- * @memberOf Editor
- * @param {object|array} field The object that describes the field (the full
- * object is described by {@link Editor.model.field}. Note that multiple
- * fields can be given by passing in an array of field definitions.
- * @param {string} [after] Existing field to insert the new field after. This
- * can be `undefined` (insert at end), `null` (insert at start) or `string`
- * the field name to insert after.
- * @param {boolean} [reorder] INTERNAL for array adding performance only
+ * @param this Editor instance
+ * @param cfg The object that describes the field (the full
+ *   object is described by `Editor.model.field`. Note that multiple
+ *   fields can be given by passing in an array of field definitions.
+ * @param after Existing field to insert the new field after. This
+ *   can be `undefined` (insert at end), `null` (insert at start) or `string`
+ *   the field name to insert after.
+ * @param reorder INTERNAL for array adding performance only
+ * @returns Editor instance
  */
 function add(cfg, after, reorder) {
     if (reorder === void 0) { reorder = true; }
@@ -17456,13 +17525,6 @@ function add(cfg, after, reorder) {
     }
     return this;
 }
-// TODO
-/**
- * Get / set the Ajax configuration for the Editor instance
- *
- * @return {object|Editor} Editor instance, for chaining when used as a
- *   setter, the Ajax configuration when used as a getter.
- */
 function ajax(newAjax) {
     if (newAjax) {
         this.s.ajax = newAjax;
@@ -17477,7 +17539,8 @@ function ajax(newAjax) {
  * used by display controller plug-ins to perform the required task on
  * background activation.
  *
- * @return {Editor} Editor instance, for chaining
+ * @param this Editor instance
+ * @returns Editor instance
  */
 function background() {
     var onBackground = this.s.editOpts.onBackground;
@@ -17504,7 +17567,7 @@ function background() {
  * close, or it might submit depending upon the configuration, while a click on
  * the close box is a very definite close.
  *
- * @return {Editor} Editor instance, for chaining
+ * @returns Editor instance
  */
 function blur() {
     this._blur();
@@ -17512,6 +17575,7 @@ function blur() {
 }
 function bubble(cells, fieldNames, showIn, opts) {
     var _this = this;
+    if (showIn === void 0) { showIn = true; }
     var that = this;
     // Some other field in inline edit mode?
     if (this._tidy(function () {
@@ -17546,7 +17610,7 @@ function bubble(cells, fieldNames, showIn, opts) {
             return _this;
         }
         // Keep the bubble in position on resize
-        $(window).on('resize.' + namespace, function () {
+        $(window).on('resize.' + namespace + ' scroll.' + namespace, function () {
             _this.bubblePosition();
         });
         // Store the nodes this are being used so the bubble can be positioned
@@ -17593,7 +17657,7 @@ function bubble(cells, fieldNames, showIn, opts) {
             _this._animate(pair, { opacity: 0 }, function () {
                 if (this === container[0]) {
                     pair.detach();
-                    $(window).off('resize.' + namespace);
+                    $(window).off('resize.' + namespace + ' scroll.' + namespace);
                     finish();
                 }
             });
@@ -17625,7 +17689,7 @@ function bubble(cells, fieldNames, showIn, opts) {
  * used to update the bubble position if other elements on the page change
  * position. Editor will automatically call this method on window resize.
  *
- * @return {Editor} Editor instance, for chaining
+ * @returns Editor instance
  */
 function bubblePosition() {
     var wrapper = $('div.DTE_Bubble');
@@ -17648,24 +17712,35 @@ function bubblePosition() {
     var top = position.top;
     var left = (position.left + position.right) / 2;
     var width = liner.outerWidth();
+    var height = liner.outerHeight();
     var visLeft = left - (width / 2);
     var visRight = visLeft + width;
     var docWidth = $(window).width();
+    var viewportTop = $(window).scrollTop();
     var padding = 15;
-    this.classes.bubble;
+    // Show above or below depending on bubbleBottom
     wrapper.css({
         left: left,
-        top: top
+        top: this.s.bubbleBottom ? position.bottom : top
     });
-    // Correct for overflow from the top of the document by positioning below
-    // the field if needed
-    if (liner.length && liner.offset().top < 0) {
+    if (this.s.bubbleBottom) {
+        wrapper.addClass('below');
+    }
+    var curPosition = wrapper.position();
+    // Correct for overflow below the fold
+    if (liner.length && curPosition.top + height > viewportTop + window.innerHeight) {
+        wrapper
+            .css('top', top)
+            .removeClass('below');
+        this.s.bubbleBottom = false;
+    }
+    else if (liner.length && curPosition.top - height < viewportTop) {
+        // Correct for overflow from the top of the document by positioning below
+        // the field if needed
         wrapper
             .css('top', position.bottom)
             .addClass('below');
-    }
-    else {
-        wrapper.removeClass('below');
+        this.s.bubbleBottom = true;
     }
     // Attempt to correct for overflow to the right of the document
     if (visRight + padding > docWidth) {
@@ -17685,22 +17760,11 @@ function bubblePosition() {
  * Setup the buttons that will be shown in the footer of the form - calling this
  * method will replace any buttons which are currently shown in the form.
  *
- * @param {array|object} buttonsIn A single button definition to add to the form or
- * an array of objects with the button definitions to add more than one button.
- * The options for the button definitions are fully defined by the
- * {@link Editor.models.button} object.
- * @param {string} buttons.text The text to put into the button. This can be any
- * HTML string you wish as it will be rendered as HTML (allowing images etc to
- * be shown inside the button).
- * @param {function} [buttons.action] Callback function which the button is activated.
- * For example for a 'submit' button you would call the {@link Editor#submit} method,
- * while for a cancel button you would call the {@link Editor#close} method. Note that
- * the function is executed in the scope of the Editor instance, so you can call
- * the Editor's API methods using the `this` keyword.
- * @param {string} [buttons.className] The CSS class(es) to apply to the button
- * which can be useful for styling buttons which perform different functions
- * each with a distinctive visual appearance.
- * @return {Editor} Editor instance, for chaining
+ * @param this Editor instance
+ * @param buttonsIn A single button definition to add to the form or
+ *   an array of objects with the button definitions to add more than one button.
+ *   The options for the button definitions are fully defined by the
+ * @returns Editor instance
  */
 function buttons(buttonsIn) {
     var _this = this;
@@ -17727,8 +17791,8 @@ function buttons(buttonsIn) {
                 text: btn
             };
         }
-        var text = btn.text || btn.label;
-        var action = btn.action || btn.fn;
+        var text = btn.text || btn.label; // legacy support
+        var action = btn.action || btn.fn; // legacy support
         var attr = btn.attr || {};
         $('<button></button>', {
             class: _this.classes.form.button + (btn.className ? ' ' + btn.className : '')
@@ -17762,35 +17826,11 @@ function buttons(buttonsIn) {
     return this;
 }
 /**
- * Remove fields from the form (fields are those that have been added using the
- * {@link Editor#add} method or the `fields` initialisation option). A single,
- * multiple or all fields can be removed at a time based on the passed parameter.
- * Fields are identified by the `name` property that was given to each field
- * when added to the form.
+ * Remove fields from the form.
  *
- * @param {string|array} [fieldName] Field or fields to remove from the form. If
- * not given then all fields are removed from the form. If given as a string
- * then the single matching field will be removed. If given as an array of
- * strings, then all matching fields will be removed.
- * @return {Editor} Editor instance, for chaining
- *
- * @example
- * // Clear the form of current fields and then add a new field
- * // before displaying a 'create' display
- * editor.clear();
- * editor.add( {
- *  "label": "User name",
- *  "name": "username"
- * } );
- * editor.create( "Create user" );
- *
- * @example
- * // Remove an individual field
- * editor.clear( "username" );
- *
- * @example
- * // Remove multiple fields
- * editor.clear( [ "first_name", "last_name" ] );
+ * @param this Editor instance
+ * @param fieldName Field to remove
+ * @returns Editor instance
  */
 function clear(fieldName) {
     var that = this;
@@ -17816,42 +17856,13 @@ function clear(fieldName) {
 /**
  * Close the form display.
  *
- * Note that `close()` will close any of the three Editor form types (main,
- * bubble and inline).
- *
- * @return {Editor} Editor instance, for chaining
+ * @param this Editor instance
+ * @returns Editor instance
  */
 function close() {
     this._close(false);
     return this;
 }
-/**
- * Create a new record - show the form that allows the user to enter information
- * for a new row and then subsequently submit that data.
- *
- * @param {boolean} [show=true] Show the form or not.
- *
- * @example
- * // Show the create form with a submit button
- * editor
- *  .title( 'Add new record' )
- *  .buttons( {
- *    "label": "Save",
- *    "fn": function () {
- *      this.submit();
- *    }
- *  } )
- *  .create();
- *
- * @example
- * // Don't show the form and automatically submit it after programmatically
- * // setting the values of fields (and using the field defaults)
- * editor
- *  create()
- *  set( 'name',   'Test user' )
- *  set( 'access', 'Read only' )
- *  submit();
- */
 function create(arg1, arg2, arg3, arg4) {
     var _this = this;
     var that = this;
@@ -17905,8 +17916,9 @@ function create(arg1, arg2, arg3, arg4) {
 /**
  * Remove dependent links from a field
  *
- * @param {string} parent The name of the field to remove the existing dependencies
- * @return {Editor} Editor instance, for chaining
+ * @param this Editor instance
+ * @param parent The name of the field to remove the existing dependencies
+ * @returns Editor instance
  */
 function undependent(parent) {
     if (Array.isArray(parent)) {
@@ -17924,19 +17936,17 @@ function undependent(parent) {
  * form. This update can consist of updating an options list, changing values
  * or making fields hidden / visible.
  *
- * @param {string} parent The name of the field to listen to changes from
- * @param {string|object|function} url Callback definition. This can be:
- * * A string, which will be used as a URL to submit the request for update to
- * * An object, which is used to extend an Ajax object for the request. The
- * `url` parameter must be specified.
- * * A function, which is used as a callback, allowing non-ajax updates.
- * @return {Editor} Editor instance, for chaining
+ * @param this Editor instance
+ * @param parent Field(s) to attach a dependency to
+ * @param url Action to perform on data change
+ * @param optsIn Configuration options
+ * @returns Editor instance
  */
-function dependent(parent, url, opts) {
+function dependent(parent, url, optsIn) {
     var _this = this;
     if (Array.isArray(parent)) {
         for (var i = 0, ien = parent.length; i < ien; i++) {
-            this.dependent(parent[i], url, opts);
+            this.dependent(parent[i], url, optsIn);
         }
         return this;
     }
@@ -17946,12 +17956,12 @@ function dependent(parent, url, opts) {
         dataType: 'json',
         type: 'POST'
     };
-    opts = $.extend({
+    var opts = $.extend({}, {
         data: null,
         event: 'change',
         postUpdate: null,
         preUpdate: null
-    }, opts);
+    }, optsIn);
     var update = function (json) {
         if (opts.preUpdate) {
             opts.preUpdate(json);
@@ -18000,7 +18010,7 @@ function dependent(parent, url, opts) {
         if (opts.data) {
             var ret = opts.data(data);
             if (ret) {
-                opts.data = ret;
+                data = ret;
             }
         }
         if (typeof url === 'function') {
@@ -18057,22 +18067,9 @@ function destroy() {
  * Disable one or more field inputs, disallowing subsequent user interaction with the
  * fields until they are re-enabled.
  *
- * @param {string|array} name The field name (from the `name` parameter given when
- * originally setting up the field) to disable, or an array of field names to disable
- * multiple fields with a single call.
- * @return {Editor} Editor instance, for chaining
- *
- * @example
- * // Show a 'create' record form, but with a field disabled
- * editor.disable( 'account_type' );
- * editor.create( 'Add new user', {
- *  "label": "Save",
- *  "fn": function () { this.submit(); }
- * } );
- *
- * @example
- * // Disable multiple fields by using an array of field names
- * editor.disable( ['account_type', 'access_level'] );
+ * @param this Editor instance
+ * @param name Field(s) to disable. Disables all if not given.
+ * @returns Editor instance
  */
 function disable(name) {
     var that = this;
@@ -18088,9 +18085,10 @@ function display(showIn) {
     return this[showIn ? 'open' : 'close']();
 }
 /**
- * Fields which are currently displayed
+ * Get a list of the fields that are currently shown in the Editor form.
  *
- * @return {string[]} Field names that are shown
+ * @param this Editor instance
+ * @returns Array of field names
  */
 function displayed() {
     return $.map(this.s.fields, function (fieldIn, name) {
@@ -18100,44 +18098,11 @@ function displayed() {
 /**
  * Get display controller node
  *
- * @return {node} Display controller host element
+ * @returns Display controller host element
  */
 function displayNode() {
     return this.s.displayController.node(this);
 }
-/**
- * Edit a record - show the form, pre-populated with the data that is in the given
- * DataTables row, that allows the user to enter information for the row to be modified
- * and then subsequently submit that data.
- *
- * @param {node} items The TR element from the DataTable that is to be edited
- * @param {boolean} [show=true] Show the form or not.
- * @return {Editor} Editor instance, for chaining
- *
- * @example
- * // Show the edit form for the first row in the DataTable with a submit button
- * editor.edit( $('#example tbody tr:eq(0)')[0], 'Edit record', {
- *  "label": "Update",
- *  "fn": function () { this.submit(); }
- * } );
- *
- * @example
- * // Use the title and buttons API methods to show an edit form (this provides
- * // the same result as example above, but is a different way of achieving it
- * editor.title( 'Edit record' );
- * editor.buttons( {
- *  "label": "Update",
- *  "fn": function () { this.submit(); }
- * } );
- * editor.edit( $('#example tbody tr:eq(0)')[0] );
- *
- * @example
- * // Automatically submit an edit without showing the user the form
- * editor.edit( TRnode, null, null, false );
- * editor.set( 'name', 'Updated name' );
- * editor.set( 'access', 'Read only' );
- * editor.submit();
- */
 function edit(items, arg1, arg2, arg3, arg4) {
     var _this = this;
     var that = this;
@@ -18158,31 +18123,9 @@ function edit(items, arg1, arg2, arg3, arg4) {
 /**
  * Enable one or more field inputs, restoring user interaction with the fields.
  *
- * @param {string|array} name The field name (from the `name` parameter given when
- * originally setting up the field) to enable, or an array of field names to enable
- * multiple fields with a single call.
- * @return {Editor} Editor instance, for chaining
- *
- * @example
- * // Show a 'create' form with buttons which will enable and disable certain fields
- * editor.create( 'Add new user', [
- *  {
- *    "label": "User name only",
- *    "fn": function () {
- *      this.enable('username');
- *      this.disable( ['first_name', 'last_name'] );
- *    }
- *  }, {
- *    "label": "Name based",
- *    "fn": function () {
- *      this.disable('username');
- *      this.enable( ['first_name', 'last_name'] );
- *    }
- *  }, {
- *    "label": "Submit",
- *    "fn": function () { this.submit(); }
- *  }
- * );
+ * @param this Editor instance
+ * @param name Field(s) to enable. If not given, all fields in the form are enabled
+ * @returns Editor instance
  */
 function enable(name) {
     var that = this;
@@ -18210,30 +18153,11 @@ function error$1(name, msg) {
 }
 /**
  * Get a field object, configured for a named field, which can then be
- * manipulated through its API. This function effectively acts as a
- * proxy to the field extensions, allowing easy access to the methods
- * for a named field. The methods that are available depend upon the field
- * type plug-in for Editor.
+ * manipulated through its API.
  *
- * @param {string} name Field name to be obtained
- * @return {Editor.Field} Field instance
- *
- * @example
- * // Update the values available in a select list
- * editor.field('island').update( [
- *   'Lewis and Harris',
- *   'South Uist',
- *   'North Uist',
- *   'Benbecula',
- *   'Barra'
- * ] );
- *
- * @example
- * // Equivalent calls
- * editor.field('name').set('John Smith');
- *
- * // results in the same action as:
- * editor.set('John Smith');
+ * @param this Editor instance
+ * @param name Field to get
+ * @returns Field instance
  */
 function field(name) {
     var sFields = this.s.fields;
@@ -18245,14 +18169,8 @@ function field(name) {
 /**
  * Get a list of the fields that are used by the Editor instance.
  *
- * @returns {string[]} Array of field names
- *
- * @example
- * // Get current fields and move first item to the end
- * var fields = editor.fields();
- * var first = fields.shift();
- * fields.push( first );
- * editor.order( fields );
+ * @param this Editor instance
+ * @returns Editor instance
  */
 function fields() {
     return $.map(this.s.fields, function (fieldIn, name) {
@@ -18262,9 +18180,9 @@ function fields() {
 /**
  * Get data object for a file from a table and id
  *
- * @param  {string} name Table name
- * @param  {string|number} id Primary key identifier
- * @return {object} Table information
+ * @param name Table name
+ * @param id Primary key identifier
+ * @returns File information
  */
 function file(name, id) {
     var tableFromFile = this.files(name); // can throw. `this` will be Editor or
@@ -18274,12 +18192,6 @@ function file(name, id) {
     }
     return tableFromFile[id];
 }
-/**
- * Get data objects for available files
- *
- * @param  {string} [name] Table name
- * @return {object} Table array
- */
 function files(name) {
     if (!name) {
         return Editor.files;
@@ -18290,31 +18202,6 @@ function files(name) {
     }
     return editorTable;
 }
-/**
- * Get the value of a field
- *
- * @param {string|array} [name] The field name (from the `name` parameter given
- * when originally setting up the field) to disable. If not given, then an
- * object of fields is returned, with the value of each field from the
- * instance represented in the array (the object properties are the field
- * names). Also an array of field names can be given to get a collection of
- * data from the form.
- * @returns {*|object} Value from the named field
- *
- * @example
- * // Client-side validation - check that a field has been given a value
- * // before submitting the form
- * editor.create( 'Add new user', {
- *  "label": "Submit",
- *  "fn": function () {
- *    if ( this.get('username') === '' ) {
- *      this.error( 'username', 'A user name is required' );
- *      return;
- *    }
- *    this.submit();
- *  }
- * } );
- */
 function get(name) {
     var that = this;
     if (!name) {
@@ -18330,28 +18217,12 @@ function get(name) {
     return this.field(name).get();
 }
 /**
- * Remove a field from the form display. Note that the field will still be submitted
- * with the other fields in the form, but it simply won't be visible to the user.
+ * Hide one or more fields from the form display.
  *
- * @param {string|array} [name] The field name (from the `name` parameter given when
- * originally setting up the field) to hide or an array of names. If not given then all
- * fields are hidden.
- * @param {boolean} [animate=true] Animate if visible
- * @return {Editor} Editor instance, for chaining
- *
- * @example
- * // Show a 'create' record form, but with some fields hidden
- * editor.hide( 'account_type' );
- * editor.hide( 'access_level' );
- * editor.create( 'Add new user', {
- *  "label": "Save",
- *  "fn": function () { this.submit(); }
- * } );
- *
- * @example
- * // Show a single field by hiding all and then showing one
- * editor.hide();
- * editor.show('access_type');
+ * @param this Editor instance
+ * @param names Fields to hide. Will hide all if not given
+ * @param animate Animate (default true)
+ * @returns Editor instance
  */
 function hide(names, animate) {
     var that = this;
@@ -18362,6 +18233,8 @@ function hide(names, animate) {
 }
 /**
  * Get the ids of the rows being edited
+ *
+ * @param includeHash Include a prefixed `#`, useful if to be used as a selector
  */
 function ids(includeHash) {
     if (includeHash === void 0) { includeHash = false; }
@@ -18375,9 +18248,9 @@ function ids(includeHash) {
  * Determine if there is an error state in the form, either the form's global
  * error message, or one or more fields.
  *
- * @param {string|array|undefined} [inNames] The field names to check. All
- * fields checked if undefined.
- * @return {boolean} `true` if there is an error in the form
+ * @param this Editor instance
+ * @param inNames Fields to check. All checked if not given
+ * @returns true if in error, false otherwise
  */
 function inError(inNames) {
     $(this.dom.formError);
@@ -18394,22 +18267,6 @@ function inError(inNames) {
     }
     return false;
 }
-/**
- * Inline editing. This method provides a method to allow
- * end users to very quickly edit fields in place. For example, a user could
- * simply click on a cell in a table, the contents of which would be replaced
- * with the editing input field for that cell.
- *
- * @param {string|node|DataTables.Api|cell-selector} cell The cell or field to
- * be edited (note that for table editing this must be a cell - for standalone
- * editing it can also be the field name to edit).
- * @param {string} [fieldName] The field name to be edited. This parameter is
- * optional. If not provided, Editor will attempt to resolve the correct field
- * from the cell / element given as the first parameter. If it is unable to do
- * so, it will throw an error.
- * @param {object} [opts] Inline editing options - see the `form-options` type
- * @return {Editor} Editor instance, for chaining
- */
 function inline(cell, fieldName, opts) {
     var _this = this;
     var that = this;
@@ -18450,6 +18307,11 @@ function inline(cell, fieldName, opts) {
 }
 /**
  * Inline creation of data.
+ *
+ * @param this Editor instance
+ * @param insertPoint Where to insert the create row
+ * @param opts Form options
+ * @returns Editor instance
  */
 function inlineCreate(insertPoint, opts) {
     var _this = this;
@@ -18483,31 +18345,6 @@ function inlineCreate(insertPoint, opts) {
     this._event('initCreate', null);
     return this;
 }
-/**
- * Show an information message for the form as a whole, or for an individual
- * field. This can be used to provide helpful information to a user about an
- * individual field, or more typically the form (for example when deleting
- * a record and asking for confirmation).
- *
- * @param {string} [name] The name of the field to show the message for. If not
- * given then a global message is shown for the form
- * @param {string|function} msg The message to show
- * @return {Editor} Editor instance, for chaining
- *
- * @example
- * // Show a global message for a 'create' form
- * editor.message( 'Add a new user to the database by completing the fields below' );
- * editor.create( 'Add new user', {
- *  "label": "Submit",
- *  "fn": function () { this.submit(); }
- * } );
- *
- * @example
- * // Show a message for an individual field when a 'help' icon is clicked on
- * $('#user_help').click( function () {
- *  editor.message( 'user', 'The user name is what the system user will login with' );
- * } );
- */
 function message(name, msg) {
     if (msg === undefined) {
         // Global message
@@ -18519,11 +18356,6 @@ function message(name, msg) {
     }
     return this;
 }
-/**
- * Get which mode of operation the Editor form is in
- *
- * @return {string} `create`, `edit`, `remove` or `null` if no active state.
- */
 function mode(modeIn) {
     if (!modeIn) {
         return this.s.action;
@@ -18540,22 +18372,18 @@ function mode(modeIn) {
 /**
  * Get the modifier that was used to trigger the edit or delete action.
  *
- * @return {*} The identifier that was used for the editing / remove method
+ * @returns The identifier that was used for the editing / remove method
  * called.
  */
 function modifier() {
     return this.s.modifier;
 }
 /**
- * Get the values from one or more fields, taking into account multiple data
- * points being edited at the same time.
+ * Get the values for one or more fields (multi-row editing aware).
  *
- * @param  {string|array} fieldNames A single field name or an array of field
- * names.
- * @return {object} If a string is given as the first parameter an object that
- * contains the value for each row being edited is returned. If an array is
- * given, then the object has the field names as the parameter name and the
- * value is the value object with values for each row being edited.
+ * @param this Editor instance
+ * @param fieldNames Fields to get values for, or all fields if not given
+ * @returns Editor instance
  */
 function multiGet(fieldNames) {
     var that = this;
@@ -18572,17 +18400,6 @@ function multiGet(fieldNames) {
     // String
     return this.field(fieldNames).multiGet();
 }
-/**
- * Set the values for one or more fields, taking into account multiple data
- * points being edited at the same time.
- *
- * @param  {object|string} fieldNames The name of the field to set, or an object
- * with the field names as the parameters that contains the value object to
- * set for each field.
- * @param  {*} [valIn] Value to set if first parameter is given as a string.
- * Otherwise it is ignored.
- * @return {Editor} Editor instance, for chaining
- */
 function multiSet(fieldNames, valIn) {
     var that = this;
     if ($.isPlainObject(fieldNames) && valIn === undefined) {
@@ -18595,17 +18412,6 @@ function multiSet(fieldNames, valIn) {
     }
     return this;
 }
-/**
- * Get the container node for an individual field.
- *
- * @param {string|array} name The field name (from the `name` parameter given
- * when originally setting up the field) to get the DOM node for.
- * @return {node|array} Field container node
- *
- * @example
- * // Dynamically add a class to a field's container
- * $(editor.node( 'account_type' )).addClass( 'account' );
- */
 function node(name) {
     var that = this;
     if (!name) {
@@ -18618,23 +18424,12 @@ function node(name) {
         this.field(name).node();
 }
 /**
- * Remove a bound event listener to the editor instance. This method provides a
- * shorthand way of binding jQuery events that would be the same as writing
- * `$(editor).off(...)` for convenience.
+ * Remove a bound event listener to the editor instance.
  *
- * @param {string} name Event name to remove the listeners for - event names are
- * defined by {@link Editor}.
- * @param {function} [fn] The function to remove. If not given, all functions which
- * are assigned to the given event name will be removed.
- * @return {Editor} Editor instance, for chaining
- *
- * @example
- * // Add an event to alert when the form is shown and then remove the listener
- * // so it will only fire once
- * editor.on( 'open', function () {
- *  alert('Form displayed!');
- *  editor.off( 'open' );
- * } );
+ * @param this Editor instance
+ * @param name Event name to remove
+ * @param fn Handler to remove, or all if not specified
+ * @returns Editor instance
  */
 function off(name, fn) {
     $(this).off(this._eventName(name), fn);
@@ -18642,19 +18437,12 @@ function off(name, fn) {
 }
 /**
  * Listen for an event which is fired off by Editor when it performs certain
- * actions. This method provides a shorthand way of binding jQuery events that
- * would be the same as writing  `$(editor).on(...)` for convenience.
+ * actions.
  *
- * @param {string} name Event name to add the listener for - event names are
- * defined by {@link Editor}.
- * @param {function} fn The function to run when the event is triggered.
- * @return {Editor} Editor instance, for chaining
- *
- * @example
- * // Log events on the console when they occur
- * editor.on( 'open', function () { console.log( 'Form opened' ); } );
- * editor.on( 'close', function () { console.log( 'Form closed' ); } );
- * editor.on( 'submit', function () { console.log( 'Form submitted' ); } );
+ * @param this Editor instance
+ * @param name Event to listen for
+ * @param fn Event handler to apply
+ * @returns Editor instance
  */
 function on(name, fn) {
     $(this).on(this._eventName(name), fn);
@@ -18662,14 +18450,12 @@ function on(name, fn) {
 }
 /**
  * Listen for a single event event which is fired off by Editor when it performs
- * certain actions. This method provides a shorthand way of binding jQuery
- * events that would be the same as writing  `$(editor).one(...)` for
- * convenience.
+ * certain actions
  *
- * @param {string} name Event name to add the listener for - event names are
- * defined by {@link Editor}.
- * @param {function} fn The function to run when the event is triggered.
- * @return {Editor} Editor instance, for chaining
+ * @param this Editor instance
+ * @param name Event to listen for
+ * @param fn Event handler to apply
+ * @returns Editor instance
  */
 function one(name, fn) {
     $(this).one(this._eventName(name), fn);
@@ -18678,21 +18464,8 @@ function one(name, fn) {
 /**
  * Display the main form editor to the end user in the web-browser.
  *
- * Note that the `close()` method will close any of the three Editor form types
- * (main, bubble and inline), but this method will open only the main type.
- *
- * @return {Editor} Editor instance, for chaining
- *
- * @example
- * // Build a 'create' form, but don't display it until some values have
- * // been set. When done, then display the form.
- * editor.create( 'Create user', {
- *  "label": "Submit",
- *  "fn": function () { this.submit(); }
- * }, false );
- * editor.set( 'name', 'Test user' );
- * editor.set( 'access', 'Read only' );
- * editor.open();
+ * @param this Editor instance
+ * @returns Editor instance
  */
 function open() {
     var _this = this;
@@ -18734,36 +18507,6 @@ function order(setIn /* , ... */) {
     this._displayReorder();
     return this;
 }
-/**
- * Remove (delete) entries from the table. The rows to remove are given as
- * either a single DOM node or an array of DOM nodes (including a jQuery
- * object).
- *
- * @param {node|array} items The row, or array of nodes, to delete
- * @param {boolean} [show=true] Show the form or not.
- * @return {Editor} Editor instance, for chaining
- *
- * @example
- * // Delete a given row with a message to let the user know exactly what is
- * // happening
- * editor.message( "Are you sure you want to remove this row?" );
- * editor.remove( row_to_delete, 'Delete row', {
- *  "label": "Confirm",
- *  "fn": function () { this.submit(); }
- * } );
- *
- * @example
- * // Delete the first row in a table without asking the user for confirmation
- * editor.remove( '', $('#example tbody tr:eq(0)')[0], null, false );
- * editor.submit();
- *
- * @example
- * // Delete all rows in a table with a submit button
- * editor.remove( $('#example tbody tr'), 'Delete all rows', {
- *  "label": "Delete all",
- *  "fn": function () { this.submit(); }
- * } );
- */
 function remove(items, arg1, arg2, arg3, arg4) {
     var _this = this;
     var that = this;
@@ -18772,6 +18515,9 @@ function remove(items, arg1, arg2, arg3, arg4) {
         that.remove(items, arg1, arg2, arg3, arg4);
     })) {
         return this;
+    }
+    if (!items && !this.s.table) {
+        items = 'keyless';
     }
     // Allow a single row node to be passed in to remove, Can't use Array.isArray
     // as we also allow array like objects to be passed in (API, jQuery)
@@ -18803,25 +18549,6 @@ function remove(items, arg1, arg2, arg3, arg4) {
     });
     return this;
 }
-/**
- * Set the value of a field
- *
- * @param {string|object} name The field name (from the `name` parameter given
- * when originally setting up the field) to set the value of. If given as an
- * object the object parameter name will be the value of the field to set and
- * the value the value to set for the field.
- * @param {*} [valIn] The value to set the field to. The format of the value will
- * depend upon the field type. Not required if the first parameter is given
- * as an object.
- * @return {Editor} Editor instance, for chaining
- *
- * @example
- * // Set the values of a few fields before then automatically submitting the form
- * editor.create( null, null, false );
- * editor.set( 'name', 'Test user' );
- * editor.set( 'access', 'Read only' );
- * editor.submit();
- */
 function set(setIn, valIn) {
     var that = this;
     if (!$.isPlainObject(setIn)) {
@@ -18835,28 +18562,12 @@ function set(setIn, valIn) {
     return this;
 }
 /**
- * Show a field in the display that was previously hidden.
+ * Show fields in the display that were previously hidden.
  *
- * @param {string|array} [names] The field name (from the `name` parameter
- * given when originally setting up the field) to make visible, or an array of
- * field names to make visible. If not given all fields are shown.
- * @param {boolean} [animate=true] Animate if visible
- * @return {Editor} Editor instance, for chaining
- *
- * @example
- * // Shuffle the fields that are visible, hiding one field and making two
- * // others visible before then showing the {@link Editor#create} record form.
- * editor.hide( 'username' );
- * editor.show( 'account_type' );
- * editor.show( 'access_level' );
- * editor.create( 'Add new user', {
- *  "label": "Save",
- *  "fn": function () { this.submit(); }
- * } );
- *
- * @example
- * // Show all fields
- * editor.show();
+ * @param this Editor instance
+ * @param names Field(s) to show. All if not given.
+ * @param animate Animate the visual change or not
+ * @returns Editor instance
  */
 function show(names, animate) {
     var that = this;
@@ -18866,87 +18577,18 @@ function show(names, animate) {
     return this;
 }
 /**
- * Submit a form to the server for processing. The exact action performed will depend
- * on which of the methods {@link Editor#create}, {@link Editor#edit} or
- * {@link Editor#remove} were called to prepare the form - regardless of which one is
- * used, you call this method to submit data.
+ * Submit a form for processing.
  *
- * @param {function} [successCallback] Callback function that is executed once the
- * form has been successfully submitted to the server and no errors occurred.
- * @param {function} [errorCallback] Callback function that is executed if the
- * server reports an error due to the submission (this includes a JSON formatting
- * error should the error return invalid JSON).
- * @param {function} [formatdata] Callback function that is passed in the data
- * that will be submitted to the server, allowing pre-formatting of the data,
- * removal of data or adding of extra fields.
- * @param {boolean} [hideIn=true] When the form is successfully submitted, by default
- * the form display will be hidden - this option allows that to be overridden.
- * @return {Editor} Editor instance, for chaining
- *
- * @example
- * // Submit data from a form button
- * editor.create( 'Add new record', {
- *  "label": "Save",
- *  "fn": function () {
- *    this.submit();
- *  }
- * } );
- *
- * @example
- * // Submit without showing the user the form
- * editor.create( null, null, false );
- * editor.submit();
- *
- * @example
- * // Provide success and error callback methods
- * editor.create( 'Add new record', {
- *  "label": "Save",
- *  "fn": function () {
- *    this.submit( function () {
- *        alert( 'Form successfully submitted!' );
- *      }, function () {
- *        alert( 'Form  encountered an error :-(' );
- *      }
- *    );
- *  }
- * } );
- *
- * @example
- * // Add an extra field to the data
- * editor.create( 'Add new record', {
- *  "label": "Save",
- *  "fn": function () {
- *    this.submit( null, null, function (data) {
- *      data.extra = "Extra information";
- *    } );
- *  }
- * } );
- *
- * @example
- * // Don't hide the form immediately - change the title and then close the form
- * // after a small amount of time
- * editor.create( 'Add new record', {
- *  "label": "Save",
- *  "fn": function () {
- *    this.submit(
- *      function () {
- *        var that = this;
- *        this.title( 'Data successfully added!' );
- *        setTimeout( function () {
- *          that.close();
- *        }, 1000 );
- *      },
- *      null,
- *      null,
- *      false
- *    );
- *  }
- * } );
- *
+ * @param this Editor instance
+ * @param successCallback Function executed when submit is completed
+ * @param errorCallback Function executed on error
+ * @param formatdata Data formatting function
+ * @param hideIn Disable default close action by passing in false
+ * @returns Editor instance
  */
 function submit(successCallback, errorCallback, formatdata, hideIn) {
     var _this = this;
-    var sFields = this.s.fields;
+    var fields = this.s.fields;
     var errorFields = [];
     var errorReady = 0;
     var sent = false;
@@ -18971,18 +18613,24 @@ function submit(successCallback, errorCallback, formatdata, hideIn) {
             _this._submit(successCallback, errorCallback, formatdata, hideIn);
         });
     };
+    // Blur the current focus if it is a form input element - this allows any
+    // actions on change event (e.g. dpendent) to happen
+    var active = document.activeElement;
+    if ($(active).closest('div.DTE_Field').length !== 0) {
+        active.blur();
+    }
     // Remove the global error (don't know if the form is still in an error
     // state!)
     this.error();
     // Count how many fields are in error
-    $.each(sFields, function (name, fieldIn) {
+    $.each(fields, function (name, fieldIn) {
         if (fieldIn.inError()) {
             errorFields.push(name);
         }
     });
     // Remove the error display
     $.each(errorFields, function (i, name) {
-        sFields[name].error('', function () {
+        fields[name].error('', function () {
             errorReady++;
             send();
         });
@@ -18990,14 +18638,6 @@ function submit(successCallback, errorCallback, formatdata, hideIn) {
     send();
     return this;
 }
-/**
- * Get / set the DataTable assoc. with this Editor instance
- *
- * @param  {string|node|jQuery|undefined} setIn If undefined, treat as a getter,
- * otherwise set the host DataTable
- * @return {Editor|string|node|jQuery} Self is a setter, otherwise the DataTable
- * / DataTable selector
- */
 function table(setIn) {
     if (setIn === undefined) {
         return this.s.table;
@@ -19005,13 +18645,6 @@ function table(setIn) {
     this.s.table = setIn;
     return this;
 }
-/**
- * Get / set the form template
- *
- * @param  {string|node|jQuery|undefined} setIn If undefined, treat as a getter,
- * otherwise set as the template - usually a selector.
- * @return {Editor|string|node|jQuery} Self is a setter, otherwise the template
- */
 function template(setIn) {
     if (setIn === undefined) {
         return this.s.template;
@@ -19021,60 +18654,23 @@ function template(setIn) {
         $(setIn);
     return this;
 }
-/**
- * Set the title of the form
- *
- * @param {string|function} titleIn The title to give to the form
- * @return {Editor} Editor instance, for chaining
- *
- * @example
- * // Create an edit display used the title, buttons and edit methods (note that
- * // this is just an example, typically you would use the parameters of the edit
- * // method to achieve this.
- * editor.title( 'Edit record' );
- * editor.buttons( {
- *  "label": "Update",
- *  "fn": function () { this.submit(); }
- * } );
- * editor.edit( TR_to_edit );
- *
- * @example
- * // Show a create form, with a timer for the duration that the form is open
- * editor.create( 'Add new record - time on form: 0s', {
- *  "label": "Save",
- *  "fn": function () { this.submit(); }
- * } );
- *
- * // Add an event to the editor to stop the timer when the display is removed
- * var runTimer = true;
- * var timer = 0;
- * editor.on( 'close', function () {
- *  runTimer = false;
- *  editor.off( 'close' );
- * } );
- * // Start the timer running
- * updateTitle();
- *
- * // Local function to update the title once per second
- * function updateTitle() {
- *  editor.title( 'Add new record - time on form: '+timer+'s' );
- *  timer++;
- *  if ( runTimer ) {
- *    setTimeout( function() {
- *      updateTitle();
- *    }, 1000 );
- *  }
- * }
- */
 function title(titleIn) {
     var header = $(this.dom.header).children('div.' + this.classes.header.content);
+    var titleClass = this.classes.header.title;
     if (titleIn === undefined) {
-        return header.html();
+        return header.data('title');
     }
     if (typeof titleIn === 'function') {
-        titleIn = titleIn(this, new DataTable$4.Api(this.s.table));
+        titleIn = titleIn(this, new DataTable$5.Api(this.s.table));
     }
-    header.html(titleIn);
+    var set = titleClass.tag
+        ? $("<" + titleClass.tag + "></" + titleClass.tag)
+            .addClass(titleClass.class)
+            .html(titleIn)
+        : titleIn;
+    header
+        .html(set)
+        .data('title', titleIn);
     return this;
 }
 function val(fieldIn, value) {
@@ -19172,7 +18768,9 @@ function upload$1(editor, conf, files, progressCallback, completeCallback) {
     var reader = new FileReader();
     var counter = 0;
     var ids = [];
-    var generalError = 'A server error occurred while uploading the file';
+    var generalError = conf.errors && conf.errors._
+        ? conf.errors._
+        : 'A server error occurred while uploading the file';
     // Clear any existing errors, as the new upload might not be in error
     editor.error(conf.name, '');
     if (typeof conf.ajax === 'function') {
@@ -19250,7 +18848,11 @@ function upload$1(editor, conf, files, progressCallback, completeCallback) {
                 data: data,
                 dataType: 'json',
                 error: function (xhr) {
-                    editor.error(conf.name, generalError);
+                    var errors = conf.errors;
+                    editor.off('preSubmit.DTE_Upload');
+                    editor.error(conf.name, errors && errors[xhr.status]
+                        ? errors[xhr.status]
+                        : generalError);
                     editor._event('uploadXhrError', [conf.name, xhr]);
                     progressCallback(conf);
                 },
@@ -19263,12 +18865,15 @@ function upload$1(editor, conf, files, progressCallback, completeCallback) {
                         for (var i = 0, ien = errors.length; i < ien; i++) {
                             editor.error(errors[i].name, errors[i].status);
                         }
+                        completeCallback.call(editor, ids, true);
                     }
                     else if (json.error) {
                         editor.error(json.error);
+                        completeCallback.call(editor, ids, true);
                     }
                     else if (!json.upload || !json.upload.id) {
                         editor.error(conf.name, generalError);
+                        completeCallback.call(editor, ids, true);
                     }
                     else {
                         if (json.files) {
@@ -19326,7 +18931,7 @@ function upload$1(editor, conf, files, progressCallback, completeCallback) {
     reader.readAsDataURL(files[0]);
 }
 
-var DataTable$3 = $.fn.dataTable;
+var DataTable$4 = $.fn.dataTable;
 var _inlineCounter = 0;
 /**
  * Set the class on the form to relate to the action that is being performed.
@@ -19409,7 +19014,7 @@ function _ajax(data, success, error, submitParams) {
     }
     if (typeof ajaxSrc === 'function') {
         // As a function, execute it, passing in the required parameters
-        ajaxSrc(null, null, data, success, error);
+        ajaxSrc.call(this, null, null, data, success, error);
         return;
     }
     else if (typeof ajaxSrc === 'string') {
@@ -19489,11 +19094,14 @@ function _animate(target, style, time, callback) {
     }
     else {
         target.css(style);
+        var scope = target.length && target.length > 1
+            ? target[0]
+            : target;
         if (typeof time === 'function') {
-            time.call(target);
+            time.call(scope);
         }
         else if (callback) {
-            callback.call(target);
+            callback.call(scope);
         }
     }
 }
@@ -20054,7 +19662,6 @@ function _inline(editFields, opts, closeCb) {
     var classes = this.classes.inline;
     var keys = Object.keys(editFields);
     var editRow = editFields[keys[0]];
-    var children = null;
     var lastAttachPoint;
     var elements = [];
     for (var i = 0; i < editRow.attach.length; i++) {
@@ -20096,25 +19703,8 @@ function _inline(editFields, opts, closeCb) {
         }
     }
     // If there is a submit trigger target, we need to modify the document to allow submission
-    var submitTrigger = opts.submitTrigger;
-    if (submitTrigger !== null) {
-        // Allow the input to be a column index, including a negative to count from right
-        if (typeof submitTrigger === 'number') {
-            var kids = $(lastAttachPoint).closest('tr').children();
-            submitTrigger = submitTrigger < 0
-                ? kids[kids.length + submitTrigger]
-                : kids[submitTrigger];
-        }
-        children = Array.from($(submitTrigger)[0].childNodes).slice();
-        $(children).detach();
-        // Event handler to submit the form and do nothing else
-        $(submitTrigger)
-            .on('click.dte-submit', function (e) {
-            e.stopImmediatePropagation();
-            _this.submit();
-        })
-            .append(opts.submitHtml);
-    }
+    var submitClose = this._inputTrigger('submit', opts, lastAttachPoint);
+    var cancelClose = this._inputTrigger('cancel', opts, lastAttachPoint);
     this._closeReg(function (submitComplete, action) {
         // Mark that this specific inline edit has closed
         closed = true;
@@ -20129,12 +19719,8 @@ function _inline(editFields, opts, closeCb) {
                 el.node.append(el.children);
             });
         }
-        if (submitTrigger) {
-            $(submitTrigger)
-                .off('click.dte-submit')
-                .empty()
-                .append(children);
-        }
+        submitClose();
+        cancelClose();
         // Clear error messages "offline"
         _this._clearDynamicInfo();
         if (closeCb) {
@@ -20160,6 +19746,9 @@ function _inline(editFields, opts, closeCb) {
             .on('mousedown' + namespace, function (e) {
             target = e.target;
         })
+            .on('keydown' + namespace, function (e) {
+            target = e.target;
+        })
             .on('click' + namespace, function (e) {
             // Was the click inside or owned by one of the editing nodes? If
             // not, then come out of editing mode.
@@ -20180,6 +19769,55 @@ function _inline(editFields, opts, closeCb) {
     this._postopen('inline', true);
 }
 /**
+ * Add a triggering action for inline editing, with a return function that
+ * will tidy up the events.
+ *
+ * @param  type Action
+ * @param  opts Form options object
+ * @param  insertPoint Insert point in the DOM
+ * @private
+ */
+function _inputTrigger(type, opts, insertPoint) {
+    var _this = this;
+    var trigger = opts[type + 'Trigger'];
+    var html = opts[type + 'Html'];
+    var event = 'click.dte-' + type;
+    var tr = $(insertPoint).closest('tr');
+    if (trigger === undefined) {
+        return function () { };
+    }
+    // Allow the input to be a column index, including a negative to count from right
+    if (typeof trigger === 'number') {
+        var kids = tr.children();
+        trigger = trigger < 0
+            ? kids[kids.length + trigger]
+            : kids[trigger];
+    }
+    // Use childNodes to get text nodes as well
+    var children = $(trigger, tr).length
+        ? Array.prototype.slice.call($(trigger, tr)[0].childNodes)
+        : [];
+    $(children).detach();
+    // Event handler to submit the form and do nothing else
+    var triggerEl = $(trigger, tr)
+        .on(event, function (e) {
+        e.stopImmediatePropagation();
+        if (type === 'cancel') {
+            _this.close();
+        }
+        else {
+            _this.submit();
+        }
+    })
+        .append(html);
+    return function () {
+        triggerEl
+            .off(event)
+            .empty()
+            .append(children);
+    };
+}
+/**
  * Update the field options from a JSON data source
  *
  * @param  {object} json JSON object from the server
@@ -20187,7 +19825,7 @@ function _inline(editFields, opts, closeCb) {
  */
 function _optionsUpdate(json) {
     var that = this;
-    if (json.options) {
+    if (json && json.options) {
         $.each(this.s.fields, function (name, field) {
             if (json.options[name] !== undefined) {
                 var fieldInst = that.field(name);
@@ -20219,7 +19857,7 @@ function _message(el, msg, title, fn) {
         fn = function () { };
     }
     if (typeof msg === 'function') {
-        msg = msg(this, new DataTable$3.Api(this.s.table));
+        msg = msg(this, new DataTable$4.Api(this.s.table));
     }
     el = $(el);
     if (canAnimate) {
@@ -20882,7 +20520,7 @@ var fieldType = {
     set: function () { }
 };
 
-var DataTable$2 = $.fn.dataTable;
+var DataTable$3 = $.fn.dataTable;
 // Upload private helper method
 function _buttonText(conf, textIn) {
     if (textIn === null || textIn === undefined) {
@@ -20971,8 +20609,10 @@ function _commonUpload(editor, conf, dropCallback, multiple) {
         }
     });
     container.find('input[type=file]').on('input', function () {
-        Editor.upload(editor, conf, this.files, _buttonText, function (ids) {
-            dropCallback.call(editor, ids);
+        Editor.upload(editor, conf, this.files, _buttonText, function (ids, error) {
+            if (!error) {
+                dropCallback.call(editor, ids);
+            }
             container.find('input[type=file]')[0].value = '';
         });
     });
@@ -21013,6 +20653,7 @@ var baseFieldType = $.extend(true, {}, fieldType, {
 });
 var hidden = {
     create: function (conf) {
+        conf._input = $('<input/>');
         conf._val = conf.value;
         return null;
     },
@@ -21020,7 +20661,12 @@ var hidden = {
         return conf._val;
     },
     set: function (conf, val) {
+        var oldVal = conf._val;
         conf._val = val;
+        conf._input.val(val);
+        if (oldVal !== val) {
+            _triggerChange(conf._input);
+        }
     }
 };
 var readonly = $.extend(true, {}, baseFieldType, {
@@ -21354,10 +21000,17 @@ var datetime = $.extend(true, {}, baseFieldType, {
             id: Editor.safeId(conf.id),
             type: 'text'
         }, conf.attr));
-        if (!DataTable$2.DateTime) {
+        if (!DataTable$3.DateTime) {
             Editor.error('DateTime library is required', 15);
         }
-        conf._picker = new DataTable$2.DateTime(conf._input, $.extend({
+        // Legacy support for 2.0- parameters
+        if (conf.momentLocale && !conf.opts.locale) {
+            conf.opts.locale = conf.momentLocale;
+        }
+        if (conf.momentStrict && !conf.opts.strict) {
+            conf.opts.strict = conf.momentStrict;
+        }
+        conf._picker = new DataTable$3.DateTime(conf._input, $.extend({
             format: conf.displayFormat || conf.format,
             i18n: this.i18n.datetime,
         }, conf.opts));
@@ -21381,13 +21034,9 @@ var datetime = $.extend(true, {}, baseFieldType, {
         conf._picker.errorMsg(msg);
     },
     get: function (conf) {
-        var val = conf._input.val();
-        var inst = conf._picker.c;
-        var moment = window.moment;
-        // If a wire format is specified, convert the display format to the wire
-        return val && conf.wireFormat && moment ?
-            moment(val, inst.format, inst.momentLocale, inst.momentStrict).format(conf.wireFormat) :
-            val;
+        return conf.wireFormat
+            ? conf._picker.valFormat(conf.wireFormat)
+            : conf._input.val();
     },
     maxDate: function (conf, max) {
         conf._picker.max(max);
@@ -21400,13 +21049,14 @@ var datetime = $.extend(true, {}, baseFieldType, {
         return conf._picker.owns(node);
     },
     set: function (conf, val) {
-        var inst = conf._picker.c;
-        var moment = window.moment;
         // If there is a wire format, convert it to the display format
         // Note that special values (e.g. `--now` and empty) do not get formatted
-        conf._picker.val(typeof val === 'string' && val && val.indexOf('--') !== 0 && conf.wireFormat && moment ?
-            moment(val, conf.wireFormat, inst.momentLocale, inst.momentStrict).format(inst.format) :
-            val);
+        if (typeof val === 'string' && val && val.indexOf('--') !== 0 && conf.wireFormat) {
+            conf._picker.valFormat(conf.wireFormat, val);
+        }
+        else {
+            conf._picker.val(val);
+        }
         _triggerChange(conf._input);
     }
 });
@@ -21522,10 +21172,13 @@ var uploadMany = $.extend(true, {}, baseFieldType, {
             if (val.length) {
                 var list_1 = $('<ul></ul>').appendTo(rendered);
                 $.each(val, function (i, file) {
-                    list_1.append('<li>' +
-                        conf.display(file, i) +
-                        ' <button class="' + that.classes.form.button + ' remove" data-idx="' + i + '">&times;</button>' +
-                        '</li>');
+                    var display = conf.display(file, i);
+                    if (display !== null) {
+                        list_1.append('<li>' +
+                            display +
+                            ' <button class="' + that.classes.form.button + ' remove" data-idx="' + i + '">&times;</button>' +
+                            '</li>');
+                    }
                 });
             }
             else {
@@ -21545,18 +21198,41 @@ var datatable = $.extend(true, {}, baseFieldType, {
         }
         dt.rows.add(options).draw();
     },
-    _jumpToFirst: function (conf) {
+    _jumpToFirst: function (conf, editor) {
+        var dt = conf.dt;
         // Find which page in the table the first selected row is
-        var idx = conf.dt.row({ order: 'applied', selected: true }).index();
+        var idx = dt.row({ order: 'applied', selected: true }).index();
         var page = 0;
         if (typeof idx === 'number') {
-            var pageLen = conf.dt.page.info().length;
-            var pos = conf.dt.rows({ order: 'applied' }).indexes().indexOf(idx);
+            var pageLen = dt.page.info().length;
+            var pos = dt.rows({ order: 'applied' }).indexes().indexOf(idx);
             page = pageLen > 0
                 ? Math.floor(pos / pageLen)
                 : 0;
         }
-        conf.dt.page(page).draw(false);
+        dt.page(page).draw(false);
+        // If scrolling is enabled, scroll down to first selected
+        var container = $('div.dataTables_scrollBody', dt.table().container());
+        var scrollTo = function () {
+            var node = dt.row({ order: 'applied', selected: true }).node();
+            var height = container.height();
+            var top = $(node).position().top;
+            if (top > height - 10) {
+                container.scrollTop(top);
+            }
+        };
+        if (container.length) {
+            // Check that the form has actually been displayed. If not need
+            // to wait for Editor's open event
+            if (container.parents('body').length) {
+                scrollTo();
+            }
+            else {
+                editor.one('open', function () {
+                    scrollTo();
+                });
+            }
+        }
     },
     create: function (conf) {
         var _this = this;
@@ -21578,10 +21254,13 @@ var datatable = $.extend(true, {}, baseFieldType, {
             .addClass(datatable.tableClass)
             .width('100%')
             .on('init.dt', function (e, settings) {
-            var api = new DataTable$2.Api(settings);
+            if (settings.nTable !== table[0]) {
+                return;
+            }
+            var api = new DataTable$3.Api(settings);
             var containerNode = $(api.table(undefined).container());
             // Select init
-            DataTable$2.select.init(api);
+            DataTable$3.select.init(api);
             // Append side button controls
             side
                 .append(containerNode.find('div.dataTables_filter'))
@@ -21640,7 +21319,7 @@ var datatable = $.extend(true, {}, baseFieldType, {
                 else if (action === 'edit' || action === 'remove') {
                     _this._dataSource('refresh');
                 }
-                datatable._jumpToFirst(conf);
+                datatable._jumpToFirst(conf, _this);
             });
         }
         conf.dt = dt;
@@ -21688,7 +21367,7 @@ var datatable = $.extend(true, {}, baseFieldType, {
         conf.dt.rows({ selected: true }).deselect();
         conf.dt.rows(function (idx, data, node) { return val.indexOf(valueFn(data)) !== -1; }).select();
         // Jump to the first page with a selected row (if there are any)
-        datatable._jumpToFirst(conf);
+        datatable._jumpToFirst(conf, this);
         // Update will call change itself, otherwise multiple might be called
         if (!localUpdate) {
             _triggerChange($(conf.dt.table().container()));
@@ -21727,7 +21406,7 @@ var defaults = {
     type: 'text'
 };
 
-var DataTable$1 = $.fn.dataTable;
+var DataTable$2 = $.fn.dataTable;
 var Field = /** @class */ (function () {
     function Field(options, classes, host) {
         var that = this;
@@ -22054,8 +21733,8 @@ var Field = /** @class */ (function () {
                     .replace(/&amp;/g, '&')
                     .replace(/&quot;/g, '"')
                     .replace(/&#163;/g, '£')
-                    .replace(/&#39;/g, '\'')
-                    .replace(/&#10;/g, '\n');
+                    .replace(/&#0?39;/g, '\'')
+                    .replace(/&#0?10;/g, '\n');
         };
         this.s.multiValue = false;
         var decode = this.s.opts.entityDecode;
@@ -22150,7 +21829,7 @@ var Field = /** @class */ (function () {
         }
         if (typeof msg === 'function') {
             var editor = this.s.host;
-            msg = msg(editor, new DataTable$1.Api(editor.internalSettings().table));
+            msg = msg(editor, new DataTable$2.Api(editor.internalSettings().table));
         }
         if (el.parent().is(':visible') && $.fn.animate) {
             el.html(msg);
@@ -22264,13 +21943,13 @@ var displayController = {
     open: function () { }
 };
 
-var DataTable = $.fn.dataTable;
+var DataTable$1 = $.fn.dataTable;
 /*
  * DataTables 1.10 API integration. Provides the ability to control basic Editor
  * aspects from the DataTables API. Full control does of course require use of
  * the Editor API though.
  */
-var apiRegister = DataTable.Api.register;
+var apiRegister = DataTable$1.Api.register;
 function _getInst(api) {
     var ctx = api.context[0];
     return ctx.oInit.editor || ctx._editor;
@@ -22522,6 +22201,10 @@ _buttons.editSingle.extend = 'selectedSingle';
 _buttons.removeSingle = $.extend({}, _buttons.remove);
 _buttons.removeSingle.extend = 'selectedSingle';
 
+
+if (!DataTable || !DataTable.versionCheck || !DataTable.versionCheck('1.10.20')) {
+    throw new Error('Editor requires DataTables 1.10.20 or newer');
+}
 var Editor = /** @class */ (function () {
     function Editor(init) {
         var _this = this;
@@ -22593,6 +22276,7 @@ var Editor = /** @class */ (function () {
         this._focus = _focus;
         this._formOptions = _formOptions;
         this._inline = _inline;
+        this._inputTrigger = _inputTrigger;
         this._optionsUpdate = _optionsUpdate;
         this._message = _message;
         this._multiInfo = _multiInfo;
@@ -22612,6 +22296,7 @@ var Editor = /** @class */ (function () {
             alert('DataTables Editor must be initialised as a \'new\' instance');
         }
         init = $.extend(true, {}, Editor.defaults, init);
+        this.c = init;
         this.s = $.extend(true, {}, Editor.models.settings, {
             actionName: init.actionName,
             ajax: init.ajax,
@@ -22672,32 +22357,46 @@ var Editor = /** @class */ (function () {
         });
         // Cache the DOM nodes
         this.dom;
-        var table$1 = this.s.table;
         // Add any fields which are given on initialisation
         if (init.fields) {
             this.add(init.fields);
         }
         $(document)
             .on('init.dt.dte' + this.s.unique, function (e, settings, json) {
-            if (_this.s.table && settings.nTable === $(table$1)[0]) {
-                // Attempt to attach to a DataTable automatically when the table is
-                // initialised
-                settings._editor = _this;
+            // Resolve this reference in the event handlers so the
+            // table() API method can be used to change it and the
+            // change still be operated on here.
+            var table = _this.s.table;
+            if (table) {
+                var dtApi = new DataTable.Api(table);
+                if (settings.nTable === dtApi.table().node()) {
+                    // Attempt to attach to a DataTable automatically when the table is
+                    // initialised
+                    settings._editor = _this;
+                }
             }
         })
             .on('i18n.dt.dte' + this.s.unique, function (e, settings) {
-            if (_this.s.table && settings.nTable === $(table$1)[0]) {
-                // Use loaded language options
-                if (settings.oLanguage.editor) {
-                    $.extend(true, _this.i18n, settings.oLanguage.editor);
+            var table = _this.s.table;
+            if (table) {
+                var dtApi = new DataTable.Api(table);
+                if (settings.nTable === dtApi.table().node()) {
+                    // Use loaded language options
+                    if (settings.oLanguage.editor) {
+                        $.extend(true, _this.i18n, settings.oLanguage.editor);
+                    }
                 }
             }
         })
             .on('xhr.dt.dte' + this.s.unique, function (e, settings, json) {
-            if (json && _this.s.table && settings.nTable === $(table$1)[0]) {
-                // Automatically update fields which have a field name defined in
-                // the returned json - saves an `initComplete` for the user
-                _this._optionsUpdate(json);
+            var table = _this.s.table;
+            if (table) {
+                var dtApi = new DataTable.Api(table);
+                if (settings.nTable === dtApi.table().node()) {
+                    // Automatically update fields which have a field name defined in
+                    // the returned json - saves an `initComplete` for the user
+                    _this._optionsUpdate(json);
+                }
             }
         });
         // Prep the display controller
@@ -22741,7 +22440,7 @@ var Editor = /** @class */ (function () {
         uploadMany: uploadMany
     };
     Editor.files = {};
-    Editor.version = '2.0.8';
+    Editor.version = '2.1.1';
     Editor.classes = classNames;
     Editor.Field = Field;
     Editor.DateTime = null;
@@ -22769,22 +22468,19 @@ var Editor = /** @class */ (function () {
     };
     return Editor;
 }());
-
-
 DataTable.Editor = Editor;
 $.fn.DataTable.Editor = Editor;
-
 if (DataTable.DateTime) {
-	Editor.DateTime = DataTable.DateTime;
+    Editor.DateTime = DataTable.DateTime;
 }
-
 // If there are field types available on DataTables we copy them in (after the
 // built in ones to allow overrides) and then expose the field types object.
-if ( DataTable.ext.editorFields ) {
-	$.extend( Editor.fieldTypes, DataTable.ext.editorFields );
+if (DataTable.ext.editorFields) {
+    $.extend(Editor.fieldTypes, DataTable.ext.editorFields);
 }
-
 DataTable.ext.editorFields = Editor.fieldTypes;
+
+
 
 return Editor;
 }));
@@ -22805,11 +22501,19 @@ return Editor;
 		// CommonJS
 		module.exports = function (root, $) {
 			if ( ! root ) {
+				// CommonJS environments without a window global must pass a
+				// root. This will give an error otherwise
 				root = window;
 			}
 
-			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net-dt')(root, $).$;
+			if ( ! $ ) {
+				$ = typeof window !== 'undefined' ? // jQuery's factory checks for a global window
+					require('jquery') :
+					require('jquery')( root );
+			}
+
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net-dt')(root, $);
 			}
 
 			if ( ! $.fn.dataTable.Editor ) {
@@ -22825,14 +22529,18 @@ return Editor;
 	}
 }(function( $, window, document, undefined ) {
 'use strict';
+var DataTable = $.fn.dataTable;
 
-return $.fn.dataTable.Editor;
 
+var Editor = DataTable.Editor;
+
+
+return Editor;
 }));
 
 
-/*! Buttons for DataTables 2.2.3
- * ©2016-2022 SpryMedia Ltd - datatables.net/license
+/*! Buttons for DataTables 2.3.5
+ * ©2016-2023 SpryMedia Ltd - datatables.net/license
  */
 
 (function( factory ){
@@ -22846,11 +22554,19 @@ return $.fn.dataTable.Editor;
 		// CommonJS
 		module.exports = function (root, $) {
 			if ( ! root ) {
+				// CommonJS environments without a window global must pass a
+				// root. This will give an error otherwise
 				root = window;
 			}
 
-			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net')(root, $).$;
+			if ( ! $ ) {
+				$ = typeof window !== 'undefined' ? // jQuery's factory checks for a global window
+					require('jquery') :
+					require('jquery')( root );
+			}
+
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net')(root, $);
 			}
 
 			return factory( $, root, root.document );
@@ -22863,6 +22579,7 @@ return $.fn.dataTable.Editor;
 }(function( $, window, document, undefined ) {
 'use strict';
 var DataTable = $.fn.dataTable;
+
 
 
 // Used for namespacing events added to the document by each instance, so they
@@ -23062,7 +22779,16 @@ $.extend( Buttons.prototype, {
 			for (i=button.buttons.length-1; i>=0; i--) {
 				this.remove(button.buttons[i].node);
 			}
-	
+
+			// If the collection has prefix and / or postfix buttons we need to add them in
+			if (button.conf.prefixButtons) {
+				newButtons.unshift.apply(newButtons, button.conf.prefixButtons);
+			}
+
+			if (button.conf.postfixButtons) {
+				newButtons.push.apply(newButtons, button.conf.postfixButtons);
+			}
+
 			for (i=0; i<newButtons.length; i++) {
 				var newBtn = newButtons[i];
 
@@ -23072,7 +22798,7 @@ $.extend( Buttons.prototype, {
 					newBtn !== undefined && newBtn.config !== undefined && newBtn.config.split !== undefined,
 					true,
 					newBtn.parentConf !== undefined && newBtn.parentConf.split !== undefined,
-					i,
+					null,
 					newBtn.parentConf
 				);
 			}
@@ -23100,7 +22826,7 @@ $.extend( Buttons.prototype, {
 
 		$(button.node)
 			.addClass( this.c.dom.button.disabled )
-			.attr('disabled', true);
+			.prop('disabled', true);
 
 		return this;
 	},
@@ -23155,7 +22881,7 @@ $.extend( Buttons.prototype, {
 		var button = this._nodeToButton( node );
 		$(button.node)
 			.removeClass( this.c.dom.button.disabled )
-			.removeAttr('disabled');
+			.prop('disabled', false);
 
 		return this;
 	},
@@ -23708,7 +23434,7 @@ $.extend( Buttons.prototype, {
 			this._addKey(dropButtonConfig);
 
 			var splitAction = function ( e, dt, button, config ) {
-				_dtButtons.split.action.call( dt.button($('div.dt-btn-split-wrapper')[0] ), e, dt, button, config );
+				_dtButtons.split.action.call( dt.button(splitDiv), e, dt, button, config );
 	
 				$(dt.table().node()).triggerHandler( 'buttons-action.dt', [
 					dt.button( button ), dt, button, config 
@@ -23983,38 +23709,34 @@ $.extend( Buttons.prototype, {
 				conf.className = originalClassName+' '+conf.className;
 			}
 
-			// Buttons to be added to a collection  -gives the ability to define
-			// if buttons should be added to the start or end of a collection
-			var postfixButtons = conf.postfixButtons;
-			if ( postfixButtons ) {
-				if ( ! conf.buttons ) {
-					conf.buttons = [];
-				}
-
-				for ( i=0, ien=postfixButtons.length ; i<ien ; i++ ) {
-					conf.buttons.push( postfixButtons[i] );
-				}
-
-				conf.postfixButtons = null;
-			}
-
-			var prefixButtons = conf.prefixButtons;
-			if ( prefixButtons ) {
-				if ( ! conf.buttons ) {
-					conf.buttons = [];
-				}
-
-				for ( i=0, ien=prefixButtons.length ; i<ien ; i++ ) {
-					conf.buttons.splice( i, 0, prefixButtons[i] );
-				}
-
-				conf.prefixButtons = null;
-			}
-
 			// Although we want the `conf` object to overwrite almost all of
 			// the properties of the object being extended, the `extend`
 			// property should come from the object being extended
 			conf.extend = objArray.extend;
+		}
+
+		// Buttons to be added to a collection  -gives the ability to define
+		// if buttons should be added to the start or end of a collection
+		var postfixButtons = conf.postfixButtons;
+		if ( postfixButtons ) {
+			if ( ! conf.buttons ) {
+				conf.buttons = [];
+			}
+
+			for ( i=0, ien=postfixButtons.length ; i<ien ; i++ ) {
+				conf.buttons.push( postfixButtons[i] );
+			}
+		}
+
+		var prefixButtons = conf.prefixButtons;
+		if ( prefixButtons ) {
+			if ( ! conf.buttons ) {
+				conf.buttons = [];
+			}
+
+			for ( i=0, ien=prefixButtons.length ; i<ien ; i++ ) {
+				conf.buttons.splice( i, 0, prefixButtons[i] );
+			}
 		}
 
 		return conf;
@@ -24670,7 +24392,7 @@ Buttons.defaults = {
  * @type {string}
  * @static
  */
-Buttons.version = '2.2.3';
+Buttons.version = '2.3.5';
 
 
 $.extend( _dtButtons, {
@@ -25345,13 +25067,56 @@ if ( DataTable.ext.features ) {
 }
 
 
-return Buttons;
+return DataTable;
 }));
 
 
 /*! DataTables styling wrapper for Buttons
  * ©2018 SpryMedia Ltd - datatables.net/license
  */
+
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net-dt', 'datatables.net-buttons'], function ( $ ) {
+			return factory( $, window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		module.exports = function (root, $) {
+			if ( ! root ) {
+				// CommonJS environments without a window global must pass a
+				// root. This will give an error otherwise
+				root = window;
+			}
+
+			if ( ! $ ) {
+				$ = typeof window !== 'undefined' ? // jQuery's factory checks for a global window
+					require('jquery') :
+					require('jquery')( root );
+			}
+
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net-dt')(root, $);
+			}
+
+			if ( ! $.fn.dataTable.Buttons ) {
+				require('datatables.net-buttons')(root, $);
+			}
+
+			return factory( $, root, root.document );
+		};
+	}
+	else {
+		// Browser
+		factory( jQuery, window, document );
+	}
+}(function( $, window, document, undefined ) {
+'use strict';
+var DataTable = $.fn.dataTable;
+
+
 
 (function( factory ){
 	if ( typeof define === 'function' && define.amd ) {
@@ -25388,33 +25153,19 @@ return $.fn.dataTable;
 
 }));
 
-/*! FixedHeader 3.2.3
- * ©2009-2022 SpryMedia Ltd - datatables.net/license
- */
+return DataTable;
+}));
 
-/**
- * @summary     FixedHeader
- * @description Fix a table's header or footer, so it is always visible while
- *              scrolling
- * @version     3.2.3
- * @author      SpryMedia Ltd (www.sprymedia.co.uk)
- * @contact     www.sprymedia.co.uk
- * @copyright   SpryMedia Ltd.
- *
- * This source file is free software, available under the following license:
- *   MIT license - http://datatables.net/license/mit
- *
- * This source file is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the license files for details.
- *
- * For details please refer to: http://www.datatables.net
+
+/*!
+ * Print button for Buttons and DataTables.
+ * 2016 SpryMedia Ltd - datatables.net/license
  */
 
 (function( factory ){
 	if ( typeof define === 'function' && define.amd ) {
 		// AMD
-		define( ['jquery', 'datatables.net'], function ( $ ) {
+		define( ['jquery', 'datatables.net', 'datatables.net-buttons'], function ( $ ) {
 			return factory( $, window, document );
 		} );
 	}
@@ -25422,11 +25173,23 @@ return $.fn.dataTable;
 		// CommonJS
 		module.exports = function (root, $) {
 			if ( ! root ) {
+				// CommonJS environments without a window global must pass a
+				// root. This will give an error otherwise
 				root = window;
 			}
 
-			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net')(root, $).$;
+			if ( ! $ ) {
+				$ = typeof window !== 'undefined' ? // jQuery's factory checks for a global window
+					require('jquery') :
+					require('jquery')( root );
+			}
+
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net')(root, $);
+			}
+
+			if ( ! $.fn.dataTable.Buttons ) {
+				require('datatables.net-buttons')(root, $);
 			}
 
 			return factory( $, root, root.document );
@@ -25440,6 +25203,254 @@ return $.fn.dataTable;
 'use strict';
 var DataTable = $.fn.dataTable;
 
+
+
+var _link = document.createElement( 'a' );
+
+/**
+ * Clone link and style tags, taking into account the need to change the source
+ * path.
+ *
+ * @param  {node}     el Element to convert
+ */
+var _styleToAbs = function( el ) {
+	var url;
+	var clone = $(el).clone()[0];
+	var linkHost;
+
+	if ( clone.nodeName.toLowerCase() === 'link' ) {
+		clone.href = _relToAbs( clone.href );
+	}
+
+	return clone.outerHTML;
+};
+
+/**
+ * Convert a URL from a relative to an absolute address so it will work
+ * correctly in the popup window which has no base URL.
+ *
+ * @param  {string} href URL
+ */
+var _relToAbs = function( href ) {
+	// Assign to a link on the original page so the browser will do all the
+	// hard work of figuring out where the file actually is
+	_link.href = href;
+	var linkHost = _link.host;
+
+	// IE doesn't have a trailing slash on the host
+	// Chrome has it on the pathname
+	if ( linkHost.indexOf('/') === -1 && _link.pathname.indexOf('/') !== 0) {
+		linkHost += '/';
+	}
+
+	return _link.protocol+"//"+linkHost+_link.pathname+_link.search;
+};
+
+
+DataTable.ext.buttons.print = {
+	className: 'buttons-print',
+
+	text: function ( dt ) {
+		return dt.i18n( 'buttons.print', 'Print' );
+	},
+
+	action: function ( e, dt, button, config ) {
+		var data = dt.buttons.exportData(
+			$.extend( {decodeEntities: false}, config.exportOptions ) // XSS protection
+		);
+		var exportInfo = dt.buttons.exportInfo( config );
+		var columnClasses = dt
+			.columns( config.exportOptions.columns )
+			.flatten()
+			.map( function (idx) {
+				return dt.settings()[0].aoColumns[dt.column(idx).index()].sClass;
+			} )
+			.toArray();
+
+		var addRow = function ( d, tag ) {
+			var str = '<tr>';
+
+			for ( var i=0, ien=d.length ; i<ien ; i++ ) {
+				// null and undefined aren't useful in the print output
+				var dataOut = d[i] === null || d[i] === undefined ?
+					'' :
+					d[i];
+				var classAttr = columnClasses[i] ?
+					'class="'+columnClasses[i]+'"' :
+					'';
+
+				str += '<'+tag+' '+classAttr+'>'+dataOut+'</'+tag+'>';
+			}
+
+			return str + '</tr>';
+		};
+
+		// Construct a table for printing
+		var html = '<table class="'+dt.table().node().className+'">';
+
+		if ( config.header ) {
+			html += '<thead>'+ addRow( data.header, 'th' ) +'</thead>';
+		}
+
+		html += '<tbody>';
+		for ( var i=0, ien=data.body.length ; i<ien ; i++ ) {
+			html += addRow( data.body[i], 'td' );
+		}
+		html += '</tbody>';
+
+		if ( config.footer && data.footer ) {
+			html += '<tfoot>'+ addRow( data.footer, 'th' ) +'</tfoot>';
+		}
+		html += '</table>';
+
+		// Open a new window for the printable table
+		var win = window.open( '', '' );
+
+		if (! win) {
+			dt.buttons.info(
+				dt.i18n( 'buttons.printErrorTitle', 'Unable to open print view' ),
+				dt.i18n( 'buttons.printErrorMsg', 'Please allow popups in your browser for this site to be able to view the print view.' ),
+				5000
+			);
+
+			return;
+		}
+
+		win.document.close();
+
+		// Inject the title and also a copy of the style and link tags from this
+		// document so the table can retain its base styling. Note that we have
+		// to use string manipulation as IE won't allow elements to be created
+		// in the host document and then appended to the new window.
+		var head = '<title>'+exportInfo.title+'</title>';
+		$('style, link').each( function () {
+			head += _styleToAbs( this );
+		} );
+
+		try {
+			win.document.head.innerHTML = head; // Work around for Edge
+		}
+		catch (e) {
+			$(win.document.head).html( head ); // Old IE
+		}
+
+		// Inject the table and other surrounding information
+		win.document.body.innerHTML =
+			'<h1>'+exportInfo.title+'</h1>'+
+			'<div>'+(exportInfo.messageTop || '')+'</div>'+
+			html+
+			'<div>'+(exportInfo.messageBottom || '')+'</div>';
+
+		$(win.document.body).addClass('dt-print-view');
+
+		$('img', win.document.body).each( function ( i, img ) {
+			img.setAttribute( 'src', _relToAbs( img.getAttribute('src') ) );
+		} );
+
+		if ( config.customize ) {
+			config.customize( win, config, dt );
+		}
+
+		// Allow stylesheets time to load
+		var autoPrint = function () {
+			if ( config.autoPrint ) {
+				win.print(); // blocking - so close will not
+				win.close(); // execute until this is done
+			}
+		};
+
+		if ( navigator.userAgent.match(/Trident\/\d.\d/) ) { // IE needs to call this without a setTimeout
+			autoPrint();
+		}
+		else {
+			win.setTimeout( autoPrint, 1000 );
+		}
+	},
+
+	title: '*',
+
+	messageTop: '*',
+
+	messageBottom: '*',
+
+	exportOptions: {},
+
+	header: true,
+
+	footer: false,
+
+	autoPrint: true,
+
+	customize: null
+};
+
+
+return DataTable;
+}));
+
+
+/*! FixedHeader 3.3.1
+ * ©2009-2022 SpryMedia Ltd - datatables.net/license
+ */
+
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net'], function ( $ ) {
+			return factory( $, window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		module.exports = function (root, $) {
+			if ( ! root ) {
+				// CommonJS environments without a window global must pass a
+				// root. This will give an error otherwise
+				root = window;
+			}
+
+			if ( ! $ ) {
+				$ = typeof window !== 'undefined' ? // jQuery's factory checks for a global window
+					require('jquery') :
+					require('jquery')( root );
+			}
+
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net')(root, $);
+			}
+
+
+			return factory( $, root, root.document );
+		};
+	}
+	else {
+		// Browser
+		factory( jQuery, window, document );
+	}
+}(function( $, window, document, undefined ) {
+'use strict';
+var DataTable = $.fn.dataTable;
+
+
+
+/**
+ * @summary     FixedHeader
+ * @description Fix a table's header or footer, so it is always visible while
+ *              scrolling
+ * @version     3.3.1
+ * @author      SpryMedia Ltd (www.sprymedia.co.uk)
+ * @contact     www.sprymedia.co.uk
+ * @copyright   SpryMedia Ltd.
+ *
+ * This source file is free software, available under the following license:
+ *   MIT license - http://datatables.net/license/mit
+ *
+ * This source file is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the license files for details.
+ *
+ * For details please refer to: http://www.datatables.net
+ */
 
 var _instCounter = 0;
 
@@ -25617,6 +25628,10 @@ $.extend( FixedHeader.prototype, {
 	 */
 	update: function (force)
 	{
+		if (! this.s.enable) {
+			return;
+		}
+
 		var table = this.s.dt.table().node();
 
 		if ( $(table).is(':visible') ) {
@@ -25723,6 +25738,9 @@ $.extend( FixedHeader.prototype, {
 			itemDom.floating.removeClass( 'fixedHeader-floating fixedHeader-locked' );
 		}
 		else {
+			var docScrollLeft = $(document).scrollLeft();
+			var docScrollTop = $(document).scrollTop();
+
 			if ( itemDom.floating ) {
 				if(itemDom.placeholder !== null) {
 					itemDom.placeholder.remove();
@@ -25735,8 +25753,6 @@ $.extend( FixedHeader.prototype, {
 			var tableNode = $(dt.table().node()); 
 			var scrollBody = $(tableNode.parent());
 			var scrollEnabled = this._scrollEnabled();
-			var docScrollLeft = $(document).scrollLeft();
-			var docScrollTop = $(document).scrollTop();
 
 			itemDom.floating = $( dt.table().node().cloneNode( false ) )
 				.attr( 'aria-hidden', 'true' )
@@ -25809,7 +25825,7 @@ $.extend( FixedHeader.prototype, {
 	 * @param {JQuery<HTMLElement>} el 
 	 * @param {string} sign 
 	 */
-	_stickyPosition(el, sign) {
+	_stickyPosition: function(el, sign) {
 		if (this._scrollEnabled()) {
 			var that = this
 			var rtl = $(that.s.dt.table().node()).css('direction') === 'rtl';
@@ -26310,14 +26326,21 @@ $.extend( FixedHeader.prototype, {
 
 					el = blocker.length === 0 ?
 						null :
-						blocker.clone().appendTo('body').css('z-index', 1);
+						blocker.clone().css('z-index', 1);
 				}
 
 				if(el !== null) {
-					el.css({
-						top: end === 'top' ? header.offset.top : footer.offset.top,
-						left: side === 'right' ? bodyLeft + bodyWidth - el.width() : bodyLeft
-					});
+					if (headerMode === 'in' || headerMode === 'below') {
+						el
+							.appendTo('body')
+							.css({
+								top: end === 'top' ? header.offset.top : footer.offset.top,
+								left: side === 'right' ? bodyLeft + bodyWidth - el.width() : bodyLeft
+							});
+					}
+					else {
+						el.detach();
+					}
 				}
 
 				return el;
@@ -26350,7 +26373,7 @@ $.extend( FixedHeader.prototype, {
  * @type {String}
  * @static
  */
-FixedHeader.version = "3.2.3";
+FixedHeader.version = "3.3.1";
 
 /**
  * Defaults
@@ -26460,30 +26483,12 @@ $.each( ['header', 'footer'], function ( i, el ) {
 } );
 
 
-return FixedHeader;
+return DataTable;
 }));
 
 
-/*! Scroller 2.0.6
+/*! Scroller 2.1.0
  * ©2011-2022 SpryMedia Ltd - datatables.net/license
- */
-
-/**
- * @summary     Scroller
- * @description Virtual rendering for DataTables
- * @version     2.0.6
- * @author      SpryMedia Ltd (www.sprymedia.co.uk)
- * @contact     www.sprymedia.co.uk/contact
- * @copyright   SpryMedia Ltd.
- *
- * This source file is free software, available under the following license:
- *   MIT license - http://datatables.net/license/mit
- *
- * This source file is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the license files for details.
- *
- * For details please refer to: http://www.datatables.net
  */
 
 (function( factory ){
@@ -26497,11 +26502,19 @@ return FixedHeader;
 		// CommonJS
 		module.exports = function (root, $) {
 			if ( ! root ) {
+				// CommonJS environments without a window global must pass a
+				// root. This will give an error otherwise
 				root = window;
 			}
 
-			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net')(root, $).$;
+			if ( ! $ ) {
+				$ = typeof window !== 'undefined' ? // jQuery's factory checks for a global window
+					require('jquery') :
+					require('jquery')( root );
+			}
+
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net')(root, $);
 			}
 
 			return factory( $, root, root.document );
@@ -26514,6 +26527,26 @@ return FixedHeader;
 }(function( $, window, document, undefined ) {
 'use strict';
 var DataTable = $.fn.dataTable;
+
+
+
+/**
+ * @summary     Scroller
+ * @description Virtual rendering for DataTables
+ * @version     2.1.0
+ * @author      SpryMedia Ltd (www.sprymedia.co.uk)
+ * @contact     www.sprymedia.co.uk/contact
+ * @copyright   SpryMedia Ltd.
+ *
+ * This source file is free software, available under the following license:
+ *   MIT license - http://datatables.net/license/mit
+ *
+ * This source file is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the license files for details.
+ *
+ * For details please refer to: http://www.datatables.net
+ */
 
 
 /**
@@ -26998,7 +27031,10 @@ $.extend( Scroller.prototype, {
 			if ( initialStateSave && loadedState ) {
 				data.scroller = loadedState.scroller;
 				initialStateSave = false;
-				that.s.lastScrollTop = data.scroller.scrollTop;
+
+				if (data.scroller) {
+					that.s.lastScrollTop = data.scroller.scrollTop;
+				}
 			}
 			else {
 				// Need to used the saved position on init
@@ -27140,7 +27176,8 @@ $.extend( Scroller.prototype, {
 			iTableHeight = $(this.s.dt.nTable).height(),
 			displayStart = this.s.dt._iDisplayStart,
 			displayLen = this.s.dt._iDisplayLength,
-			displayEnd = this.s.dt.fnRecordsDisplay();
+			displayEnd = this.s.dt.fnRecordsDisplay(),
+			viewportEndY = iScrollTop + heights.viewport;
 
 		// Disable the scroll event listener while we are updating the DOM
 		this.s.skip = true;
@@ -27166,6 +27203,17 @@ $.extend( Scroller.prototype, {
 		}
 		else if ( displayStart + displayLen >= displayEnd ) {
 			tableTop = heights.scroll - iTableHeight;
+		}
+		else {
+			var iTableBottomY = tableTop + iTableHeight;
+			if (iTableBottomY < viewportEndY) {
+				// The last row of the data is above the end of the viewport.
+				// This means the background is visible, which is not what the user expects.
+				var newTableTop = viewportEndY - iTableHeight;
+				var diffPx = newTableTop - tableTop;
+				this.s.baseScrollTop += diffPx + 1; // Update start row number in footer.
+				tableTop = newTableTop; // Move table so last line of data is at the bottom of the viewport.
+			}
 		}
 
 		this.dom.table.style.top = tableTop+'px';
@@ -27674,7 +27722,7 @@ Scroller.oDefaults = Scroller.defaults;
  *  @name      Scroller.version
  *  @static
  */
-Scroller.version = "2.0.6";
+Scroller.version = "2.1.0";
 
 
 
@@ -27781,33 +27829,15 @@ Api.register( 'scroller.page()', function() {
 	// undefined
 } );
 
-return Scroller;
+
+return DataTable;
 }));
 
 
-/*! Select for DataTables 1.4.0
- * 2015-2021 SpryMedia Ltd - datatables.net/license/mit
+/*! Select for DataTables 1.6.1
+ * 2015-2023 SpryMedia Ltd - datatables.net/license/mit
  */
 
-/**
- * @summary     Select for DataTables
- * @description A collection of API methods, events and buttons for DataTables
- *   that provides selection options of the items in a DataTable
- * @version     1.4.0
- * @file        dataTables.select.js
- * @author      SpryMedia Ltd (www.sprymedia.co.uk)
- * @contact     datatables.net/forums
- * @copyright   Copyright 2015-2021 SpryMedia Ltd.
- *
- * This source file is free software, available under the following license:
- *   MIT license - http://datatables.net/license/mit
- *
- * This source file is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the license files for details.
- *
- * For details please refer to: http://www.datatables.net/extensions/select
- */
 (function( factory ){
 	if ( typeof define === 'function' && define.amd ) {
 		// AMD
@@ -27819,11 +27849,19 @@ return Scroller;
 		// CommonJS
 		module.exports = function (root, $) {
 			if ( ! root ) {
+				// CommonJS environments without a window global must pass a
+				// root. This will give an error otherwise
 				root = window;
 			}
 
-			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net')(root, $).$;
+			if ( ! $ ) {
+				$ = typeof window !== 'undefined' ? // jQuery's factory checks for a global window
+					require('jquery') :
+					require('jquery')( root );
+			}
+
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net')(root, $);
 			}
 
 			return factory( $, root, root.document );
@@ -27838,10 +27876,11 @@ return Scroller;
 var DataTable = $.fn.dataTable;
 
 
+
 // Version information for debugger
 DataTable.select = {};
 
-DataTable.select.version = '1.4.0';
+DataTable.select.version = '1.6.1';
 
 DataTable.select.init = function ( dt ) {
 	var ctx = dt.settings()[0];
@@ -27881,11 +27920,12 @@ DataTable.select.init = function ( dt ) {
 				dt.cell(data.select.cells[i].row, data.select.cells[i].column).select();
 			}
 		}
+
 		dt.state.save();
 	}
 	
-	dt.one('init', function() {
-		dt.on('stateSaveParams', function(e, settings, data) {
+	dt
+		.on('stateSaveParams', function(e, settings, data) {
 			data.select = {};
 			data.select.rows = dt.rows({selected:true}).ids(true).toArray();
 			data.select.columns = dt.columns({selected:true})[0];
@@ -27893,10 +27933,10 @@ DataTable.select.init = function ( dt ) {
 				return {row: dt.row(coords.row).id(true), column: coords.column}
 			});
 		})
-		
-		selectAndSave(undefined, undefined, savedSelected)
-		dt.on('stateLoaded stateLoadParams', selectAndSave)
-	})
+		.on('stateLoadParams', selectAndSave)
+		.one('init', function() {
+			selectAndSave(undefined, undefined, savedSelected);
+		});
 
 	var init = ctx.oInit.select;
 	var defaults = DataTable.defaults.select;
@@ -28450,7 +28490,8 @@ function init ( ctx ) {
 
 	// Clean up and release
 	api.on( 'destroy.dtSelect', function () {
-		api.rows({selected: true}).deselect();
+		// Remove class directly rather than calling deselect - which would trigger events
+		$(api.rows({selected: true}).nodes()).removeClass(api.settings()[0]._select.className);
 
 		disableMouseSelection( api );
 		api.off( '.dtSelect' );
@@ -29069,6 +29110,44 @@ $.extend( DataTable.ext.buttons, {
 		destroy: function ( dt, node, config ) {
 			dt.off( config._eventNamespace );
 		}
+	},
+	showSelected: {
+		text: i18n( 'showSelected', 'Show only selected' ),
+		className: 'buttons-show-selected',
+		action: function (e, dt, node, conf) {
+			// Works by having a filtering function which will reduce to the selected
+			// items only. So we can re-reference the function it gets stored in the
+			// `conf` object
+			if (conf._filter) {
+				var idx = DataTable.ext.search.indexOf(conf._filter);
+
+				if (idx !== -1) {
+					DataTable.ext.search.splice(idx, 1);
+					conf._filter = null;
+				}
+
+				this.active(false);
+			}
+			else {
+				var fn = function (s, data, idx) {
+					// Need to be sure we are operating on our table!
+					if (s !== dt.settings()[0]) {
+						return true;
+					}
+
+					let row = s.aoData[idx];
+
+					return row._select_selected;
+				}
+
+				conf._filter = fn;
+				DataTable.ext.search.push(fn);
+
+				this.active(true);
+			}
+
+			dt.draw();
+		}
 	}
 } );
 
@@ -29092,6 +29171,7 @@ $.each( [ 'Row', 'Column', 'Cell' ], function ( i, item ) {
 } );
 
 
+$.fn.DataTable.select = DataTable.select;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Initialisation
@@ -29110,7 +29190,7 @@ $(document).on( 'preInit.dt.dtSelect', function (e, ctx) {
 } );
 
 
-return DataTable.select;
+return DataTable;
 }));
 
 

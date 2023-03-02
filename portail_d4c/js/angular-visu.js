@@ -1257,7 +1257,8 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                 buttons: [
                     { extend: 'create', editor: editor },
                     { extend: 'edit', editor: editor },
-                    { extend: 'remove', editor: editor }
+                    { extend: 'remove', editor: editor },
+                    { extend: 'print', text: 'Imprimer' }
                 ]
             });
         };
