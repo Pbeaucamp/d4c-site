@@ -480,6 +480,13 @@ function getReq() {
 	var rowsReq = "&rows=" + rows;
 	var startReq = "&start=" + start;
 
+	var backOfficeReq = "";
+	var isBackOffice = isBackOfficeEnabled();
+	if (isBackOffice) {
+		backOfficeReq = "&backoffice=1";
+	}
+
+
 	var searchValue = getSearchValue();
 	if (searchValue != "") {
 		searchValue = searchValue.toLowerCase();
@@ -563,7 +570,7 @@ function getReq() {
 
 
 
-	req = facetReq + rowsReq + startReq + qReq + sortReq + coordReq + fqReq;
+	req = facetReq + rowsReq + startReq + qReq + sortReq + coordReq + fqReq + backOfficeReq;
 
 	return req;
 }
@@ -771,10 +778,7 @@ function setActiveFilters() {
 }
 
 function createDataset(data) {
-	var backOffice = getQueryVariable('backoffice');
-	backOffice != null && backOffice == 'true';
-
-	var isBackOffice = backOffice && platformInformations != null && platformInformations.isUserConnected && (platformInformations.isUserAdmin || platformInformations.isUserRo);
+	var isBackOffice = isBackOfficeEnabled();
 	var hasDataBfc = platformInformations.isDataBfc;
 
 	var datasetId = data.id;
@@ -1436,6 +1440,11 @@ function loading(visible) {
 		$("#pagination").removeClass("hidden");
 	}
 
+}
+
+function isBackOfficeEnabled() {
+	var backOffice = getQueryVariable('backoffice');
+	return backOffice != null && (backOffice == '1' || backOffice == 'true') && platformInformations != null && platformInformations.isUserConnected && (platformInformations.isUserAdmin || platformInformations.isUserRo);
 }
 
 function isMarqueBlanche() {
