@@ -815,7 +815,7 @@ function createDataset(data) {
 
 
 	let analyseDefault = '';
-	let imgBck = fetchPrefix() + '/sites/default/files/img_backgr/default.svg';
+	let imgBck = '';
 	let isRgpd = false;
 
 	for (let i = 0; i < data.extras.length; i++) {
@@ -831,6 +831,8 @@ function createDataset(data) {
 			isRgpd = data.extras[i].value == '1';
 		}
 	}
+
+	imgBck = getImgBck(imgBck, data);
 
 	//Check if dataset has features geo or hasWMS to display map
 	let hasGeo = data.metas != undefined && data.metas.features != undefined && data.metas.features.indexOf("geo") != -1;
@@ -873,6 +875,54 @@ function createDataset(data) {
 			partDataValidation +
 		'</div>'
 	);
+}
+
+function getImgBck(imgBck, data) {
+	// If an image is defined in the extras, we use it
+	if (imgBck != null && imgBck != '') {
+		return imgBck;
+	}
+
+	var datasetType = getDatasetType(data);
+
+	var prefix = fetchPrefix() + '/sites/default/files/images-background';
+
+	// Values possible: API, SFTP, Limesurvey, Graphique, Carte, Tableau, Visualisation, Tableau de bord, Données
+	switch (datasetType) {
+	case 'API':
+		imgBck = prefix + '/background-api-01.png';
+		break;
+	case 'SFTP':
+		imgBck = prefix + '/background-sftp-01.png';
+		break;
+	case 'Limesurvey':
+		imgBck = prefix + '/background-limesurvey-01.png';
+		break;
+	case 'Graphique':
+		imgBck = prefix + '/background-graphique-01.png';
+		break;
+	case 'Carte':
+		imgBck = prefix + '/background-carte-01.png';
+		break;
+	case 'Tableau':
+	case 'Données':
+		imgBck = prefix + '/background-donnees-01.png';
+		break;
+	case 'Visualisation':
+		imgBck = prefix + '/background-visualisation-01.png';
+		break;
+	case 'Tableau de bord':
+		imgBck = prefix + '/background-tableau-de-bord-01.png';
+		break;
+	case 'Indicateur':
+		imgBck = prefix + '/background-kpi-01.png';
+		break;
+	default:
+		imgBck = prefix + '/background-donnees-01.png';
+		break;
+	}
+
+	return imgBck;
 }
 
 function buildPartTitle(datasetTitle, theme) {
@@ -965,7 +1015,8 @@ function buildPartDescription(description) {
 		'</div>';
 }
 
-function buildPartProperties(data, organizationTitle, lastUpdateDate) {
+/** Values possible : API, SFTP, Limesurvey, Graphique, Carte, Tableau, Visualisation, Tableau de bord, Données */
+function getDatasetType(data) {
 	var data4citizenType = data.extras.filter(function (t) { return t.key == "data4citizen-type" })[0];
 	data4citizenType = data4citizenType != null ? data4citizenType.value : '';
 
@@ -1001,10 +1052,22 @@ function buildPartProperties(data, organizationTitle, lastUpdateDate) {
 	else if (data4citizenType == 'tdb') {
 		datasetType = 'Tableau de bord';
 	}
+	else if (data4citizenType == 'kpi') {
+		datasetType = 'Indicateur';
+	}
 	else {
 		let hasGeo = data.metas != undefined && data.metas.features != undefined && data.metas.features.indexOf("geo") != -1;
 		datasetType = hasGeo || hasWMS(data) ? 'Carte' : 'Données';
 	}
+
+	return datasetType;
+}
+
+function buildPartProperties(data, organizationTitle, lastUpdateDate) {
+	var data4citizenType = data.extras.filter(function (t) { return t.key == "data4citizen-type" })[0];
+	data4citizenType = data4citizenType != null ? data4citizenType.value : '';
+
+	var datasetType = getDatasetType(data);
 
 	var recordsCount = data.extras.filter(function (t) { return t.key == "records_count" })[0];
 	var reuses = data.nb_reuses;
