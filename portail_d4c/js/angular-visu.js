@@ -1274,8 +1274,8 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
                 window.open(serviceWFSUrl + format, '_blank');
             }
         };
-        $scope.goBackToSearch = function () {
-            window.location.href = fetchPrefix() + '/portail';
+        $scope.goBackToSearch = function(backUrl) {
+            window.location.href = backUrl;
         };
         $scope.validateData = function (contractId, datasetId, resourceId, schemas) {
             $.ajax(fetchPrefix() + '/databfc/ro/datavalidation?contractId=' + contractId + '&datasetId=' + datasetId + '&resourceId=' + resourceId + '&schemas=' + schemas,

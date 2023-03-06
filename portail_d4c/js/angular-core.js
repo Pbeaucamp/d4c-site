@@ -25532,7 +25532,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-label/leaflet.label.css", 
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-draw/leaflet.draw.css",
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/MarkerCluster.css",
-                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/MarkerCluster.Default.css"
+                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/MarkerCluster.Default.css",
+                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-measure/leaflet-measure.css"
                 ],
                 'js': [
                     [
