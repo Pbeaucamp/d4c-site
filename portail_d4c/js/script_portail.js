@@ -1156,22 +1156,25 @@ function buildPartDataValidation(isBackOffice, datasetId, data) {
 
 	var isSchemaValid = null;
 	var schemas = [];
-	for (var i = 0; i < dataValidation.schemaValidationResults.length; i++) {
-		var schemaValidation = dataValidation.schemaValidationResults[i];
 
-		if (schemaValidation.schema == 'rgpd_schema') {
-			nbColumnsRgpd = schemaValidation.columnsWithError != null ? schemaValidation.columnsWithError.length : 0;
-			columnsRgpd = schemaValidation.columnsWithError != null ? schemaValidation.columnsWithError.join(', ') : '';
-		}
-		else if (schemaValidation.schema == 'interop_schema') {
-			nbColumnsInterop = schemaValidation.columnsWithError != null ? schemaValidation.columnsWithError.length : 0;
-			columnsInterop = schemaValidation.columnsWithError != null ? schemaValidation.columnsWithError.join(', ') : '';
-		}
-		else if (isSchemaValid == null || isSchemaValid == true) {
-			var nbLinesError = schemaValidation.nbLinesError;
-			isSchemaValid = nbLinesError == 0;
-
-			schemas.push(schemaValidation.schema);
+	if (dataValidation.schemaValidationResults != null && dataValidation.schemaValidationResults.length > 0) {
+		for (var i = 0; i < dataValidation.schemaValidationResults.length; i++) {
+			var schemaValidation = dataValidation.schemaValidationResults[i];
+	
+			if (schemaValidation.schema == 'rgpd_schema') {
+				nbColumnsRgpd = schemaValidation.columnsWithError != null ? schemaValidation.columnsWithError.length : 0;
+				columnsRgpd = schemaValidation.columnsWithError != null ? schemaValidation.columnsWithError.join(', ') : '';
+			}
+			else if (schemaValidation.schema == 'interop_schema') {
+				nbColumnsInterop = schemaValidation.columnsWithError != null ? schemaValidation.columnsWithError.length : 0;
+				columnsInterop = schemaValidation.columnsWithError != null ? schemaValidation.columnsWithError.join(', ') : '';
+			}
+			else if (isSchemaValid == null || isSchemaValid == true) {
+				var nbLinesError = schemaValidation.nbLinesError;
+				isSchemaValid = nbLinesError == 0;
+	
+				schemas.push(schemaValidation.schema);
+			}
 		}
 	}
 
