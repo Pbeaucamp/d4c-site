@@ -2257,7 +2257,7 @@ html[dir=rtl] .d4c-search-input__reset{left:2.6rem;right:auto}
 .d4c-map-location-selector{position:relative}
 .d4c-map-location-selector__map{height:300px;width:400px}
 .d4c-map-location-selector__overlay{position:absolute;left:50px;top:50px;height:200px;width:300px;background:rgba(255,255,255,.8);border:1px solid #888;opacity:.7;pointer-events:none}
-.d4c-mapbuilder__main-panel{position: absolute;top: 100px;left: 10px;/* bottom: 90px; *//* right: 0; */width: 175px;/* margin-left: auto; *//* margin-right: auto; */background-color: #fff;opacity: 0.6;border-radius: 2px;-webkit-box-shadow: 0 1px 5px rgba(0,0,0,.65);box-shadow: 0 1px 5px rgba(0,0,0,.65);color: #333;transition: all ease 0.5s; }
+.d4c-mapbuilder__main-panel{position: absolute;top: 10px;left: 50px;/* bottom: 90px; *//* right: 0; */width: 175px;/* margin-left: auto; *//* margin-right: auto; */background-color: #fff;opacity: 0.6;border-radius: 2px;-webkit-box-shadow: 0 1px 5px rgba(0,0,0,.65);box-shadow: 0 1px 5px rgba(0,0,0,.65);color: #333;transition: all ease 0.5s; }
 .d4c-mapbuilder__main-panel:hover{opacity: 1;transition: all ease 0.5s;}
 .d4c-mapbuilder__main-panel__top-bar{border-bottom: solid 1px rgba(0,0,0,.1);display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; /* border-top-left-radius: 4px; */ /* border-top-right-radius: 4px; */ /* overflow: hidden; */ text-align: center;} 
 .d4c-mapbuilder__main-panel__map-selection{-webkit-box-flex:0;-ms-flex-positive:0;flex-grow:0;-ms-flex-negative:0;flex-shrink:0}
