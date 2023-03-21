@@ -174,6 +174,7 @@ SOFTWARE.
 		$scope.services1=$scope.services.filter(function(v,index){if(index==0) return $scope.services[index];});
 		$scope.services3=$scope.services.filter(function(v,index){if(index==2) return $scope.services[index];});
 		$scope.services2=$scope.services.filter(function(v,index){if(index==1) return $scope.services[index];});
+		$scope.services4=$scope.services.filter(function(v,index){if(index==3) return $scope.services[index];});
 		angular.forEach($scope.services,function(service){
 			$scope.api[service.id]={parameters:{},urlParameters:{}};
 		});
@@ -202,7 +203,20 @@ SOFTWARE.
 						for(var subkey in object){
 							var name=parameter.name+'.'+subkey;$scope.apiParams.parameters[name]=object[subkey];
 						}
-					}else if($scope.api[service.id].parameters[parameter.name]){
+					}
+					else if(parameter.type === 'refine' && $scope.api[service.id].parameters[parameter.name]){
+						var object = $scope.api[service.id].parameters[parameter.name];
+						var refines = object.split(',');
+						if (refines) {
+							for(var i=0; i < refines.length; i++) {
+								var refineValues = refines[i].split("=");
+
+								var name = parameter.name + '.' + refineValues[0];
+								$scope.apiParams.parameters[name] = refineValues[1];
+							}
+						}
+					}
+					else if($scope.api[service.id].parameters[parameter.name]){
 						$scope.apiParams.parameters[parameter.name]=$scope.api[service.id].parameters[parameter.name];
 					}
 				}
@@ -213,11 +227,19 @@ SOFTWARE.
 		$scope.sendRequest=function(service){
 			$http.get($scope.computeURL(service))
 			.then(function(data){
-				result=data.data.results;
-				if(result == undefined){
+				//We specifically change this result as it is a special API endpoint
+				var result = null;
+				if (service.id === 'resource_records_search') {
+					result = data.data;
+				}
+				else {
+					result = data.data.result;
+				}
+				if (result == null) {
 					result=data.data.result;
 				}
-				$scope.results[service.id]=result;$scope.errors[service.id]=null;
+				$scope.results[service.id] = result;
+				$scope.errors[service.id] = null;
 			}, function(data){$scope.results[service.id]=null;$scope.errors[service.id]=data.error;});
 		};
 		//$scope.sendRequest=function(service){$scope.results=JSON.parse('[{"name":"dataset","helptext":"ID du jeu de données"},{"name":"q","helptext":"Requête en texte intégral"},{"name":"lang","helptext":"Code langue de 2 lettres"}]');$scope.errors=null;};
@@ -297,6 +319,13 @@ SOFTWARE.
 			{'name':'sort','type':'string','helptext':translate(' comma separated field names with ordering e.g.: “fieldname1, fieldname2 desc”')},
 			{'name':'include_total','type':'boolean','helptext':translate(' True to return total matching record count (optional, default: true)')},
 			{'name':'records_format','type':'string','helptext':translate('the format for the records return value: ‘objects’ (default) list of {fieldname1: value1, ...} dicts, ‘lists’ list of [value1, value2, ...] lists, ‘csv’ string containing comma-separated values with no header, ‘tsv’ string containing tab-separated values with no header')}
+			];
+		});
+		app.factory('ResourceRecordsSearchParameters',function(translate){
+			return	[
+				{'name':'resource_id','type':'string','helptext':translate('the id of the resource')},
+				{'name':'format','type':'string','helptext':translate('the format (default is json). list of available formats: csv, json, xls, geojson')},
+				{'name':'refine','type':'refine','helptext':translate('refine to apply (ex: key=value,key2=value2)')}
 			];
 		});
 

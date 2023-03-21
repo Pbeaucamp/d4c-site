@@ -12994,6 +12994,25 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     return $scope.visibleItemsNumber;
                 };
                 $scope.visible = function () {
+                    function sort(g){
+                        g.sort(function (a, b) {
+                            var nameA = a.name.toLowerCase(),
+                                nameB = b.name.toLowerCase()
+                            if (nameA < nameB)
+                                return -1
+                            if (nameA > nameB)
+                                return 1
+                            return 0
+                        });
+                            
+                        for(let i = 0; i < g.length; i++){
+                            if(g[i].name == 'Projet approuvé'){
+                                g[i].name = 'Approuvé';
+                            }
+                        }
+                        return g;
+                    }
+                    $scope.categories=sort($scope.categories);
                     return !(angular.isString($scope.hideIfSingleCategory) && $scope.hideIfSingleCategory.toLowerCase() === 'true' && $scope.categories.length === 1 && $scope.categories[0].state !== 'refined');
                 };
                 var customTemplate = $transclude.$$boundTransclude().html();
@@ -20320,6 +20339,32 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 (function () {
     'use strict';
     var mod = angular.module('d4c-widgets');
+    mod.directive('d4cResultList', ['D4CAPI', function (D4CAPI) {
+        return {
+            restrict: 'E',
+            replace: true,
+            transclude: true,
+            scope: {
+                context: '=',
+                max: '@?',
+                showHitsCounter: '@?',
+                showPagination: '@?'
+            },
+            template: '<div class="d4cwidget d4cwidget-result-list">' + '	<div d4c-results="items" d4c-results-context="context" d4c-results-max="{{maxHits}}" class="d4cwidget-result-list__results">' + '		<div ng-if="loading"><d4c-spinner class="d4cwidget-spinner--large"></d4c-spinner></div>' + '		<div ng-if="!loading && !items.length" class="d4cwidget-result-enumerator__no-results-message" translate>No results</div>' + '		<div ng-if="!loading && items.length && !context.parameters[&#39;refine.insee_com&#39;]">' + '			<select ng-model="selectedItem" class="d4cwidget-result-list" ng-change="context.parameters[&#39;refine.insee_com&#39;] = selectedItem" ng-class="{\'d4c-list__items--visible\': items.length > 1 || items[0].value !== ngModel}">' + '				<option value="" translate>(select)</option>' + '				<option ng:repeat="item in items" value="{{item.fields.insee_com}}" inject></option>' + '			</select>' + '		</div>' + '		<div ng-if="context.parameters[&#39;refine.insee_com&#39;]" ng-repeat="item in items" class="d4cwidget-result-enumerator__item" inject></div>' + '	</div>' + '</div>',
+            link: function (scope, element) {
+                scope.localId = 'd4cResultList-' + D4C.StringUtils.getRandomUUID();
+                element.children()[0].id = scope.localId;
+            },
+            controller: ['$scope', function ($scope) {
+                $scope.maxHits = $scope.max || 10;
+                $scope.hitsCounter = (angular.isString($scope.showHitsCounter) && $scope.showHitsCounter.toLowerCase() === 'true');
+            }]
+        };
+    }]);
+}());;
+(function () {
+    'use strict';
+    var mod = angular.module('d4c-widgets');
     mod.directive('d4cResults', ['D4CAPI', function (D4CAPI) {
         return {
             restrict: 'A',
@@ -21503,6 +21548,14 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 var getQueryParameter = function (config) {
                     return config['parameter'];
                 };
+                var clearParameter = function (value) {
+                    value = value.normalize("NFD");
+                    value = value.replace(/\p{Diacritic}/gu, "");
+                    value = value.toUpperCase();
+                    value = value.replaceAll("-", " ");
+                    value = value.replaceAll("'", " ");
+                    return value;
+                };
                 var unwatch = $scope.$watch('context', function (newContext, oldContext) {
                     if (newContext) {
                         if (!angular.isArray(newContext)) {
@@ -21573,10 +21626,16 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     angular.forEach(contexts, function (context) {
                         var contextConfig = getContextConfig(context);
                         var queryParameter = getQueryParameter(contextConfig);
+                        var value = $scope.searchExpression;
                         if (contextConfig['field'] && $scope.searchExpression) {
-                            context.parameters[queryParameter] = contextConfig['field'] + ':"' + $scope.searchExpression + '"';
+                            var value = clearParameter(value);
+                            context.parameters[queryParameter] = contextConfig['field'] + ':"' + value + '"';
                         } else {
-                            context.parameters[queryParameter] = $scope.searchExpression;
+                            var value = clearParameter(value);
+                            context.parameters[queryParameter] = value;
+                        }
+                        if (contextConfig['field'] && $scope.searchExpression) {
+                            context.parameters['sort'] = contextConfig['field'];
                         }
                     });
                 };
@@ -23674,6 +23733,13 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (!this.dataset || !this.dataset.datasetid) {
                             return;
                         }
+
+                        if (parameters) {
+                            var p = JSON.stringify(parameters);
+                            p = p.replace(/\//g, "_slash_");
+                            parameters = JSON.parse(p);
+                        }
+                        
                         format = format || 'csv';
                         //var url = this.domainUrl + '/explore/dataset/' + this.dataset.datasetid + '/download/?format=' + format;
                         var url = fetchPrefix() + '/d4c/api/records/2.0/downloadfile/format=' + format;
@@ -24680,7 +24746,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                 });
 
-                if (mapDisplay != null) {
+                if (mapDisplay != null && mapDisplay.length > 0) {
                     var label = L.marker(shapeLayer.getBounds().getCenter(), {
                         icon: L.divIcon({
                             className: 'label',
