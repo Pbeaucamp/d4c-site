@@ -486,6 +486,12 @@ function getReq() {
 		backOfficeReq = "&backoffice=1";
 	}
 
+	var siretReq = "";
+	var siret = getQueryVariable('siret');
+	if (siret) {
+		siretReq = "&siret=" + siret;
+	}
+
 
 	var searchValue = getSearchValue();
 	if (searchValue != "") {
@@ -568,9 +574,7 @@ function getReq() {
 		fqReq = "&fq=" + fqArr.join(" AND ");
 	}
 
-
-
-	req = facetReq + rowsReq + startReq + qReq + sortReq + coordReq + fqReq + backOfficeReq;
+	req = facetReq + rowsReq + startReq + qReq + sortReq + coordReq + fqReq + backOfficeReq + siretReq;
 
 	return req;
 }
