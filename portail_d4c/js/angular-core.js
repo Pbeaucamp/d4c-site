@@ -7480,7 +7480,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 (function () {
     'use strict';
     var mod = angular.module('d4c.core');
-    mod.directive('d4cEmbedControl', ['$location', 'translate', 'WidgetCodeBuilder', 'VisualizationAPI', function ($location, translate, WidgetCodeBuilder, VisualizationAPI) {
+    mod.directive('d4cEmbedControl', ['$location', 'translate', 'WidgetCodeBuilder', 'VisualizationAPI', 'd4cNotificationService', function ($location, translate, WidgetCodeBuilder, VisualizationAPI, d4cNotificationService) {
         function buildWidgetCode(embedType, context) {
             if (embedType === "cartograph") {
                 return "";
@@ -7610,6 +7610,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     updateEmbedAPI(data).success(function (data) {
                        $scope.saved = true;
                        $scope.visualizationId = data.result.visualizationId;
+
+                       d4cNotificationService.sendNotification({
+                            title: translate('Mise à jour'),
+                            type: 'success',
+                            message: translate('La visualisation a été mise à jour.')
+                        });
                     });
                 };
                 var _computeShareUrl = function (url, embedType) {
