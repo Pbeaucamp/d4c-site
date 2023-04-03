@@ -1000,7 +1000,7 @@
       color: rgb(var(--texte),.75);
   }
   .dataset-informations-table table tr:nth-child(odd) {
-      background-color: rgb(var(--accents),.15) !important;
+      background-color: #FFF9E5 !important;
   }
   .dataset-informations {
       width: 100%;
