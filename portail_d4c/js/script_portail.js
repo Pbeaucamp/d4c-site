@@ -788,33 +788,7 @@ function createDataset(data) {
 		
 	}*/
 
-	var modif = data.metadata_modified;
-	var date = new Date(Date.UTC(modif.substring(0, 4), +modif.substring(5, 7) - 1, +modif.substring(8, 10), +modif.substring(11, 13), +modif.substring(14, 16)));
-	// var heure = (date.toLocaleTimeString()).substring(0,5);
-
-	// var imported = data.metadata_imported;
-	// if(imported != undefined){
-	// 	imported = new Date(Date.UTC(imported.substring(0,4),+imported.substring(5,7) - 1,+imported.substring(8,10),+imported.substring(11,13),+imported.substring(14,16)));
-	// } else {
-	// 	imported = new Date();
-	// }
-
-	//Define last data update date
-	var lastUpdateDate;
-	for (let i = 0; i < data.resources.length; i++) {
-		let resource = data.resources[i];
-		let currentDataDate = resource.last_modified;
-		if (!currentDataDate) {
-			currentDataDate = resource.created;
-		}
-
-		if (!lastUpdateDate) {
-			lastUpdateDate = currentDataDate;
-		}
-	}
-	if (lastUpdateDate) {
-		lastUpdateDate = new Date(Date.UTC(lastUpdateDate.substring(0, 4), +lastUpdateDate.substring(5, 7) - 1, +lastUpdateDate.substring(8, 10), +lastUpdateDate.substring(11, 13), +lastUpdateDate.substring(14, 16)));
-	}
+	var lastUpdateDate = data.dataset_modification_date != null ? new Date(data.dataset_modification_date) : null;
 
 	/////////////
 	var tagList = "";
@@ -950,8 +924,12 @@ function createDataset(data) {
 	//theme = accentsTidy(theme.replace(new RegExp(", ", 'g'),"-").replace(new RegExp(",", 'g'),"-").replace(new RegExp(" ", 'g'),"-"));
 	var imageThemes = buildImageThemes(theme);
 
+	var options = { timeZone: 'Europe/Paris', hour12: false, hour: '2-digit', minute: '2-digit' };
+	var lastUpdateDateString = lastUpdateDate != null ? lastUpdateDate.toLocaleDateString() : "";
+	var lastUpdateTimeString = lastUpdateDate != null ? lastUpdateDate.toLocaleTimeString('fr-FR', options) : "";
+
     $('#datasets').prepend(
-		'<div div class="dataset col-md-6 col-sm-12 col-xs-12 content-body" data-theme="' + theme[0] +'" data-orga="' + id_orga /*+'" data-reuses="'+ nb_reuses*/  +'" data-id="' + id +'" data-time="' + date.getTime() /*+'" data-views="' + nbViews + '" data-downloads="' + nbDownloads + '" data-records="' + nbRecords*/ + '" data-analyse="' + analyseDefault + '" data-imported="' + (lastUpdateDate !=  null ? lastUpdateDate.getTime() : '') + '" style="background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.41)), url(' + imgBck + ') center center no-repeat; background-size: cover;" >' +
+		'<div div class="dataset col-md-6 col-sm-12 col-xs-12 content-body" data-theme="' + theme[0] +'" data-orga="' + id_orga /*+'" data-reuses="'+ nb_reuses*/  +'" data-id="' + id +'" data-time="' + (lastUpdateDate != null ? lastUpdateDate.getTime() : '') /*+'" data-views="' + nbViews + '" data-downloads="' + nbDownloads + '" data-records="' + nbRecords*/ + '" data-analyse="' + analyseDefault + '" data-imported="' + (lastUpdateDate !=  null ? lastUpdateDate.getTime() : '') + '" style="background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.41)), url(' + imgBck + ') center center no-repeat; background-size: cover;" >' +
     		'<div class="box_1">' + 
 				'<a href="' + fetchPrefix() + '/visualisation/?id=' + name + '' + analyseDefault + '"' + targetValue + '>' +
 					'<div style="display: flex; flex-direction:row">' +
@@ -971,7 +949,7 @@ function createDataset(data) {
 						// Modification custom SPOT
 						//'<ul><li class="titre">Origine du site</li><li class="info" id="nomOrga">'+ data.organization.title + '</li></ul>' +
 						'<ul><li class="titre">Producteur</li><li class="info" id="nomOrga">' + data.organization.title + '</li></ul>' +
-						'<ul><li class="titre">Date modification</li><li class="info">' + (lastUpdateDate != null ? lastUpdateDate.toLocaleDateString() : '') + (lastUpdateDate != null ? ' ' + lastUpdateDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '') + '</ul>'+ /*li_granularite + li_reuses +*/
+						'<ul><li class="titre">Modification</li><li class="info">' + lastUpdateDateString + ' ' + lastUpdateTimeString + '</ul>' +
 						'<ul class="jetons">' + tagList + '</ul>' + 
 					'</div>' + 
 				'</a>' +      

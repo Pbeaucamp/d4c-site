@@ -1267,7 +1267,7 @@ for(var i=0;i<$scope.downloadTrackers.length;i++){$scope.downloadTrackers[i](eve
             });
         };
         $scope.visualizeResource = function (datasetId, resourceId) {
-            window.location.search = '?id=' + datasetId + '&resourceId=' + resourceId;
+            window.location.search = '?id=' + datasetId + '&resource_id=' + resourceId;
         };
         $scope.downloadResource = function (serviceWMSUrl, serviceWFSUrl, format) {
             var type = $("#d4c-select-download-resource :selected")[0].parentNode.label;
