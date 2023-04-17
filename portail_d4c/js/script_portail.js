@@ -1091,6 +1091,12 @@ function buildPartProperties(data, organizationTitle, lastUpdateDate) {
 
 function buildPartKeywords(data) {
 	var keywords = "";
+
+	// Checking if data is a reference
+	if (data.is_reference) {
+		keywords += '<li class="tag-reference">Données de référence</li>';
+	}
+
 	for (var i = 0; i < data.tags.length; i++) {
 		var tag = data.tags[i].name;
 		keywords += '<li class="tag">' + tag + '</li>';

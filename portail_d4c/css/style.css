@@ -159,6 +159,11 @@
       display: inline-block;
   }
   
+  #main.widget-opendata .tag-reference {
+    background-color: coral !important;
+    border: solid 1px coral !important;
+  }
+
   /**************** widget *************/
   #main.widget-opendata #tags li
   {
