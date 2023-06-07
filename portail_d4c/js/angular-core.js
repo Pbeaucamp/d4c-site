@@ -5445,12 +5445,35 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                     var queryString = $.param($scope.apiParams.parameters, true);
                     if (queryString) {
+                        // For gravitee, taken from Poitiers - To test to activate
+                        // //We have a redirection which makes a error if we go through gravitee if we use ? so we had it only if baseUrl doesn't end with a slash
+                        // if (baseURL.endsWith("/")) {
+                        //     return baseURL + queryString;
+                        // }
+                        // else {
+                        //     return baseURL + '?' + queryString;
+                        // }     
                         return baseURL + '?' + queryString;
                     } else {
                         return baseURL;
                     }
                 };
+                // For gravitee, taken from Poitiers - To test to activate
+                // $scope.getHeaders = function () {
+                //     var options = {};
+                //     if ($scope.service.apiKey) {
+                //         var headerKey = ($scope.service.headerKey ? $scope.service.headerKey : 'X-Gravitee-Api-Key');
+                //         options.headers = {
+                //             [headerKey]: $scope.service.apiKey
+                //         };
+
+                //     }
+                //     return options;
+                // };
                 $scope.sendCall = function () {
+                    // For gravitee, taken from Poitiers - To test to activate
+                    // var queryOptions = $scope.getHeaders();
+                    // $http.get($scope.computeURL(), queryOptions).success(function (data) {
                     $http.get($scope.computeURL()).success(function (data) {
                         data.parameters["facet"] = $scope.api.parameters["facet"];
                         if (data.parameters["facet"].length <= 0) {
@@ -11151,7 +11174,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     var boundsQuery = [scope.startField + '<' + end.format('YYYY-MM-DD'), scope.endField + '>=' + start.format('YYYY-MM-DD')].join(' AND ');
                     options = $.extend(options, {
                         'q.calendar_bounds': boundsQuery,
-                        fields: scope.tooltipFields
+                        fields: scope.tooltipFields.join(',')
                     });
 
                     return options;
@@ -15774,10 +15797,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                             }
                                         }
                                         else {
+                                            var display = mainTypeChart != "pie" ? true : false;
                                             //console.log(options.series);
                                             var yAxis = [];
                                             for (var i = 0; i < options.yAxis.length; i++) {
-                                                options.yAxis[i].display = true;
+                                                options.yAxis[i].display = display;
                                                 options.yAxis[i].id = 'y' + i;
                                                 /*options.yAxis[i].ticks = {
                                                                 beginAtZero: true,
