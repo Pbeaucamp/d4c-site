@@ -486,10 +486,10 @@ function getReq() {
 		backOfficeReq = "&backoffice=1";
 	}
 
-	var siretReq = "";
-	var siret = getQueryVariable('siret');
-	if (siret) {
-		siretReq = "&siret=" + siret;
+	var sirenReq = "";
+	var siren = getQueryVariable('siren');
+	if (siren) {
+		sirenReq = "&siren=" + siren;
 	}
 
 
@@ -574,7 +574,7 @@ function getReq() {
 		fqReq = "&fq=" + fqArr.join(" AND ");
 	}
 
-	req = facetReq + rowsReq + startReq + qReq + sortReq + coordReq + fqReq + backOfficeReq + siretReq;
+	req = facetReq + rowsReq + startReq + qReq + sortReq + coordReq + fqReq + backOfficeReq + sirenReq;
 
 	return req;
 }
