@@ -25404,7 +25404,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         layerConfig._incomplete = true;
                     }
 
-                    var markerClusterGroup = L.markerClusterGroup();
+                    // We only had clusters if the page is not the main map page
+                    var markerClusterGroup = window.location.href.indexOf("/carte") < 0 ? L.markerClusterGroup() : null;
                     var hasMarkerClusterGroup = false;
                     for (var i = 0; i < data.length; i++) {
                         var record = data[i];
@@ -25424,7 +25425,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             return;
                         }
                         if (geoJSON.type === 'Point') {
-                            hasMarkerClusterGroup = true;
+                            hasMarkerClusterGroup = markerClusterGroup != null && true;
                             MapLayerHelper.drawPoint(layerConfig, map, [geoJSON.coordinates[1], geoJSON.coordinates[0]], record, markerLayerGroup, null, markerClusterGroup);
                         } else {
                             MapLayerHelper.drawShape(layerConfig, map, geoJSON, record, markerLayerGroup, record.route_color, record.map_display);
