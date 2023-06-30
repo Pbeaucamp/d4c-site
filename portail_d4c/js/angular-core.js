@@ -18359,10 +18359,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     resizeMap();
 
                     //Check if dataset has WMS layers available
-                    if (scope.context != undefined && scope.context.dataset != undefined && scope.context.dataset.hasWMS()) {
+                    var hasWMS = scope.context.dataset.hasWMS();
+                    if (scope.context != undefined && scope.context.dataset != undefined) {
                         mapOptions.customWMSLayers = [];
-
-                        var displayLayer = !scope.context.dataset.hasFeature('geo');
 
                         for (let i = 0; i < scope.context.dataset.metas.resources.length; i++) {
                             var resource = scope.context.dataset.metas.resources[i];
@@ -18370,7 +18369,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 var wmsLayer = {
                                     url: resource.url,
                                     name: resource.name,
-                                    display: displayLayer,
+                                    display: true,
                                 };
 
                                 mapOptions.customWMSLayers.push(wmsLayer);
@@ -18381,6 +18380,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
                     var map = new L.D4CMap(element.children()[0].children[0], mapOptions);
                     map.addControl(new L.Control.Scale());
+                    // We don't display D4C data by default if the dataset has a WMS
+                    map.displayD4CData = !hasWMS;
                     if (!isStatic) {
                         map.addControl(new L.Control.Zoom({
                             position: 'topright',
@@ -18709,6 +18710,18 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             });
                         });
                     }
+                    scope.map.on('layeradd', function (e) {
+                        var addedLayer = e.layer;
+                        if (addedLayer.name === "masterLayerGroup") {
+                            scope.map.displayD4CData = true;
+                        }
+                    });
+                    scope.map.on('layerremove', function (e) {
+                        var removedLayer = e.layer;
+                        if (removedLayer.name === "masterLayerGroup") {
+                            scope.map.displayD4CData = false;
+                        }
+                    });
                     var onViewportMove = function (map) {
                         var size = map.getSize();
                         if (size.x > 0 && size.y > 0) {
@@ -18718,16 +18731,62 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     var renderedLayers = {};
                     var previousMasterLayerGroup;
                     var refreshData = function (fitView, locationChangedOnly) {
-                        fitView = !noRefit && fitView;
-                        var renderData = function (locationChangedOnly) {
-                            var promises = [];
-                            var newlyRenderedLayers = {};
+                        if (scope.map.displayD4CData == false) {
+                            if (previousMasterLayerGroup) {
+                                scope.map.layersControl.removeLayer(previousMasterLayerGroup);
+                            }
+
                             var masterLayerGroup = new L.LayerGroup();
-                            scope.partialDataLayers = '';
-                            scope.partialDataLayersArray = [];
-                            angular.forEach(scope.mapConfig.groups, function (layerGroup) {
-                                if (!layerGroup.displayed) {
+                            masterLayerGroup.name = "masterLayerGroup";
+                            masterLayerGroup.display = false;
+
+                            scope.map.layersControl.addOverlay(masterLayerGroup, "Données tabulaires");
+                            previousMasterLayerGroup = masterLayerGroup;
+                        }
+                        else {
+                            fitView = !noRefit && fitView;
+                            var renderData = function (locationChangedOnly) {
+                                var promises = [];
+                                var newlyRenderedLayers = {};
+                                var masterLayerGroup = new L.LayerGroup();
+                                masterLayerGroup.name = "masterLayerGroup";
+                                scope.partialDataLayers = '';
+                                scope.partialDataLayersArray = [];
+                                angular.forEach(scope.mapConfig.groups, function (layerGroup) {
+                                    if (!layerGroup.displayed) {
+                                        angular.forEach(layerGroup.layers, function (layer) {
+                                            if (layer._currentRequestTimeout) {
+                                                layer._currentRequestTimeout.resolve();
+                                                layer._loading = false;
+                                            }
+                                            if (layer._rendered) {
+                                                scope.map.removeLayer(layer._rendered);
+                                                layer._rendered = null;
+                                            }
+                                        });
+                                        return;
+                                    }
                                     angular.forEach(layerGroup.layers, function (layer) {
+                                        if (layer.showZoomMin && layer.showZoomMin > scope.map.getZoom()) {
+                                            return;
+                                        }
+                                        if (layer.showZoomMax && layer.showZoomMax < scope.map.getZoom()) {
+                                            return;
+                                        }
+                                        if (layer.context.dataset === null) {
+                                            return;
+                                        }
+                                        if (!locationChangedOnly || MapLayerRenderer.doesLayerRefreshOnLocationChange(layer)) {
+                                            var deferred = $q.defer();
+                                            masterLayerGroup.addLayer(MapLayerRenderer.updateDataLayer(layer, scope.map, deferred));
+                                            promises.push(deferred.promise);
+                                            newlyRenderedLayers[layer._runtimeId] = layer;
+                                        }
+                                    });
+                                });
+                                Object.keys(renderedLayers).forEach(function (runtimeId) {
+                                    if (angular.isUndefined(newlyRenderedLayers[runtimeId])) {
+                                        var layer = renderedLayers[runtimeId];
                                         if (layer._currentRequestTimeout) {
                                             layer._currentRequestTimeout.resolve();
                                             layer._loading = false;
@@ -18736,80 +18795,51 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                             scope.map.removeLayer(layer._rendered);
                                             layer._rendered = null;
                                         }
+                                    }
+                                });
+                                renderedLayers = newlyRenderedLayers;
+                                $q.all(promises).then(function () {
+                                    if (previousMasterLayerGroup) {
+                                        scope.map.layersControl.removeLayer(previousMasterLayerGroup);
+                                        scope.map.removeLayer(previousMasterLayerGroup);
+                                    }
+                                    scope.map.layersControl.addOverlay(masterLayerGroup, "Données tabulaires");
+                                    scope.map.addLayer(masterLayerGroup);
+                                    previousMasterLayerGroup = masterLayerGroup;
+                                    angular.forEach(renderedLayers, function (layerGroup) {
+                                        if (layerGroup._incomplete) {
+                                            var layerTitle = layerGroup.title || layerGroup.context.dataset.metas.title;
+                                            var maxTitleLength = 50;
+                                            if (layerTitle.length > maxTitleLength) {
+                                                layerTitle = layerTitle.substr(0, maxTitleLength - 1) + '&hellip;';
+                                            }
+                                            scope.partialDataLayersArray.push('&bull; ' + layerTitle);
+                                            scope.partialDataLayers = scope.partialDataTooltipMessage(scope.partialDataLayersArray);
+                                        }
                                     });
-                                    return;
-                                }
-                                angular.forEach(layerGroup.layers, function (layer) {
-                                    if (layer.showZoomMin && layer.showZoomMin > scope.map.getZoom()) {
-                                        return;
-                                    }
-                                    if (layer.showZoomMax && layer.showZoomMax < scope.map.getZoom()) {
-                                        return;
-                                    }
-                                    if (layer.context.dataset === null) {
-                                        return;
-                                    }
-                                    if (!locationChangedOnly || MapLayerRenderer.doesLayerRefreshOnLocationChange(layer)) {
-                                        var deferred = $q.defer();
-                                        masterLayerGroup.addLayer(MapLayerRenderer.updateDataLayer(layer, scope.map, deferred));
-                                        promises.push(deferred.promise);
-                                        newlyRenderedLayers[layer._runtimeId] = layer;
+                                });
+                            };
+                            if (fitView) {
+                                MapHelper.retrieveBounds(MapHelper.MapConfiguration.getActiveContextList(scope.mapConfig, {
+                                    geoOnly: true,
+                                    skipExcludedFromRefit: true
+                                })).then(function (bounds) {
+                                    if (bounds && bounds !== MapHelper.WORLD_BOUNDS) {
+                                        $timeout(function () {
+                                            var before = scope.map.getBounds().toBBoxString();
+                                            scope.map.fitBounds(bounds);
+                                            var after = scope.map.getBounds().toBBoxString();
+                                            if (before === after) {
+                                                refreshData(false, true);
+                                            }
+                                        }, 0);
+                                    } else {
+                                        renderData(locationChangedOnly);
                                     }
                                 });
-                            });
-                            Object.keys(renderedLayers).forEach(function (runtimeId) {
-                                if (angular.isUndefined(newlyRenderedLayers[runtimeId])) {
-                                    var layer = renderedLayers[runtimeId];
-                                    if (layer._currentRequestTimeout) {
-                                        layer._currentRequestTimeout.resolve();
-                                        layer._loading = false;
-                                    }
-                                    if (layer._rendered) {
-                                        scope.map.removeLayer(layer._rendered);
-                                        layer._rendered = null;
-                                    }
-                                }
-                            });
-                            renderedLayers = newlyRenderedLayers;
-                            $q.all(promises).then(function () {
-                                if (previousMasterLayerGroup) {
-                                    scope.map.removeLayer(previousMasterLayerGroup);
-                                }
-                                scope.map.addLayer(masterLayerGroup);
-                                previousMasterLayerGroup = masterLayerGroup;
-                                angular.forEach(renderedLayers, function (layerGroup) {
-                                    if (layerGroup._incomplete) {
-                                        var layerTitle = layerGroup.title || layerGroup.context.dataset.metas.title;
-                                        var maxTitleLength = 50;
-                                        if (layerTitle.length > maxTitleLength) {
-                                            layerTitle = layerTitle.substr(0, maxTitleLength - 1) + '&hellip;';
-                                        }
-                                        scope.partialDataLayersArray.push('&bull; ' + layerTitle);
-                                        scope.partialDataLayers = scope.partialDataTooltipMessage(scope.partialDataLayersArray);
-                                    }
-                                });
-                            });
-                        };
-                        if (fitView) {
-                            MapHelper.retrieveBounds(MapHelper.MapConfiguration.getActiveContextList(scope.mapConfig, {
-                                geoOnly: true,
-                                skipExcludedFromRefit: true
-                            })).then(function (bounds) {
-                                if (bounds && bounds !== MapHelper.WORLD_BOUNDS) {
-                                    $timeout(function () {
-                                        var before = scope.map.getBounds().toBBoxString();
-                                        scope.map.fitBounds(bounds);
-                                        var after = scope.map.getBounds().toBBoxString();
-                                        if (before === after) {
-                                            refreshData(false, true);
-                                        }
-                                    }, 0);
-                                } else {
-                                    renderData(locationChangedOnly);
-                                }
-                            });
-                        } else {
-                            renderData();
+                            } else {
+                                renderData();
+                            }
                         }
                     };
                     scope.partialDataTooltipMessage = function (layerList) {

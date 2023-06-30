@@ -169,6 +169,7 @@ L.D4CMap = L.Map.extend({
                     this.addLayer(layer);
                 }
             }
+            this.layersControl = layersControl;
             this.addControl(layersControl);
         }
 
