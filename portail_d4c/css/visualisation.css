@@ -170,7 +170,7 @@ html[dir=rtl] .d4cwidget-last-datasets-feed__theme-picto{float:right}
 .d4cwidget-map--fullscreen{position:fixed!important;top:0!important;right:0!important;bottom:0!important;left:0!important;height:100%!important;width:100%!important;z-index:9999999}
 .d4cwidget-map__map{height:100%;min-height:400px}
 .d4cwidget-map--fullscreen .d4cwidget-map__map{position:absolute!important;top:0!important;right:0!important;bottom:0!important;left:0!important}
-.d4cwidget-map__loading{left:50%;margin-left:-24px;bottom:30px;background:rgba(255,255,255,.9);padding:5px 12px;color:#333;font-size:30px;pointer-events:none}
+.d4cwidget-map__loading{position:absolute;left:50%;margin-left:-24px;background:rgba(255,255,255,.9);padding:5px 12px;color:#333;font-size:30px;pointer-events:none}
 .d4cwidget-map__limited-data-warning.d4c-message-box{font-size:.833rem;position:absolute;bottom:20px;left:50%;-webkit-transform:translate(-50%,0);transform:translate(-50%,0);margin-bottom:0;-webkit-box-shadow:0 1px 5px rgba(0,0,0,.65);box-shadow:0 1px 5px rgba(0,0,0,.65)}
 .d4cwidget-picto.d4cwidget-map-picto svg{width:18px;height:18px}
 .d4cwidget-map__legend{border-radius:2px;text-align:left;line-height:18px;color:#555;background-color:#fff;padding:.4em;min-width:200px;-webkit-box-sizing:border-box;box-sizing:border-box}
