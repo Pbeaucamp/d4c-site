@@ -1,4 +1,4 @@
-}/*@font-face{
+/*@font-face{
 	font-family:"DroidSans";
 	src:url("..fonts/DroidSans.ttf")format("ttf");
 	vvvvvvvvsrc:url("..fonts/DroidSans.eot")format("eot");
@@ -1241,6 +1241,26 @@ details[open] summary::before {
 	margin: 0 !important;
 	display: block !important;
 }
+
+
+#btn-edit-data, 
+:not(.d4c-dataset-selection-list__item-actions) >  .d4c-button--primary, 
+:not(.d4c-dataset-selection-list__item-actions) > .d4c-button:not(.d4c-chart-controls__add-chart-button, .d4c-form__addon), 
+.d4cwidget-social-buttons__button {
+	border: 0 !important;
+	border-radius: 0 !important;
+	padding: 16px 24px !important;
+	background: var(--marque-primaire) !important;
+	color: var(--nuance-de-gris-gris8) !important;
+	-webkit-transition: all .55s ease-in-out;
+	text-decoration: none !important;
+	margin: 0 !important;
+	font-style: normal;
+	font-weight: 700;
+	font-size: 16px !important;
+	line-height: 18px;
+}
+
 /** Portail **/
 .full-width {
 	width: 100%;
@@ -1303,6 +1323,270 @@ input:checked + .slider:before {
 input:checked + .slider:after {
 	content:'Public';
 	left: 2px;
+}
+main.main--dataset .d4c-dataset-reuses .d4c-dataset-reuses__new-reuse {
+	margin: 0;
+}
+main.main--dataset .d4c-dataset-reuses .reuseForm {
+	background: var(--nuance-de-gris-gris7);
+	padding: 16px;
+}
+main.main--dataset .d4c-dataset-reuses .reuseForm .d4c-form__control {
+	width: 100%;
+    cursor: pointer !important;
+    border: 1px solid var(--nuance-de-gris-gris5) !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 10px 16px !important;
+    height: unset !important;
+    font-size: 13px !important;
+    line-height: 16px !important;
+}
+.d4c-dataset-visualization .d4c-embed-control.ng-isolate-scope {
+    width: 100%;
+}
+.tabs--primary {
+	margin-bottom: 2rem;
+}
+.d4c-tabs__tabs > a:hover,
+.d4c-tabs__tabs > a:focus,
+.d4c-tabs__tabs > a.d4c-tabs__tab--active,
+.tabs--primary > li > a:hover, 
+.tabs--primary > li > a:focus, 
+.tabs--primary > li.active > a {
+	border-bottom: 4px solid var(--marque-primaire) !important;
+	background-color: transparent !important;
+	color: var(--nuance-de-gris-gris1) !important;
+	text-decoration: none !i;
+	background: unset;
+	border-left: 0 !important;
+	border-top: 0 !important;
+	border-right: 0 !important;
+}
+.d4c-tabs__tabs > a,
+.tabs--primary > li > a {
+	border-bottom: 0 !important;
+	border-radius: 0 !important;
+	color: var(--nuance-de-gris-gris1) !important;
+	background-color: transparent !important;
+	line-height: 150%;
+	padding: 24px !important;
+	margin: 0 !important;
+	text-decoration: none !important;
+	border-left: 0 !important;
+	border-top:  0 !important;
+	border-right: 0 !important;
+	border-bottom: 4px solid var(--marque-primaire-light) !important;
+	font-size: 16px;
+	font-weight: 400;
+	font-style: normal;
+}
+.d4c-tabs__tabs > a > i {display: none;}
+.d4c-tabs__tabs > a.d4c-tabs__tab.information::before {
+	content: "\e9ad";
+	font-family: var(--icons-font);
+}
+.d4c-tabs__tabs > a.d4c-tabs__tab.table::before {
+	content: "\eabc";
+	font-family: var(--icons-font);
+}
+.d4c-tabs__tabs > a.d4c-tabs__tab.map::before {
+	content: "\e9aa";
+	font-family: var(--icons-font);
+}
+.d4c-tabs__tabs > a.d4c-tabs__tab.analyze::before {
+	content: "\e8c6";
+	font-family: var(--icons-font);
+}
+.d4c-tabs__tabs > a.d4c-tabs__tab.export::before {
+	content: "\eb36";
+	font-family: var(--icons-font);
+}
+.d4c-tabs__tabs > a.d4c-tabs__tab.api::before {
+	content: "\e980";
+	font-family: var(--icons-font);
+}
+.d4c-tabs__tabs > a.d4c-tabs__tab.reuses::before {
+	content: "\e985";
+	font-family: var(--icons-font);
+}
+.d4c-tabs__tabs > a.d4c-tabs__tab.admin::before {
+	content: "\e98e";
+	font-family: var(--icons-font);
+}
+div[role="main"] .card-body > .row > .download-item {
+	display: flex;
+}
+div[role="main"] .card-body > .row > .download-item .download-img {
+	color: var(--nuance-de-gris-gris2);
+}
+div[role="main"] .card-body > .row > .download-item > .inline > .download-text {
+	color: var(--nuance-de-gris-gris2);
+}
+div[role="main"] .card-body > .row > .download-item > .inline > a {
+	text-decoration: none;
+	background: unset;
+	word-break: break-all;
+}
+div[role="main"] .card-body > .row > .download-item > .inline > a:hover {
+	text-decoration: underline;
+}
+div[role="main"] .card-body > .row .btn {
+	color: var(--nuance-de-gris-gris1) !important;
+	text-decoration: none !important;
+	background-color: var(--nuance-de-gris-gris8) !important;
+	border: 2px solid var(--marque-primaire) !important;
+	float: right;
+	border-radius: 0;
+	padding: 13px 24px !i;
+}
+div[role="main"] .card-body > .row .btn:hover {
+	border-color: var(--marque-primaire-dark-1) !important;
+	color: var(--marque-primaire-dark-1) !important;
+}
+.d4c-dataset-export-link__link::before {
+	content: "\eb36";
+	font-family: var(--icons-font)
+}
+.d4c-dataset-export-link__link {text-decoration: none !important;}
+.d4c-dataset-export-link__link > i {display:none}
+.d4c-dataset-export-link__explanations, .d4c-dataset-export-link__warning {font-size: 11px;line-height: 24px;}
+.d4c-dataset-export-link__link:hover {text-decoration: underline !important;}
+.d4c-dataset-export__format-choice, .d4c-dataset-export-link {display: flex;}
+.d4c-dataset-export__format-choice {border-left: 0;padding: 8px 0;margin: 0;}
+.d4c-dataset-export-link__format-name {
+	min-width: 150px;
+}
+.d4c-dataset-export-link__format-name--alternative:nth-child(1) {
+	width: 6rem !important; 
+	max-width: 6rem !important;
+}
+.d4c-dataset-export-link__format-name--alternative:nth-child(2) {
+	width: 40rem !important;
+	max-width: 40rem !important;
+}
+.d4c-dataset-export-link__description {margin: 0}
+.d4c-dataset-api-console .d4c-api-console .d4c-api-console-page__service-result,
+.d4c-dataset-api-console .d4c-api-console .d4c-message-box.d4c-message-box--error {
+	margin-left: 56px;
+}
+.d4c-api-console-page__service-url {
+	word-break: break-all;
+}
+.d4c-dataset-api-console .d4c-form__group .d4c-form__label {
+	text-align: right;
+	margin-right: 16px;
+	padding: 0;
+	margin-bottom: 0;
+	flex-basis: 100px;
+}
+.d4c-dataset-api-console .d4c-form__group--horizontal .d4c-form__control {
+	padding: 8px;
+	width: 100%;
+	background: rgb(var(--marque-primaire-light-rgb),.2);
+	border-color: #E5E5E5;
+}
+.d4c-form__help-text {
+	font-size: 11px;
+}
+
+/* Mobile */
+@media screen and (max-width: 480px) {
+	h1.d4c-dataset-visualization__dataset-title > .box_3 {
+		justify-content: flex-start;
+	}
+	h1.d4c-dataset-visualization__dataset-title > .box_3 > * {
+		width: 100% !important;
+	}
+	h1.d4c-dataset-visualization__dataset-title > .box_3 .d4cwidget-social-buttons {
+		justify-content: flex-start !important;
+	}
+	h1.d4c-dataset-visualization__dataset-title > .box_3 > div:not(.d4c-button):not(.d4cwidget-social-buttons) {
+		width: 40px !important; 
+	}
+}
+@media screen and (min-width: 480px) {
+	main.main--dataset .d4c-app-explore-dataset {
+	    width: 100%;
+	}
+	h1.d4c-dataset-visualization__dataset-title > .box_3 .d4cwidget-social-buttons {
+	    width: calc(100% - 30rem);
+	}
+}
+/* Tablette */
+@media screen and (max-width: 768px) {
+	div[role="main"] #main.widget-opendata, .main--dataset,
+	div[role="main"] #main.widget-opendata .col-md-10 #datasets {
+		justify-content: center;
+	}
+	div[role="main"] #main.widget-opendata #filter h1,
+	div[role="main"] #main.widget-opendata #filter .form-group {
+		position: relative;
+		order: -5;
+		margin-bottom: 2rem;
+	}
+	#reuses {
+		gap: 16px;
+	}	
+	#reuses > .reuse {
+		width: 100% !important;
+	}
+	.reuse .thumbnail > a {
+		height: 162px;
+	}
+	.reuse .thumbnail > .caption {
+		padding: 24px 24px 0 !important;
+	}
+	.reuse .thumbnail > .caption > a > h2 {
+		font-size: 16px !important;
+	}
+	.reuse .thumbnail > .caption > a > p:not(.data-desc), .reuse .thumbnail > .caption > p {
+		font-size: 11px;
+	}
+	.reuse .thumbnail > .caption > a > p.data-desc {
+		font-size: 13px;
+	}
+	.reuse .thumbnail::after {
+		padding: 0px 24px 16px;
+	}
+}
+@media screen and (min-width: 768px) {
+	div[role="main"] #main.widget-opendata, main.main--dataset .d4c-app-explore-dataset, #block-citizena-themes-quicktabsapi {
+	    display: -webkit-box;
+	    display: -webkit-flex;
+	    display: -ms-flexbox;
+	    display: flex;
+	    -webkit-box-align: start;
+	    -webkit-align-items: flex-start;
+	    -ms-flex-align: start;
+	    align-items: flex-start;
+	    -webkit-box-pack: end;
+	    -webkit-justify-content: flex-end;
+	    -ms-flex-pack: end;
+	    justify-content: flex-end;
+	    flex-wrap: wrap;
+	    margin: 0 auto;
+	    padding: 0 !important;
+	    position: relative;
+	}
+	.path-reuses #main.widget-opendata {
+		margin-top: 0 !important;
+	}
+	div[role="main"] #main.widget-opendata #filter {
+	    width: 280px;
+	    margin: 0;
+	    padding-left: 0;
+	}
+	div[role="main"] #main.widget-opendata .col-md-10 {
+	    width: calc(100% - 280px);
+	    padding-left: 121px;
+	    padding-right: 0 !important;
+	}
+	.d4c-modal__window {
+		max-height: calc(100vh - 2*150px) !important;
+		margin: 240px auto !important;
+	}
 }
 /* Desktop */
 @media screen and (min-width: 992px) {
