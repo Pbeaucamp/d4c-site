@@ -63,7 +63,7 @@ Copyright (c) 2014 - Opendatasoft
                 <div d4c-dataset-export-link export-parameters="exportParameters" format-label="Shapefile" format-extension="shp" context="context" nhits="context.nhits" records-limit="{{ shapefileExportLimit }}" ></div>
             </li>
             <li class="d4c-dataset-export__format-choice">
-                <div d4c-dataset-export-link export-parameters="exportParameters" format-label="KML" format-extension="kml" context="context" nhits="context.nhits" ></div>
+                <div d4c-dataset-export-link export-parameters="exportParameters" format-label="KML" format-extension="kml" context="context" nhits="context.nhits" records-limit="{{ shapefileExportLimit }}" ></div>
             </li>
             <li class="d4c-dataset-export__format-choice" ng-if="context.dataset.extra_metas.exporters && context.dataset.extra_metas.exporters.gpx_namefield && context.dataset.extra_metas.exporters.gpx_includedfields">
                 <div d4c-dataset-export-link export-parameters="exportParameters" format-label="GPX" format-extension="gpx" context="context" nhits="context.nhits" ></div>
