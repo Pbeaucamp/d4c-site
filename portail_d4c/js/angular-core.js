@@ -18732,7 +18732,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     var previousMasterLayerGroup;
                     var refreshData = function (fitView, locationChangedOnly) {
                         if (scope.map.displayD4CData == false) {
-                            if (previousMasterLayerGroup) {
+                            if (previousMasterLayerGroup && scope.map.layersControl != undefined) {
                                 scope.map.layersControl.removeLayer(previousMasterLayerGroup);
                             }
 
@@ -18740,7 +18740,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             masterLayerGroup.name = "masterLayerGroup";
                             masterLayerGroup.display = false;
 
-                            scope.map.layersControl.addOverlay(masterLayerGroup, "Données tabulaires");
+                            if (scope.map.layersControl != undefined) {
+                                scope.map.layersControl.addOverlay(masterLayerGroup, "Données tabulaires");
+                            }
                             previousMasterLayerGroup = masterLayerGroup;
                         }
                         else {
@@ -18800,10 +18802,14 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 renderedLayers = newlyRenderedLayers;
                                 $q.all(promises).then(function () {
                                     if (previousMasterLayerGroup) {
-                                        scope.map.layersControl.removeLayer(previousMasterLayerGroup);
+                                        if (scope.map.layersControl != undefined) {
+                                            scope.map.layersControl.removeLayer(previousMasterLayerGroup);
+                                        }
                                         scope.map.removeLayer(previousMasterLayerGroup);
                                     }
-                                    scope.map.layersControl.addOverlay(masterLayerGroup, "Données tabulaires");
+                                    if (scope.map.layersControl != undefined) {
+                                        scope.map.layersControl.addOverlay(masterLayerGroup, "Données tabulaires");
+                                    }
                                     scope.map.addLayer(masterLayerGroup);
                                     previousMasterLayerGroup = masterLayerGroup;
                                     angular.forEach(renderedLayers, function (layerGroup) {
@@ -21360,7 +21366,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         $element.find('.d4cwidget-table__internal-table-header').show().removeAttr('role');
                         var totalWidth = 0;
                         angular.forEach($element.find('.d4cwidget-table__internal-table-header .d4cwidget-table__cell-container'), function (thDiv, i) {
-                            $scope.layout[i] = $(thDiv).width() + 8;
+                            $scope.layout[i] = $(thDiv).width() + 30;
                             totalWidth += $scope.layout[i];
                         });
                         $scope.layout[0] = 30;
