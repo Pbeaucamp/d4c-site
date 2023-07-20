@@ -445,6 +445,161 @@ div[class^="col-"] {
 .d4c-tabs__pane.d4c-tabs__pane--horizontal .card-body .h5.text-uppercase {
 	font-weight: 600;
 }
+/* tab analyse css */
+.d4c-chart-controls__details-container > summary::before {
+	display: none;
+}
+.d4c-chart-controls__details-container > summary::after {
+	content: "\f107";
+	font-family: 'FontAwesome';
+}
+.d4c-chart-controls__details-container[open] > summary::after {
+	transform: rotate(180deg);
+}
+.d4c-chart-controls__details-container > summary {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 16px;
+	font-weight: 700;
+	padding: 10px;
+	margin: 0;
+	border: 1px solid #eee;
+}
+.d4c-chart-controls__details-container[open] > summary {
+	border-color: rgb(0,116,141);
+	color: rgb(0,116,141);
+}
+.d4c-chart-controls__details-container > div {
+	text-align: left;
+	background: #f8f8f8;
+	padding: 10px 10px 20px;
+	border-radius: 0;
+	border-left: 1px solid #e4e4e4;
+	border-right: 1px solid #e4e4e4;
+}
+.d4c-chart-controls__serie-handle {
+	float: unset !important;
+}
+.d4c-color-chooser__color-selector {
+	left: unset !important;
+	right: 0 !important;
+}
+.records-analyze.ng-scope {
+	display: flex;
+	flex-direction: row;
+}
+.records-analyze.ng-scope > .d4c-advanced-chart-controls {
+	width: 28%;
+    min-width: 260px;
+	max-height: 402px;
+    overflow: auto;
+	box-shadow: inset 1px 1px 0px 0px #eee, inset -1px -1px #eee;
+}
+.records-analyze.ng-scope > .d4c-chart {
+	width: 72%;
+	padding: 1rem;
+}
+.d4c-chart-controls__xaxis {
+	display: flex;
+    flex-direction: column;
+	position: relative;
+	padding-bottom: 20px;
+}
+.d4c-chart-controls__sort-choice {
+	float: unset;
+    align-self: flex-end;
+    margin: 0;
+    position: absolute;
+}
+.d4c-chart-controls__xaxis .group,
+.d4c-chart-controls__yaxis .group {
+	margin: 0;
+	display: flex;
+    flex-direction: column;
+	font-weight: 700;
+	width: 100%;
+}
+.d4c-chart-controls__yaxis .group {
+	font-size: 15px;
+}
+.d4c-chart-controls__xaxis .group > label {
+	display: flex;
+    flex-direction: column;
+	margin-bottom: 0;
+}
+.d4c-chart-controls__controls-group > label {
+	display: flex;
+    flex-direction: column;
+}
+.d4c-chart-controls {
+	padding: 0;
+	background-color: #fff;
+}
+.d4c-chart-controls__add-chart-button {
+	float: unset;
+	border: 0;
+    background: transparent;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.d4c-chart-controls__serie-list .d4c-chart-controls__sort-choice {
+	position: relative;
+	width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+	gap: 4px;
+}
+.d4c-chart-controls__serie-list .d4c-chart-controls__sort-choice > input,
+.d4c-chart-controls__yaxis-controls {
+	margin: 0;
+}
+.d4c-color-chooser, .d4c-color-chooser__preview, .d4c-color-chooser__current-color, .d4c-color-chooser__current-color-range {
+	height: 100%;
+}
+.d4c-chart-controls__controls-group {
+	margin: 0 !important;
+}
+.d4c-chart-controls__yaxis-controls .d4c-chart-controls__controls-group {
+	width: 100%;
+}
+.d4c-chart-controls__serie-basic-controls {
+	display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+	row-gap: 8px;
+}
+.d4c-chart-controls input, .d4c-chart-controls select, .d4c-chart-controls textarea {
+	padding: 8px 12px;
+}
+.d4c-chart-controls__serie-basic-controls .d4c-chart-controls label {
+	margin: 0;
+}
+.d4c-chart-controls__controls-group > select {
+	height: 100%;
+	width: 100%;
+}
+select.d4c-chart-controls__input {
+	width: 100%;
+}
+.d4c-chart-controls__serie-container {
+	background-color: transparent;
+	border: 1px solid;
+	padding: 4px 8px 8px;
+}
+.d4c-chart-controls__serie-container:not(:last-child) {
+	margin-bottom: 8px;
+}
+.d4c-chart-controls__serie-container:last-child {
+	margin-bottom: 0px;
+}
+div.d4c-chart-controls__controls-group {
+	width: 100%;
+}
 @media screen and (max-width: 768px) {
 	.d4c-search-filters.ng-hide,
 	.d4c-actif-filters.ng-hide {

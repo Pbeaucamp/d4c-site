@@ -566,6 +566,12 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				"Add a serie": {
 					"$$noContext": "Ajouter une série"
 				},
+                "Measure": {
+                    "$$noContext": "Mesure"
+                },
+				"Options":{
+					"$$noContext":"Options"
+				},
 				"Add a source": {
 					"$$noContext": "Ajouter une source"
 				},
