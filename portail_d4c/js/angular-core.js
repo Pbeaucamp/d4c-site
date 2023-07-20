@@ -16800,9 +16800,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 })
                             });
                             geocoder.markGeocode = function (result) {
-                                map.fitBounds(result.bbox);
-                                if (result.properties.geojson) {
-                                    var highlight = L.geoJson(result.properties.geojson, {
+                                map.fitBounds(result.geocode.bbox);
+                                if (result.geocode.properties.geojson) {
+                                    var highlight = L.geoJson(result.geocode.properties.geojson, {
                                         style: function () {
                                             return {
                                                 opacity: 0,
@@ -18396,12 +18396,16 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
                     var map = new L.D4CMap(element.children()[0].children[0], mapOptions);
                     map.addControl(new L.Control.Scale());
-                    map.addControl(new L.easyPrint({
+                    // map.addControl(new L.easyPrint({
+                    //     title: 'Exporter la carte',
+                    //     position: 'bottomright',
+                    //     exportOnly: true,
+                    //     filename: 'carte_export',
+                    //     sizeModes: ['A4Portrait', 'A4Landscape']
+                    // }));
+                    map.addControl(new L.control.browserPrint({
                         title: 'Exporter la carte',
-                        position: 'bottomright',
-                        exportOnly: true,
-                        filename: 'carte_export',
-                        sizeModes: ['A4Portrait', 'A4Landscape']
+                        position: 'bottomright'
                     }));
                     map.addControl(new L.Control.Measure({
                         position: 'bottomright',
@@ -18435,6 +18439,14 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         var geocoder = L.Control.geocoder({
                             placeholder: translate('Find a place...'),
                             errorMessage: translate('Nothing found.'),
+                            // Not used for now. Need license key
+                            // geocoder: new L.Control.Geocoder.Google({
+                            //     geocodingQueryParams: {
+                            //         "accept-language": D4CWidgetsConfig.language || 'en',
+                            //         "countrycodes": D4CWidgetsConfig.language,
+                            //         "polygon_geojson": true
+                            //     }
+                            // })
                             geocoder: new L.Control.Geocoder.Nominatim({
                                 serviceUrl: "https://nominatim.openstreetmap.org/",
                                 geocodingQueryParams: {
@@ -18445,9 +18457,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             })
                         });
                         geocoder.markGeocode = function (result) {
-                            map.fitBounds(result.bbox);
-                            if (result.properties.geojson) {
-                                var highlight = L.geoJson(result.properties.geojson, {
+                            map.fitBounds(result.geocode.bbox);
+                            if (result.geocode.properties.geojson) {
+                                var highlight = L.geoJson(result.geocode.properties.geojson, {
                                     style: function () {
                                         return {
                                             opacity: 0,
@@ -25553,13 +25565,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             'leaflet': {
                 'css': [
-                    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css", 
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map-fullscreen/map-fullscreen.css", 
-                    "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.css", 
+                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/L.Control.Locate.css", 
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-control-geocoder/Control.Geocoder.css", 
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/vectormarker/vectormarker.css", 
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/clustermarker/clustermarker.css", 
-                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-label/leaflet.label.css", 
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-draw/leaflet.draw.css",
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/MarkerCluster.css",
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/MarkerCluster.Default.css",
@@ -25567,12 +25577,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 ],
                 'js': [
                     [
-                        "L@https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"
-                    ],
-                    [
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map-fullscreen/map-fullscreen.js", 
-                        "L.Control.Locate@https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.js", 
-                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-label/leaflet.label.js", 
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/L.Control.Locate.min.js", 
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map/map.js", 
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map/tilelayer.js", 
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-control-geocoder/Control.Geocoder.js", 
@@ -25581,6 +25587,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-draw/leaflet.draw.js", 
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-heat/leaflet-heat.js",
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/leaflet.markercluster.js",
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-browser-print/leaflet.browser.print.min.js",
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-easyprint/bundle.js",
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-measure/leaflet-measure.fr.js"
                     ],

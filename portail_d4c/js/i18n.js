@@ -240,8 +240,7 @@ d4c.config(function (D4CWidgetsConfigProvider, ModuleLazyLoaderProvider) {
 			"lib/leaflet-locatecontrol/L.Control.Locate.css", 
 			"lib/leaflet-control-geocoder/Control.Geocoder.css", 
 			"lib/vectormarker/vectormarker.css", 
-			"lib/clustermarker/clustermarker.css", 
-			"lib/leaflet-label/leaflet.label.css", 
+			"lib/clustermarker/clustermarker.css",
 			"lib/leaflet-draw/leaflet.draw.css", 
 			"lib/leaflet-markercluster/MarkerCluster.css", 
 			"lib/leaflet-markercluster/MarkerCluster.Default.css", 
@@ -253,8 +252,7 @@ d4c.config(function (D4CWidgetsConfigProvider, ModuleLazyLoaderProvider) {
 			], 
 			[
 				"L.Control.D4CMapFullscreen@lib/map-fullscreen/map-fullscreen.js", 
-				"L.Control.Locate@lib/leaflet-locatecontrol/L.Control.Locate.js", 
-				"L.Label@lib/leaflet-label/leaflet.label.js", 
+				"L.Control.Locate@lib/leaflet-locatecontrol/L.Control.Locate.min.js",
 				"L.D4CMap@lib/map/map.js", 
 				"L.D4CTileLayer@lib/map/tilelayer.js", 
 				"L.Control.Geocoder@lib/leaflet-control-geocoder/Control.Geocoder.js", 
@@ -265,6 +263,7 @@ d4c.config(function (D4CWidgetsConfigProvider, ModuleLazyLoaderProvider) {
 				"L.BundleTileLayer@lib/bundletilelayer/bundletilelayer.js", 
 				"L.HeatLayer@lib/leaflet-heat/leaflet-heat.js", 
 				"L.MarkerClusterGroup@lib/leaflet-markercluster/leaflet.markercluster.js",
+				"L.Control.BrowserPrint@lib/leaflet-browser-print/leaflet.browser.print.min.js",
 				"L.Control.EasyPrint@lib/leaflet-easyprint/bundle.js",
 				"L.Control.Measure@lib/leaflet-measure/leaflet-measure.fr.js"
 			],
