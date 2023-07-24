@@ -1,94 +1,83 @@
 <div>
-    <!--
-    MIT Licence
-    ods-widgets -- https://github.com/opendatasoft/ods-widgets
-    Copyright (c) 2014 - Opendatasoft
-    -->
+<!--
+MIT Licence
+ods-widgets -- https://github.com/opendatasoft/ods-widgets
+Copyright (c) 2014 - Opendatasoft
+-->
     <div class="d4c-chart-controls" add-remove="" ng-model="query.charts" ng-if="query">
-        <details class="d4c-chart-controls__details-container" open>
-            <summary><span translate="">Dimension</span></summary>
-            <div class="d4c-chart-controls__xaxis">
-                <label ng-if="!query.seriesBreakdown" class="d4c-chart-controls__sort-choice">
-                    <input style="margin: 0;" type="radio" ng-model="query.sort" value="" name="sort">
-                    <span translate="">Default ordering</span>
+        <div class="d4c-chart-controls__xaxis">
+            <label ng-if="!query.seriesBreakdown" class="d4c-chart-controls__sort-choice">
+                <input style="margin: 0;" type="radio" ng-model="query.sort" value="" name="sort">
+                <span translate="">Default ordering</span>
+            </label>
+            <span class="group">
+                <label>
+                    <span translate="">X axis</span>
+                    <select class="d4c-chart-controls__field-selector d4c-chart-controls__input" required="" ng-model="query.xAxis" ng-options="field.name as field.label for field in availableX"></select>
                 </label>
-                <span class="group">
-                    <label>
-                        <span translate="">Dimension</span>
-                        <select class="d4c-chart-controls__field-selector d4c-chart-controls__input" required="" ng-model="query.xAxis" ng-options="field.name as field.label for field in availableX"></select>
-                    </label>
-                    <select ng-change="timescaleChange()" ng-model="query.timescale" ng-options="scale.name as scale.label for scale in timescales" class="d4c-chart-controls__input" ng-show="timescales.length &gt; 0"></select>
-                </span>
-                <span class="group" ng-if="advanced &amp;&amp; !query.seriesBreakdown &amp;&amp; !query.timescale">
-                    <button type="button" class="d4c-button d4c-button--small" ng-click="initColorsCategoryModal(query.xAxis)" translate="">Specify category colors</button>
-                </span>
-                <label class="group">
-                    <span translate="">Max. number of points</span>
-                    <select class="d4c-chart-controls__input" ng-model="query.maxpoints" ng-options="v for v in [5, 10, 20, 50, 100, 200]">
-                        <option value="" translate="">Show all</option>
-                    </select>
-                </label>
-            </div>
-        </details>
-        <details class="d4c-chart-controls__details-container">
-            <summary><span translate="">Measure</span></summary>
-            <div class="d4c-chart-controls__yaxis">
-                <ul class="d4c-chart-controls__serie-list" html-sortable="{&#39;handle&#39;: &#39;.d4c-chart-controls__serie-handle&#39;, &#39;group&#39;: index}" html-sortable-callback="reorderQueries" ng-model="query.charts">
-                    <li class="d4c-chart-controls__serie-container" ng-repeat="chart in query.charts track by $index" ng-style="{&#39;border-color&#39;: chart.color}">
-                        <form ng-model="chart">
-                            <span ng-show="query.charts.length &gt; 1" class="d4c-chart-controls__serie-handle">
-                                <i class="fa fa-reorder icon-reorder"></i>
-                            </span>
-                            <span class="d4c-chart-controls__serie-remove" ng-show="query.charts.length &gt; 1" ng-click="chartRemoval(chart); remove(chart)">
-                                <i class="fa fa-close icon-remove"></i>
-                            </span>
-                            <label ng-if="!query.seriesBreakdown &amp;&amp; !isRangeChart(chart.type) &amp;&amp; chart.type !== &#39;boxplot&#39;" class="d4c-chart-controls__sort-choice">
-                                <input type="radio" class="d4c-chart-controls__input" ng-model="query.sort" value="{{getSerieForChart(query, chart)}}">
-                                <span translate="">Use for ordering</span>
-                            </label>
-                            <span d4c-chart-control-serie="" serie="query.charts[$index]" context="context" advanced="advanced" single-axis="dataChart.singleAxis" breakdown="query.seriesBreakdown" stacked="query.stacked"></span>
-                        </form>
-                    </li>
-                </ul>
-                <button type="button" class="d4c-chart-controls__add-chart-button" ng-disabled="query.charts[0].type==&#39;treemap&#39;" ng-click="query.charts[0].type==&#39;treemap&#39; || add(serieTemplate, true, query.charts.length, fillDefaultValues)" d4c-disabled-tooltip="query.charts[0].type==&#39;treemap&#39;" translate="d4c-disabled-tooltip-text" d4c-disabled-tooltip-text="You cannot add multiple series on treemap.">
+                <select ng-change="timescaleChange()" ng-model="query.timescale" ng-options="scale.name as scale.label for scale in timescales" class="d4c-chart-controls__input" ng-show="timescales.length &gt; 0"></select>
+            </span>
+            <span class="group" ng-if="advanced &amp;&amp; !query.seriesBreakdown &amp;&amp; !query.timescale">
+                <button type="button" class="d4c-button d4c-button--small" ng-click="initColorsCategoryModal(query.xAxis)" translate="">Specify category colors</button>
+            </span>
+            <label class="group">
+                <span translate="">Max. number of points</span>
+                <select class="d4c-chart-controls__input" ng-model="query.maxpoints" ng-options="v for v in [5, 10, 20, 50, 100, 200]">
+                    <option value="" translate="">Show all</option>
+                </select>
+            </label>
+        </div>
+        <div class="d4c-chart-controls__yaxis">
+            <div class="d4c-chart-controls__yaxis-controls">
+                <button type="button" class="d4c-chart-controls__add-chart-button d4c-button d4c-button--small" ng-disabled="query.charts[0].type==&#39;treemap&#39;" ng-click="query.charts[0].type==&#39;treemap&#39; || add(serieTemplate, true, query.charts.length, fillDefaultValues)" d4c-disabled-tooltip="query.charts[0].type==&#39;treemap&#39;" translate="d4c-disabled-tooltip-text" d4c-disabled-tooltip-text="You cannot add multiple series on treemap.">
                     <i class="fa fa-plus icon-plus"></i>
                     <translate>Add a serie</translate>
                 </button>
-            </div>
-        </details>
-        <details class="d4c-chart-controls__details-container">
-            <summary><span translate="">Options</span></summary>
-            <div class="d4c-chart-controls__yaxis">
-                <div class="d4c-chart-controls__yaxis-controls">
-                    <span class="d4c-chart-controls__controls-group">
-                        <label>
-                            <translate>Break down series</translate>
-                            <select ng-disabled="availableBreakDowns.length === 0 || query.charts[0].type==&#39;treemap&#39;" class="d4c-chart-controls__input" required="" ng-model="query.seriesBreakdown" ng-options="field.name as field.label for field in availableBreakDowns" d4c-disabled-tooltip="availableBreakDowns.length === 0 || query.charts[0].type==&#39;treemap&#39;" translate="d4c-disabled-tooltip-text" d4c-disabled-tooltip-text="Series break down is not available with treemaps and requires a second facet.">
-                                <option value="">----</option>
-                            </select>
-                        </label>
-                        <select ng-model="query.seriesBreakdownTimescale" ng-options="scale.name as scale.label for scale in timescalesForBreakdown" ng-show="timescalesForBreakdown.length &gt; 0"></select>
-                    </span>
-                    <span class="d4c-chart-controls__controls-group">
-                        <label>
-                            <translate>Stack</translate>
-                            <select ng-disabled="!stackingEnabled()" class="d4c-chart-controls__input" ng-model="query.stacked" d4c-disabled-tooltip="!stackingEnabled()" d4c-disabled-tooltip-text="The stacking is available only when all series use the same chart type or when series breakdown is activated." translate="d4c-disabled-tooltip-text">
-                                <option value="" translate="">No stack</option>
-                                <option value="normal" translate="">Normal</option>
-                                <option value="percent" translate="">Percent</option>
-                            </select>
-                        </label>
-                    </span>
-                    <span class="group" ng-if="advanced &amp;&amp; query.seriesBreakdown">
-                        <button type="button" class="d4c-button d4c-button--small" ng-click="initColorsCategoryModal(query.seriesBreakdown)" translate="">Specify category for series</button>
-                    </span>
-                    <label class="d4c-chart-controls__controls-group" ng-show="query.charts.length &gt; 1 &amp;&amp; !advanced">
-                        <input style="margin: 0;" type="checkbox" ng-model="dataChart.singleAxis">
-                        <span translate="">Merge Y axes</span>
+                <span class="d4c-chart-controls__controls-group">
+                    <label>
+                        <translate>Break down series</translate>
+                        <select ng-disabled="availableBreakDowns.length === 0 || query.charts[0].type==&#39;treemap&#39;" class="d4c-chart-controls__input" required="" ng-model="query.seriesBreakdown" ng-options="field.name as field.label for field in availableBreakDowns" d4c-disabled-tooltip="availableBreakDowns.length === 0 || query.charts[0].type==&#39;treemap&#39;" translate="d4c-disabled-tooltip-text" d4c-disabled-tooltip-text="Series break down is not available with treemaps and requires a second facet.">
+                            <option value="">----</option>
+                        </select>
                     </label>
-                </div>
+                    <select ng-model="query.seriesBreakdownTimescale" ng-options="scale.name as scale.label for scale in timescalesForBreakdown" ng-show="timescalesForBreakdown.length &gt; 0"></select>
+                </span>
+                <span class="d4c-chart-controls__controls-group">
+                    <label>
+                        <translate>Stack</translate>
+                        <select ng-disabled="!stackingEnabled()" class="d4c-chart-controls__input" ng-model="query.stacked" d4c-disabled-tooltip="!stackingEnabled()" d4c-disabled-tooltip-text="The stacking is available only when all series use the same chart type or when series breakdown is activated." translate="d4c-disabled-tooltip-text">
+                            <option value="" translate="">No stack</option>
+                            <option value="normal" translate="">Normal</option>
+                            <option value="percent" translate="">Percent</option>
+                        </select>
+                    </label>
+                </span>
+                <span class="group" ng-if="advanced &amp;&amp; query.seriesBreakdown">
+                    <button type="button" class="d4c-button d4c-button--small" ng-click="initColorsCategoryModal(query.seriesBreakdown)" translate="">Specify category for series</button>
+                </span>
+                <label class="d4c-chart-controls__controls-group" ng-show="query.charts.length &gt; 1 &amp;&amp; !advanced">
+                    <input style="margin: 0;" type="checkbox" ng-model="dataChart.singleAxis">
+                    <span translate="">Merge Y axes</span>
+                </label>
             </div>
-        </details>
+            <ul class="d4c-chart-controls__serie-list" html-sortable="{&#39;handle&#39;: &#39;.d4c-chart-controls__serie-handle&#39;, &#39;group&#39;: index}" html-sortable-callback="reorderQueries" ng-model="query.charts">
+                <li class="d4c-chart-controls__serie-container" ng-repeat="chart in query.charts track by $index" ng-style="{&#39;border-color&#39;: chart.color}">
+                    <form ng-model="chart">
+                        <span ng-show="query.charts.length &gt; 1" class="d4c-chart-controls__serie-handle">
+                            <i class="fa fa-reorder icon-reorder"></i>
+                        </span>
+                        <span class="d4c-chart-controls__serie-remove" ng-show="query.charts.length &gt; 1" ng-click="chartRemoval(chart); remove(chart)">
+                            <i class="fa fa-close icon-remove"></i>
+                        </span>
+                        <label ng-if="!query.seriesBreakdown &amp;&amp; !isRangeChart(chart.type) &amp;&amp; chart.type !== &#39;boxplot&#39;" class="d4c-chart-controls__sort-choice">
+                            <input type="radio" class="d4c-chart-controls__input" ng-model="query.sort" value="{{getSerieForChart(query, chart)}}">
+                            <span translate="">Use for ordering</span>
+                        </label>
+                        <span d4c-chart-control-serie="" serie="query.charts[$index]" context="context" advanced="advanced" single-axis="dataChart.singleAxis" breakdown="query.seriesBreakdown" stacked="query.stacked"></span>
+                    </form>
+                </li>
+            </ul>
+        </div>
     </div>
     <d4c-modal name="colorsCategoryModal" title="Categories palette" translate="title" class="d4c-modal__categories-colors">
         <d4c-modal-body>
