@@ -623,7 +623,7 @@ function renderResult(json) {
 	var numDataset = 0;
 
 	if (json == null || json.result.count == 0) {
-		$('#datasets').append('<div class="alert alert-info">Aucune connaissance trouvée</div>');
+		$('#datasets').append('<div class="alert alert-info">Aucun jeu de données trouvé</div>');
 
 		setActiveFilters();
 
