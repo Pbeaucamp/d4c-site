@@ -18359,7 +18359,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     resizeMap();
 
                     //Check if dataset has WMS layers available
-                    var hasWMS = scope.context.dataset.hasWMS();
+                    var hasWMS = scope.context != undefined && scope.context.dataset != undefined && scope.context.dataset.hasWMS();
                     if (scope.context != undefined && scope.context.dataset != undefined) {
                         mapOptions.customWMSLayers = [];
 
