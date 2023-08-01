@@ -268,7 +268,8 @@ d4c.config(function (D4CWidgetsConfigProvider, ModuleLazyLoaderProvider) {
 				"L.Control.Measure@lib/leaflet-measure/leaflet-measure.fr.js"
 			],
 			[
-				'lib/leaflet-proj4js/GpPluginLeaflet.js'
+				'lib/leaflet-proj4js/GpPluginLeaflet.js',
+				'lib/dom-to-image/dom-to-image.min.js'
 			]
 		]
 	};

@@ -18403,10 +18403,74 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     //     filename: 'carte_export',
                     //     sizeModes: ['A4Portrait', 'A4Landscape']
                     // }));
+                    // map.addControl(new L.control.browserPrint({
+                    //     title: 'Exporter la carte',
+                    //     position: 'bottomright',
+                    //     printModes: [
+                    //         L.BrowserPrint.Mode.Portrait("A3", {title: "A3", scale: 2}),
+                    //     ]
+                    // }));
+
+                    var customActionToPrint = function(context, mode) {
+                        return function() { 
+                            var node = document.getElementsByClassName("leaflet-map-pane");
+                            // domtoimage.toPng(node[0])
+                            //     .then(function (dataUrl) {
+                            //         var link = document.createElement('a');
+                            //         link.download = map.printControl.options.documentTitle || "exportedMap" + '.png';
+                            //         link.href = dataUrl;
+                            //         link.click();
+                            //     })
+                            //     .catch(function (error) {
+                            //         console.error('oops, something went wrong!', error);
+                            //     });
+
+                            domtoimage.toSvg(node[0])
+                                .then(function (dataUrl) {
+                                    var link = document.createElement('a');
+                                    link.download = map.printControl.options.documentTitle || "exportedMap" + '.svg';
+                                    link.href = dataUrl;
+                                    link.click();
+                                })
+                                .catch(function (error) {
+                                    console.error('oops, something went wrong!', error);
+                                });
+                        }
+                    };
                     map.addControl(new L.control.browserPrint({
                         title: 'Exporter la carte',
-                        position: 'bottomright'
+                        position: 'bottomright',
+                        printModes: [
+                            L.browserPrint.mode("Alert", {
+                                title:"User specified print action",
+                                pageSize: "A6", 
+                                action: customActionToPrint, 
+                                invalidateBounds: false
+                            }),
+                        ]
                     }));
+
+                    // Not working anymore  - Dunno why
+                    // var saveAsImage = function () {
+                    //     // return domtoimage.toPng(document.querySelector("#-print")).then(function (dataUrl) {
+                    //     return domtoimage.toPng(document.body).then(function (dataUrl) {
+                    //         var link = document.createElement('a');
+                    //         link.download = map.printControl.options.documentTitle || "exportedMap" + '.png';
+                    //         link.href = dataUrl;
+                    //         link.click();
+                    //     });
+                    // };
+                    // map.addControl(new L.control.browserPrint({
+                    //     // title: 'Exporter la carte',
+                    //     documentTitle: "printImage",
+                    //     printModes: [
+                    //         L.BrowserPrint.Mode.Auto("Exporter la carte"),
+                    //     ],
+                    //     printFunction: saveAsImage
+                    // }));
+                    // L.BrowserPrint.Utils.registerLayer(L.MarkerClusterGroup, 'L.MarkerClusterGroup', function (layer, utils) {
+                    //     return layer;
+                    // });
                     map.addControl(new L.Control.Measure({
                         position: 'bottomright',
                         primaryLengthUnit: 'meters',
@@ -25589,7 +25653,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/leaflet.markercluster.js",
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-browser-print/leaflet.browser.print.min.js",
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-easyprint/bundle.js",
-                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-measure/leaflet-measure.fr.js"
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-measure/leaflet-measure.fr.js",
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/dom-to-image/dom-to-image.min.js"
                     ],
                     [
                         fetchPrefix() + '/sites/default/files/api/portail_d4c/lib/leaflet-proj4js/GpPluginLeaflet.js'
