@@ -1091,8 +1091,8 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				"CSV File resource field": {
 					"$$noContext": "Champs contenant le nom du fichier CSV"
 				},
-				"CSV uses semicolon (;) as a separator.": {
-					"$$noContext": "Le CSV utilise le point-virgule (;) comme séparateur."
+				"CSV uses comma (,) as a separator.": {
+					"$$noContext": "Le CSV utilise la virgule (,) comme séparateur."
 				},
 				"CSW URL": {
 					"$$noContext": "URL CSW"
