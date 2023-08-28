@@ -13968,6 +13968,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     useHTML: true,
                     rtl: D4CWidgetsConfig.language === 'ar'
                 },
+                // Add this to increase resolution for image export
+                devicePixelRatio: 4,
                 yAxis: [],
                 plotOptions: {
                     series: {
@@ -15117,7 +15119,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         var ctx = canvas.getContext('2d');
                                         $scope.chart = new Chart(ctx, chartjs(options));
 
-
+                                        // TODO/
+                                        console.log($scope.chart.toBase64Image());
 
                                         //$scope.chart = new Chart($scope.chart.canvas.getContext('2d'), chartjs(options));
                                     } else {
@@ -15130,6 +15133,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         var canvas = document.getElementById(id);
                                         var ctx = canvas.getContext('2d');
                                         $scope.chart = new Chart(ctx, chartjs(options));
+
+                                        // TODO/
+                                        console.log($scope.chart.toBase64Image());
                                     }
 
                                 }
