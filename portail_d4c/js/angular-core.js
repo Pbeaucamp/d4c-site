@@ -14552,7 +14552,28 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 colors: '=',
                 contexts: '=?'
             },
-            template: '' + '<div class="d4c-chart">' + '   <div class="d4c-chart__loading" ng-show="loading">' + '        <d4c-spinner></d4c-spinner>' + '    </div>' + '    <div class="chartplaceholder" style="display: none;" ></div> ' + '<div class="chartplaceholder"   style="background:white; border-radius: 1em;"></div>' + ' <debug data="chartoptions"></debug>' + '    <ul ng-if="tzsForcedLength > 0" class="chart-timezone-caption">' + '       <li ng-repeat="(datasetId, tz) in tzsForced">' + '           <i class="fa fa-info" aria-hidden="true">{{t}}</i>' + '           <span translate ng-if="hasDatasetWithoutTz || tzsForcedLength > 1">' + '               All dates and times for dataset {{datasetId}} are in {{tz}} time.' + '           </span>' + '           <span translate ng-if="!hasDatasetWithoutTz && tzsForcedLength === 1">' + '               All dates and times are in {{tz}} time.' + '           </span>' + '       </li>' + '    </ul>' + '</div>',
+            template: '' +  '<div class="d4c-chart">' + 
+                            '   <div class="d4c-chart__loading" ng-show="loading">' + 
+                            '        <d4c-spinner></d4c-spinner>' + 
+                            '    </div>' + 
+                            '    <div class="chartplaceholder" style="display: none;" ></div> ' + 
+                            '<div class="chartplaceholder"   style="background:white; border-radius: 1em;"></div>' + 
+                            ' <debug data="chartoptions"></debug>' + 
+                            '    <ul ng-if="tzsForcedLength > 0" class="chart-timezone-caption">' + 
+                            '       <li ng-repeat="(datasetId, tz) in tzsForced">' + 
+                            '           <i class="fa fa-info" aria-hidden="true">{{t}}</i>' + 
+                            '           <span translate ng-if="hasDatasetWithoutTz || tzsForcedLength > 1">' + 
+                            '               All dates and times for dataset {{datasetId}} are in {{tz}} time.' + 
+                            '           </span>' + 
+                            '           <span translate ng-if="!hasDatasetWithoutTz && tzsForcedLength === 1">' + 
+                            '               All dates and times are in {{tz}} time.' + 
+                            '           </span>' + 
+                            '       </li>' + 
+                            '    </ul>' + 
+                            '   <button class="d4c-chart-download" d4c-tooltip="Download chart" translate="d4c-tooltip" d4c-tooltip-direction="left" ng-click="downloadChart()">' + 
+                            '       <i class="fa fa-download"></i>' + 
+                            '   </button>' + 
+                            '</div>',
             controller: ['$scope', '$element', '$attrs', function ($scope) {
                 var timeSerieMode, precision, periodic, yAxisesIndexes, domain, that = this;
                 $scope.$watch('contexts', function (nv, ov) {
@@ -14563,6 +14584,14 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         }
                     }
                 }, true);
+                $scope.downloadChart = function () {
+                    var a = document.createElement('a');
+                    a.href = $scope.chart.toBase64Image();
+                    a.download = 'mon_graphique.png';
+
+                    // Trigger the download
+                    a.click();
+                };
                 this.highchartsLoaded = function (Highcharts, element) {
                     var chartplaceholder = element.find('.chartplaceholder');
                     function formatRowX(value) {
@@ -15119,9 +15148,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         var ctx = canvas.getContext('2d');
                                         $scope.chart = new Chart(ctx, chartjs(options));
 
-                                        // TODO/
-                                        console.log($scope.chart.toBase64Image());
-
                                         //$scope.chart = new Chart($scope.chart.canvas.getContext('2d'), chartjs(options));
                                     } else {
 
@@ -15133,9 +15159,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         var canvas = document.getElementById(id);
                                         var ctx = canvas.getContext('2d');
                                         $scope.chart = new Chart(ctx, chartjs(options));
-
-                                        // TODO/
-                                        console.log($scope.chart.toBase64Image());
                                     }
 
                                 }
@@ -15869,6 +15892,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     }
 
                                     datasets.options.legend = options.legend;
+                                    datasets.options.devicePixelRatio = options.devicePixelRatio;
 
                                     Chart.scaleService.updateScaleDefaults('category', {
                                         ticks: {
@@ -16804,6 +16828,14 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         "polygon_geojson": true
                                     }
                                 })
+                                // geocoder: new L.Control.Geocoder.Mapbox({
+                                //     apiKey: 'REPLACE_WITH_API_KEY',
+                                //     geocodingQueryParams: {
+                                //         "language": D4CWidgetsConfig.language || 'en',
+                                //         "country": D4CWidgetsConfig.language,
+                                //         "routing": true
+                                //     }
+                                // })
                             });
                             geocoder.markGeocode = function (result) {
                                 map.fitBounds(result.geocode.bbox);
@@ -18509,14 +18541,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         var geocoder = L.Control.geocoder({
                             placeholder: translate('Find a place...'),
                             errorMessage: translate('Nothing found.'),
-                            // Not used for now. Need license key
-                            // geocoder: new L.Control.Geocoder.Google({
-                            //     geocodingQueryParams: {
-                            //         "accept-language": D4CWidgetsConfig.language || 'en',
-                            //         "countrycodes": D4CWidgetsConfig.language,
-                            //         "polygon_geojson": true
-                            //     }
-                            // })
+                            // By default we use the Nominatim but if we have an API Key for google or mapbox we can uncomment the following code
                             geocoder: new L.Control.Geocoder.Nominatim({
                                 serviceUrl: "https://nominatim.openstreetmap.org/",
                                 geocodingQueryParams: {
@@ -18525,6 +18550,22 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     "polygon_geojson": true
                                 }
                             })
+                            // geocoder: new L.Control.Geocoder.Google({
+                            //     apiKey: 'XX_API_KEY',
+                            //     geocodingQueryParams: {
+                            //         "accept-language": D4CWidgetsConfig.language || 'en',
+                            //         "countrycodes": D4CWidgetsConfig.language,
+                            //         "polygon_geojson": true
+                            //     }
+                            // })
+                            // geocoder: new L.Control.Geocoder.Mapbox({
+                            //     apiKey: 'REPLACE_WITH_API_KEY',
+                            //     geocodingQueryParams: {
+                            //         "language": D4CWidgetsConfig.language || 'en',
+                            //         "country": D4CWidgetsConfig.language,
+                            //         "routing": true
+                            //     }
+                            // })
                         });
                         geocoder.markGeocode = function (result) {
                             map.fitBounds(result.geocode.bbox);
@@ -25635,8 +25676,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             'leaflet': {
                 'css': [
+                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet/leaflet.css",
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map-fullscreen/map-fullscreen.css", 
-                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/L.Control.Locate.css", 
+                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-locatecontrol/L.Control.Locate.css", 
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-control-geocoder/Control.Geocoder.css", 
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/vectormarker/vectormarker.css", 
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/clustermarker/clustermarker.css", 
@@ -25647,8 +25689,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 ],
                 'js': [
                     [
+                        "L@" + fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet/leaflet.js"
+                    ],
+                    [
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map-fullscreen/map-fullscreen.js", 
-                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/L.Control.Locate.min.js", 
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-locatecontrol/L.Control.Locate.min.js", 
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map/map.js", 
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map/tilelayer.js", 
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-control-geocoder/Control.Geocoder.js", 
