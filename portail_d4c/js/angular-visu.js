@@ -590,7 +590,10 @@ angular.module('monospaced.elastic', []).constant('msdElasticConfig', {
             restrict: 'E',
             templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/dataset-api-console.html',
             scope: {
-                context: '='
+                context: '=',
+                serviceUrl: '@',
+                serviceApiKey: '@',
+                serviceHeaderKey: '@'
             },
             controller: function ($location, $scope, DebugLogger, ServiceDescription, SearchAPI) {
                 DebugLogger.log('init api');
@@ -601,6 +604,11 @@ return;}*/
                     parameters: {}
                 };
                 $scope.service = ServiceDescription;
+                if (!$scope.service.url.includes($scope.serviceUrl)) {
+                    $scope.service.url = $scope.serviceUrl + $scope.service.url;
+                }
+                $scope.service.apiKey = $scope.serviceApiKey;
+                $scope.service.headerKey = $scope.serviceHeaderKey;
                 var hierarchicalArrayToParams = function (service, params) {
                     var paramName, key;
                     for (var i = 0; i < service.parameters.length; i++) {
