@@ -163,6 +163,50 @@ Copyright (c) 2014 - Opendatasoft
         </div>
     </form>
     <div ng-if="!noControls && !advanced" class="d4c-chart-controls__query-container" d4c-chart-control-query>
+        <div class="d4c-form__group">
+            <div class="d4c-form__check-line">
+                <div class="d4c-chart-controls">
+                    <label for="text-title" translate>Title</label>
+                    <input type="text"
+                           id="text-title"
+                           class="d4c-d4c-chart-controls__input"
+                           ng-model="localChartContext.dataChart.textTitle"
+                    />
+                </div>
+                <div class="d4c-chart-controls">
+                    <label for="text-subtitle" translate>Subtitle</label>
+                    <input type="text"
+                           id="text-subtitle"
+                           class="d4c-d4c-chart-controls__input"
+                           ng-model="localChartContext.dataChart.textSubtitle"
+                    />
+                </div>
+                <label>
+                    <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayBackgroundColor">
+                    <span translate>Display the background color</span>
+                </label>
+                <div class="d4c-chart-controls">
+                    <label for="text-subtitle" translate>Background color</label>
+                    <span class="d4c-chart-controls__controls-group d4c-chart-controls_background-color-border">
+                        <span d4c-color-chooser="" color="localChartContext.dataChart.backgroundColor" allowedcolors="allowedcolors"></span>
+                    </span>
+                </div>
+                <label>
+                    <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayBorder">
+                    <span translate>Display the border</span>
+                </label>
+                <div class="d4c-chart-controls">
+                    <label for="text-subtitle" translate>Border color</label>
+                    <span class="d4c-chart-controls__controls-group d4c-chart-controls_background-color-border">
+                        <span d4c-color-chooser="" color="localChartContext.dataChart.borderColor" allowedcolors="allowedcolors"></span>
+                    </span>
+                </div>
+                <label>
+                    <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayLegend">
+                    <span translate>Display the graph legend</span>
+                </label>
+            </div>
+        </div>
         <div chart-controls advanced="advanced"
              context="context.datasets[localChartContext.dataChart.queries[0].config.dataset]"
              query="localChartContext.dataChart.queries[0]"

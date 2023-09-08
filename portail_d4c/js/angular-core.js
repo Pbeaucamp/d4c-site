@@ -4995,6 +4995,33 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if (typeof chartConfig.alignMonth !== "undefined") {
                         widgetCode += ' align-month="' + chartConfig.alignMonth + '"';
                     }
+                    if (chartConfig.displayTitle === true) {
+                        widgetCode += ' display-title="true"';
+                    }
+                    if (chartConfig.textTitle) {
+                        widgetCode += ' text-title="' + chartConfig.textTitle + '"';
+                    }
+                    if (chartConfig.displaySubtitle === true) {
+                        widgetCode += ' display-subtitle="true"';
+                    }
+                    if (chartConfig.textSubtitle) {
+                        widgetCode += ' text-subtitle="' + chartConfig.textSubtitle + '"';
+                    }
+                    if (chartConfig.displayBackgroundColor === false) {
+                        widgetCode += ' display-background-color="false"';
+                    }
+                    if (chartConfig.backgroundColor) {
+                        widgetCode += ' background-color="' + chartConfig.backgroundColor + '"';
+                    }
+                    if (chartConfig.displayBorder === true) {
+                        widgetCode += ' display-border="true"';
+                    }
+                    if (chartConfig.borderColor) {
+                        widgetCode += ' border-color="' + chartConfig.borderColor + '"';
+                    }
+                    if (chartConfig.borderWidth) {
+                        widgetCode += ' border-width="' + chartConfig.borderWidth + '"';
+                    }
                     widgetCode += '>\n';
                     if (chartConfig.queries) {
                         for (var i = 0; i < chartConfig.queries.length; i++) {
@@ -13912,15 +13939,35 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     parameters.xLabel = ChartHelper.getXLabel(datasetid, parameters.queries[0].xAxis, parameters.timescale);
                 }
             }
+
+            parameters.displayTitle = !(angular.isUndefined(parameters.textTitle) || parameters.textTitle === '');
+            parameters.displaySubtitle = !(angular.isUndefined(parameters.textSubtitle) || parameters.textSubtitle === '');
+
             if (angular.isUndefined(parameters.displayLegend)) {
                 parameters.displayLegend = true;
             }
+
+            if (angular.isUndefined(parameters.displayBackgroundColor)) {
+                parameters.displayBackgroundColor = true;
+            }
+            
             parameters.labelsXLength = parameters.labelsXLength || 12;
             var serieTitle = '<span style="color:{series.color}">{series.name}</span>:';
             var options = {
                 chart: {},
                 title: {
-                    text: ''
+                    text: parameters.textTitle,
+                    display: parameters.displayTitle
+                },
+                subtitle: {
+                    text: parameters.textSubtitle,
+                    display: parameters.displaySubtitle
+                },
+                backgroundColor: parameters.displayBackgroundColor ? parameters.backgroundColor : null,
+                border: {
+                    display: parameters.displayBorder,
+                    color: parameters.borderColor,
+                    width: parameters.borderWidth ? parameters.borderWidth : 1
                 },
                 credits: {
                     enabled: false
@@ -15135,6 +15182,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     //$('#divChartJs').html('');
                                     //$('#divChartJs').html('<canvas id="myChart"></canvas>');
 
+                                    Chart.plugins.register({PluginSubtitle});
+                                    Chart.plugins.register({PluginBackground});
+                                    Chart.plugins.register({PluginBorder});
+
                                     if ($scope.chart) {
 
 
@@ -15894,6 +15945,29 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     datasets.options.legend = options.legend;
                                     datasets.options.devicePixelRatio = options.devicePixelRatio;
 
+                                    datasets.options.title = options.title;
+
+                                    datasets.options.plugins = {
+                                        chartJsPluginSubtitle: {
+                                            display: options.subtitle.display,
+                                            // fontSize: 30,
+                                            // fontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                                            // fontColor: '#888',
+                                            // fontStyle: 'normal',
+                                            // paddingTop: 4,
+                                            text: options.subtitle.text,
+                                        },
+                                        chartJsPluginBackground: {
+                                            color: options.backgroundColor,
+                                        },
+                                        chartJsPluginBorder: {
+                                            borderColor: options.border.color,
+                                            borderWidth: options.border.display ? options.border.width : 0,
+                                            borderDash: null,
+                                            borderDashOffset: 0,
+                                        }
+                                    };
+                                    
                                     Chart.scaleService.updateScaleDefaults('category', {
                                         ticks: {
                                             callback: function (tick) {
@@ -16166,7 +16240,16 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 labelY: '@',
                 sort: '@',
                 maxpoints: '@',
-                chart: '=?parameters'
+                chart: '=?parameters',
+                textTitle: '@',
+                displayTitle: '@',
+                textSubtitle: '@',
+                displaySubtitle: '@',
+                displayBackgroundColor: '@',
+                backgroundColor: '@',
+                displayBorder: '@',
+                borderColor: '@',
+                borderWidth: '@',
             },
             replace: true,
             transclude: true,
@@ -16191,6 +16274,15 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         displayLegend: angular.isDefined($scope.displayLegend) && $scope.displayLegend === "false" ? false : true,
                         labelsXLength: angular.isDefined($scope.labelsXLength) && $scope.labelsXLength !== "" ? parseInt($scope.labelsXLength) : undefined,
                         alignMonth: angular.isDefined($scope.alignMonth) && $scope.alignMonth === "false" ? false : true,
+                        displayTitle: angular.isDefined($scope.displayTitle) && $scope.displayTitle === "false" ? false : true,
+                        textTitle: angular.isDefined($scope.textTitle) && $scope.textTitle !== "" ? $scope.textTitle : undefined,
+                        displaySubtitle: angular.isDefined($scope.displaySubtitle) && $scope.displaySubtitle === "false" ? false : true,
+                        textSubtitle: angular.isDefined($scope.textSubtitle) && $scope.textSubtitle !== "" ? $scope.textSubtitle : undefined,
+                        displayBackgroundColor: angular.isDefined($scope.displayBackgroundColor) && $scope.displayBackgroundColor === "false" ? false : true,
+                        backgroundColor: angular.isDefined($scope.backgroundColor) && $scope.backgroundColor !== "" ? $scope.backgroundColor : undefined,
+                        displayBorder: angular.isDefined($scope.displayBorder) && $scope.displayBorder === "false" ? false : true,
+                        borderColor: angular.isDefined($scope.borderColor) && $scope.borderColor !== "" ? $scope.borderColor : undefined,
+                        borderWidth: angular.isDefined($scope.borderWidth) && $scope.borderWidth !== "" ? $scope.borderWidth : undefined,
                     };
                 }
                 angular.forEach($scope.chart, function (item, key) {
@@ -23267,6 +23359,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 if (typeof chart.displayLegend === "undefined") {
                     chart.displayLegend = true;
                 }
+                if (typeof chart.displayBackgroundColor === "undefined") {
+                    chart.displayBackgroundColor = true;
+                }
                 if (typeof chart.alignMonth === "undefined") {
                     chart.alignMonth = true;
                 }
@@ -25666,7 +25761,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             'highcharts': {
                 'css': [],
                 'js': [
-                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs/chart.min.js"],
+                    // Trying bundle but may revert back to chart.min.js if it is not working
+                    // [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs/chart.min.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs/Chart.bundle.min.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-background/Plugin.Background.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-border/Plugin.Border.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-subtitle/Plugin.Subtitle.min.js"],
                     ["https://code.highcharts.com/6.1.4/highcharts.js"],
                     ["https://code.highcharts.com/6.1.4/modules/no-data-to-display.js"],
                     ["https://code.highcharts.com/6.1.4/highcharts-more.js"],
