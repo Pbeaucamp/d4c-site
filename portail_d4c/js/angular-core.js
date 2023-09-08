@@ -4659,6 +4659,9 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
             },
             'update': function (data) {
                 return APIXHRService('PUT', API_PATH, data);
+            },
+            'unlock': function (data) {
+                return APIXHRService('POST', API_PATH + 'unlock', data);
             }
         };
     }]);
@@ -21843,6 +21846,55 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             context.parameters[queryParameter] = contextConfig['field'] + ':"' + $scope.searchExpression + '"';
                         } else {
                             context.parameters[queryParameter] = $scope.searchExpression;
+                        }
+                    });
+                };
+            }]
+        };
+    }]);
+}());;
+(function () {
+    'use strict';
+    var mod = angular.module('d4c-widgets');
+    mod.directive('d4cPass', ['$location', 'translate', 'VisualizationAPI', function ($location, translate, VisualizationAPI) {
+        return {
+            restrict: 'E',
+            replace: true,
+            template: '' + '<div id="d4c-pass-widget" class="d4cwidget d4cwidget-pass">' + 
+            '    <form ng-submit="loadItem()" class="d4cwidget-pass__form">' + 
+            '        <input type="password" id="password" placeholder="Mot de passe" ng-model="password"/>' + 
+            '        <button id="btn-validate-password">Valider</button>' + 
+            '        <label id="error-label" style="color:red; display:none;">Mot de passe incorrect</label>' +
+            '    </form>' +
+            '</div>',
+            scope: {
+                context: '=',
+                visualizationId: '@?'
+            },
+            link: function (scope, element, attrs) {
+                if ('autofocus' in attrs) {
+                    $(element).find('input').focus();
+                }
+            },
+            controller: ['$scope', '$attrs', 'translate', function ($scope, $attrs, translate) {
+                $scope.loadItem = function () {
+                    console.log("Load item ");
+                    var unlockVisu = VisualizationAPI.unlock;
+
+                    var data = {
+                        'datasetId': $scope.context.dataset.metas.id,
+                        'visualizationId': $scope.visualizationId,
+                        'password': $scope.password
+                    }
+
+                    unlockVisu(data).success(function (data) {
+                        console.log("success");
+                        if (data.status == "success") {
+                            $("#d4c-pass-widget").hide();
+                            $("#visualizationFrame").attr("src", data.iframeUrl);
+                        }
+                        else {
+                            $("#error-label").show();
                         }
                     });
                 };
