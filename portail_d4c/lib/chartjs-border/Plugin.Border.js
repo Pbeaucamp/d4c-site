@@ -17,8 +17,8 @@ var BorderPlugin = {
   beforeDraw(chart, args, options) {
     const {ctx, chartArea: {left, top, right, bottom}} = chart;
     ctx.save();
-    ctx.strokeStyle = options.borderColor;
-    ctx.lineWidth = options.borderWidth;
+    ctx.strokeStyle = options.display ? options.borderColor : 'rgba(0,0,0,0)';
+    ctx.lineWidth = 1;
     ctx.setLineDash(options.borderDash || []);
     ctx.lineDashOffset = options.borderDashOffset;
 
