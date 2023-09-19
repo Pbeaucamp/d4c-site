@@ -174,8 +174,6 @@ var DesriptionPlugin = {
         height = chart.height
     var textX = 0;
     var textY = height - chart.options.title.padding * 2 + (options.paddingTop + 11);
-    ctx.canvas.height = chart.height + 100;
-    ctx.canvas.width = chart.width;
     ctx.fillText(text, textX, textY);
   },
 
