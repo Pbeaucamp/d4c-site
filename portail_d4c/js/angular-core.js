@@ -5010,6 +5010,13 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if (chartConfig.textSubtitle) {
                         widgetCode += ' text-subtitle="' + chartConfig.textSubtitle + '"';
                     }
+                    if (chartConfig.displayDescription === true) {
+                        widgetCode += ' display-description="true"';
+                    }
+                    if (chartConfig.textDescription) {
+                        widgetCode += ' text-description="' + chartConfig.textDescription + '"';
+                    }
+
                     if (chartConfig.displayBackgroundColor === false) {
                         widgetCode += ' display-background-color="false"';
                     }
@@ -13945,6 +13952,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
             parameters.displayTitle = !(angular.isUndefined(parameters.textTitle) || parameters.textTitle === '');
             parameters.displaySubtitle = !(angular.isUndefined(parameters.textSubtitle) || parameters.textSubtitle === '');
+            parameters.displayDescription = !(angular.isUndefined(parameters.textDescription) || parameters.textDescription === '');
 
             if (angular.isUndefined(parameters.displayLegend)) {
                 parameters.displayLegend = true;
@@ -13965,6 +13973,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 subtitle: {
                     text: parameters.textSubtitle,
                     display: parameters.displaySubtitle
+                },
+                description: {
+                    text: parameters.textDescription,
+                    display: parameters.displayDescription,
+                    position: 'bottom'
                 },
                 backgroundColor: parameters.displayBackgroundColor ? parameters.backgroundColor : null,
                 border: {
@@ -15186,6 +15199,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     //$('#divChartJs').html('<canvas id="myChart"></canvas>');
 
                                     Chart.plugins.register({PluginSubtitle});
+                                    Chart.plugins.register({PluginDescription});
                                     Chart.plugins.register({PluginBackground});
                                     Chart.plugins.register({PluginBorder});
 
@@ -15250,6 +15264,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         .paddingTop(2)
                                         .paddingRight(2)
                                         .paddingInner(2) // Padding between each rectangle
+                                        
                                         //.paddingOuter(6)
                                         //.padding(20)
                                         (root)
@@ -15960,6 +15975,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                             // paddingTop: 4,
                                             text: options.subtitle.text,
                                         },
+                                        chartJsPluginDescription: {
+                                            display: options.description.display,
+                                            text: options.description.text,
+                                        },
                                         chartJsPluginBackground: {
                                             color: options.backgroundColor,
                                         },
@@ -16249,6 +16268,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 displayTitle: '@',
                 textSubtitle: '@',
                 displaySubtitle: '@',
+                textDescription: '@',
+                displayDescription: '@',
                 displayBackgroundColor: '@',
                 backgroundColor: '@',
                 displayBorder: '@',
@@ -16282,6 +16303,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         textTitle: angular.isDefined($scope.textTitle) && $scope.textTitle !== "" ? $scope.textTitle : undefined,
                         displaySubtitle: angular.isDefined($scope.displaySubtitle) && $scope.displaySubtitle === "false" ? false : true,
                         textSubtitle: angular.isDefined($scope.textSubtitle) && $scope.textSubtitle !== "" ? $scope.textSubtitle : undefined,
+                        displayDescription: angular.isDefined($scope.displayDescription) && $scope.displayDescription === "false" ? false : true,
+                        textDescription: angular.isDefined($scope.textDescription) && $scope.textDescription !== "" ? $scope.textDescription : undefined,
                         displayBackgroundColor: angular.isDefined($scope.displayBackgroundColor) && $scope.displayBackgroundColor === "false" ? false : true,
                         backgroundColor: angular.isDefined($scope.backgroundColor) && $scope.backgroundColor !== "" ? $scope.backgroundColor : undefined,
                         displayBorder: angular.isDefined($scope.displayBorder) && $scope.displayBorder === "false" ? false : true,
@@ -25820,6 +25843,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-background/Plugin.Background.js"],
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-border/Plugin.Border.js"],
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-subtitle/Plugin.Subtitle.min.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-description/Plugin.Description.js"],
                     ["https://code.highcharts.com/6.1.4/highcharts.js"],
                     ["https://code.highcharts.com/6.1.4/modules/no-data-to-display.js"],
                     ["https://code.highcharts.com/6.1.4/highcharts-more.js"],
