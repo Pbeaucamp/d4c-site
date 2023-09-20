@@ -49,7 +49,7 @@ var defaultOptions = {
    * @member {Number}
    * @default 4
    */
-  paddingTop: 10,
+  paddingTop: 15,
 
   /**
    * Subtitle text to display
@@ -209,7 +209,7 @@ var DesriptionPlugin = {
     var splittedText = this.splitText(text,250);
     
     for(var i=0;i<splittedText.length;i++){
-      ctx.fillText(splittedText[i],textX,textY + 10*i,chart.width);
+      ctx.fillText(splittedText[i],textX,textY + options.paddingTop*i,chart.width);
     }
   },
 
