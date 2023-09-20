@@ -163,6 +163,38 @@ var DesriptionPlugin = {
   },
 
 
+
+  /**
+   * Split text into lines
+   * @param {String} text
+   * @param maxWidth
+   */
+  splitText : function splitText(text,maxWidth) {
+    var lines = [];
+    var words = text.split(" ");
+    console.log(words.length)
+    var i = 0;
+    while(i < words.length){
+      var line = "";
+      if(words[i].length > maxWidth){
+        line = line.concat(words[i]);
+        line = line.concat(" ");
+        i++;
+      }
+      else{
+        while((i < words.length) && (line.length + words[i].length < maxWidth)){
+          line = line.concat(words[i]);
+          line = line.concat(" ");
+          i++;
+        }
+      }
+      console.log(line);
+      lines.push(line);
+    }
+    return lines;
+  },
+
+
   /**
    * Draw the subtitle on the bottom position
    * @param {Chart} chart
@@ -174,7 +206,11 @@ var DesriptionPlugin = {
         height = chart.height
     var textX = 0;
     var textY = height - chart.options.title.padding * 2 + (options.paddingTop + 11);
-    ctx.fillText(text, textX, textY);
+    var splittedText = this.splitText(text,250);
+    
+    for(var i=0;i<splittedText.length;i++){
+      ctx.fillText(splittedText[i],textX,textY + 10*i,chart.width);
+    }
   },
 
 
