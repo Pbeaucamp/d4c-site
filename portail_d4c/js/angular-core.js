@@ -7937,6 +7937,69 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             }
         };
     }]);
+    mod.directive('d4cTextstyleOptions', ['colorScale', '$document', function (colorScale, $document) {
+        return {
+            restrict: 'AE',
+            scope: {
+                selectedFontfamily: '=',
+                selectedFontsize: '=',
+                selectedTextcolor: '=',
+                selectedTextalign: '='
+            },
+            replace: true,
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/textstyle-options.html',
+            link: function (scope, element, attrs) {
+                scope.fontfamilies = [
+                    {label:"Arial"},
+                    {label:"Calibri"},
+                    {label:"Times New Roman"}
+                ]
+                scope.fontsizes = [
+                    {label:"8",value:8},
+                    {label:"9",value:9},
+                    {label:"10",value:10},
+                    {label:"11",value:11},
+                    {label:"12",value:12},
+                    {label:"14",value:14},
+                    {label:"16",value:16},
+                    {label:"18",value:18},
+                    {label:"20",value:20},
+                    {label:"22",value:22},
+                    {label:"24",value:24},
+                    {label:"26",value:26},
+                    {label:"28",value:28},
+                    {label:"36",value:36},
+                    {label:"48",value:48},
+                    {label:"54",value:54},
+                    {label:"72",value:72}
+                ];               
+                scope.preview = true;
+                scope.closeSelector = function ($event) {
+                    scope.preview = true;
+                };
+                scope.openSelector = function ($event) {
+                    scope.preview = false;
+                    var documentClickHandler = function ($event) {
+                        if ($($event.target).closest(element).length !== 1) {
+                            scope.closeSelector();
+                            $document.off('click', documentClickHandler);
+                        }
+                        scope.$apply();
+                    };
+                    $document.on('click', documentClickHandler);
+                    $event.stopPropagation();
+                    $event.preventDefault();
+                };
+                scope.toggleSelector = function ($event) {
+                    if (scope.preview) {
+                        scope.openSelector($event);
+                    } else {
+                        scope.closeSelector($event);
+                    }
+                };
+            }
+        };
+    }]);
     mod.directive('d4cColorChooser', ['colorScale', '$document', function (colorScale, $document) {
         return {
             restrict: 'AE',
