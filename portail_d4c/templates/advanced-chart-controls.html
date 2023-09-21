@@ -181,6 +181,16 @@ Copyright (c) 2014 - Opendatasoft
                            ng-model="localChartContext.dataChart.textSubtitle"
                     />
                 </div>
+                <div class="d4c-chart-controls">
+                    <label for="text-description" translate>Description</label>
+                    <textarea type="text"
+                           id="text-description"
+                           maxlength="1000"
+                           rows="12" cols="50"
+                           class="d4c-d4c-chart-controls__input"
+                           ng-model="localChartContext.dataChart.textDescription"
+                    ></textarea>
+                </div>              
                 <label>
                     <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayBackgroundColor">
                     <span translate>Display the background color</span>

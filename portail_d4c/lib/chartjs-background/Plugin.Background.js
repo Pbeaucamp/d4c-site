@@ -16,11 +16,13 @@ var BackgroundPlugin = {
    */
   beforeDraw: (chart, args, options) => {
     const {ctx} = chart;
+    ctx.canvas.height = chart.height + 60;
+    ctx.canvas.width = chart.width
     if (options.color) {
       ctx.save();
       ctx.globalCompositeOperation = 'destination-over';
       ctx.fillStyle = options.color;
-      ctx.fillRect(0, 0, chart.width, chart.height);
+      ctx.fillRect(0, 0, chart.width, chart.height + 150);
       ctx.restore();
     }
   }
