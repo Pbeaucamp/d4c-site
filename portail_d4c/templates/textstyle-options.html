@@ -16,7 +16,7 @@
                         <label for="chart-text-fontfamily" translate>Font</label>
                         <select class="d4c-d4c-chart-controls__input"
                                 id="chart-text-fontfamily"
-                                ng-model="selectedFontfamily"
+                                ng-model="internalValues.selectedfontfamily"
                                 ng-options="fontfamily.label for fontfamily in fontfamilies"
                                 >
                         </select>
@@ -27,8 +27,8 @@
                         <label for="chart-text-fontsize" translate>Font size</label>
                         <select class="d4c-d4c-chart-controls__input"
                                 id="chart-text-fontsize"
-                                ng-model="selectedFontsize"
-                                ng-options="fontsize.label for fontsize in fontsizes"
+                                ng-model="internalValues.selectedfontsize"
+                                ng-options="fontsize.value for fontsize in fontsizes"
                                 >
                         </select>
                     </div>
@@ -37,21 +37,9 @@
             <tr>
                 <td class="td-style-options">
                     <div class="d4c-chart-controls">
-                        <label for="chart-text-align" translate>Text align</label>
-                        <div class="btn-group btn-group-sm" id="chart-text-align" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-secondary"><i class="fa fa-align-left"></i></button>
-                            <button type="button" class="btn btn-secondary"><i class="fa fa-align-center"></i></button>
-                            <button type="button" class="btn btn-secondary"><i class="fa fa-align-right"></i></button>
-                          </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="td-style-options">
-                    <div class="d4c-chart-controls">
                         <label for="chart-text-color" translate>Text color</label>
                         <span class="d4c-chart-controls__controls-group d4c-chart-controls_background-color-border">
-                            <span d4c-color-chooser="" color="color" allowedcolors="allowedcolors"></span>
+                            <span d4c-color-chooser="" color="internalValues.selectedtextcolor" allowedcolors="allowedcolors"></span>
                         </span>
                     </div>
                 </td>

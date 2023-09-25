@@ -173,7 +173,7 @@ Copyright (c) 2014 - Opendatasoft
                            ng-model="localChartContext.dataChart.textTitle"
                     />
                     <span class="d4c-chart-controls__controls-group d4c-chart-controls_titlestyle-options">
-                        <span d4c-textstyle-options="" selectedFontfamily="localChartContext.dataChart.titleFontfamily" selectedFontsize="localChartContext.dataChart.titleFontsize" selectedTextcolor="localChartContext.dataChart.titleTextcolor" selectedTextalign="localChartContext.dataChart.titleTextalign"></span>
+                        <span d4c-textstyle-options="" selectedfontfamily="localChartContext.dataChart.titleFontfamily" selectedfontsize="localChartContext.dataChart.titleFontsize" selectedtextcolor="localChartContext.dataChart.titleTextcolor"></span>
                     </span>
                 </div>
                 <div class="d4c-chart-controls">
@@ -183,6 +183,9 @@ Copyright (c) 2014 - Opendatasoft
                            class="d4c-d4c-chart-controls__input"
                            ng-model="localChartContext.dataChart.textSubtitle"
                     />
+                    <span class="d4c-chart-controls__controls-group d4c-chart-controls_subtitlestyle-options">
+                        <span d4c-textstyle-options="" selectedfontfamily="localChartContext.dataChart.subtitleFontfamily" selectedfontsize="localChartContext.dataChart.subtitleFontsize" selectedtextcolor="localChartContext.dataChart.subtitleTextcolor"></span>
+                    </span>
                 </div>
                 <div class="d4c-chart-controls">
                     <label for="text-description" translate>Description</label>
@@ -218,6 +221,12 @@ Copyright (c) 2014 - Opendatasoft
                     <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayLegend">
                     <span translate>Display the graph legend</span>
                 </label>
+                <div class="d4c-chart-controls">
+                    <label for="legend-styles" translate>Legend styles</label>
+                    <span class="d4c-chart-controls__controls-group d4c-chart-controls_legendstyle-options">
+                        <span d4c-textstyle-options="" selectedfontfamily="localChartContext.dataChart.legendFontfamily" selectedfontsize="localChartContext.dataChart.legendFontsize" selectedtextcolor="localChartContext.dataChart.legendTextcolor"></span>
+                    </span>
+                </div>
             </div>
         </div>
         <div chart-controls advanced="advanced"

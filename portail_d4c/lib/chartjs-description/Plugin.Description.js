@@ -27,7 +27,7 @@ var defaultOptions = {
    * @member {String} fontFamily
    * @default "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
    */
-  fontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+  fontFamily: "Arial",
 
   /**
    * Font color
@@ -56,7 +56,15 @@ var defaultOptions = {
    * @member {String}
    * @default ''
    */
-  text: ''
+  text: '',
+
+  /**
+   * Description position
+   * @member position
+   * @enum 'top' | 'left' | 'right' | 'bottom'
+   * @default 'bottom'
+   */
+  position: 'bottom'
 };
 
 var DesriptionPlugin = {
@@ -91,12 +99,41 @@ var DesriptionPlugin = {
 
 
   /**
-   * Draw the description on the top position
+   * Split text into lines
+   * @param {String} text
+   * @param maxWidth
+   */
+  splitText : function splitText(text,maxWidth) {
+    var lines = [];
+    var words = text.split(" ");
+    var i = 0;
+    while(i < words.length){
+      var line = "";
+      if(words[i].length > maxWidth){
+        line = line.concat(words[i]);
+        line = line.concat(" ");
+        i++;
+      }
+      else{
+        while((i < words.length) && (line.length + words[i].length < maxWidth)){
+          line = line.concat(words[i]);
+          line = line.concat(" ");
+          i++;
+        }
+      }
+      lines.push(line);
+    }
+    return lines;
+  },
+
+    /**
+   * Draw the subtitle on the top position
    * @param {Chart} chart
    * @param {Object} options
    */
   drawTop: function drawTop(chart, options) {
     var text = options.text;
+    var align = options.align;
     var ctx = chart.ctx,
         width = chart.width;
 
@@ -104,7 +141,7 @@ var DesriptionPlugin = {
 
     var titleOffset = chart.titleBlock.height - chart.options.title.padding;
 
-    var textX = Math.round((width - ctx.measureText(text).width) / 2);
+    var textX = 0;
     var textY = titleOffset + options.paddingTop + 3;
     ctx.fillText(text, textX, textY);
   },
@@ -128,7 +165,7 @@ var DesriptionPlugin = {
     ctx.translate(0, 0);
     ctx.rotate(-Math.PI / 2);
 
-    var textX = Math.round((height + ctx.measureText(text).width) / 2);
+    var textX = height;
     var textY = titleOffset + options.paddingTop + 3;
 
     ctx.fillText(text, -textX, textY);
@@ -155,45 +192,12 @@ var DesriptionPlugin = {
     ctx.translate(0, 0);
     ctx.rotate(Math.PI / 2);
 
-    var textX = Math.round((height - ctx.measureText(text).width) / 2);
+    var textX = height;
     var textY = titleOffset + options.paddingTop - width;
 
     ctx.fillText(text, textX, textY);
     ctx.restore();
   },
-
-
-
-  /**
-   * Split text into lines
-   * @param {String} text
-   * @param maxWidth
-   */
-  splitText : function splitText(text,maxWidth) {
-    var lines = [];
-    var words = text.split(" ");
-    console.log(words.length)
-    var i = 0;
-    while(i < words.length){
-      var line = "";
-      if(words[i].length > maxWidth){
-        line = line.concat(words[i]);
-        line = line.concat(" ");
-        i++;
-      }
-      else{
-        while((i < words.length) && (line.length + words[i].length < maxWidth)){
-          line = line.concat(words[i]);
-          line = line.concat(" ");
-          i++;
-        }
-      }
-      console.log(line);
-      lines.push(line);
-    }
-    return lines;
-  },
-
 
   /**
    * Draw the subtitle on the bottom position
@@ -202,8 +206,10 @@ var DesriptionPlugin = {
    */
   drawBottom: function drawBottom(chart, options) {
     var text = options.text;
+    var align = options.align;
     var ctx = chart.ctx,
         height = chart.height
+    
     var textX = 0;
     var textY = height - chart.options.title.padding * 2 + (options.paddingTop + 11);
     var splittedText = this.splitText(text,250);
@@ -228,7 +234,20 @@ var DesriptionPlugin = {
       ctx.font = this.resolveFont(options);
       ctx.textBaseline = 'middle';
       ctx.fillStyle = options.fontColor;
-      this.drawBottom(chart.chart, options);
+      switch(options.position){
+        case 'top':
+          this.drawTop(chart.chart,options);
+          break;
+        case 'left':
+          this.drawLeft(chart.chart,options);
+          break;
+        case 'right':
+          this.drawRight(chart.chart,options);
+          break;
+        default:
+          this.drawBottom(chart.chart,options);
+          break;
+      }
     }
   }
 };
