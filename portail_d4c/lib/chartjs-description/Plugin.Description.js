@@ -20,7 +20,7 @@ var defaultOptions = {
    * @member {Number}
    * @default 12
    */
-  fontSize: 12,
+  fontSize: 14,
 
   /**
    * Font family for the title text.
@@ -42,7 +42,7 @@ var defaultOptions = {
    * @enum 'normal' | 'bold' | 'italic' | 'italic bold'
    * @default 'normal'
    */
-  fontStyle: 'italic',
+  fontStyle: 'normal',
 
   /**
    * Padding between the title and the subtitle
@@ -50,6 +50,13 @@ var defaultOptions = {
    * @default 4
    */
   paddingTop: 15,
+
+  /**
+   * Padding between the title and the subtitle
+   * @member {Number}
+   * @default 10
+   */
+  margin: 10,
 
   /**
    * Subtitle text to display
@@ -132,9 +139,9 @@ var DesriptionPlugin = {
     
     var textX = 0;
     var textY = height - chart.options.layout.padding.bottom - chart.options.title.padding * 2 + (options.paddingTop + 11);
-    var splittedText = this.splitText(text,250);
+    var splittedText = this.splitText(text,200);
     for(var i=0;i<splittedText.length;i++){
-      ctx.fillText(splittedText[i],textX,textY + options.paddingTop*i,chart.width);
+      ctx.fillText(splittedText[i],textX + options.margin,textY + options.margin + options.paddingTop*i,chart.width - options.margin - 5);
     }
   },
 
