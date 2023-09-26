@@ -154,7 +154,6 @@ var SubtitlePlugin = {
     ctx.save();
     ctx.translate(0, 0);
     ctx.rotate(Math.PI / 2);
-
     var textX = Math.round((height - ctx.measureText(text).width) / 2);
     var textY = titleOffset + options.paddingTop - width;
 

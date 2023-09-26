@@ -15347,6 +15347,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         var ctx = canvas.getContext('2d');
                                         $scope.chart = new Chart(ctx, chartjs(options));
 
+
                                         //$scope.chart = new Chart($scope.chart.canvas.getContext('2d'), chartjs(options));
                                     } else {
 
@@ -15359,7 +15360,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         var ctx = canvas.getContext('2d');
                                         $scope.chart = new Chart(ctx, chartjs(options));
                                     }
-
                                 }
 
                                 // treemap 
@@ -16093,6 +16093,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
                                     datasets.options.legend = options.legend;
                                     datasets.options.devicePixelRatio = options.devicePixelRatio;
+                                    datasets.options.layout = {
+                                        padding : {
+                                            bottom : 100,
+                                        }
+                                    };
 
                                     datasets.options.title = options.title;
 

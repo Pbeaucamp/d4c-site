@@ -58,13 +58,6 @@ var defaultOptions = {
    */
   text: '',
 
-  /**
-   * Description position
-   * @member position
-   * @enum 'top' | 'left' | 'right' | 'bottom'
-   * @default 'bottom'
-   */
-  position: 'bottom'
 };
 
 var DesriptionPlugin = {
@@ -126,78 +119,6 @@ var DesriptionPlugin = {
     return lines;
   },
 
-    /**
-   * Draw the subtitle on the top position
-   * @param {Chart} chart
-   * @param {Object} options
-   */
-  drawTop: function drawTop(chart, options) {
-    var text = options.text;
-    var align = options.align;
-    var ctx = chart.ctx,
-        width = chart.width;
-
-    // this value accounts for multiple lines in title
-
-    var titleOffset = chart.titleBlock.height - chart.options.title.padding;
-
-    var textX = 0;
-    var textY = titleOffset + options.paddingTop + 3;
-    ctx.fillText(text, textX, textY);
-  },
-
-
-  /**
-   * Draw the subtitle on the left position
-   * @param {Chart} chart
-   * @param {Object} options
-   */
-  drawLeft: function drawLeft(chart, options) {
-    var text = options.text;
-    var ctx = chart.ctx,
-        height = chart.height;
-
-    // this value accounts for multiple lines in title
-
-    var titleOffset = chart.titleBlock.width - chart.options.title.padding;
-
-    ctx.save();
-    ctx.translate(0, 0);
-    ctx.rotate(-Math.PI / 2);
-
-    var textX = height;
-    var textY = titleOffset + options.paddingTop + 3;
-
-    ctx.fillText(text, -textX, textY);
-    ctx.restore();
-  },
-
-
-  /**
-   * Draw the subtitle on the right position
-   * @param {Chart} chart
-   * @param {Object} options
-   */
-  drawRight: function drawRight(chart, options) {
-    var text = options.text;
-    var ctx = chart.ctx,
-        height = chart.height,
-        width = chart.width;
-
-    // this value accounts for multiple lines in title
-
-    var titleOffset = chart.titleBlock.width - chart.options.title.padding;
-
-    ctx.save();
-    ctx.translate(0, 0);
-    ctx.rotate(Math.PI / 2);
-
-    var textX = height;
-    var textY = titleOffset + options.paddingTop - width;
-
-    ctx.fillText(text, textX, textY);
-    ctx.restore();
-  },
 
   /**
    * Draw the subtitle on the bottom position
@@ -206,14 +127,12 @@ var DesriptionPlugin = {
    */
   drawBottom: function drawBottom(chart, options) {
     var text = options.text;
-    var align = options.align;
     var ctx = chart.ctx,
         height = chart.height
     
     var textX = 0;
-    var textY = height - chart.options.title.padding * 2 + (options.paddingTop + 11);
+    var textY = height - chart.options.layout.padding.bottom - chart.options.title.padding * 2 + (options.paddingTop + 11);
     var splittedText = this.splitText(text,250);
-    
     for(var i=0;i<splittedText.length;i++){
       ctx.fillText(splittedText[i],textX,textY + options.paddingTop*i,chart.width);
     }
@@ -234,20 +153,7 @@ var DesriptionPlugin = {
       ctx.font = this.resolveFont(options);
       ctx.textBaseline = 'middle';
       ctx.fillStyle = options.fontColor;
-      switch(options.position){
-        case 'top':
-          this.drawTop(chart.chart,options);
-          break;
-        case 'left':
-          this.drawLeft(chart.chart,options);
-          break;
-        case 'right':
-          this.drawRight(chart.chart,options);
-          break;
-        default:
-          this.drawBottom(chart.chart,options);
-          break;
-      }
+      this.drawBottom(chart.chart,options);
     }
   }
 };
