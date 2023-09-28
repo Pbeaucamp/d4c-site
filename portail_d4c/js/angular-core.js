@@ -13941,6 +13941,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
         var getGlobalOptions = function (parameters, precision, periodic, chartplaceholder, domain) {
             var datasetid;
+            var stacked = false;
             if (parameters.queries.length === 0) {
                 parameters.xLabel = '';
             } else {
@@ -13948,6 +13949,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 if (!angular.isDefined(parameters.xLabel)) {
                     parameters.xLabel = ChartHelper.getXLabel(datasetid, parameters.queries[0].xAxis, parameters.timescale);
                 }
+                stacked = parameters.queries[0].stacked == "normal";
             }
 
             parameters.displayTitle = !(angular.isUndefined(parameters.textTitle) || parameters.textTitle === '');
@@ -13961,7 +13963,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             if (angular.isUndefined(parameters.displayBackgroundColor)) {
                 parameters.displayBackgroundColor = true;
             }
-            
+
             parameters.labelsXLength = parameters.labelsXLength || 12;
             var serieTitle = '<span style="color:{series.color}">{series.name}</span>:';
             var options = {
@@ -14033,6 +14035,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 },
                 // Add this to increase resolution for image export
                 devicePixelRatio: 4,
+                stacked: stacked,
                 yAxis: [],
                 plotOptions: {
                     series: {
@@ -15209,31 +15212,29 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     Chart.plugins.register({PluginBorder});
 
                                     if ($scope.chart) {
-
-
-
-
                                         let idChart = $scope.chart.canvas.getContext('2d').canvas.id;
                                         $('#' + idChart).remove();
 
                                         options.chart.renderTo.innerHTML = '<canvas id="' + idChart + '"></canvas>';
                                         var canvas = document.getElementById(idChart);
                                         var ctx = canvas.getContext('2d');
-                                        $scope.chart = new Chart(ctx, chartjs(options));
+
+                                        var chartOptions = chartjs(options);
+                                        $scope.chart = new Chart(ctx, chartOptions);
 
                                         //$scope.chart = new Chart($scope.chart.canvas.getContext('2d'), chartjs(options));
-                                    } else {
-
-
+                                    }
+                                    else {
                                         var id = "myChart-" + $('canvas').length;
 
                                         options.chart.renderTo.innerHTML = '<canvas id="' + id + '"></canvas>';
 
                                         var canvas = document.getElementById(id);
                                         var ctx = canvas.getContext('2d');
-                                        $scope.chart = new Chart(ctx, chartjs(options));
-                                    }
 
+                                        var chartOptions = chartjs(options);
+                                        $scope.chart = new Chart(ctx, chartOptions);
+                                    }
                                 }
 
                                 // treemap 
@@ -15811,6 +15812,36 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                             }
                                         }
                                         else {
+                                            var scales = {};
+                                            if (options.stacked) {
+                                                scales = {
+                                                    yAxes: [
+                                                        {
+                                                            display: true,
+                                                            ticks: {
+                                                                beginAtZero: true,
+                                                            },
+                                                            stacked: options.stacked
+                                                        }
+                                                    ],
+                                                    xAxes: [{
+                                                        stacked: options.stacked
+                                                    }]
+                                                }
+                                            }
+                                            else {
+                                                scales = {
+                                                    yAxes: [
+                                                        {
+                                                            display: true,
+                                                            ticks: {
+                                                                beginAtZero: true,
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+
                                             datasets = {
                                                 type: mainTypeChart,
                                                 data: {
@@ -15818,16 +15849,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                                     datasets: options.series,
                                                 },
                                                 options: {
-                                                    scales: {
-                                                        yAxes: [
-                                                            {
-                                                                display: true,
-                                                                ticks: {
-                                                                    beginAtZero: true,
-                                                                }
-                                                            }
-                                                        ]
-                                                    },
+                                                    scales: scales,
                                                     tooltips: {
                                                         callbacks: {
                                                             label: function (tooltipItem, data) {
@@ -15905,6 +15927,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                             var yAxis = [];
                                             for (var i = 0; i < options.yAxis.length; i++) {
                                                 options.yAxis[i].display = display;
+                                                options.yAxis[i].stacked = options.stacked;
                                                 options.yAxis[i].id = 'y' + i;
                                                 /*options.yAxis[i].ticks = {
                                                                 beginAtZero: true,
@@ -15919,10 +15942,36 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                             var scales;
                                             if (mainTypeChart == "radar" || mainTypeChart == "polarArea") {
                                                 scales = {};
-                                            } else if (mainTypeChart == "horizontalBar") {
-                                                scales = { xAxes: yAxis };
-                                            } else {
-                                                scales = { yAxes: yAxis };
+                                            }
+                                            else if (mainTypeChart == "horizontalBar") {
+                                                if (options.stacked) {
+                                                    scales = {
+                                                        xAxes: yAxis,
+                                                        yAxis: [{
+                                                            stacked: true,
+                                                        }]
+                                                    };
+                                                }
+                                                else {
+                                                    scales = {
+                                                        xAxes: yAxis
+                                                    };
+                                                }
+                                            }
+                                            else {
+                                                if (options.stacked) {
+                                                    scales = {
+                                                        yAxes: yAxis,
+                                                        xAxes: [{
+                                                            stacked: true,
+                                                        }]
+                                                    };
+                                                }
+                                                else {
+                                                    scales = {
+                                                        yAxes: yAxis
+                                                    };
+                                                }
                                             }
 
                                             datasets = {

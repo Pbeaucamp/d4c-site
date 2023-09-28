@@ -48,7 +48,8 @@ Copyright (c) 2014 - Opendatasoft
                         <select ng-disabled="!stackingEnabled()" class="d4c-chart-controls__input" ng-model="query.stacked" d4c-disabled-tooltip="!stackingEnabled()" d4c-disabled-tooltip-text="The stacking is available only when all series use the same chart type or when series breakdown is activated." translate="d4c-disabled-tooltip-text">
                             <option value="" translate="">No stack</option>
                             <option value="normal" translate="">Normal</option>
-                            <option value="percent" translate="">Percent</option>
+                            <!-- Disable for now because chartjs does not support percent -->
+                            <!-- <option value="percent" translate="">Percent</option> -->
                         </select>
                     </label>
                 </span>
