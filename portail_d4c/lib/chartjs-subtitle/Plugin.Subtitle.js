@@ -89,7 +89,6 @@ var SubtitlePlugin = {
     return this.resolveStyle(options) + ' ' + this.resolveSize(options) + ' ' + options.fontFamily;
   },
 
-
   /**
    * Draw the subtitle on the top position
    * @param {Chart} chart
@@ -97,6 +96,7 @@ var SubtitlePlugin = {
    */
   drawTop: function drawTop(chart, options) {
     var text = options.text;
+    var align = options.align;
     var ctx = chart.ctx,
         width = chart.width;
 
@@ -154,7 +154,6 @@ var SubtitlePlugin = {
     ctx.save();
     ctx.translate(0, 0);
     ctx.rotate(Math.PI / 2);
-
     var textX = Math.round((height - ctx.measureText(text).width) / 2);
     var textY = titleOffset + options.paddingTop - width;
 
@@ -170,6 +169,7 @@ var SubtitlePlugin = {
    */
   drawBottom: function drawBottom(chart, options) {
     var text = options.text;
+    var align = options.align;
     var ctx = chart.ctx,
         height = chart.height,
         width = chart.width;

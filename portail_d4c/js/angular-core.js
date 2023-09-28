@@ -5004,11 +5004,29 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if (chartConfig.textTitle) {
                         widgetCode += ' text-title="' + chartConfig.textTitle + '"';
                     }
+                    if(chartConfig.titleFontfamily){
+                        widgetCode += ' title-fontfamily="' + chartConfig.titleFontfamily + '"';
+                    }
+                    if(chartConfig.titleFontsize){
+                        widgetCode += ' title-fontsize="' + chartConfig.titleFontsize + '"';
+                    }
+                    if(chartConfig.titleTextcolor){
+                        widgetCode += ' title-textcolor="' + chartConfig.titleTextcolor + '"';
+                    }
                     if (chartConfig.displaySubtitle === true) {
                         widgetCode += ' display-subtitle="true"';
                     }
                     if (chartConfig.textSubtitle) {
                         widgetCode += ' text-subtitle="' + chartConfig.textSubtitle + '"';
+                    }
+                    if(chartConfig.subtitleFontfamily){
+                        widgetCode += ' subtitle-fontfamily="' + chartConfig.subtitleFontfamily + '"';
+                    }
+                    if(chartConfig.subtitleFontsize){
+                        widgetCode += ' subtitle-fontsize="' + chartConfig.subtitleFontsize + '"';
+                    }
+                    if(chartConfig.subtitleTextcolor){
+                        widgetCode += ' subtitle-textcolor="' + chartConfig.subtitleTextcolor + '"';
                     }
                     if (chartConfig.displayDescription === true) {
                         widgetCode += ' display-description="true"';
@@ -5031,6 +5049,24 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                     if (chartConfig.borderWidth) {
                         widgetCode += ' border-width="' + chartConfig.borderWidth + '"';
+                    }
+                    if(chartConfig.legendFontfamily){
+                        widgetCode += ' legend-fontfamily="' + chartConfig.legendFontfamily + '"';
+                    }
+                    if(chartConfig.legendFontsize){
+                        widgetCode += ' legend-fontsize="' + chartConfig.legendFontsize + '"';
+                    }
+                    if(chartConfig.legendTextcolor){
+                        widgetCode += ' legend-textcolor="' + chartConfig.legendTextcolor + '"';
+                    }
+                    if(chartConfig.axesLabelFontfamily){
+                        widgetCode += ' axes-label-fontfamily="' + chartConfig.axesLabelFontfamily + '"';
+                    }
+                    if(chartConfig.axesLabelFontsize){
+                        widgetCode += ' axes-label-fontsize="' + chartConfig.axesLabelFontsize + '"';
+                    }
+                    if(chartConfig.axesLabelTextcolor){
+                        widgetCode += ' axes-label-textcolor="' + chartConfig.axesLabelTextcolor + '"';
                     }
                     widgetCode += '>\n';
                     if (chartConfig.queries) {
@@ -7937,6 +7973,85 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             }
         };
     }]);
+    mod.directive('d4cTextstyleOptions', ['$document', function ($document) {
+        return {
+            restrict: 'AE',
+            scope: {
+                selectedfontfamily: '=',
+                selectedfontsize: '=',
+                selectedtextcolor: '='
+            },
+            replace: true,
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/textstyle-options.html',
+            link: function (scope, element, attrs) {
+                scope.fontfamilies = [
+                    {label:"Arial"},
+                    {label:"Calibri"},
+                    {label:"Times New Roman"}
+                ]
+                scope.fontsizes = [
+                    {label:"8",value:8},
+                    {label:"9",value:9},
+                    {label:"10",value:10},
+                    {label:"11",value:11},
+                    {label:"12",value:12},
+                    {label:"14",value:14},
+                    {label:"16",value:16},
+                    {label:"18",value:18},
+                    {label:"20",value:20},
+                    {label:"22",value:22},
+                    {label:"24",value:24},
+                    {label:"26",value:26},
+                    {label:"28",value:28},
+                    {label:"36",value:36},
+                    {label:"48",value:48},
+                    {label:"54",value:54},
+                    {label:"72",value:72}
+                ];               
+                scope.preview = true;
+                scope.internalValues = {};
+                scope.closeSelector = function ($event) {
+                    scope.preview = true;
+                };
+                scope.openSelector = function ($event) {
+                    scope.preview = false;
+                    var documentClickHandler = function ($event) {
+                        if ($($event.target).closest(element).length !== 1) {
+                            scope.closeSelector();
+                            $document.off('click', documentClickHandler);
+                        }
+                        scope.$apply();
+                    };
+                    $document.on('click', documentClickHandler);
+                    $event.stopPropagation();
+                    $event.preventDefault();
+                };
+                scope.toggleSelector = function ($event) {
+                    if (scope.preview) {
+                        scope.openSelector($event);
+                    } else {
+                        scope.closeSelector($event);
+                    }
+                };
+                scope.$watch('internalValues',function(nv,ov){
+                    console.log(scope.internalValues);
+                    scope.selectedfontfamily = nv.selectedfontfamily;
+                    scope.selectedfontsize = nv.selectedfontsize;
+                    scope.selectedtextcolor = nv.selectedtextcolor;
+
+                },true);
+                scope.$watch('selectedfontfamily',function(){
+                    console.log(scope.selectedfontfamily);
+                },true);
+                scope.$watch('selectedfontsize',function(){
+                    console.log(scope.selectedfontsize);
+                },true);
+                scope.$watch('selectedtextcolor',function(){
+                    console.log(scope.selectedtextcolor);
+                },true);
+            }
+        };
+    }]);
     mod.directive('d4cColorChooser', ['colorScale', '$document', function (colorScale, $document) {
         return {
             restrict: 'AE',
@@ -7999,6 +8114,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             scope.color = nv.color;
                         }
                     }
+                    console.log(scope.internalValues);
                 }, true);
                 scope.$watch('color', function (nv, ov) {
                     scope.internalValues.colortype = 'single';
@@ -13954,6 +14070,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             parameters.displaySubtitle = !(angular.isUndefined(parameters.textSubtitle) || parameters.textSubtitle === '');
             parameters.displayDescription = !(angular.isUndefined(parameters.textDescription) || parameters.textDescription === '');
 
+            
+
             if (angular.isUndefined(parameters.displayLegend)) {
                 parameters.displayLegend = true;
             }
@@ -13964,20 +14082,28 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             
             parameters.labelsXLength = parameters.labelsXLength || 12;
             var serieTitle = '<span style="color:{series.color}">{series.name}</span>:';
+            
+            console.log(parameters);
+
             var options = {
                 chart: {},
                 title: {
                     text: parameters.textTitle,
-                    display: parameters.displayTitle
+                    display: parameters.displayTitle,
+                    fontFamily: angular.isDefined(parameters.titleFontfamily) && parameters.titleFontfamily !== "" ? parameters.titleFontfamily.label : "Arial",
+                    fontSize: angular.isDefined(parameters.titleFontsize) && parameters.titleFontsize !== "" ? parameters.titleFontsize.value : 12,
+                    fontColor: parameters.titleTextcolor,
                 },
                 subtitle: {
                     text: parameters.textSubtitle,
-                    display: parameters.displaySubtitle
+                    display: parameters.displaySubtitle,
+                    fontFamily: angular.isDefined(parameters.subtitleFontfamily) && parameters.subtitleFontfamily !== "" ? parameters.subtitleFontfamily.label : "Arial",
+                    fontSize: angular.isDefined(parameters.subtitleFontsize) && parameters.subtitleFontsize !== "" ? parameters.subtitleFontsize.value : 12,
+                    fontColor: parameters.subtitleTextcolor,
                 },
                 description: {
                     text: parameters.textDescription,
                     display: parameters.displayDescription,
-                    position: 'bottom'
                 },
                 backgroundColor: parameters.displayBackgroundColor ? parameters.backgroundColor : null,
                 border: {
@@ -14029,7 +14155,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 legend: {
                     enabled: !!parameters.displayLegend,
                     useHTML: true,
-                    rtl: D4CWidgetsConfig.language === 'ar'
+                    rtl: D4CWidgetsConfig.language === 'ar',
+                    labels:{
+                        fontFamily: angular.isDefined(parameters.legendFontfamily) && parameters.legendFontfamily !== "" ? parameters.legendFontfamily.label : "Arial",
+                        fontSize: angular.isDefined(parameters.legendFontsize) && parameters.legendFontsize !== "" ? parameters.legendFontsize.value : 12,
+                        fontColor : parameters.legendTextcolor
+                    }
                 },
                 // Add this to increase resolution for image export
                 devicePixelRatio: 4,
@@ -15221,6 +15352,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         var ctx = canvas.getContext('2d');
                                         $scope.chart = new Chart(ctx, chartjs(options));
 
+
                                         //$scope.chart = new Chart($scope.chart.canvas.getContext('2d'), chartjs(options));
                                     } else {
 
@@ -15233,7 +15365,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         var ctx = canvas.getContext('2d');
                                         $scope.chart = new Chart(ctx, chartjs(options));
                                     }
-
                                 }
 
                                 // treemap 
@@ -15359,7 +15490,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
                                     // Try to sort legend but it does not work as is
                                     // Need to modify chart.min.js in lib to add after e.filter on buildLabels e.sort&&(i = i.sort(function(a,b){return e.sort(a,b,t.chart.data)}))
-                                    options.legend.labels = {};
+                                    //options.legend.labels = {};
                                     options.legend.labels.sort = function(a, b) { 
                                         // return b.datasetIndex > a.datasetIndex ? -1 : 1;
                                         return a.text.localeCompare(b.text);
@@ -15967,6 +16098,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
                                     datasets.options.legend = options.legend;
                                     datasets.options.devicePixelRatio = options.devicePixelRatio;
+                                    datasets.options.layout = {
+                                        padding : {
+                                            bottom : 100,
+                                        }
+                                    };
 
                                     datasets.options.title = options.title;
 
@@ -15979,6 +16115,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                             // fontStyle: 'normal',
                                             // paddingTop: 4,
                                             text: options.subtitle.text,
+                                            fontFamily: options.subtitle.fontFamily,
+                                            fontSize: options.subtitle.fontSize,
+                                            fontColor: options.subtitle.fontColor
                                         },
                                         chartJsPluginDescription: {
                                             display: options.description.display,
@@ -16271,8 +16410,14 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 chart: '=?parameters',
                 textTitle: '@',
                 displayTitle: '@',
+                titleFontfamily: '@',
+                titleFontsize: '@',
+                titleTextcolor: '@',
                 textSubtitle: '@',
                 displaySubtitle: '@',
+                subtitleFontfamily: '@',
+                subtitleFontsize: '@',
+                subtitleTextcolor: '@',
                 textDescription: '@',
                 displayDescription: '@',
                 displayBackgroundColor: '@',
@@ -16280,6 +16425,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 displayBorder: '@',
                 borderColor: '@',
                 borderWidth: '@',
+                legendFontfamily: '@',
+                legendFontsize: '@',
+                legendTextcolor: '@',
             },
             replace: true,
             transclude: true,
@@ -16306,15 +16454,27 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         alignMonth: angular.isDefined($scope.alignMonth) && $scope.alignMonth === "false" ? false : true,
                         displayTitle: angular.isDefined($scope.displayTitle) && $scope.displayTitle === "false" ? false : true,
                         textTitle: angular.isDefined($scope.textTitle) && $scope.textTitle !== "" ? $scope.textTitle : undefined,
+                        titleFontfamily: angular.isDefined($scope.titleFontfamily) && $scope.titleFontfamily !== "" ? $scope.titleFontfamily : undefined,
+                        titleFontsize: angular.isDefined($scope.titleFontsize) && $scope.titleFontsize !== "" ? $scope.titleFontsize : undefined,
+                        titleTextcolor: angular.isDefined($scope.titleTextcolor) && $scope.titleTextcolor !== "" ? $scope.titleTextcolor : undefined,
                         displaySubtitle: angular.isDefined($scope.displaySubtitle) && $scope.displaySubtitle === "false" ? false : true,
                         textSubtitle: angular.isDefined($scope.textSubtitle) && $scope.textSubtitle !== "" ? $scope.textSubtitle : undefined,
+                        subtitleFontfamily: angular.isDefined($scope.subtitleFontfamily) && $scope.subtitleFontfamily !== "" ? $scope.subtitleFontfamily : {label:"Arial"},
+                        subtitleFontsize: angular.isDefined($scope.subtitleFontsize) && $scope.subtitleFontsize !== "" ? $scope.subtitleFontsize : {label:"12",value:12},
+                        subtitleTextcolor: angular.isDefined($scope.subtitleTextcolor) && $scope.subtitleTextcolor !== "" ? $scope.subtitleTextcolor : '#888',
                         displayDescription: angular.isDefined($scope.displayDescription) && $scope.displayDescription === "false" ? false : true,
                         textDescription: angular.isDefined($scope.textDescription) && $scope.textDescription !== "" ? $scope.textDescription : undefined,
+                        descriptionFontfamily: angular.isDefined($scope.descriptionFontfamily) && $scope.descriptionFontfamily !== "" ? $scope.descriptionFontfamily : {label:"Arial"},
+                        descriptionFontsize: angular.isDefined($scope.descriptionFontsize) && $scope.descriptionFontsize !== "" ? $scope.descriptionFontsize : {label:"12",value:12},
+                        descriptionTextcolor: angular.isDefined($scope.descriptionTextcolor) && $scope.descriptionTextcolor !== "" ? $scope.descriptionTextcolor : '#888',
                         displayBackgroundColor: angular.isDefined($scope.displayBackgroundColor) && $scope.displayBackgroundColor === "false" ? false : true,
                         backgroundColor: angular.isDefined($scope.backgroundColor) && $scope.backgroundColor !== "" ? $scope.backgroundColor : undefined,
                         displayBorder: angular.isDefined($scope.displayBorder) && $scope.displayBorder === "false" ? false : true,
                         borderColor: angular.isDefined($scope.borderColor) && $scope.borderColor !== "" ? $scope.borderColor : undefined,
                         borderWidth: angular.isDefined($scope.borderWidth) && $scope.borderWidth !== "" ? $scope.borderWidth : undefined,
+                        legendFontfamily: angular.isDefined($scope.legendFontfamily) && $scope.legendFontfamily !== "" ? $scope.legendFontfamily : undefined,
+                        legendFontsize: angular.isDefined($scope.legendFontsize) && $scope.legendFontsize !== "" ? $scope.legendFontsize : undefined,
+                        legendTextcolor: angular.isDefined($scope.legendTextcolor) && $scope.legendTextcolor !== "" ? $scope.legendTextcolor : undefined,
                     };
                 }
                 angular.forEach($scope.chart, function (item, key) {
@@ -25853,7 +26013,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs/Chart.bundle.min.js"],
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-background/Plugin.Background.js"],
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-border/Plugin.Border.js"],
-                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-subtitle/Plugin.Subtitle.min.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-subtitle/Plugin.Subtitle.js"],
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-description/Plugin.Description.js"],
                     ["https://code.highcharts.com/6.1.4/highcharts.js"],
                     ["https://code.highcharts.com/6.1.4/modules/no-data-to-display.js"],
