@@ -1349,7 +1349,11 @@ html[dir=rtl] .d4c-chart-controls__configuration-tab{margin-right:20px;margin-le
 html[dir=rtl] .d4c-chart-controls__select-dataset{float:right}
 .d4c-chart-controls__remove-dataset{float:right}
 html[dir=rtl] .d4c-chart-controls__remove-dataset{float:left}
-.d4c-color-chooser{position:relative}
+.d4c-textstyle-options__style-options{position:absolute;top:0;left:0;margin:0 0 1rem 0;padding:5px;list-style:none;z-index:100;background-color:#888;max-height:300px;overflow-y:auto}
+.d4c-textstyle-options__preview{width:100%;height:1.33rem;margin-bottom:.33rem;cursor:pointer}
+.d4c-textstyle-options__preview:hover{border:1px solid #000}
+.d4c-textstyle-options__preview.d4c-textstyle-options__preview--selected{border:1px solid #000}
+.d4c-textstyle-options{position:relative}
 .d4c-color-chooser__color-selector{position:absolute;top:0;left:0;margin:0 0 1rem 0;padding:5px;width:220px;list-style:none;z-index:100;background-color:#888;max-height:300px;overflow-y:auto}
 .d4c-color-chooser__current-color,.d4c-color-chooser__current-color-range{width:2rem;height:1.33rem;cursor:pointer}
 .d4c-color-chooser__color-preview{width:100%;height:1.33rem;margin-bottom:.33rem;cursor:pointer}
@@ -1358,6 +1362,7 @@ html[dir=rtl] .d4c-chart-controls__remove-dataset{float:left}
 .d4c-color-chooser__custom-color{border:1px solid transparent}
 .d4c-color-chooser__custom-color-title{text-align:center;margin-right:2px}
 .d4c-color-chooser__custom-color-picker{float:right}
+.d4c-color-chooser{position:relative}
 .d4c-color-picker__button{display:-webkit-inline-box;display:-ms-inline-flexbox;display:inline-flex}
 .d4c-color-picker__close-button{border:none;outline:0;position:absolute;right:0;padding-top:4px;background:0 0}
 .d4c-color-picker__reset-button{color:#313131;border:none;outline:0;right:0;background:0 0}

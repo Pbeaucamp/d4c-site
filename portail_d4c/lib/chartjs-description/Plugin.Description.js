@@ -20,14 +20,14 @@ var defaultOptions = {
    * @member {Number}
    * @default 12
    */
-  fontSize: 12,
+  fontSize: 14,
 
   /**
    * Font family for the title text.
    * @member {String} fontFamily
    * @default "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
    */
-  fontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+  fontFamily: "Arial",
 
   /**
    * Font color
@@ -42,7 +42,7 @@ var defaultOptions = {
    * @enum 'normal' | 'bold' | 'italic' | 'italic bold'
    * @default 'normal'
    */
-  fontStyle: 'italic',
+  fontStyle: 'normal',
 
   /**
    * Padding between the title and the subtitle
@@ -52,11 +52,19 @@ var defaultOptions = {
   paddingTop: 15,
 
   /**
+   * Padding between the title and the subtitle
+   * @member {Number}
+   * @default 10
+   */
+  margin: 10,
+
+  /**
    * Subtitle text to display
    * @member {String}
    * @default ''
    */
-  text: ''
+  text: '',
+
 };
 
 var DesriptionPlugin = {
@@ -91,80 +99,6 @@ var DesriptionPlugin = {
 
 
   /**
-   * Draw the description on the top position
-   * @param {Chart} chart
-   * @param {Object} options
-   */
-  drawTop: function drawTop(chart, options) {
-    var text = options.text;
-    var ctx = chart.ctx,
-        width = chart.width;
-
-    // this value accounts for multiple lines in title
-
-    var titleOffset = chart.titleBlock.height - chart.options.title.padding;
-
-    var textX = Math.round((width - ctx.measureText(text).width) / 2);
-    var textY = titleOffset + options.paddingTop + 3;
-    ctx.fillText(text, textX, textY);
-  },
-
-
-  /**
-   * Draw the subtitle on the left position
-   * @param {Chart} chart
-   * @param {Object} options
-   */
-  drawLeft: function drawLeft(chart, options) {
-    var text = options.text;
-    var ctx = chart.ctx,
-        height = chart.height;
-
-    // this value accounts for multiple lines in title
-
-    var titleOffset = chart.titleBlock.width - chart.options.title.padding;
-
-    ctx.save();
-    ctx.translate(0, 0);
-    ctx.rotate(-Math.PI / 2);
-
-    var textX = Math.round((height + ctx.measureText(text).width) / 2);
-    var textY = titleOffset + options.paddingTop + 3;
-
-    ctx.fillText(text, -textX, textY);
-    ctx.restore();
-  },
-
-
-  /**
-   * Draw the subtitle on the right position
-   * @param {Chart} chart
-   * @param {Object} options
-   */
-  drawRight: function drawRight(chart, options) {
-    var text = options.text;
-    var ctx = chart.ctx,
-        height = chart.height,
-        width = chart.width;
-
-    // this value accounts for multiple lines in title
-
-    var titleOffset = chart.titleBlock.width - chart.options.title.padding;
-
-    ctx.save();
-    ctx.translate(0, 0);
-    ctx.rotate(Math.PI / 2);
-
-    var textX = Math.round((height - ctx.measureText(text).width) / 2);
-    var textY = titleOffset + options.paddingTop - width;
-
-    ctx.fillText(text, textX, textY);
-    ctx.restore();
-  },
-
-
-
-  /**
    * Split text into lines
    * @param {String} text
    * @param maxWidth
@@ -172,7 +106,6 @@ var DesriptionPlugin = {
   splitText : function splitText(text,maxWidth) {
     var lines = [];
     var words = text.split(" ");
-    console.log(words.length)
     var i = 0;
     while(i < words.length){
       var line = "";
@@ -188,7 +121,6 @@ var DesriptionPlugin = {
           i++;
         }
       }
-      console.log(line);
       lines.push(line);
     }
     return lines;
@@ -204,12 +136,12 @@ var DesriptionPlugin = {
     var text = options.text;
     var ctx = chart.ctx,
         height = chart.height
-    var textX = 0;
-    var textY = height - chart.options.title.padding * 2 + (options.paddingTop + 11);
-    var splittedText = this.splitText(text,250);
     
+    var textX = 0;
+    var textY = height - chart.options.layout.padding.bottom - chart.options.title.padding * 2 + (options.paddingTop + 11);
+    var splittedText = this.splitText(text,200);
     for(var i=0;i<splittedText.length;i++){
-      ctx.fillText(splittedText[i],textX,textY + options.paddingTop*i,chart.width);
+      ctx.fillText(splittedText[i],textX + options.margin,textY + options.margin + options.paddingTop*i,chart.width - options.margin - 5);
     }
   },
 
@@ -228,7 +160,7 @@ var DesriptionPlugin = {
       ctx.font = this.resolveFont(options);
       ctx.textBaseline = 'middle';
       ctx.fillStyle = options.fontColor;
-      this.drawBottom(chart.chart, options);
+      this.drawBottom(chart.chart,options);
     }
   }
 };
