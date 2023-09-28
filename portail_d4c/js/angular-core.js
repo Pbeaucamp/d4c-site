@@ -15183,6 +15183,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 options.time.timezone = $scope.tzsForced[Object.keys($scope.tzsForced)[0]];
                             }
                             try {
+                                if (options.series.length == 0) {
+                                    // Throw new error
+                                    throw new Error(translate("La configuration de votre graphique est incorrecte. Veuillez vérifier vos sélections."));
+                                }
+
                                 if (options.series.length > 500) {
                                     d4cNotificationService.sendNotification(translate("There are too many series to be displayed correctly, try to refine your query a bit."));
                                     options.series = options.series.slice(0, 10);
@@ -24098,9 +24103,15 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             interopmetas: true /*,source:sourceParameter*/
                         });
                         loadingSchemas[cacheKey].success(function (data) {
-                            schemaCache[cacheKey] = data;
-                            context.dataset = new D4C.Dataset(data, selectedResourceId);
-                            deferred.resolve(context.dataset);
+                            if (data == null || data == "" || data.length == 0) {
+                                context.error = true;
+                                deferred.reject("Failed to fetch " + contextName + " context.");
+                            }
+                            else {
+                                schemaCache[cacheKey] = data;
+                                context.dataset = new D4C.Dataset(data, selectedResourceId);
+                                deferred.resolve(context.dataset);
+                            }
                         }).error(function (data) {
                             context.error = true;
                             deferred.reject("Failed to fetch " + contextName + " context.");
@@ -33867,7 +33878,7 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                 }
             };
             var resourceCSVid = -1;
-            if (dataset.metas.resources != undefined) {
+            if (dataset.metas != undefined && dataset.metas.resources != undefined) {
                 if (dataset.metas.resources.length > 0) {
                     var res = dataset.metas.resources.filter(function (r) {
                         if ((r.mimetype == "text/csv" || r.format.toUpperCase() == "CSV") && r.datastore_active == true && (selectedResourceId == null || selectedResourceId == r.id)) {//} || r.mimetype == "application/vnd.ms-excel" || r.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
