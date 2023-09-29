@@ -60,11 +60,12 @@ Copyright (c) 2014 - Opendatasoft
                     <span translate="">Merge Y axes</span>
                 </label>
             </div>
-            <ul class="d4c-chart-controls__serie-list" html-sortable="{&#39;handle&#39;: &#39;.d4c-chart-controls__serie-handle&#39;, &#39;group&#39;: index}" html-sortable-callback="reorderQueries" ng-model="query.charts">
+            <ul class="d4c-chart-controls__serie-list" ng-sortable html-sortable="{&#39;handle&#39;: &#39;.d4c-chart-controls__serie-handle&#39;, &#39;group&#39;: index}" html-sortable-callback="reorderQueries" ng-model="query.charts">
                 <li class="d4c-chart-controls__serie-container" ng-repeat="chart in query.charts track by $index" ng-style="{&#39;border-color&#39;: chart.color}">
                     <form ng-model="chart">
                         <span ng-show="query.charts.length &gt; 1" class="d4c-chart-controls__serie-handle">
                             <i class="fa fa-reorder icon-reorder"></i>
+
                         </span>
                         <span class="d4c-chart-controls__serie-remove" ng-show="query.charts.length &gt; 1" ng-click="chartRemoval(chart); remove(chart)">
                             <i class="fa fa-close icon-remove"></i>
