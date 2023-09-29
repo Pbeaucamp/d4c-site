@@ -16177,10 +16177,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         },
                                         chartJsPluginBorder: {
                                             borderColor: options.border.color,
-                                            borderWidth: 1,
+                                            borderWidth: options.border.display ? options.border.width : 0,
                                             borderDash: null,
                                             borderDashOffset: 0,
-                                            display: options.border.display
                                         }
                                     };
                                     
