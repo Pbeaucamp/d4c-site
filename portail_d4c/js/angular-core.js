@@ -15665,8 +15665,39 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                                     Array.prototype.push.apply(options.series[i].backgroundColor, options.series[i].backgroundColor);
                                                 }
 
-                                                options.series[i].data = data;
-                                                options.xAxis.categories = labels;
+                                                //options.series[i].data = data;
+                                                //options.xAxis.categories = labels;
+
+                                                if (typeof ((options.series[i].data[0])) === 'object') {
+                                                    let dataNew = [];
+                                                    let AxisX = [];
+                                                    for (let idx = 0; idx < options.series[i].data.length; idx++) {
+                                                        if (options.xAxis.type == "datetime") {
+                                                            dataNew.push({
+                                                                x: /*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/,
+                                                                y: options.series[i].data[idx][1]
+                                                            });
+
+                                                            AxisX.push(/*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/);
+                                                        } else {
+                                                            dataNew.push(options.series[i].data[idx].y);
+                                                            if (options.series[i].data[idx].color != undefined) {
+                                                                if (!Array.isArray(options.series[i].backgroundColor) || idx==0) {
+                                                                    options.series[i].backgroundColor = [];
+                                                                }
+                                                                options.series[i].backgroundColor.push(options.series[i].data[idx].color);
+                                                            }
+                                                        }
+                                                    }
+
+                                                    options.series[i].data = dataNew;
+                                                    if (AxisX.length > 0) {
+                                                        options.xAxis.categories = AxisX;
+                                                    }
+                
+                                                }
+
+                                                console.log(options.series[i].backgroundColor);
                                             }
                                             else if (options.series[i].type == 'polarArea') {
                                                 mainTypeChart = 'polarArea';
@@ -15690,7 +15721,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                                         } else {
                                                             dataNew.push(options.series[i].data[idx].y);
                                                             if (options.series[i].data[idx].color != undefined) {
-                                                                if (!Array.isArray(options.series[i].backgroundColor)) {
+                                                                if (!Array.isArray(options.series[i].backgroundColor) || idx==0) {
                                                                     options.series[i].backgroundColor = [];
                                                                 }
                                                                 options.series[i].backgroundColor.push(options.series[i].data[idx].color);
@@ -15702,6 +15733,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                                     if (AxisX.length > 0) {
                                                         options.xAxis.categories = AxisX;
                                                     }
+                
                                                 }
                                             }
                                             else if (options.series[i].type == 'funnel') {
