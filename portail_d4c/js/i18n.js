@@ -396,13 +396,13 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Un filtre existe déjà pour ce paramètre"
 				},
 				"A harvest can be a one time operation or a regularly scheduled one. Whether you're migrating a portal or updating datasets from an external source, all your needs are covered.": {
-					"$$noContext": "Un moissonnage peut être une opération ponctuelle ou planifiée pour être répétée régulièrement. Suivant que vous soyez en train de migrer un portail ou de mettre à jour un jeu de données depuis une source externe, le moissonnage répond à tous vos besoins."
+					"$$noContext": "Un moissonnage peut être une opération ponctuelle ou planifiée pour être répétée régulièrement. Suivant que vous soyez en train de migrer un portail ou de mettre à jour une connaissance depuis une source externe, le moissonnage répond à tous vos besoins."
 				},
 				"A harvest can be a one time operation or a regularly scheduled one. Whether you're migrating a portal or updating datasets, all your needs are covered.": {
-					"$$noContext": "Un moissonnage peut être une opération ponctuelle ou planifiée pour être répétée régulièrement. Suivant que vous soyez en train de migrer un portail ou de mettre à jour un jeu de données depuis une source externe, le moissonnage répond à tous vos besoins."
+					"$$noContext": "Un moissonnage peut être une opération ponctuelle ou planifiée pour être répétée régulièrement. Suivant que vous soyez en train de migrer un portail ou de mettre à jour une connaissance depuis une source externe, le moissonnage répond à tous vos besoins."
 				},
 				"A harvester fetches data from a remote source and updates your data catalog.": {
-					"$$noContext": "Un moissonneur récupère les données depuis une source externe et crée un jeu de données à partir de celle-ci."
+					"$$noContext": "Un moissonneur récupère les données depuis une source externe et crée une connaissance à partir de celle-ci."
 				},
 				"A harvester has a critical error": {
 					"$$noContext": ["Un moissonneur a une erreur critique", "{{ $count }} moissonneurs ont une erreur critique"]
@@ -411,10 +411,10 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"API error message": "Un utilisateur local ne peut pas détacher son identité"
 				},
 				"A longer description of what you achieved using this dataset (max. 1000 characters)": {
-					"$$noContext": "Une description de ce que vous avez fait en utilisant ce jeu de données (max. 1000 caractères)"
+					"$$noContext": "Une description de ce que vous avez fait en utilisant cette connaissance (max. 1000 caractères)"
 				},
 				"A description about the using this dataset": {
-					"$$noContext": "Une description de l'utilisation de ce jeu de données"
+					"$$noContext": "Une description de l'utilisation de cette connaissance"
 				},
 				"A parameter with this name already exists.": {
 					"$$noContext": "Un paramètre avec ce nom existe déjà."
@@ -423,7 +423,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Un polygone formé par une liste de points WGS84 (un seul polygone pour le moment)"
 				},
 				"A preview of 5 datasets will appear here": {
-					"$$noContext": "Une prévisualisation de 5 jeux de données apparaitra ici"
+					"$$noContext": "Une prévisualisation de 5 connaissances apparaitra ici"
 				},
 				"A problem during your visit, a question about a feature or our APIs? Contact us.": {
 					"$$noContext": "Un problème pendant votre visite, une question à propos d'une fonctionnalité ou de nos APIs ? Contactez nous. "
@@ -537,16 +537,16 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Ajouter"
 				},
 				"Add a dataset": {
-					"$$noContext": "Ajouter un jeu de données"
+					"$$noContext": "Ajouter une connaissance"
 				},
 				"Add a dataset from the Data4Citizen network": {
-					"$$noContext": "Ajouter un jeu de données du réseau Data4Citizen"
+					"$$noContext": "Ajouter une connaissance du réseau Data4Citizen"
 				},
 				"Add a dataset to this chart": {
-					"$$noContext": "Ajouter un jeu de données à ce graphe"
+					"$$noContext": "Ajouter une connaissance à ce graphe"
 				},
 				"Add a dataset to this map": {
-					"$$noContext": "Ajouter un jeu de données à cette carte"
+					"$$noContext": "Ajouter une connaissance à cette carte"
 				},
 				"Add a data layer": {
 					"$$noContext": "Ajouter une couche de données"
@@ -657,10 +657,10 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Pages complexes"
 				},
 				"After setting the harvester, click <em>preview</em> to get a quick peek at some datasets": {
-					"$$noContext": "Après avoir configuré un moissonneur, cliquez sur <em>prévisualisation</em> pour avoir un aperçu rapide de quelques jeux de données."
+					"$$noContext": "Après avoir configuré un moissonneur, cliquez sur <em>prévisualisation</em> pour avoir un aperçu rapide de quelques connaissances."
 				},
 				"Aggregate series in a single dataset": {
-					"$$noContext": "Agréger les séries dans un seul jeu de données"
+					"$$noContext": "Agréger les séries dans une seule connaissance"
 				},
 				"Aggregation on a field": {
 					"$$noContext": "Agrégation sur un champ"
@@ -681,19 +681,19 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Toutes les données disponibles"
 				},
 				"All datasets": {
-					"$$noContext": "Tous les jeux de données"
+					"$$noContext": "Toutes les connaissances"
 				},
 				"All datasets being published have the queued status": {
-					"$$noContext": "Tous les jeux de données en cours de publication sont en file d'attente"
+					"$$noContext": "Toutes les connaissances en cours de publication sont en file d'attente"
 				},
 				"All dates and times are in {{tz}} time.": {
 					"$$noContext": "Toutes les dates et heures sont affichées dans le fuseau horaire {{tz}}."
 				},
 				"All dates and times for dataset {{datasetId}} are in {{tz}} time.": {
-					"$$noContext": "Toutes les dates et heures du jeu de données {{datasetId}} sont affichées dans le fuseau horaire {{tz}}."
+					"$$noContext": "Toutes les dates et heures de la connaissance {{datasetId}} sont affichées dans le fuseau horaire {{tz}}."
 				},
 				"All distributed datasets are restricted by default.": {
-					"$$noContext": "Tous les jeux de données sont distribués en accès restreint par défaut."
+					"$$noContext": "Toutes les connaissances sont distribuées en accès restreint par défaut."
 				},
 				"All done!": {
 					"$$noContext": "C'est fait !"
@@ -717,7 +717,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Tous les utilisateurs ajoutés au groupe"
 				},
 				"All your datasets at a glance": {
-					"$$noContext": "Tous vos jeux de données en un coup d'oeil"
+					"$$noContext": "Toutes vos connaissances en un coup d'oeil"
 				},
 				"All your harvesters at a glance": {
 					"$$noContext": "Vision globale sur tous vos moissonneurs"
@@ -864,7 +864,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Êtes-vous sûr de vouloir supprimer ce snapshot ?"
 				},
 				"Are you sure you want to delete your dataset and everything in it?": {
-					"$$noContext": "Êtes-vous sûr de vouloir supprimer votre jeu de données et tout ce qu'il contient ?"
+					"$$noContext": "Êtes-vous sûr de vouloir supprimer votre connaissance et tout ce qu'il contient ?"
 				},
 				"Are you sure you want to proceed with this action?": {
 					"$$noContext": "Êtes vous sûr de vouloir continuer ?"
@@ -897,7 +897,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Etes-vous sûr de vouloir supprimer la permission \"{permission}\" du groupe \"{group}\" ?"
 				},
 				"Are you sure you want to remove this dataset from the subdomain?": {
-					"$$noContext": "Êtes vous sûr de vouloir retirer ce jeu de données du sous-domaine ?"
+					"$$noContext": "Êtes vous sûr de vouloir retirer cette connaissance du sous-domaine ?"
 				},
 				"Are you sure you want to remove this identity?": {
 					"$$noContext": "Êtes-vous sûr de vouloir supprimer cette identité ?"
@@ -909,7 +909,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Êtes vous sûr de vouloir révoquer cette clé d'API ?"
 				},
 				"Are you sure you want to unpublish this dataset?": {
-					"$$noContext": "Êtes-vous sûr de vouloir dépublier votre jeu de données ?"
+					"$$noContext": "Êtes-vous sûr de vouloir dépublier votre connaissance ?"
 				},
 				"Are you sure?": {
 					"$$noContext": "Êtes-vous sûr ?"
@@ -978,7 +978,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Géolocalisation automatique"
 				},
 				"Automatically computes the geographic area covered by the dataset": {
-					"$$noContext": "Calculer automatiquement la zone géographique couverte par le jeu de données"
+					"$$noContext": "Calculer automatiquement la zone géographique couverte par la connaissance "
 				},
 				"Automatically granted": {
 					"$$noContext": "Attribuée automatiquement"
@@ -1041,7 +1041,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Avant de télécharger cette ressource, vous devez lire et accepter les <a href=\"/conditions/\" target=\"_blank\">conditions générales d'utilisation</a>."
 				},
 				"Better overview of your datasets": {
-					"$$noContext": "Un meilleur résumé de vos jeux de données"
+					"$$noContext": "Un meilleur résumé de vos connaissances"
 				},
 				"Bio-geographical regions": {
 					"inspire metadata template": "Régions biogéographiques"
@@ -1077,10 +1077,10 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Par défaut, le nouveau sous domaine ne sera pas ouvert aux utilisateurs anonymes. Activer cette option pour copier cette configuration du domaine principal."
 				},
 				"By modifying the dataset identifier, you will potentially break any third-party application using it, and any past embedded visualization from it won't work anymore.": {
-					"$$noContext": "En modifiant l'identifiant du jeu de données, les applications tierces l'utilisant risquent de ne plus fonctionner, et toute intégration de visualisation effectuée par le passé deviendra inopérante."
+					"$$noContext": "En modifiant l'identifiant de la connaissance, les applications tierces l'utilisant risquent de ne plus fonctionner, et toute intégration de visualisation effectuée par le passé deviendra inopérante."
 				},
 				"By subscribing to this dataset, you can receive email notifications from the dataset's publisher if important changes happen.": {
-					"$$noContext": "En vous abonnant à ce jeu de données, vous pourrez recevoir des notifications par email de la part du producteur de ce jeu de données si des changements importants ont lieu."
+					"$$noContext": "En vous abonnant à cette connaissance, vous pourrez recevoir des notifications par email de la part du producteur de cette connaissance si des changements importants ont lieu."
 				},
 				"Byte": {
 					"$$noContext": "Octets"
@@ -1311,10 +1311,10 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Cliquez pour replier"
 				},
 				"Click to go to the datasets": {
-					"$$noContext": "Cliquez pour aller aux jeux de données"
+					"$$noContext": "Cliquez pour aller aux connaissances"
 				},
 				"Click to go to the harvested datasets": {
-					"$$noContext": "Cliquez pour aller à la liste des jeux de données moissonnés"
+					"$$noContext": "Cliquez pour aller à la liste des connaissances moissonnées"
 				},
 				"Click to start drawing line": {
 					"$$noContext": "Cliquez pour commencer à dessiner la ligne"
@@ -1401,7 +1401,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Commentaires"
 				},
 				"Complete dataset": {
-					"$$noContext": "Jeu de données entier"
+					"$$noContext": "Connaissance entière"
 				},
 				"Computed from data": {
 					"$$noContext": "Calculée automatiquement à partir des données"
@@ -1560,7 +1560,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Action en cours :"
 				},
 				"Current datasets usage": {
-					"$$noContext": "Usage actuel de jeux de données"
+					"$$noContext": "Usage actuel de connaissances"
 				},
 				"Current icon is {iconName}. Open icon picker": {
 					"$$noContext": "L'icône courante est {iconName}. Ouvrir le sélecteur d'icône"
@@ -1704,46 +1704,46 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Qualité des données"
 				},
 				"Dataset": {
-					"$$noContext": "Jeu de données"
+					"$$noContext": "Connaissance"
 				},
 				"Dataset ID": {
-					"$$noContext": "ID du jeu de données"
+					"$$noContext": "ID de la connaissance"
 				},
 				"Dataset Identifier": {
-					"$$noContext": "Identifiant du jeu de données"
+					"$$noContext": "Identifiant de la connaissance"
 				},
 				"Dataset catalog statistics": {
-					"$$noContext": "Statistiques du catalogue de jeux de données"
+					"$$noContext": "Statistiques du catalogue de connaissances"
 				},
 				"Dataset expowsrt ({{ formatLabel }})": {
-					"$$noContext": "Export du jeu de données ({{ formatLabel }})"
+					"$$noContext": "Export de la connaissance ({{ formatLabel }})"
 				},
 				"Dataset field": {
-					"$$noContext": "Champ jeu de données"
+					"$$noContext": "Champ connaissance"
 				},
 				"Dataset of datasets": {
-					"$$noContext": "Jeu de données des jeux de données"
+					"$$noContext": "Connaissance des connaissances"
 				},
 				"Dataset schema": {
 					"$$noContext": "Modèle de données"
 				},
 				"Dataset source or processors have changed.": {
-					"$$noContext": "La source du jeu de données ou les processeurs ont été modifiés."
+					"$$noContext": "La source de la connaissance ou les processeurs ont été modifiés."
 				},
 				"Datasets": {
-					"$$noContext": "Jeux de données"
+					"$$noContext": "Connaissances"
 				},
 				"Datasets published": {
-					"$$noContext": "Jeux de données publiés"
+					"$$noContext": "Connaissances publiées"
 				},
 				"Datasets unpublished": {
-					"$$noContext": "Jeux de données dépubliés"
+					"$$noContext": "Connaissances dépubliées"
 				},
 				"Datasets visibility": {
-					"$$noContext": "Visibilité des jeux de données"
+					"$$noContext": "Visibilité des connaissances"
 				},
 				"Datasets with warnings are not harvested and won’t appear on your portal": {
-					"$$noContext": "Les jeux de données en erreur ne sont pas moissonnés et n'apparaitront pas sur votre portail"
+					"$$noContext": "Les connaissances en erreur ne sont pas moissonnées et n'apparaitront pas sur votre portail"
 				},
 				"Date (ascending)": {
 					"$$noContext": "Date croissante"
@@ -1821,7 +1821,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Supprimer le graphique ?"
 				},
 				"Delete dataset": {
-					"$$noContext": "Supprimer le jeu de données"
+					"$$noContext": "Supprimer la connaissance"
 				},
 				"Delete font": {
 					"$$noContext": "Supprimer la police"
@@ -1857,7 +1857,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Supprimer ce fond de carte"
 				},
 				"Delete this dataset theme": {
-					"$$noContext": "Supprimer ce thème de jeu de données"
+					"$$noContext": "Supprimer ce thème de connaissance"
 				},
 				"Delete this group": {
 					"$$noContext": "Supprimer ce groupe"
@@ -1884,10 +1884,10 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Densité"
 				},
 				"Depending on the number of datasets, publishing could take some time": {
-					"$$noContext": "Suivant le nombre de jeux de données, la publication peut prendre du temps"
+					"$$noContext": "Suivant le nombre de connaissances, la publication peut prendre du temps"
 				},
 				"Depending on the number of datasets, unpublishing could take some time": {
-					"$$noContext": "Suivant le nombre de jeux de données, la dépublication peut prendre du temps"
+					"$$noContext": "Suivant le nombre de connaissances, la dépublication peut prendre du temps"
 				},
 				"Descending order": {
 					"$$noContext": "Ordre descendant"
@@ -1902,7 +1902,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Détails"
 				},
 				"Digest about the data world: articles, events, featured datasets and more.": {
-					"$$noContext": "Condensé à propos du monde de la data : des articles, des évènements, des jeux de données et plus encore. "
+					"$$noContext": "Condensé à propos du monde de la data : des articles, des évènements, des connaissances et plus encore. "
 				},
 				"Digital information": {
 					"$$noContext": "Information digitale"
@@ -1926,7 +1926,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Affichage"
 				},
 				"Display caption for this dataset": {
-					"$$noContext": "Afficher une légende pour ce jeu de données"
+					"$$noContext": "Afficher une légende pour cette connaissance"
 				},
 				"Display dataset information card": {
 					"$$noContext": "Afficher un volet d'information"
@@ -1959,7 +1959,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Afficher, cacher et réordonner les filtres au clavier ou à la souris."
 				},
 				"Displays the unit defined in the dataset for the selected field. If no unit has been set by the publisher, nothing is displayed.": {
-					"$$noContext": "Affiche l'unité définie dans le jeu de données pour le champ sélectionné. Si aucune unité n'a été associé au champ par l'éditeur, rien n'est affiché."
+					"$$noContext": "Affiche l'unité définie dans la connaissance pour le champ sélectionné. Si aucune unité n'a été associé au champ par l'éditeur, rien n'est affiché."
 				},
 				"Distance or size": {
 					"$$noContext": "Distance ou taille"
@@ -1968,13 +1968,13 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Distribuer"
 				},
 				"Distribute complete or filtered datasets, match parameters between the subdomain's parameters and the datasets' records": {
-					"$$noContext": "Distribuez des jeux de données complets ou filtrés, associez des paramètres entre les paramètres des sous-domaines et les enregistrements des jeux de données"
+					"$$noContext": "Distribuez des connaissances complètes ou filtrées, associez des paramètres entre les paramètres des sous-domaines et les enregistrements des connaissances"
 				},
 				"Distribute content ({{ selectedItemsCount }})": {
 					"$$noContext": "Distribuer du contenu ({{ selectedItemsCount }})"
 				},
 				"Distribute datasets": {
-					"$$noContext": "Distribuer des jeux de données"
+					"$$noContext": "Distribuer des connaissances"
 				},
 				"Distribute pages": {
 					"$$noContext": "Distribuer des pages"
@@ -1992,7 +1992,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Êtes-vous sûr de vouloir supprimer cette carte ?"
 				},
 				"Do you really want to remove all filters for this dataset? Removing all filters will display all records for the distributed dataset.": {
-					"$$noContext": "Voulez vous vraiment enlever tous les filtres de ce jeu de données ? Dans ce cas, tous les enregistrements seront disponibles pour le jeu de données distribué."
+					"$$noContext": "Voulez vous vraiment enlever tous les filtres de cette connaissance ? Dans ce cas, tous les enregistrements seront disponibles pour la connaissance distribuée."
 				},
 				"Do your really want to delete this image?": {
 					"$$noContext": "Êtes-vous sûr de vouloir supprimer cette image ?"
@@ -2031,13 +2031,13 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Points"
 				},
 				"Dots (recommended for high-density datasets)": {
-					"$$noContext": "Points (recommandé pour les jeux de données à haute densité)"
+					"$$noContext": "Points (recommandé pour les connaissances à haute densité)"
 				},
 				"Dots and shapes": {
 					"$$noContext": "Points et formes"
 				},
 				"Dots are recommended for high density datasets. Icons and marker are recommended for low density datasets.": {
-					"$$noContext": "Les points sont recommandés pour les jeux de données à forte densité. Les icônes et les marqueurs sont recommandés pour l'affichage de jeux de données dont la densité est faible."
+					"$$noContext": "Les points sont recommandés pour les connaissances à forte densité. Les icônes et les marqueurs sont recommandés pour l'affichage de connaissances dont la densité est faible."
 				},
 				"Dots style": {
 					"$$noContext": "Style des points"
@@ -2097,7 +2097,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Dupliquer"
 				},
 				"Duplicate dataset": {
-					"$$noContext": "Dupliquer le jeu de données"
+					"$$noContext": "Dupliquer la connaissance"
 				},
 				"Duration": {
 					"$$noContext": "Durée"
@@ -2127,7 +2127,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Édition"
 				},
 				"Either come back to this page and publish all datasets at once (that means no reviewing).": {
-					"$$noContext": "Vous pouvez soit revenir sur cette page et publier tous les jeux de données en une fois (donc pas de revue individuelle). "
+					"$$noContext": "Vous pouvez soit revenir sur cette page et publier toutes les connaissances en une fois (donc pas de revue individuelle). "
 				},
 				"Elevation": {
 					"inspire metadata template": "Altitude"
@@ -2313,7 +2313,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Explorer les données"
 				},
 				"Explore the {{ $count }} dataset": {
-					"$$noContext": ["Explorer le jeu de données", "Explorer les {{ $count }} jeux de données"]
+					"$$noContext": ["Explorer la connaissance", "Explorer les {{ $count }} connaissances"]
 				},
 				"Export": {
 					"$$noContext": "Export"
@@ -2424,13 +2424,13 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Filtres"
 				},
 				"Filters help you find your datasets.": {
-					"$$noContext": "Les filtres vous aident à retrouver vos jeux de données."
+					"$$noContext": "Les filtres vous aident à retrouver vos connaissances."
 				},
 				"Filters stay the same but have a more compact look.": {
 					"$$noContext": "Les filtres restent les mêmes mais gagnent un aspect plus compact."
 				},
 				"Find a dataset...": {
-					"$$noContext": "Trouver un jeu de données..."
+					"$$noContext": "Trouver une connaissance..."
 				},
 				"Find a place...": {
 					"$$noContext": "Trouver un lieu..."
@@ -2445,10 +2445,10 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Prénom (optionnel)"
 				},
 				"Five least popular datasets in this domain": {
-					"$$noContext": "Cinq jeux de données les moins populaires du domaine"
+					"$$noContext": "Cinq connaissances les moins populaires du domaine"
 				},
 				"Five most popular datasets in this domain": {
-					"$$noContext": "Cinq jeux de données les plus populaires du domaine"
+					"$$noContext": "Cinq connaissances les plus populaires du domaine"
 				},
 				"Flat file formats": {
 					"$$noContext": "Formats de fichiers plats"
@@ -2472,7 +2472,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Pour les deux documents, vous pouvez soit définir un lien vers une page ou écrire vos conditions d'utilisation et votre politique de confidentialité en vous aidant des modèles fournis."
 				},
 				"For dataset with <strong>remote resources</strong>, you can schedule automatic republishing.": {
-					"$$noContext": "Pour un jeu de données avec <strong>des ressources distantes</strong>, vous pouvez planifier une republication automatique."
+					"$$noContext": "Pour une connaissance avec <strong>des ressources distantes</strong>, vous pouvez planifier une republication automatique."
 				},
 				"For value that are spread from a very large spectrum": {
 					"$$noContext": "Pour les valeurs réparties sur une large plage"
@@ -2487,7 +2487,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Utilisateurs FranceConnect"
 				},
 				"Fred databases may be huge, a number of datasets is required to limit the number of queries": {
-					"$$noContext": "Les bases de données FRED peuvent être volumineuses, vous devez définir un nombre de jeux de données pour limiter le nombre de requête"
+					"$$noContext": "Les bases de données FRED peuvent être volumineuses, vous devez définir un nombre de connaissances pour limiter le nombre de requête"
 				},
 				"French": {
 					"$$noContext": "Français"
@@ -2505,7 +2505,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Du"
 				},
 				"From dataset:": {
-					"$$noContext": "Jeu de données :"
+					"$$noContext": "Connaissance :"
 				},
 				"From the harvester name to the default metadata, these parameters adapt to fit for the task at hand.": {
 					"$$noContext": "Du nom du moissonneur aux métadonnées par défaut, ces paramètres s'adaptent en fonction de la tâche."
@@ -2755,7 +2755,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "J'accepte les <a ng-href=\"{{ tos_page_url }}\" target=\"_blank\">conditions d'utilisation</a>"
 				},
 				"I accept the portal's terms of use and the license applicable to the dataset.": {
-					"$$noContext": "J'accepte les conditions générales du portail et la licence applicable au jeu de données."
+					"$$noContext": "J'accepte les conditions générales du portail et la licence applicable à la connaissance."
 				},
 				"I don't accept": {
 					"$$noContext": "Je n'accepte pas"
@@ -2770,7 +2770,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Icône"
 				},
 				"Icons (not recommended for high-density datasets)": {
-					"$$noContext": "Icônes (déconseillé pour les jeux de données à haute densité)"
+					"$$noContext": "Icônes (déconseillé pour les connaissances à haute densité)"
 				},
 				"Icons style": {
 					"$$noContext": "Style des icônes"
@@ -2794,7 +2794,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "La clé d'API si le portail requiert une authentification"
 				},
 				"If the source datasets are deleted on the harvested portal, delete them on this Data4Citizen portal too": {
-					"$$noContext": "Si les jeux de données source du portail moissonné sont supprimés, les supprimer aussi de ce portail Data4Citizen"
+					"$$noContext": "Si les connaissances source du portail moissonné sont supprimées, les supprimer aussi de ce portail Data4Citizen"
 				},
 				"If you are doing it after the original dataset publication, consider warning your users.": {
 					"$$noContext": "Si vous effectuez la modification après que le jeu de donnée ait été publié, pensez à prévenir vos utilisateurs."
@@ -2803,7 +2803,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Si vous obtenez des rapports d'erreurs internes pendant le moissonnage, cela signifie que notre moissonneur a rencontré une condition imprévue sur le portail cible, il faut la régler sur la plateforme"
 				},
 				"If you can't see datasets, you should review your harvester configuration. If you see datasets, your harvester should work fine and you're good to go.": {
-					"$$noContext": "Si vous ne pouvez pas voir les jeux de données, vous devriez revoir votre configuration de moissonneur. Si vous voyez des jeux de données, votre moissonneur devrait fonctionner sans problème et tout est prêt. "
+					"$$noContext": "Si vous ne pouvez pas voir les connaissances, vous devriez revoir votre configuration de moissonneur. Si vous voyez des connaissances, votre moissonneur devrait fonctionner sans problème et tout est prêt. "
 				},
 				"If you enable user feedback on this dataset, users will be able to contribute by submitting comments on a specific record; they may also suggest new values.": {
 					"$$noContext": "Si vous activez les contributions, les utilisateurs pourront soumettre des commentaires sur chaque enregistrement, et éventuellement suggérer de nouvelles valeurs."
@@ -2836,22 +2836,22 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Pour accéder à cette API"
 				},
 				"In order to download this dataset": {
-					"$$noContext": "Pour télécharger ce jeu de données"
+					"$$noContext": "Pour télécharger cette connaissance"
 				},
 				"In order to have a map tab, your dataset must have a geographical field (Geo point 2D or Geo Shape).": {
-					"$$noContext": "Afin d'avoir un onglet carte, votre jeu de données doit avoir un champ géographique (Geo point 2D ou Geo Shape)"
+					"$$noContext": "Afin d'avoir un onglet carte, votre connaissance doit avoir un champ géographique (Geo point 2D ou Geo Shape)"
 				},
 				"In order to have an analyze tab, your dataset must have at least one date field or one facet.": {
-					"$$noContext": "Afin d'avoir un onglet analyse, votre jeu de données doit avoir au moins un champ date ou une facette."
+					"$$noContext": "Afin d'avoir un onglet analyse, votre connaissance doit avoir au moins un champ date ou une facette."
 				},
-				"In order to have an images tab, your dataset must have a file field.": {
-					"$$noContext": "Afin d'avoir un onglet images, votre jeu de données doit avoir un champ de type fichier."
+				"In order to have an images tab, your dataset must havetoutes a file field.": {
+					"$$noContext": "Afin d'avoir un onglet images, votre connaissance doit avoir un champ de type fichier."
 				},
 				"In the meantime, you can continue to edit this map even before you log in for the first time.": {
 					"$$noContext": "Pendant ce temps, vous pouvez continuer à éditer cette carte même avant de vous authentifier pour la première fois."
 				},
 				"In this table you will find all your datasets in an orderly fashion.": {
-					"$$noContext": "Vous trouverez dans ce tableau tous vos jeux de données bien ordonnés."
+					"$$noContext": "Vous trouverez dans ce tableau toutes vos connaissances bien ordonnées."
 				},
 				"In this timezone": {
 					"$$noContext": "Sur ce fuseau horaire"
@@ -2917,7 +2917,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Couche invalide"
 				},
 				"Invalid number of datasets.": {
-					"$$noContext": "Nombre de jeux de données invalide."
+					"$$noContext": "Nombre de connaissances invalides."
 				},
 				"Invalid password or this user has not been activated": {
 					"$$noContext": "Le mot de passe est invalide ou cet utilisateur n'a pas été activé"
@@ -3079,7 +3079,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "7 derniers jours"
 				},
 				"Last datasets": {
-					"$$noContext": "Derniers jeux de données"
+					"$$noContext": "Dernières connaissances"
 				},
 				"Last harvesting led to a critical error": {
 					"$$noContext": "Le dernier moissonnage a provoqué une erreur critique"
@@ -3115,7 +3115,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Latitude"
 				},
 				"Launch the harvesting, wait for a few minutes to gather all data and process it and your portal should be filled with brand new datasets": {
-					"$$noContext": "Lancer le moissonnage, attendre quelques minutes que les données soient rassemblées et indexées et votre portail devrait être rempli de nouveaux jeux de données"
+					"$$noContext": "Lancer le moissonnage, attendre quelques minutes que les données soient rassemblées et indexées et votre portail devrait être rempli de nouvelles connaissances"
 				},
 				"Layer color": {
 					"$$noContext": "Couleur de la couche"
@@ -3211,7 +3211,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Langue des liens"
 				},
 				"List of comma separated dataset IDs (bea-fa2004-section1-101-a, ecb-bop, ...).": {
-					"$$noContext": "Liste des IDs de jeux de données séparés par des virgules (bea-fa2004-section1-101-a, ecb-bop, ...)"
+					"$$noContext": "Liste des IDs de connaissances séparés par des virgules (bea-fa2004-section1-101-a, ecb-bop, ...)"
 				},
 				"Liter": {
 					"$$noContext": "Litre"
@@ -3274,7 +3274,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Informations principales"
 				},
 				"Make the visibility of newly harvested datasets restricted (does not update visibility of existing datasets)": {
-					"$$noContext": "Restreindre la visibilité des jeux de données nouvellement moissonnés (la visibilité des jeux de données existants n'est pas modifiée)"
+					"$$noContext": "Restreindre la visibilité des connaissances nouvellement moissonnées (la visibilité des connaissances existantes n'est pas modifiée)"
 				},
 				"Mandatory": {
 					"$$noContext": "Obligatoire"
@@ -3385,13 +3385,13 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Valeur maximum"
 				},
 				"Maximum value: {{ parentDomain.license.quota.datasets }} datasets": {
-					"$$noContext": "Valeur maximum : {{ parentDomain.license.quota.datasets }} jeux de données"
+					"$$noContext": "Valeur maximum : {{ parentDomain.license.quota.datasets }} connaissances"
 				},
 				"Maximum value: {{ parentDomain.license.quota.records }} records": {
 					"$$noContext": "Valeur maximum : {{ parentDomain.license.quota.records }} enregistrements"
 				},
 				"Maximum value: {{ parentDomain.license.quota.records_by_dataset }} records by dataset": {
-					"$$noContext": "Valeur maximum : {{ parentDomain.license.quota.records_by_dataset }} enregistrements par jeu de données"
+					"$$noContext": "Valeur maximum : {{ parentDomain.license.quota.records_by_dataset }} enregistrements par connaissance"
 				},
 				"Maximum:": {
 					"$$noContext": "Maximum :"
@@ -3619,7 +3619,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Plus compact et plus simple à utiliser, il a été pensé pour vous faciliter la vie. "
 				},
 				"More datasets at a glance": {
-					"$$noContext": "Plus de jeux de données en un coup d'oeil"
+					"$$noContext": "Plus de connaissances en un coup d'oeil"
 				},
 				"More filters": {
 					"$$noContext": "Plus de filtres"
@@ -3628,7 +3628,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Le + de téléchargements"
 				},
 				"Most popular data": {
-					"$$noContext": "Jeux de données les plus populaires"
+					"$$noContext": "Connaissances les plus populaires"
 				},
 				"Most popular first": {
 					"$$noContext": "Les + populaires "
@@ -3739,7 +3739,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Données pas encore disponibles"
 				},
 				"No datasets distributed to this subdomain": {
-					"$$noContext": "Aucun jeu de données distribué à ce sous-domaine"
+					"$$noContext": "Aucune connaissance distribuée à ce sous-domaine"
 				},
 				"No description available for this field.": {
 					"$$noContext": "Aucune description n'est disponible pour ce champ."
@@ -3757,7 +3757,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Aucune contribution à afficher"
 				},
 				"No field for the selected dataset": {
-					"$$noContext": "Pas de champ pour le jeu de données sélectionné"
+					"$$noContext": "Pas de champ pour la connaissance sélectionnée"
 				},
 				"No filter": {
 					"$$noContext": "Aucun filtre"
@@ -3766,7 +3766,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Aucun filtre disponible"
 				},
 				"No filter for this dataset": {
-					"$$noContext": "Aucun filtre pour ce jeu de données"
+					"$$noContext": "Aucun filtre pour cette connaissance"
 				},
 				"No group found": {
 					"$$noContext": "Aucun groupe trouvé"
@@ -3814,7 +3814,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Aucune permission"
 				},
 				"No points are available in this dataset.": {
-					"$$noContext": "Aucun point n'existe dans ce jeu de données."
+					"$$noContext": "Aucun point n'existe dans cette connaissance."
 				},
 				"No results": {
 					"$$noContext": "Aucun résultat"
@@ -3823,7 +3823,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Aucun résultat pour votre recherche. Vous souhaitez peut-être <a ng-click=\"search=''\" href=\"\">la réinitialiser ?</a>"
 				},
 				"No shapes are available in this dataset.": {
-					"$$noContext": "Aucune forme n'existe dans ce jeu de données."
+					"$$noContext": "Aucune forme n'existe dans cette connaissance."
 				},
 				"No snapshots created yet.": {
 					"$$noContext": "Pas encore de snapshots créés"
@@ -3850,7 +3850,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Aucun utilisateur trouvé"
 				},
 				"No value set in remote dataset": {
-					"$$noContext": "Pas de valeur définie sur le jeu de données distant"
+					"$$noContext": "Pas de valeur définie sur la connaissance distante"
 				},
 				"None": {
 					"$$noContext": "Aucune"
@@ -3889,16 +3889,16 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Nombre de couleurs"
 				},
 				"Number of datasets": {
-					"$$noContext": "Nombre de jeux de données"
+					"$$noContext": "Nombre de connaissances"
 				},
 				"Number of elements": {
 					"$$noContext": "Nombre d'éléments"
 				},
 				"Number of modified datasets": {
-					"$$noContext": "Nombre de jeux de données modifiés"
+					"$$noContext": "Nombre de connaissances modifiées"
 				},
 				"Number of records per dataset": {
-					"$$noContext": "Nombre d'enregistrements par jeu de données"
+					"$$noContext": "Nombre d'enregistrements par connaissance"
 				},
 				"Number of rows in the result (default: 10)": {
 					"$$noContext": "Nombre de lignes de résultat (10 par défaut)"
@@ -3949,22 +3949,22 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Sur cette page, vous serez en mesure de configurer les paramètres des moissonneurs."
 				},
 				"On this page, you will be able to fill in your distribution parameters, distribute datasets and pages and set your quotas.": {
-					"$$noContext": "Sur cette page, vous serez capable de remplir vos paramètres de distribution, de distribuer des jeux de données et des pages et de définir vos quotas."
+					"$$noContext": "Sur cette page, vous serez capable de remplir vos paramètres de distribution, de distribuer des connaissances et des pages et de définir vos quotas."
 				},
 				"On those days": {
 					"$$noContext": "Ces jours "
 				},
 				"Once set, distribution parameters can be used to match your fields' values on the dataset, effectively filtering your data.": {
-					"$$noContext": "Une fois remplis, les paramètres de distribution peuvent être utilisés pour être associer avec les valeurs des champs dans le jeu de données, ce qui filtrera vos données."
+					"$$noContext": "Une fois remplis, les paramètres de distribution peuvent être utilisés pour être associer avec les valeurs des champs dans la connaissance, ce qui filtrera vos données."
 				},
 				"One or more datasets associated with this group of layers are unknown. Some data may not appear on the map.": {
-					"$$noContext": "Un ou plusieurs jeux de données associés à ce groupe de couches sont introuvables. Certaines données peuvent ne pas apparaître sur la carte."
+					"$$noContext": "Une ou plusieurs connaissances associées à ce groupe de couches sont introuvables. Certaines données peuvent ne pas apparaître sur la carte."
 				},
 				"One or more datasets used in this map are not available. Check if they are not deleted, unpublished or restricted to use this map as a widget. You can also delete the associated layers in the mapbuilder edit mode.": {
-					"$$noContext": "Un ou plusieurs jeux de données utilisés sur cette carte sont introuvables. Vérifiez qu'ils n'ont pas été supprimé, dépublié ou restreint pour utiliser cette carte en tant que widget. Vous pouvez aussi supprimer les couches associées dans le mode édition de l'éditeur de carte."
+					"$$noContext": "Une ou plusieurs connaissances utilisées sur cette carte sont introuvables. Vérifiez qu'elles n'ont pas été supprimées, dépubliées ou restreintes pour utiliser cette carte en tant que widget. Vous pouvez aussi supprimer les couches associées dans le mode édition de l'éditeur de carte."
 				},
 				"Only available if the dataset has a Geo Point field!": {
-					"$$noContext": "Disponible seulement si le jeu de données contient un champ Point Géo !"
+					"$$noContext": "Disponible seulement si la connaissance contient un champ Point Géo !"
 				},
 				"Only download metadata and link to actual data": {
 					"$$noContext": "Télécharger uniquement les métadonnées et le lien vers les données"
@@ -3973,7 +3973,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Une seule couche affichée à la fois"
 				},
 				"Only retrieve a certain amount of datasets. 0 means unlimited.": {
-					"$$noContext": "Récupère seulement un certain nombre de jeux de données. 0 pour illimité."
+					"$$noContext": "Récupère seulement un certain nombre de connaissances. 0 pour illimité."
 				},
 				"Only retrieve metadata and ignore records": {
 					"$$noContext": "Récupérer uniquement les métadonnées et ignorer les enregistrements"
@@ -4015,7 +4015,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Options"
 				},
 				"Or go to your datasets catalog page to review and publish them individually.": {
-					"$$noContext": "Ou vous pouvez retourner à la page de catalogue des jeux de données pour les revoir et les publier individuellement."
+					"$$noContext": "Ou vous pouvez retourner à la page de catalogue des connaissances pour les revoir et les publier individuellement."
 				},
 				"Order and groups": {
 					"$$noContext": "Ordres et groupes"
@@ -4063,7 +4063,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Surcharger les métadonnées par défaut"
 				},
 				"Overview of your datasets": {
-					"$$noContext": "Résumé de vos jeux de données"
+					"$$noContext": "Résumé de vos connaissances"
 				},
 				"Page": {
 					"$$noContext": "Page"
@@ -4279,7 +4279,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Accès privé"
 				},
 				"Private datasets": {
-					"$$noContext": "Jeux de données privés"
+					"$$noContext": "Connaissances privées"
 				},
 				"Processing": {
 					"$$noContext": "Traitement"
@@ -4318,7 +4318,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Accès public"
 				},
 				"Public datasets": {
-					"$$noContext": "Jeux de données publics"
+					"$$noContext": "Connaissances publiques"
 				},
 				"Publish": {
 					"$$noContext": "Publier"
@@ -4327,10 +4327,10 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Publier tous les datasets moissonnés "
 				},
 				"Publish harvester's datasets": {
-					"$$noContext": "Publier les jeux de données du moissonneur"
+					"$$noContext": "Publier les connaissances du moissonneur"
 				},
 				"Publish your dataset to update your visualizations.": {
-					"$$noContext": "Publiez votre jeu de données pour mettre à jour les visualisations."
+					"$$noContext": "Publiez votre connaissance pour mettre à jour les visualisations."
 				},
 				"Published": {
 					"$$noContext": "Publié"
@@ -4360,7 +4360,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Clé API Quandl"
 				},
 				"Quandl databases may be huge, a number of datasets is required to limit the number of queries": {
-					"$$noContext": "Les bases de données Quandl peuvent être énormes, un nombre de jeux de données est obligatoire pour limiter le nombre de requêtes"
+					"$$noContext": "Les bases de données Quandl peuvent être énormes, un nombre de connaissances est obligatoire pour limiter le nombre de requêtes"
 				},
 				"Query": {
 					"$$noContext": "Requête"
@@ -4480,7 +4480,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Enlever tout"
 				},
 				"Remove all filters for this dataset": {
-					"$$noContext": "Supprimer tous les filtres pour ce jeu de données"
+					"$$noContext": "Supprimer tous les filtres pour cette connaissance"
 				},
 				"Remove all filters?": {
 					"$$noContext": "Supprimer tous les filtres ?"
@@ -4498,10 +4498,10 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Supprimer la ressource ?"
 				},
 				"Remove dataset": {
-					"$$noContext": "Retirer le jeu de données"
+					"$$noContext": "Retirer la connaissance"
 				},
 				"Remove dataset from the map": {
-					"$$noContext": "Retirer le jeu de données de la carte"
+					"$$noContext": "Retirer la connaissance de la carte"
 				},
 				"Remove facet": {
 					"$$noContext": "Supprimer la facette"
@@ -4531,7 +4531,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Supprimer cette couleur"
 				},
 				"Remove this dataset": {
-					"$$noContext": "Supprimer ce jeu de données"
+					"$$noContext": "Supprimer cette connaissance"
 				},
 				"Remove this field": {
 					"$$noContext": "Supprimer ce champ"
@@ -4783,10 +4783,10 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Voir l'enregistrement"
 				},
 				"See the incomplete dataset": {
-					"$$noContext": ["Voir le jeu de données incomplet", "Voir les {{ $count | number }} jeux de données incomplets"]
+					"$$noContext": ["Voir la connaissance incomplète", "Voir les {{ $count | number }} connaissances incomplètes"]
 				},
 				"See the older dataset": {
-					"$$noContext": ["Voir le jeu de données le plus ancien", "Voir les {{ $count | number }} jeux de données les plus anciens"]
+					"$$noContext": ["Voir la connaissance la plus ancienne", "Voir les {{ $count | number }} connaissances les plus anciennes"]
 				},
 				"Select": {
 					"$$noContext": "Sélectionner"
@@ -4798,7 +4798,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Choisir un pictogramme depuis une liste"
 				},
 				"Select a source dataset": {
-					"$$noContext": "Sélectionner un jeu de données source"
+					"$$noContext": "Sélectionner une connaissance source"
 				},
 				"Select color": {
 					"$$noContext": "Sélectionner"
@@ -4816,13 +4816,13 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Choisir une image..."
 				},
 				"Select one to boostrap your domain with two interesting datasets or simply skip this step.": {
-					"$$noContext": "Sélectionnez en un pour amorcer votre domaine avec deux jeux de données ou simplement passez cette étape."
+					"$$noContext": "Sélectionnez en un pour amorcer votre domaine avec deux connaissances ou simplement passez cette étape."
 				},
 				"Select pages": {
 					"$$noContext": "Sélectionnez des pages"
 				},
 				"Select the distribution parameter to match with the dataset field": {
-					"$$noContext": "Sélectionnez le paramètre de distribution à associer avec le champ du jeu de données"
+					"$$noContext": "Sélectionnez le paramètre de distribution à associer avec le champ de la connaissance"
 				},
 				"Select the pages you wish to distribute to the subdomain.": {
 					"$$noContext": "Sélectionner les pages à distribuer au sous-domaine."
@@ -4852,7 +4852,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Envoi du message"
 				},
 				"Sent when a dataset finishes its processing with errors or when a realtime dataset did not receive data for a defined period of time.": {
-					"$$noContext": "Envoyés à chaque fois qu'un jeu de données termine son processus de traitement en retournant des erreurs ou lorsqu'un jeu de données temps réel n'a pas reçu de données depuis longtemps."
+					"$$noContext": "Envoyés à chaque fois qu'une connaissance termine son processus de traitement en retournant des erreurs ou lorsqu'une connaissance temps réel n'a pas reçu de données depuis longtemps."
 				},
 				"Sent when one of your api calls quota is about to expire (80% reached) or expired.": {
 					"$$noContext": "Envoyés lorsqu'un de vos quota de requêtes d’API va être atteint (à 80% de sa limite) ou lorsqu'il est atteint."
@@ -5014,7 +5014,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Snapshots"
 				},
 				"Snapshots can't be created from restricted datasets.": {
-					"$$noContext": "Il n'est pas possible de créer de snapshot d'un jeu de données restreint."
+					"$$noContext": "Il n'est pas possible de créer de snapshot d'une connaissance restreinte."
 				},
 				"So, what's a harvester again?": {
 					"$$noContext": "C'est quoi un moissonneur ? "
@@ -5029,7 +5029,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Requête au format Solr. Exemple: 'value AND filterKey1:filterValue1 OR filterKey2:filterValue2 ...'"
 				},
 				"Some datasets could not be harvested": {
-					"$$noContext": "Certains jeux de données n'ont pas pu être moissonnés"
+					"$$noContext": "Certaines connaissances n'ont pas pu être moissonnées"
 				},
 				"Some operations couldn't be performed.": {
 					"$$noContext": "Certaines opérations n'ont pas pu être effectuées."
@@ -5161,7 +5161,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Démarrer le moissonneur"
 				},
 				"Start harvesting by clicking on the <em>start harvester</em> button (harvesting datasets may take some time on the bigger ones).": {
-					"$$noContext": "Commencer le moissonnage en cliquant sur le bouton <em>Démarrer le moissonneur</em> (le moissonnage des données peut prendre un peu de temps sur les jeux de données les plus gros)."
+					"$$noContext": "Commencer le moissonnage en cliquant sur le bouton <em>Démarrer le moissonneur</em> (le moissonnage des données peut prendre un peu de temps sur les connaissances les plus grosses)."
 				},
 				"Start time": {
 					"$$noContext": "Début"
@@ -5203,7 +5203,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Sous-domaines"
 				},
 				"Subdomains can now receive datasets and pages from the parent domain with the possibility to filter the data you're distributing. You can either distribute complete or filtered datasets.": {
-					"$$noContext": "Les sous-domaines peuvent maintenant recevoir des jeux de données et des pages du domaine parent avec la possibilité de filtrer les données distribuées. Vous pouvez distribuer des jeux de données filtrés ou complets. "
+					"$$noContext": "Les sous-domaines peuvent maintenant recevoir des connaissances et des pages du domaine parent avec la possibilité de filtrer les données distribuées. Vous pouvez distribuer des connaissances filtrées ou complètes. "
 				},
 				"Submit": {
 					"$$noContext": "Envoyer"
@@ -5326,7 +5326,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Merci !"
 				},
 				"The API preview console is accessible when the dataset is unmodified.": {
-					"$$noContext": "L'aperçu de la console d'API n'est accessible que lorsque le jeu de données n'est pas modifié"
+					"$$noContext": "L'aperçu de la console d'API n'est accessible que lorsque la connaissance n'est pas modifiée"
 				},
 				"The Api key used to access the harvested domain": {
 					"$$noContext": "La clé d'API utilisée pour accéder au domaine à moissonner"
@@ -5383,16 +5383,16 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Le code de la base de données est obligatoire"
 				},
 				"The dataset associated with this layer is unknown. Some data may not appear on the map.": {
-					"$$noContext": "Le jeu de données associé à cette couche est introuvable. Certaines données peuvent ne pas apparaître sur la carte."
+					"$$noContext": "La connaissance associée à cette couche est introuvable. Certaines données peuvent ne pas apparaître sur la carte."
 				},
 				"The dataset can't be found: either it doesn't exist, or you don't have the permissions to access it.": {
-					"$$noContext": "Le jeu de donnée n'a pas été trouvé; cela peut signifier qu'il n'existe pas, ou que vous n'avez pas les permissions pour y accéder."
+					"$$noContext": "La connaissance n'a pas été trouvée; cela peut signifier qu'elle n'existe pas, ou que vous n'avez pas les permissions pour y accéder."
 				},
 				"The dataset is already being processed, it can't be deleted right now": {
-					"$$noContext": "Le jeu de données est déjà en cours de traitement, il ne peut être supprimé actuellement"
+					"$$noContext": "La connaissance est déjà en cours de traitement, elle ne peut être supprimée actuellement"
 				},
 				"The datasets' index has a new user interface!": {
-					"$$noContext": "L'inventaire des jeux de données change de visage !"
+					"$$noContext": "L'inventaire des connaissances change de visage !"
 				},
 				"The distribution parameters you define for a subdomain can later be used to distribute data to this subdomain. The parameters values are invisible from the subdomain point of view and cannot be modified on the subdomain.": {
 					"$$noContext": "Les paramètres de distribution que vous définissez pour un sous-domaine peuvent être utilisés plus tard pour distribuer des données à ce sous-domaine. Les valeurs des paramètres sont invisibles du point de vue du sous-domaine et ne peuvent pas y être modifiés."
@@ -5422,7 +5422,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "La première section commence avec tous les paramètres obligatoires."
 				},
 				"The following JSON object is a standardized description of your dataset's schema.": {
-					"$$noContext": "L'objet JSON ci dessous est une description standardisée du modèle de votre jeu de données."
+					"$$noContext": "L'objet JSON ci dessous est une description standardisée du modèle de votre connaissance."
 				},
 				"The following placeholders are required in your code, in order to display the menus and their links. You don't need to manually add links to your pages, as it is handled directly using the interface in your Domain page.": {
 					"$$noContext": "Les marqueurs suivants vous seront nécessaire pour afficher les menus et leurs liens. Vous n'avez pas besoin d'ajouter manuellement des liens vers vos pages, tout se fera automatiquement à partir de la configuration mise en place via l'interface de gestion de la navigation."
@@ -5440,10 +5440,10 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Ce groupe a été supprimé de votre portail. Vous allez maintenant être redirigé vers la page de gestion des groupes."
 				},
 				"The harvested datasets have been published": {
-					"$$noContext": "Les jeux de données moissonnés ont été publiés "
+					"$$noContext": "Les connaissances moissonnées ont été publiées "
 				},
 				"The harvested datasets have been unpublished": {
-					"$$noContext": "Les jeux de données moissonnés ont été dépubliés "
+					"$$noContext": "Les connaissances moissonnées ont été dépubliées "
 				},
 				"The harvester '{harvester}' has been deleted.": {
 					"$$noContext": "Le moissonneur '{harvester}' a été supprimé. "
@@ -5464,7 +5464,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "La dernière publication a généré"
 				},
 				"The last publication returned the following errors. The values generating these errors were ignored and will appear as blank.": {
-					"$$noContext": "La dernière publication a fait remonter les erreurs suivantes. Les valeurs ayant généré ces erreurs ont été ignorées, elles apparaitront vides dans le jeu de données."
+					"$$noContext": "La dernière publication a fait remonter les erreurs suivantes. Les valeurs ayant généré ces erreurs ont été ignorées, elles apparaitront vides dans la connaissance."
 				},
 				"The list of entry points available for the user.": {
 					"$$noContext": "La liste des points d'entrée disponibles pour l'utilisateur."
@@ -5497,22 +5497,22 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "La confirmation du nouveau mot de passe ne correspond pas au nouveau mot de passe. "
 				},
 				"The new table view displays 3 times as many datasets as the old layout without any information loss.": {
-					"$$noContext": "La nouvelle mise en page sous forme de tableau permet d'afficher 3 fois plus de jeux de données sur un même écran sans perdre d'information."
+					"$$noContext": "La nouvelle mise en page sous forme de tableau permet d'afficher 3 fois plus de connaissances sur un même écran sans perdre d'information."
 				},
 				"The number of datasets that will be harvested": {
-					"$$noContext": "Le nombre de jeux de données qui seront moissonnés"
+					"$$noContext": "Le nombre de connaissances qui seront moissonnées"
 				},
 				"The number of datasets that will be harvested. If no number is specified, all datasets in the collection will be harvested. However, an Enigma API key can only be used to download 80 datasets per month.": {
-					"$$noContext": "Le nombre de jeux de données à moissonner. Si non renseigné, tous les jeux de données de la collection seront moissonnées. Attention, une clé d'API Enigma ne peut télécharger que 80 jeux de données par mois."
+					"$$noContext": "Le nombre de connaissances à moissonner. Si non renseigné, toutes les connaissances de la collection seront moissonnées. Attention, une clé d'API Enigma ne peut télécharger que 80 connaissances par mois."
 				},
 				"The number of datasets that will be harvested. If no value is set, harvest all datasets matching the query (up to 1000).": {
-					"$$noContext": "Le nombre de jeux de données qui seront moissonnés. Si aucune valeur n'est définie, tous les jeux de données correspondant à la requête seront récupérés (avec un maximum de 1000)."
+					"$$noContext": "Le nombre de connaissances qui seront moissonnées. Si aucune valeur n'est définie, toutes les connaissances correspondant à la requête seront récupérées (avec un maximum de 1000)."
 				},
 				"The owner's email address is invalid.": {
 					"$$noContext": "L'adresse email du propriétaire n'est pas valide."
 				},
 				"The popularity score is the result of a calculation that uses the number of downloads, reuses and API calls of a dataset. The higher the score is, the more the dataset is being used!": {
-					"$$noContext": "Le score de popularité est le résultat d'un calcul prenant en compte le nombre de téléchargements, de réutilisations et d'appels API pour chaque jeu de données. Plus le score est haut, plus le jeu de données est utilisé !"
+					"$$noContext": "Le score de popularité est le résultat d'un calcul prenant en compte le nombre de téléchargements, de réutilisations et d'appels API pour chaque connaissance. Plus le score est haut, plus la connaissance est utilisée !"
 				},
 				"The portal url is required": {
 					"$$noContext": "L'URL du portail est requise"
@@ -5533,7 +5533,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Cette réutilisation a été rejetée et son auteur averti. Vous allez maintenant être redirigé vers la page de gestion des réutilisations."
 				},
 				"The selected dataset does not exist or is not accessible anymore.": {
-					"$$noContext": "Le jeu de données sélectionné n'existe pas ou n'est plus accessible."
+					"$$noContext": "La connaissance sélectionnée n'existe pas ou n'est plus accessible."
 				},
 				"The separator is invalid": {
 					"$$noContext": "Le séparateur est invalide"
@@ -5560,10 +5560,10 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Cet utilisateur a été supprimé de votre portail. Vous allez maintenant être redirigé vers la page de gestion des utilisateurs."
 				},
 				"The user may edit the dataset": {
-					"$$noContext": "L'utilisateur peut modifier le jeu de données"
+					"$$noContext": "L'utilisateur peut modifier la connaissance"
 				},
 				"The user may publish the dataset": {
-					"$$noContext": "L'utilisateur peut publier le jeu de données"
+					"$$noContext": "L'utilisateur peut publier la connaissance"
 				},
 				"Theme": {
 					"$$noContext": "Thème"
@@ -5602,7 +5602,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Trop de points à afficher, le nombre de maximum de points affichés à été réduit."
 				},
 				"These values will not be published on the portal, and will only be visible to users with dataset-editing permissions.": {
-					"$$noContext": "Ces valeurs ne seront pas publiées sur le portail et ne seront visible que des utilisateurs ayant des droits d'édition sur un jeu de données."
+					"$$noContext": "Ces valeurs ne seront pas publiées sur le portail et ne seront visible que des utilisateurs ayant des droits d'édition sur une connaissance."
 				},
 				"They are always visible no matter how deep you've scrolled.": {
 					"$$noContext": "Ils sont visibles en permanence, quelle que soit votre position dans la page."
@@ -5623,25 +5623,25 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Cette action est irréversible. Les éventuels liens que vous avez partagés vers cette carte ne seront plus accessibles"
 				},
 				"This dataset can be consumed via an API that allows to search and download records using various criteria exposed in the console below.": {
-					"$$noContext": "Ce jeu de données peut être utilisé via une API qui autorise la recherche et le téléchargement d'enregistrements par plusieurs critères, exposés ci dessous."
+					"$$noContext": "Cette connaissance peut être utilisée via une API qui autorise la recherche et le téléchargement d'enregistrements par plusieurs critères, exposés ci dessous."
 				},
 				"This dataset can be consumed via an API.": {
-					"$$noContext": "Ce jeu de données peut être utilisé via une API."
+					"$$noContext": "Cette connaissance peut être utilisée via une API."
 				},
 				"This dataset has been distributed by your parent domain. You cannot modify its source.": {
-					"$$noContext": "Ce jeu de données a été distribué par votre domain parent. Vous ne pouvez pas modifier sa source. "
+					"$$noContext": "Cette connaissance a été distribuée par votre domain parent. Vous ne pouvez pas modifier sa source. "
 				},
 				"This dataset is licensed under :": {
-					"$$noContext": "Ce jeu de données est sous licence :"
+					"$$noContext": "Cette connaissance est sous licence :"
 				},
 				"This dataset is part of a group, therefore only the group's title and description will appear in the map's visibility control.": {
-					"$$noContext": "Ce jeu de données fait partie d'un groupe, par conséquence seuls le titre et la description du groupe apparaitront dans le contrôle de visibilité de la carte."
+					"$$noContext": "Cette connaissance fait partie d'un groupe, par conséquent seuls le titre et la description du groupe apparaitront dans le contrôle de visibilité de la carte."
 				},
 				"This dataset only has metadata.": {
-					"$$noContext": "Ce jeu de données contient uniquement des métadonnées."
+					"$$noContext": "Cette connaissance contient uniquement des métadonnées."
 				},
 				"This dataset will be automatically republished :": {
-					"$$noContext": "Ce jeu de données sera automatiquement republié :"
+					"$$noContext": "Cette connaissance sera automatiquement republiée :"
 				},
 				"This domain": {
 					"$$noContext": "Ce domaine"
@@ -5740,7 +5740,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Tout commence ici"
 				},
 				"This layer contains an unknown dataset.": {
-					"$$noContext": "Cette couche contient un jeu de données introuvable."
+					"$$noContext": "Cette couche contient une connaissance introuvable."
 				},
 				"This layer has been imported from an older version of Mapbuilder, and its display mode isn't supported anymore in Mapbuilder's edition mode. You can delete this layer if you want to migrate it to another display mode.": {
 					"$$noContext": "Cette couche a été importée depuis une version antérieure de l'éditeur de carte, et son mode d'affichage n'est plus supporté en édition. Vous pouvez effacer cette couche si vous souhaitez afficher ces données avec un des nouveaux modes d'affichage."
@@ -5776,10 +5776,10 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Cet onglet ne sera pas affiché"
 				},
 				"This table does not only lists your harvesters, it also gives you their current state and controls to relaunch a harvest and re-publish their attached datasets.": {
-					"$$noContext": "Cette table liste vos moissonneurs et vous donne leur statut actuel. Elle permet de relancer un moissonnage et de republier les jeux de données attachés. "
+					"$$noContext": "Cette table liste vos moissonneurs et vous donne leur statut actuel. Elle permet de relancer un moissonnage et de republier les connaissances attachées. "
 				},
 				"This table not only lists your harvesters, it also gives you their current state and controls to relaunch a harvest and re-publish their attached datasets.": {
-					"$$noContext": "Cette table liste vos moissonneurs et vous donne leur status actuel. Elle permet de relancer un moissonnage et de republier les jeux de données attachés. "
+					"$$noContext": "Cette table liste vos moissonneurs et vous donne leur status actuel. Elle permet de relancer un moissonnage et de republier les connaissances attachées. "
 				},
 				"This user is a member of the Data4Citizen staff.": {
 					"$$noContext": "Cet utilisateur est membre de l'équipe Data4Citizen."
@@ -5887,13 +5887,13 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Aperçu de l'infobulle"
 				},
 				"Top 5 datasets in this domain with the most API calls": {
-					"$$noContext": "Top 5 des jeux de données ayant le plus d'appel d'API"
+					"$$noContext": "Top 5 des connaissances ayant le plus d'appel d'API"
 				},
 				"Top 5 datasets in this domain with the most reuses": {
-					"$$noContext": "Top 5 des jeux de données avec le plus de réutilisations"
+					"$$noContext": "Top 5 des connaissances avec le plus de réutilisations"
 				},
 				"Top 5 most downloaded datasets in this domain": {
-					"$$noContext": "Top 5 des jeux de données ayant le plus de téléchargement"
+					"$$noContext": "Top 5 des connaissances ayant le plus de téléchargement"
 				},
 				"Topological consistency": {
 					"$$noContext": "Consistance topologique"
@@ -5947,7 +5947,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Impossible de sauvegarder vos changements."
 				},
 				"Unable to select this dataset as a source: it is the same dataset.": {
-					"$$noContext": "Impossible de sélectionner ce jeu de données comme source: il s'agit du même jeu de données."
+					"$$noContext": "Impossible de sélectionner cette connaissance comme source: il s'agit de la même connaissance."
 				},
 				"Undefined values": {
 					"$$noContext": "Valeurs indéfinies"
@@ -5983,7 +5983,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Désabonnement"
 				},
 				"Untitled dataset": {
-					"$$noContext": "Jeu de données sans titre"
+					"$$noContext": "Connaissance sans titre"
 				},
 				"Untitled map": {
 					"$$noContext": "Carte sans titre"
@@ -6049,7 +6049,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "L'éditeur de code ci dessous vous permet d'ajouter des règles de style (en CSS) à votre portail."
 				},
 				"Use the form below to set up the portal's catalog cards, that is the dataset summary used in the catalog page.": {
-					"$$noContext": "Ecrivez le code HTML de vos cartes de catalogue (les cartes de résumé des jeux de données utilisées dans le catalogue) dans l'éditeur de code ci dessous."
+					"$$noContext": "Ecrivez le code HTML de vos cartes de catalogue (les cartes de résumé des connaissances utilisées dans le catalogue) dans l'éditeur de code ci dessous."
 				},
 				"Use the form below to set up the portal's footer.": {
 					"$$noContext": "Ecrivez le code HTML de votre pied de page dans l'éditeur de code ci dessous."
@@ -6076,7 +6076,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Utiliser cette valeur dans le formulaire de création de votre application distante."
 				},
 				"Used by {{$count}} dataset": {
-					"$$noContext": ["Utilisé par {{$count}} jeu de données", "Utilisé par {{$count}} jeux de données"]
+					"$$noContext": ["Utilisé par {{$count}} connaissance", "Utilisé par {{$count}} connaissances"]
 				},
 				"User": {
 					"$$noContext": "Utilisateur"
@@ -6229,7 +6229,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Nous reviendrons vers vous très rapidement."
 				},
 				"We're loading two awesome datasets about {{ theme }} on your portal and a content page that will showcase the data... Almost there!": {
-					"$$noContext": "Nous sommes en train de charger deux fantastiques jeux de données à propos de {{ theme }} sur votre domaine ainsi qu'une page de contenu qui présente ces données... C'est presque fini !"
+					"$$noContext": "Nous sommes en train de charger deux fantastiques connaissances à propos de {{ theme }} sur votre domaine ainsi qu'une page de contenu qui présente ces données... C'est presque fini !"
 				},
 				"We've left tips here and there to explain its main features.": {
 					"$$noContext": "Nous vous avons laissé des indices ici et là pour expliquer ses fonctionnalités principales."
@@ -6253,7 +6253,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Poids"
 				},
 				"Welcome to the datasets index!": {
-					"$$noContext": "Bienvenue sur l'inventaire des jeux de données !"
+					"$$noContext": "Bienvenue sur l'inventaire des connaissances !"
 				},
 				"Welcome to the harvesters' index!": {
 					"$$noContext": "Bienvenue dans l'index des moissonneurs ! "
@@ -6280,10 +6280,10 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Qu'est ce qu'un sous-domaine ? "
 				},
 				"When deleting a harvester, you will be prompted to delete the harvested datasets": {
-					"$$noContext": "Lors de la suppression d'un moissonneur, il vous sera demandé si vous souhaitez supprimer les jeux de données associés."
+					"$$noContext": "Lors de la suppression d'un moissonneur, il vous sera demandé si vous souhaitez supprimer les connaissances associées."
 				},
 				"When should this dataset be automatically republished ?": {
-					"$$noContext": "Quand faut il republier automatiquement ce jeu de données ?"
+					"$$noContext": "Quand faut il republier automatiquement cette connaissance ?"
 				},
 				"When specified, forces the use of this timezone for displaying dates and times": {
 					"$$noContext": "Si spécifié, force l'utilisation de ce fuseau horaire pour l'affichage des dates et heures"
@@ -6292,7 +6292,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Si vous indiquez un jour du mois supérieur à 28, la planification ne s'exécutera pas tous les mois de l'année."
 				},
 				"When your harvesting is complete, you have two ways to publish your datasets:": {
-					"$$noContext": "Quand votre moissonnage est terminé, vous avez deux moyens de publier vos jeux de données : "
+					"$$noContext": "Quand votre moissonnage est terminé, vous avez deux moyens de publier vos connaissances : "
 				},
 				"While {successes} users were successfully added to the group, {errors} others couldn't. Try adding them again. If the problem persists, contact the support.": {
 					"$$noContext": "{successes} utilisateurs ont été ajouté au groupe mais {errors} ne l'ont pas été. Essayez de les ajouter de nouveau. Si le problème persiste, contactez le support."
@@ -6301,7 +6301,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Blanc"
 				},
 				"Whole dataset": {
-					"$$noContext": "Jeu de données entier"
+					"$$noContext": "Connaissance entière"
 				},
 				"Widget": {
 					"$$noContext": "Widget"
@@ -6415,7 +6415,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Vous pouvez personnaliser l'apparence des infobulles affichées dans l'onglet carte."
 				},
 				"You can customize the displayed fields in the table tab, without altering your dataset.": {
-					"$$noContext": "Vous pouvez personnaliser les champs affichés dans l'onglet tableau, sans modifier votre jeu de données."
+					"$$noContext": "Vous pouvez personnaliser les champs affichés dans l'onglet tableau, sans modifier votre connaissance."
 				},
 				"You can customize the informations panel of the selected image in the images tab.": {
 					"$$noContext": "Vous pouvez personnaliser la fenêtre d'information de l'image sélectionnée dans l'onglet images."
@@ -6424,16 +6424,16 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Vous pouvez personnalier la liste des vues de calendrier disponibles (jour, semaine ou mois) et la vue par défaut."
 				},
 				"You can describe your dataset using the available metadata.": {
-					"$$noContext": "Vous pouvez décrire votre jeu de données par les métadonnées disponibles."
+					"$$noContext": "Vous pouvez décrire votre connaissance par les métadonnées disponibles."
 				},
 				"You can distribute datasets to the subdomain directly or by using the distribution parameters.<br> If you use distribution parameters, you will need to match a dataset field with a distribution parameter.": {
-					"$$noContext": "Vous pouvez distribuer des jeux de donnés au sous-domaine directement ou en filtrant via des paramètres de distribution.<br> Si vous utilisez des filtres, vous devrez faire correspondre les valeurs d'un champ du jeu de données et d'un paramètre de distribution."
+					"$$noContext": "Vous pouvez distribuer des jeux de donnés au sous-domaine directement ou en filtrant via des paramètres de distribution.<br> Si vous utilisez des filtres, vous devrez faire correspondre les valeurs d'un champ de la connaissance et d'un paramètre de distribution."
 				},
 				"You can distribute pages to the subdomains": {
 					"$$noContext": "Vous pouvez distribuer des pages aux sous-domaines"
 				},
 				"You can download a previous version of the dataset in the CSV format.": {
-					"$$noContext": "Vous pouvez télécharger une version précédente du jeu de données au format CSV."
+					"$$noContext": "Vous pouvez télécharger une version précédente de la connaissance au format CSV."
 				},
 				"You can edit the generated privacy policy afterwards.": {
 					"$$noContext": "Vous pourrez modifier la politique de confidentialité générée par la suite."
@@ -6448,7 +6448,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Vous pouvez générer des clés d'API pour permettre à des applications tierces d'accéder aux données en votre nom. Les clés d'API peuvent être révoquées à tout moment. "
 				},
 				"You can only rename datasets that are not published.": {
-					"$$noContext": "Vous pouvez seulement renommer les jeux de données qui ne sont pas publiés."
+					"$$noContext": "Vous pouvez seulement renommer les connaissances qui ne sont pas publiées."
 				},
 				"You can revert this dataset to a former configuration": {
 					"$$noContext": "Vous pouvez revenir à une configuration précédente"
@@ -6463,7 +6463,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Vous pouvez contribuer à l'enregistrement que vous avez sélectionné en envoyant vos commentaires au producteur; vous pouvez également suggérer de nouvelles valeurs pour chaque champ."
 				},
 				"You can't add a dataset as a federation source for itself.": {
-					"$$noContext": "Vous ne pouvez pas ajouter de jeu de données comme source de fédération pour lui même."
+					"$$noContext": "Vous ne pouvez pas ajouter de connaissance comme source de fédération pour lui même."
 				},
 				"You can't generate more than {{ maxKeys }} API Keys": {
 					"$$noContext": "Vous ne pouvez générer plus de {{ maxKeys }} clés d'API"
@@ -6472,13 +6472,13 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Vous ne pouvez pas ajouter plusieurs sur les treemaps."
 				},
 				"You cannot edit a dataset identifier when it is currently published": {
-					"$$noContext": "Vous ne pouvez pas changer l'identifiant d'un jeu de données actuellement publié."
+					"$$noContext": "Vous ne pouvez pas changer l'identifiant d'une connaissance actuellement publiée."
 				},
 				"You cannot join the current dataself with itself": {
-					"$$noContext": "Impossible de joindre le jeu de données avec lui-même"
+					"$$noContext": "Impossible de joindre la connaissance avec lui-même"
 				},
 				"You don't have the permission to delete a dataset that is currently published.": {
-					"$$noContext": "Vous n'avez pas la permission de supprimer un jeu de données qui est actuellement publié. "
+					"$$noContext": "Vous n'avez pas la permission de supprimer une connaissance qui est actuellement publiée. "
 				},
 				"You entered a wrong captcha.": {
 					"$$noContext": "Vous avez saisi un Captcha erroné."
@@ -6496,13 +6496,13 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"API error message": "Vous avez dépassé le nombre d'appels d'API autorisés pour les utilisateurs anonymes."
 				},
 				"You have exceeded your quota of {call_limit} api calls per {limit_time_unit} on this dataset.": {
-					"API error message": "Vous avez atteint votre limite de {call_limit} appels d'API par {limit_time_unit} pour ce jeu de données."
+					"API error message": "Vous avez atteint votre limite de {call_limit} appels d'API par {limit_time_unit} pour cette connaissance."
 				},
 				"You have exceeded your quota of {call_limit} api calls per {limit_time_unit}.": {
 					"API error message": "Vous avez dépassé votre quota de {call_limit} appels d'API par {limit_time_unit}."
 				},
 				"You have exceeded your subscribed quota of {call_limit} api calls per {limit_time_unit} on this dataset.": {
-					"API error message": "Vous avez dépassé le quota de votre abonnement ({call_limit} appels d'api par {limit_time_unit}) sur ce jeu de données."
+					"API error message": "Vous avez dépassé le quota de votre abonnement ({call_limit} appels d'api par {limit_time_unit}) sur cette connaissance."
 				},
 				"You have no API keys.": {
 					"$$noContext": "Vous n'avez aucune clé d'API. "
@@ -6571,16 +6571,16 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Vous devez être identifié pour voir vos cartes enregistrées."
 				},
 				"You need to be registered and logged in to subscribe to a dataset.": {
-					"$$noContext": "Vous devez être inscrit et identifié pour vous abonner à un jeu de données."
+					"$$noContext": "Vous devez être inscrit et identifié pour vous abonner à une connaissance."
 				},
 				"You need to name your map": {
 					"$$noContext": "Vous devez donner un nom à votre carte"
 				},
 				"You need to publish your dataset in order to create a new snapshot.": {
-					"$$noContext": "Vous devez publier votre jeu de données pour pouvoir en créer un snapshot."
+					"$$noContext": "Vous devez publier votre connaissance pour pouvoir en créer un snapshot."
 				},
 				"You need to publish your dataset in order to view it in Explore.": {
-					"$$noContext": "Vous devez publier votre jeu de données afin de pouvoir le consulter dans Explore."
+					"$$noContext": "Vous devez publier votre connaissance afin de pouvoir la consulter dans Explore."
 				},
 				"You need to submit at least a comment.": {
 					"$$noContext": "Vous devez soumettre au moins un commentaire."
@@ -6598,7 +6598,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Vous allez maintenant être redirigé vers votre page de contenu."
 				},
 				"You will receive email notifications from the dataset's publisher if important changes happen.": {
-					"$$noContext": "Vous recevrez des notifications par email de la part du producteur du jeu de données si des modifications importantes ont lieu."
+					"$$noContext": "Vous recevrez des notifications par email de la part du producteur de la connaissance si des modifications importantes ont lieu."
 				},
 				"You'll always be able to add him/her back later on.": {
 					"$$noContext": "Vous pourrez le/la réajouter plus tard."
@@ -6712,7 +6712,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "accessible par"
 				},
 				"and the dataset's license": {
-					"$$noContext": "et la licence du jeu de données"
+					"$$noContext": "et la licence de la connaissance"
 				},
 				"as form data": {
 					"$$noContext": "comme champ de form."
@@ -6751,8 +6751,8 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "URL du fichier datapackage.json"
 				},
 				"dataset": {
-					"$$noContext": ["jeu de données", "jeux de données"],
-					"catalog page": ["jeu de données", "jeux de données"]
+					"$$noContext": ["connaissance", "connaissances"],
+					"catalog page": ["connaissance", "connaissances"]
 				},
 				"date": {
 					"$$noContext": "date"
@@ -6932,7 +6932,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "nouveau"
 				},
 				"no dataset to display": {
-					"$$noContext": "aucun jeu de données à afficher"
+					"$$noContext": "aucune connaissance à afficher"
 				},
 				"not saved": {
 					"$$noContext": "pas enregistré"
@@ -7106,16 +7106,16 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": ["{{ $count }} caractère restant", "{{ $count }} caractères restants"]
 				},
 				"{{ $count }} dataset": {
-					"$$noContext": ["{{ $count }} jeu de données", "{{ $count }} jeux de données"]
+					"$$noContext": ["{{ $count }} connaissance", "{{ $count }} connaissances"]
 				},
 				"{{ $count }} dataset couldn't be harvested and won't appear on your portal.": {
-					"$$noContext": ["{{ $count }} jeu de données n'a pas pu être moissonné et n'apparaitra pas sur votre portail.", "{{ $count }} jeux de données n'ont pas pu être moissonnés et n'apparaitront pas sur votre portail."]
+					"$$noContext": ["{{ $count }} connaissance n'a pas pu être moissonnée et n'apparaitra pas sur votre portail.", "{{ $count }} connaissances n'ont pas pu être moissonnées et n'apparaitront pas sur votre portail."]
 				},
 				"{{ $count }} dataset found": {
-					"$$noContext": ["{{ $count }} jeu de données trouvé", "{{ $count }} jeux de données trouvés"]
+					"$$noContext": ["{{ $count }} connaissance trouvée", "{{ $count }} connaissances trouvées"]
 				},
 				"{{ $count }} dataset harvested": {
-					"$$noContext": ["{{ $count }} jeu de données moissonné", "{{ $count }} jeux de données moissonnés"]
+					"$$noContext": ["{{ $count }} connaissance moissonnée", "{{ $count }} connaissances moissonnées"]
 				},
 				"{{ $count }} invitation had error.": {
 					"$$noContext": ["{{ $count }} invitation en erreur.", "{{ $count }} invitations en erreur."]
@@ -7151,7 +7151,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": ["{{ $count }} téléchargement", "{{ $count }} téléchargements"]
 				},
 				"{{item.name}} ({{$count}} dataset)": {
-					"$$noContext": ["{{item.name}} ({{$count}} jeu de données)", "{{item.name}} ({{$count}} jeux de données)"]
+					"$$noContext": ["{{item.name}} ({{$count}} connaissance)", "{{item.name}} ({{$count}} connaissances)"]
 				},
 				"— Not available for this dataset": {
 					"$$noContext": "— Non disponible pour ces données"
@@ -7160,7 +7160,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "← ou → pour réordonner<br>espace ou ↵ pour ajouter/supprimer"
 				},
 				"Dataset date": {
-					"$$noContext": "Date du jeu de données"
+					"$$noContext": "Date de la connaissance"
 				},
 				"Predefined Filters": {
 					"$$noContext": "Filtres prédéfinis"
