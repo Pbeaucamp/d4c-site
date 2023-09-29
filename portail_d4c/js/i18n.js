@@ -5283,17 +5283,8 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				"Tags": {
 					"$$noContext": "Tags"
 				},
-				//"Take a look at the <a href=\"/api\" target=\"_blank\"><i class=\"icon-book\"></i> API page</a> to try the other API services!": {
-				//	"$$noContext": "Jetez un oeil à la <a href=\"/api\" target=\"_blank\"><i class=\"icon-book\"></i> page API</a> pour essayer les autres API !"
-				//},
-				"Take a look at the":{
-					"$$noContext": "Jeter un oeil à la"
-				},
-				"API page":{
-					"$$noContext": "page API"
-				},
-				"to try the other API services!":{
-					"$$noContext": "pour essayer les autres API !"
+				"Take a look at the <a href=\"/d4c/api\" target=\"_blank\"><i class=\"icon-book\"></i> API page</a> to try the other API services!": {
+					"$$noContext": "Jetez un oeil à la <a href=\"/api\" target=\"_blank\"><i class=\"icon-book\"></i> page API</a> pour essayer les autres API !"
 				},
 				"Temperature": {
 					"$$noContext": "Température"
