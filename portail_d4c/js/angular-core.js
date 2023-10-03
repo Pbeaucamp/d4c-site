@@ -14472,6 +14472,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     display : false
                 };
             }
+            options.datastacklabels = {
+                display : serie.displayStackValues
+            }
             if (serie.displayUnits && unit) {
                 options.tooltip.valueSuffix = ' ' + unit;
                 if (serie.displayValues && serie.type !== 'treemap') {
@@ -15349,6 +15352,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     Chart.plugins.register({PluginDescription});
                                     Chart.plugins.register({PluginBackground});
                                     Chart.plugins.register({PluginBorder});
+                                    Chart.plugins.register({PluginStackDataLabels});
                                     Chart.plugins.register(ChartDataLabels);
 
                                     if ($scope.chart) {
@@ -15360,7 +15364,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         var ctx = canvas.getContext('2d');
 
                                         var chartOptions = chartjs(options);
-                                        console.log(chartOptions);
                                         $scope.chart = new Chart(ctx, chartOptions);
 
                                         //$scope.chart = new Chart($scope.chart.canvas.getContext('2d'), chartjs(options));
@@ -15374,9 +15377,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         var ctx = canvas.getContext('2d');
 
                                         var chartOptions = chartjs(options);
-                                        console.log(chartOptions);
                                         $scope.chart = new Chart(ctx, chartOptions);
                                     }
+                                    console.log($scope.chart);
                                 }
 
                                 // treemap 
@@ -16198,10 +16201,27 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
                                     datasets.options.title = options.title;
 
+                                    //Check if we can show stacked values for a serie (currently apply to all series)
+                                    //NB : we can't display two series of stack values and there are merged into the same stack instead
+                                    var displayStackValues = false;
+                                    console.log(options);
+                                    if(options.stacked){
+                                        for(const serie of options.series){
+                                            if(serie.datastacklabels.display){
+                                                displayStackValues = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+
                                     datasets.options.plugins = {
                                         datalabels: {
                                             color: 'black',
                                             formatter : Math.round
+                                        },
+                                        chartJsPluginStackDataLabels: {
+                                            fontColor: 'red',
+                                            display : displayStackValues
                                         },
                                         chartJsPluginSubtitle: {
                                             display: options.subtitle.display,
@@ -26110,7 +26130,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-border/Plugin.Border.js"],
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-subtitle/Plugin.Subtitle.js"],
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-description/Plugin.Description.js"],
-                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-datalabels/chartjs-plugin-datalabels.min.js"]
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-datalabels/chartjs-plugin-datalabels.min.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-stackdatalabels/Plugin.StackDataLabels.js"],
                     ["https://code.highcharts.com/6.1.4/highcharts.js"],
                     ["https://code.highcharts.com/6.1.4/modules/no-data-to-display.js"],
                     ["https://code.highcharts.com/6.1.4/highcharts-more.js"],
