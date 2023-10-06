@@ -46,7 +46,7 @@ html[dir=rtl] .qtip-content{text-align:right}
 .d4cwidget-calendar__tooltip.d4cwidget-calendar__tooltip--increase-precedence .qtip-close{right:5px;top:5px;font-size:2em;text-decoration:none;color:#c3c3c3;border:0;background:0 0}
 html[dir=rtl] .d4cwidget-calendar__tooltip.d4cwidget-calendar__tooltip--increase-precedence .qtip-close{left:5px;right:auto}
 .d4cwidget-calendar__tooltip.d4cwidget-calendar__tooltip--increase-precedence .qtip-close:hover{color:#999;text-decoration:none}
-.d4c-chart{position:relative;height:100%;min-height:200px}
+.d4c-chart{position:relative;height:100%;min-height:200px;overflow:hidden;}
 .d4c-chart .chartplaceholder{width:100%;height:100%;position:relative;}
 .d4c-chart .chart-timezone-caption{color:rgba(0,0,0,.5);font-size:.85em;padding:0;list-style:none}
 .d4c-chart__loading{width:100%;position:absolute;z-index:100;text-align:center;font-size:50px;top:45%;margin-top:-25px}
