@@ -1,0 +1,43 @@
+<div class="d4c-chart-control-logo">
+    <table>
+        <tr>
+            <td class="td-logo-options">
+                <div class="d4c-chart-controls">
+                    <label for="chart-logo-width">Width</label>
+                    <input type="number" min="0" max="1000" class="d4c-d4c-chart-controls__input"
+                    id="chart-logo-width"
+                    ng-model="internalValues.width"
+                    />
+                </div>
+            </td>
+            <td class="td-logo-options">
+                <div class="d4c-chart-controls">
+                    <label for="chart-logo-height">Height</label>
+                    <input type="number" min="0" max="1000" class="d4c-d4c-chart-controls__input"
+                    id="chart-logo-height"
+                    ng-model="internalValues.height"
+                    />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="td-logo-options" colspan="2">
+                <div class="d4c-chart-controls">
+                    <label for="chart-logo-position">Position</label>
+                    <select class="d4c-d4c-chart-controls__input"
+                    id="chart-logo-position"
+                    ng-model="internalValues.position"
+                    ng-options="position.value as position.label for position in positions"
+                    >
+                    </select>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="td-logo-options" colspan="2">
+                <label for="chart-logo-url">Image URL : </label>
+                <input type="text" id="chart-logo-url" class="d4c-d4c-chart-controls__input" ng-model="internalValues.imageUrl"/>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -105,7 +105,7 @@ var SubtitlePlugin = {
     var titleOffset = chart.titleBlock.height - chart.options.title.padding;
 
     var textX = Math.round((width - ctx.measureText(text).width) / 2);
-    var textY = titleOffset + options.paddingTop + 3;
+    var textY = titleOffset + options.paddingTop + 3 + chart.options.layout.padding.top;
     ctx.fillText(text, textX, textY);
   },
 

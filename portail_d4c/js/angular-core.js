@@ -5034,9 +5034,20 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if (chartConfig.textDescription) {
                         widgetCode += ' text-description="' + chartConfig.textDescription + '"';
                     }
-
-                    if (chartConfig.displayBackgroundColor === false) {
-                        widgetCode += ' display-background-color="false"';
+                    if (chartConfig.displayLogo === true) {
+                        widgetCode += ' display-logo="true"';
+                    }
+                    if(chartConfig.logoFile){
+                        widgetCode += ' logo-file="' + chartConfig.logoFile + '"';
+                    }
+                    if(chartConfig.logoHeight){
+                        widgetCode += ' logo-height="' + chartConfig.logoHeight + '"';
+                    }
+                    if(chartConfig.logoWidth){
+                        widgetCode += ' logo-width="' + chartConfig.logoWidth + '"';
+                    }
+                    if(chartConfig.logoPosition){
+                        widgetCode += ' logo-position="' + chartConfig.logoPosition + '"';
                     }
                     if (chartConfig.backgroundColor) {
                         widgetCode += ' background-color="' + chartConfig.backgroundColor + '"';
@@ -8034,20 +8045,20 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                 };
                 scope.$watch('internalValues',function(nv,ov){
-                    console.log(scope.internalValues);
+                    //console.log(scope.internalValues);
                     scope.selectedfontfamily = nv.selectedfontfamily;
                     scope.selectedfontsize = nv.selectedfontsize;
                     scope.selectedtextcolor = nv.selectedtextcolor;
 
                 },true);
                 scope.$watch('selectedfontfamily',function(){
-                    console.log(scope.selectedfontfamily);
+                    //console.log(scope.selectedfontfamily);
                 },true);
                 scope.$watch('selectedfontsize',function(){
-                    console.log(scope.selectedfontsize);
+                    //console.log(scope.selectedfontsize);
                 },true);
                 scope.$watch('selectedtextcolor',function(){
-                    console.log(scope.selectedtextcolor);
+                    //console.log(scope.selectedtextcolor);
                 },true);
             }
         };
@@ -8114,7 +8125,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             scope.color = nv.color;
                         }
                     }
-                    console.log(scope.internalValues);
                 }, true);
                 scope.$watch('color', function (nv, ov) {
                     scope.internalValues.colortype = 'single';
@@ -8139,6 +8149,37 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             }
         };
     }]);
+    mod.directive('d4cChartControlLogo', function(){
+        return {
+            restrict: 'AE',
+            scope: {
+                height : '=',
+                width : '=',
+                position : '=',
+                imageUrl : '='
+            },
+            replace: true,
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/chart-control-logo.html',
+            link: function (scope, element, attrs) {
+                scope.internalValues = {};
+                scope.positions = [
+                    {label : 'Top Left',value : 'topLeft'},
+                    {label : 'Top Center',value : 'topCenter'},
+                    {label : 'Top Right',value : 'topRight'},
+                    {label : 'Bottom Left',value : 'bottomLeft'},
+                    {label : 'Bottom Center',value : 'bottomCenter'},
+                    {label : 'Bottom Right',value : 'bottomRight'}
+                ];
+                scope.$watch('internalValues', function(nv,ov){
+                    scope.height = nv.height;
+                    scope.width = nv.width;
+                    scope.position = nv.position;
+                    scope.imageUrl = nv.imageUrl;
+                }, true);
+
+            }
+        }
+    });
     mod.directive('d4cMultipleEmails', function () {
         return {
             require: 'ngModel',
@@ -13160,7 +13201,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 //         facetsCtrl.setHideColumnsApi(scope.name,false);
                 //     }
 
-                // }
+                // }state
                 scope.displayTimerange = function () {
                     if (!scope.timerangeFilter) {
                         return false;
@@ -14071,8 +14112,17 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             parameters.displayTitle = !(angular.isUndefined(parameters.textTitle) || parameters.textTitle === '');
             parameters.displaySubtitle = !(angular.isUndefined(parameters.textSubtitle) || parameters.textSubtitle === '');
             parameters.displayDescription = !(angular.isUndefined(parameters.textDescription) || parameters.textDescription === '');
-
+            parameters.displayLogo = !(angular.isUndefined(parameters.logoFile) || parameters.logoFile === '');
             
+            if(angular.isUndefined(parameters.logoHeight)){
+                parameters.logoHeight = 50;
+            }
+            if(angular.isUndefined(parameters.logoWidth)){
+                parameters.logoWidth = 50;
+            }
+            if(angular.isUndefined(parameters.logoPosition)){
+                parameters.logoPosition = 'topLeft';
+            }
 
             if (angular.isUndefined(parameters.displayLegend)) {
                 parameters.displayLegend = true;
@@ -14106,6 +14156,14 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 description: {
                     text: parameters.textDescription,
                     display: parameters.displayDescription,
+                },
+                logo:{
+                    display: parameters.displayLogo,
+                    file: parameters.logoFile,
+                    width: parameters.logoWidth,
+                    height: parameters.logoHeight,
+                    position: parameters.logoPosition,
+                    margin: 10
                 },
                 backgroundColor: parameters.displayBackgroundColor ? parameters.backgroundColor : null,
                 border: {
@@ -15352,6 +15410,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     Chart.plugins.register({PluginDescription});
                                     Chart.plugins.register({PluginBackground});
                                     Chart.plugins.register({PluginBorder});
+                                    Chart.plugins.register({PluginLogo});
                                     Chart.plugins.register({PluginStackDataLabels});
                                     Chart.plugins.register(ChartDataLabels);
 
@@ -16193,9 +16252,26 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
                                     datasets.options.legend = options.legend;
                                     datasets.options.devicePixelRatio = options.devicePixelRatio;
+                                    
+                                    var layoutTop = 0;
+                                    var layoutBottom = 100;
+                                    
+                                    var logoPos = options.logo.position;
+
+                                    if(options.logo.display){
+                                        if(logoPos=='bottomLeft' || logoPos=='bottomCenter' || logoPos=='bottomRight'){
+                                            layoutBottom += options.logo.height + options.logo.margin;
+                                        }
+                                        else{
+                                            layoutTop += options.logo.height + options.logo.margin;
+                                        }
+                                    }
+
+
                                     datasets.options.layout = {
                                         padding : {
-                                            bottom : 100,
+                                            top : layoutTop,
+                                            bottom : layoutBottom
                                         }
                                     };
 
@@ -16247,7 +16323,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                             borderWidth: options.border.display ? options.border.width : 0,
                                             borderDash: null,
                                             borderDashOffset: 0,
-                                        }
+                                        },
+                                        chartJsPluginLogo: options.logo
                                     };
                                     
                                     Chart.scaleService.updateScaleDefaults('category', {
@@ -16543,6 +16620,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 legendFontfamily: '@',
                 legendFontsize: '@',
                 legendTextcolor: '@',
+                logoFile: '@',
+                logoHeight: '@',
+                logoWidth: '@',
+                logoPosition: '@',
+                displayLogo: '@'
             },
             replace: true,
             transclude: true,
@@ -16590,6 +16672,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         legendFontfamily: angular.isDefined($scope.legendFontfamily) && $scope.legendFontfamily !== "" ? $scope.legendFontfamily : undefined,
                         legendFontsize: angular.isDefined($scope.legendFontsize) && $scope.legendFontsize !== "" ? $scope.legendFontsize : undefined,
                         legendTextcolor: angular.isDefined($scope.legendTextcolor) && $scope.legendTextcolor !== "" ? $scope.legendTextcolor : undefined,
+                        logoFile: angular.isDefined($scope.logoFile) && $scope.logoFile !== "" ? $scope.logoFile : undefined,
+                        logoHeight: angular.isDefined($scope.logoHeight) && $scope.logoHeight !== "" ? $scope.logoHeight : undefined,
+                        logoWidth: angular.isDefined($scope.logoWidth) && $scope.logoWidth !== "" ? $scope.logoWidth : undefined,
+                        logoPosition: angular.isDefined($scope.logoPosition) && $scope.logoPosition !== "" ? $scope.logoPosition : undefined,
+                        displayLogo: angular.isDefined($scope.displayLogo) && $scope.displayLogo !== "" ? $scope.displayLogo : undefined
                     };
                 }
                 angular.forEach($scope.chart, function (item, key) {
@@ -26130,6 +26217,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-border/Plugin.Border.js"],
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-subtitle/Plugin.Subtitle.js"],
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-description/Plugin.Description.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-logo/Plugin.Logo.js"],
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-datalabels/chartjs-plugin-datalabels.min.js"],
                     [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-stackdatalabels/Plugin.StackDataLabels.js"],
                     ["https://code.highcharts.com/6.1.4/highcharts.js"],
