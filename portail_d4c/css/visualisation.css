@@ -224,7 +224,7 @@ html[dir=rtl] .d4cwidget-last-datasets-feed__theme-picto{float:right}
 .d4cwidget-map-display-control__picto{display:inline-block;vertical-align:sub}
 .d4cwidget-map-display-control__group-description--error,.d4cwidget-map-display-control__group-title--error,.d4cwidget-map-display-control__picto--error{color:#C42B23}
 .d4cwidget-map-display-control__group-description{text-overflow:ellipsis;white-space:normal;overflow:hidden}
-.d4cwidget-map-search-box{position:absolute;left:0;top:0;padding:10px;background-color:transparent;-webkit-transition:background-color .1s,width .25s ease;transition:background-color .1s,width .25s ease;z-index:8}
+.d4cwidget-map-search-box{position:absolute;left:0;top:0;padding:10px;background-color:transparent;-webkit-transition:background-color .1s,width .25s ease;transition:background-color .1s,width .25s ease;z-index:-1}
 @media (max-width:767px){.d4cwidget-map-search-box{width:100px}
 }
 @media (min-width:768px){.d4cwidget-map-search-box{width:420px}
