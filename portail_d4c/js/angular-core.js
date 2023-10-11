@@ -19024,7 +19024,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             }
                         } catch (e) { }
                     }
-                    if (true) {
+                    
+                    if (D4CWidgetsConfig.mapGeobox && !isStatic) {
                         var geocoder = L.Control.geocoder({
                             placeholder: translate('Find a place...'),
                             errorMessage: translate('Nothing found.'),
@@ -23185,8 +23186,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             'external': externalFunctions,
             'datasets': {
                 'get': function (context, datasetID, parameters, timeout) {
-
-                    console.log((context, fetchPrefix() + '/d4c/api/datasets/1.0/' + datasetID + '/', parameters, timeout));
                     return request(context, fetchPrefix() + '/d4c/api/datasets/1.0/' + datasetID + '/', parameters, timeout);
                 },
                 'search': function (context, parameters, timeout) {
