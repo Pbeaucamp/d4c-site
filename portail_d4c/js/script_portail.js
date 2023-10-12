@@ -1061,7 +1061,7 @@ function getDatasetType(data) {
 	}
 	else {
 		let hasGeo = data.metas != undefined && data.metas.features != undefined && data.metas.features.indexOf("geo") != -1;
-		datasetType = hasGeo || hasWMS(data) ? 'Carte' : 'Données';
+		datasetType = hasGeo || hasWMS(data) ? 'Données géo' : 'Données';
 	}
 
 	return datasetType;
