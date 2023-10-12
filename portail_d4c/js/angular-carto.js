@@ -3638,7 +3638,9 @@ app.config(function(D4CWidgetsConfigProvider) {
         customAPIHeaders: {
             "D4C-API-Analytics-App": "cartograph",
         },
-        mapAppendAttribution: "<a href=\"/terms/terms-and-conditions/\" target=\"_blank\">Conditions d'utilisation</a>" + ' - ' + '<a class="d4c-mapbuilder__language-choice" data-langchoice="en" href="#" title="English">en</a> ' + '<a class="d4c-mapbuilder__language-choice" data-langchoice="fr" href="#" title="Francais">fr</a> ' + ''
+        mapAppendAttribution: "<a href=\"/terms/terms-and-conditions/\" target=\"_blank\">Conditions d'utilisation</a>" + ' - ' + '<a class="d4c-mapbuilder__language-choice" data-langchoice="en" href="#" title="English">en</a> ' + '<a class="d4c-mapbuilder__language-choice" data-langchoice="fr" href="#" title="Francais">fr</a> ' + '',
+        language: 'fr',
+        mapGeobox: true
     });
 });
 app.factory('MapbuilderConfig', [function() {

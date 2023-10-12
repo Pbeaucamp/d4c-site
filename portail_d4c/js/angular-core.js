@@ -18168,9 +18168,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     scope.removeSearchMarkers();
                     var loc = MapHelper.getLocationStructure(mapCtrl.getCurrentPosition());
                     AlgoliaPlaces(userQuery, loc.center.join(',')).then(function success(response) {
+                        console.log(response);
                         scope.selectedIndex = 0;
                         scope.suggestions = response.data.hits;
-                    }, function error(response) { });
+                    }, function error(response) { console.log("error");});
                 };
                 scope.expandSearchBox = function () {
                     scope.expanded = true;
@@ -19023,7 +19024,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             }
                         } catch (e) { }
                     }
-                    if (D4CWidgetsConfig.mapGeobox && !scope.searchBox && !isStatic) {
+                    
+                    if (D4CWidgetsConfig.mapGeobox && !isStatic) {
                         var geocoder = L.Control.geocoder({
                             placeholder: translate('Find a place...'),
                             errorMessage: translate('Nothing found.'),
@@ -23184,8 +23186,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             'external': externalFunctions,
             'datasets': {
                 'get': function (context, datasetID, parameters, timeout) {
-
-                    console.log((context, fetchPrefix() + '/d4c/api/datasets/1.0/' + datasetID + '/', parameters, timeout));
                     return request(context, fetchPrefix() + '/d4c/api/datasets/1.0/' + datasetID + '/', parameters, timeout);
                 },
                 'search': function (context, parameters, timeout) {
