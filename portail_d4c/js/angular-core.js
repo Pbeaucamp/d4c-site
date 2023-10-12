@@ -7347,7 +7347,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             }
         };
     }]);
-    mod.directive('d4cDatasetSelectionList', ['config', 'D4CWidgetsConfig', 'ManagementAPI', function (config, D4CWidgetsConfig, ManagementAPI) {
+    mod.directive('d4cDatasetSelectionList', ['D4CAPI','config', 'D4CWidgetsConfig', 'ManagementAPI', function (D4CAPI,config, D4CWidgetsConfig, ManagementAPI) {
         return {
             restrict: 'E',
             scope: {
@@ -7356,6 +7356,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 datasetid: '@',
                 catalogParameters: '=',
                 datasetParameters: '=',
+                filters: '=',
                 callback: '&',
                 customSources: '@',
                 apiKey: '@',
@@ -7373,11 +7374,39 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 $scope.HAS_RELATED_DOMAINS = config.HAS_RELATED_DOMAINS;
                 $scope.DOMAIN_ID = config.DOMAIN_ID;
                 $scope.catalogParameters = $scope.catalogParameters ? $scope.catalogParameters : {};
+                $scope.catalogParameters['refine.organization'] = [];
                 $.extend($scope.catalogParameters, {
                     'sort': 'modified'
                 });
                 $scope.presetDatasetParameters = angular.copy($scope.datasetParameters);
                 $scope.presetCatalogParameters = angular.copy($scope.catalogParameters);
+
+                $scope.filters = {};
+
+                var catalog_search2 = D4CAPI.uniqueCall(D4CAPI.datasets.search2);
+                var context = {domainUrl : ''};
+                var options = {};
+                if($scope.catalogParameters['refine.features'] == 'analyze'){
+                    options['siren'] = '';
+                }
+                else if($scope.catalogParameters['refine.features'] == 'geo'){
+                    options['coordReq'] = '';
+                }
+                catalog_search2(context, options).success(function (data) {
+                    console.log(data);
+                    $scope.filters["organizations"] = data.all_organizations;
+                    for(var organization of $scope.filters.organizations){
+                        organization["count"] = 0;
+                        organization["css"] = "list-item";
+                        for(var dataset of data.result.results){
+                            if(dataset.organization.id == organization.id){
+                                organization["count"] ++;
+                            }
+                        }
+                    }
+                    console.log($scope.filters["organizations"])
+                });
+
                 if ($scope.datasetid) {
                     $scope.exploredDatasetID = $scope.datasetid;
                 }
@@ -7392,6 +7421,22 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     });
                 }
                 $scope.showMapFilter = false;
+                $scope.toggleOrganizationFilter = function (organization){
+                    var orgFilters = $scope.catalogParameters['refine.organization'] ? $scope.catalogParameters['refine.organization'] : [];
+
+                    var orgIndex = orgFilters.indexOf(organization.name);
+                    if(orgIndex >= 0){
+                        orgFilters.splice(orgIndex,1);
+                        organization.css = "list-item";
+                    }
+                    else{
+                        orgFilters.push(organization.name);
+                        organization.css = "list-item selected";
+                    }
+
+                    $scope.catalogParameters['refine.organization'] = orgFilters;
+                    console.log($scope.catalogParameters['refine.organization'])
+                };
                 $scope.exploreDataset = function (datasetID) {
                     $scope.exploredDatasetID = datasetID;
                 };
@@ -20989,19 +21034,23 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             priority: 1001,
             controller: ['$scope', '$attrs', function ($scope, $attrs) {
                 var dataset_search = D4CAPI.uniqueCall(D4CAPI.records.search_simple),
-                    catalog_search = D4CAPI.uniqueCall(D4CAPI.datasets.search);
+                    catalog_search = D4CAPI.uniqueCall(D4CAPI.datasets.search)
                 var loadResults = function (context) {
+                    console.log($attrs.d4cOrganizationFilter);
                     var options = angular.extend({}, context.parameters, {
-                        'rows': $attrs.d4cResultsMax
+                        'rows': $attrs.d4cResultsMax,
                     });
+                    console.log(context);
                     var variable = $attrs.d4cResults || 'results';
                     $scope.loading = true;
+
                     if (context.type === 'catalog') {
                         angular.extend(options, {
                             extrametas: 'true',
                             interopmetas: 'true'
                         });
                         catalog_search(context, options).success(function (data) {
+                            console.log(data);
                             $scope[variable] = data.datasets;
                             context.nhits = data.nhits;
                             $scope.loading = false;
@@ -23196,6 +23245,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (context.type == "d4c") { parameters = angular.extend({}, parameters, { resource_id: context.dataset.resourceCSVid }); }
                         return externalFunctions.facets(context, angular.extend({}, { 'type': context.type, 'url': context.url, 'id': context.dataset.datasetid }, parameters), timeout);
                     }
+                },
+                'search2' : function (context, parameters, timeout) {
+                    return request(context, fetchPrefix() + '/d4c/api/datasets/2.0/search/', parameters, timeout);
                 },
                 'facets': function (context, facetName, timeout) {
                     var queryParameters = angular.extend({}, context.parameters, {
