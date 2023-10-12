@@ -1007,6 +1007,9 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				"Back": {
 					"$$noContext": "Retour"
 				},
+				"Background color": {
+					"$$noContext": "Couleur d'arrière-plan"
+				},
 				"Back to catalog": {
 					"$$noContext": "Retour au catalogue"
 				},
@@ -1054,6 +1057,9 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				},
 				"Boost": {
 					"$$noContext": "Boost"
+				},
+				"Border color": {
+					"$$noContext": "Couleur de bordure"
 				},
 				"Bound value can't be higher than next top bound value or max value.": {
 					"$$noContext": "Une borne ne peut être supérieure à la borne suivante ou à la valeur maximum."
@@ -1219,6 +1225,9 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				},
 				"Changes saved": {
 					"$$noContext": "Modifications sauvegardées"
+				},
+				"Chart customization": {
+					"$$noContext": "Personnalisation du graphe"
 				},
 				"Chart Title": {
 					"$$noContext": "Titre du graphique"
@@ -1924,7 +1933,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				},
 				"Display": {
 					"$$noContext": "Affichage"
-				},
+				}, 
 				"Display caption for this dataset": {
 					"$$noContext": "Afficher une légende pour cette connaissance"
 				},
@@ -1951,6 +1960,12 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				},
 				"Display search box": {
 					"$$noContext": "Afficher le champ de recherche"
+				},
+				"Display the background color": {
+					"$$noContext": "Afficher la couleur d'arrière-plan"
+				},
+				"Display the border" : {
+					"$$noContext": "Afficher la bordure"
 				},
 				"Display the graph legend": {
 					"$$noContext": "Afficher la légende du graphe"
@@ -2459,6 +2474,12 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				"Font files only (.ttf, .woff, etc.), max {size}": {
 					"$$noContext": "Fichier de polices uniquement (.ttf, .woff, etc.), maximum {size}"
 				},
+				"Font":{
+					"$$noContext": "Police de caractères"
+				},
+				"Font size":{
+					"$$noContext": "Taille de police"
+				},
 				"Fonts": {
 					"$$noContext": "Polices de caractères"
 				},
@@ -2826,6 +2847,9 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				"Image": {
 					"$$noContext": "Image"
 				},
+				"Image URL": {
+					"$$noContext": "URL de l'image"
+				},
 				"Image files only (.png, .jpeg, etc.), max {size}": {
 					"$$noContext": "Fichiers image uniquement (.png, .jpeg, etc.), maximum {size}"
 				},
@@ -3138,6 +3162,9 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				"Least recently modified first": {
 					"$$noContext": "Anciennement modifiés "
 				},
+				"Legend styles": {
+					"$$noContext": "Styles de légende"
+				},
 				"Less": {
 					"$$noContext": "Moins"
 				},
@@ -3251,6 +3278,9 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				},
 				"Login link label": {
 					"$$noContext": "Label du lien de connexion"
+				},
+				"Logo options": {
+					"$$noContext": "Options de logo"
 				},
 				"Long dashes": {
 					"$$noContext": "Traits longs"
@@ -5312,6 +5342,9 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				},
 				"Terms and conditions link to display in <strong>{{ language | uppercase }}</strong>": {
 					"$$noContext": "Lien vers les conditions d'utilisation en <strong>{{ language | uppercase }}</strong>"
+				},
+				"Text color": {
+					"$$noContext": "Couleur de texte"
 				},
 				"Text languages": {
 					"$$noContext": "Langues du texte"
