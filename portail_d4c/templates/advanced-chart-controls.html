@@ -121,77 +121,118 @@ Copyright (c) 2014 - Opendatasoft
                             </small>
                         </div>
                     </h3>
-                    <div id="chart-options" class="d4c-form__group">
-                        <div class="d4c-form__check-line">
-                            <div class="d4c-chart-controls">
-                                <label for="text-title" translate>Title</label>
-                                <input type="text"
-                                       id="text-title"
-                                       class="d4c-d4c-chart-controls__input"
-                                       ng-model="localChartContext.dataChart.textTitle"
-                                />
-                                <span class="d4c-chart-controls__controls-group d4c-chart-controls_titlestyle-options">
-                                    <span d4c-textstyle-options="" selectedfontfamily="localChartContext.dataChart.titleFontfamily" selectedfontsize="localChartContext.dataChart.titleFontsize" selectedtextcolor="localChartContext.dataChart.titleTextcolor"></span>
-                                </span>
+                    <div class="d4c-collapsible" style="margin-bottom: 10px;" ng-transclude>
+                        <d4c-collapsible-above-fold class="ng-scope">
+                            <div class="d4c-collapsible__above-fold d4c-collapsible__above-fold--expanded" ng-class="{'d4c-collapsible__above-fold--expanded': expanded}" ng-click="expanded=!expanded">
+                                <div ng-transclude="">
+                                    <h3 class="d4c-dataset-reuses__toggle-header ng-scope">
+                                        <span><span class="ng-scope" translate="">Chart customization</span></span>
+                                    </h3>
+                                </div>
                             </div>
-                            <div class="d4c-chart-controls">
-                                <label for="text-subtitle" translate>Subtitle</label>
-                                <input type="text"
-                                       id="text-subtitle"
-                                       class="d4c-d4c-chart-controls__input"
-                                       ng-model="localChartContext.dataChart.textSubtitle"
-                                />
-                                <span class="d4c-chart-controls__controls-group d4c-chart-controls_subtitlestyle-options">
-                                    <span d4c-textstyle-options="" selectedfontfamily="localChartContext.dataChart.subtitleFontfamily" selectedfontsize="localChartContext.dataChart.subtitleFontsize" selectedtextcolor="localChartContext.dataChart.subtitleTextcolor"></span>
-                                </span>
+                        </d4c-collapsible-above-fold>
+                        <d4c-collapsible-fold class="ng-scope">
+                            <div class="d4c-collapsible__fold" ng-show="expanded" ng-transclude="">
+                                <div class="d4c-form__group">
+                                    <div class="d4c-form__check-line">
+                                        <div class="d4c-chart-controls">
+                                            <label for="text-title" translate>Title</label>
+                                            <input type="text"
+                                                   id="text-title"
+                                                   class="d4c-d4c-chart-controls__input"
+                                                   ng-model="localChartContext.dataChart.textTitle"
+                                            />
+                                            <span class="d4c-chart-controls__controls-group d4c-chart-controls_titlestyle-options">
+                                                <span d4c-textstyle-options="" selectedfontfamily="localChartContext.dataChart.titleFontfamily" selectedfontsize="localChartContext.dataChart.titleFontsize" selectedtextcolor="localChartContext.dataChart.titleTextcolor"></span>
+                                            </span>
+                                        </div>
+                                        <div class="d4c-chart-controls">
+                                            <label for="text-subtitle" translate>Subtitle</label>
+                                            <input type="text"
+                                                   id="text-subtitle"
+                                                   class="d4c-d4c-chart-controls__input"
+                                                   ng-model="localChartContext.dataChart.textSubtitle"
+                                            />
+                                            <span class="d4c-chart-controls__controls-group d4c-chart-controls_subtitlestyle-options">
+                                                <span d4c-textstyle-options="" selectedfontfamily="localChartContext.dataChart.subtitleFontfamily" selectedfontsize="localChartContext.dataChart.subtitleFontsize" selectedtextcolor="localChartContext.dataChart.subtitleTextcolor"></span>
+                                            </span>
+                                        </div>
+                                        <div class="d4c-chart-controls">
+                                            <label for="text-description" style="vertical-align: top;" translate>Description</label>
+                                            <textarea type="text"
+                                                   id="text-description"
+                                                   maxlength="1000"
+                                                   rows="12" cols="50"
+                                                   class="d4c-d4c-chart-controls__input"
+                                                   ng-model="localChartContext.dataChart.textDescription"
+                                            ></textarea>
+                                        </div>  
+                                        
+                                        <table style="margin-top:10px; margin-bottom: 10px;">
+                                            <tr>
+                                                <td>
+                                                    <label>
+                                                        <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayBackgroundColor">
+                                                        <span translate>Display the background color</span>
+                                                    </label>
+                                                </td>
+                                                <td style="padding-left: 30px; padding-top: 5px;">
+                                                    <div class="d4c-chart-controls">
+                                                        <label for="text-subtitle" translate>Background color</label>
+                                                        <span class="d4c-chart-controls__controls-group d4c-chart-controls_background-color-border">
+                                                            <span d4c-color-chooser="" color="localChartContext.dataChart.backgroundColor" allowedcolors="allowedcolors"></span>
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                
+                                            <tr>
+                                                <td>
+                                                    <label>
+                                                        <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayBorder">
+                                                        <span translate>Display the border</span>
+                                                    </label>
+                                                </td>
+                                                <td style="padding-left: 30px; padding-top: 5px;">
+                                                    <div class="d4c-chart-controls">
+                                                        <label for="text-subtitle" translate>Border color</label>
+                                                        <span class="d4c-chart-controls__controls-group d4c-chart-controls_background-color-border">
+                                                            <span d4c-color-chooser="" color="localChartContext.dataChart.borderColor" allowedcolors="allowedcolors"></span>
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                
+                                            <tr>
+                                                <td>
+                                                    <label>
+                                                        <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayLegend">
+                                                        <span translate>Display the graph legend</span>
+                                                    </label>
+                                                </td>
+                                                <td style="padding-left: 30px; padding-top: 5px;">
+                                                    <div style="display: inline-block;" class="d4c-chart-controls">
+                                                        <label for="legend-styles" translate>Legend styles</label>
+                                                        <span class="d4c-chart-controls__controls-group d4c-chart-controls_legendstyle-options">
+                                                            <span d4c-textstyle-options="" selectedfontfamily="localChartContext.dataChart.legendFontfamily" selectedfontsize="localChartContext.dataChart.legendFontsize" selectedtextcolor="localChartContext.dataChart.legendTextcolor"></span>
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+            
+            
+                                        <div class="d4c-chart-controls">
+                                            <label for="logo-options" translate>Logo options</label>
+                                            <span class="d4c-chart-controls__controls-group d4c-chart-controls_logo-options">
+                                                <span d4c-chart-control-logo="" height="localChartContext.dataChart.logoHeight" width="localChartContext.dataChart.logoWidth" position="localChartContext.dataChart.logoPosition" image-url="localChartContext.dataChart.logoFile"></span>
+                                            </span>
+                                        </div>
+                        
+                                    </div>
+                                </div>
                             </div>
-                            <div class="d4c-chart-controls">
-                                <label for="text-description" translate>Description</label>
-                                <textarea type="text"
-                                       id="text-description"
-                                       maxlength="1000"
-                                       rows="12" cols="50"
-                                       class="d4c-d4c-chart-controls__input"
-                                       ng-model="localChartContext.dataChart.textDescription"
-                                ></textarea>
-                            </div>              
-                            <label>
-                                <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayBackgroundColor">
-                                <span translate>Display the background color</span>
-                            </label>
-                            <div class="d4c-chart-controls">
-                                <label for="text-subtitle" translate>Background color</label>
-                                <span class="d4c-chart-controls__controls-group d4c-chart-controls_background-color-border">
-                                    <span d4c-color-chooser="" color="localChartContext.dataChart.backgroundColor" allowedcolors="allowedcolors"></span>
-                                </span>
-                            </div>
-                            <label>
-                                <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayBorder">
-                                <span translate>Display the border</span>
-                            </label>
-                            <div class="d4c-chart-controls">
-                                <label for="text-subtitle" translate>Border color</label>
-                                <span class="d4c-chart-controls__controls-group d4c-chart-controls_background-color-border">
-                                    <span d4c-color-chooser="" color="localChartContext.dataChart.borderColor" allowedcolors="allowedcolors"></span>
-                                </span>
-                            </div>
-                            <label>
-                                <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayLegend">
-                                <span translate>Display the graph legend</span>
-                            </label>
-                            <div class="d4c-chart-controls">
-                                <label for="legend-styles" translate>Legend styles</label>
-                                <span class="d4c-chart-controls__controls-group d4c-chart-controls_legendstyle-options">
-                                    <span d4c-textstyle-options="" selectedfontfamily="localChartContext.dataChart.legendFontfamily" selectedfontsize="localChartContext.dataChart.legendFontsize" selectedtextcolor="localChartContext.dataChart.legendTextcolor"></span>
-                                </span>
-                            </div>
-                            <div class="d4c-chart-controls">
-                                <label for="logo-options" translate>Logo options</label>
-                                <span class="d4c-chart-controls__controls-group d4c-chart-controls_logo-options">
-                                    <span d4c-chart-control-logo="" height="localChartContext.dataChart.logoHeight" width="localChartContext.dataChart.logoWidth" position="localChartContext.dataChart.logoPosition" image-url="localChartContext.dataChart.logoFile"></span>
-                                </span>
-                            </div>
-                        </div>
+                        </d4c-collapsible-fold>
                     </div>
                     <div chart-controls advanced="advanced"
                          context="context.datasets[query.config.dataset]"
@@ -272,7 +313,7 @@ Copyright (c) 2014 - Opendatasoft
                                 </span>
                             </div>
                             <div class="d4c-chart-controls">
-                                <label for="text-description" translate>Description</label>
+                                <label for="text-description" style="vertical-align: top;" translate>Description</label>
                                 <textarea type="text"
                                        id="text-description"
                                        maxlength="1000"
@@ -280,37 +321,62 @@ Copyright (c) 2014 - Opendatasoft
                                        class="d4c-d4c-chart-controls__input"
                                        ng-model="localChartContext.dataChart.textDescription"
                                 ></textarea>
-                            </div>              
-                            <label>
-                                <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayBackgroundColor">
-                                <span translate>Display the background color</span>
-                            </label>
-                            <div class="d4c-chart-controls">
-                                <label for="text-subtitle" translate>Background color</label>
-                                <span class="d4c-chart-controls__controls-group d4c-chart-controls_background-color-border">
-                                    <span d4c-color-chooser="" color="localChartContext.dataChart.backgroundColor" allowedcolors="allowedcolors"></span>
-                                </span>
-                            </div>
-                            <label>
-                                <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayBorder">
-                                <span translate>Display the border</span>
-                            </label>
-                            <div class="d4c-chart-controls">
-                                <label for="text-subtitle" translate>Border color</label>
-                                <span class="d4c-chart-controls__controls-group d4c-chart-controls_background-color-border">
-                                    <span d4c-color-chooser="" color="localChartContext.dataChart.borderColor" allowedcolors="allowedcolors"></span>
-                                </span>
-                            </div>
-                            <label>
-                                <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayLegend">
-                                <span translate>Display the graph legend</span>
-                            </label>
-                            <div class="d4c-chart-controls">
-                                <label for="legend-styles" translate>Legend styles</label>
-                                <span class="d4c-chart-controls__controls-group d4c-chart-controls_legendstyle-options">
-                                    <span d4c-textstyle-options="" selectedfontfamily="localChartContext.dataChart.legendFontfamily" selectedfontsize="localChartContext.dataChart.legendFontsize" selectedtextcolor="localChartContext.dataChart.legendTextcolor"></span>
-                                </span>
-                            </div>
+                            </div>  
+                            
+                            <table style="margin-top:10px; margin-bottom: 10px;">
+                                <tr>
+                                    <td>
+                                        <label>
+                                            <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayBackgroundColor">
+                                            <span translate>Display the background color</span>
+                                        </label>
+                                    </td>
+                                    <td style="padding-left: 30px; padding-top: 5px;">
+                                        <div class="d4c-chart-controls">
+                                            <label for="text-subtitle" translate>Background color</label>
+                                            <span class="d4c-chart-controls__controls-group d4c-chart-controls_background-color-border">
+                                                <span d4c-color-chooser="" color="localChartContext.dataChart.backgroundColor" allowedcolors="allowedcolors"></span>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+    
+                                <tr>
+                                    <td>
+                                        <label>
+                                            <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayBorder">
+                                            <span translate>Display the border</span>
+                                        </label>
+                                    </td>
+                                    <td style="padding-left: 30px; padding-top: 5px;">
+                                        <div class="d4c-chart-controls">
+                                            <label for="text-subtitle" translate>Border color</label>
+                                            <span class="d4c-chart-controls__controls-group d4c-chart-controls_background-color-border">
+                                                <span d4c-color-chooser="" color="localChartContext.dataChart.borderColor" allowedcolors="allowedcolors"></span>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+    
+                                <tr>
+                                    <td>
+                                        <label>
+                                            <input class="d4c-d4c-chart-controls__input" type="checkbox" ng-model="localChartContext.dataChart.displayLegend">
+                                            <span translate>Display the graph legend</span>
+                                        </label>
+                                    </td>
+                                    <td style="padding-left: 30px; padding-top: 5px;">
+                                        <div style="display: inline-block;" class="d4c-chart-controls">
+                                            <label for="legend-styles" translate>Legend styles</label>
+                                            <span class="d4c-chart-controls__controls-group d4c-chart-controls_legendstyle-options">
+                                                <span d4c-textstyle-options="" selectedfontfamily="localChartContext.dataChart.legendFontfamily" selectedfontsize="localChartContext.dataChart.legendFontsize" selectedtextcolor="localChartContext.dataChart.legendTextcolor"></span>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+
                             <div class="d4c-chart-controls">
                                 <label for="logo-options" translate>Logo options</label>
                                 <span class="d4c-chart-controls__controls-group d4c-chart-controls_logo-options">
