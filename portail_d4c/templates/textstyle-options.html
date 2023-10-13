@@ -17,7 +17,7 @@
                         <select class="d4c-d4c-chart-controls__input"
                                 id="chart-text-fontfamily"
                                 ng-model="internalValues.selectedfontfamily"
-                                ng-options="fontfamily.label for fontfamily in fontfamilies"
+                                ng-options="fontfamily.value as fontfamily.label for fontfamily in fontfamilies"
                                 >
                         </select>
                     </div>
@@ -28,7 +28,7 @@
                         <select class="d4c-d4c-chart-controls__input"
                                 id="chart-text-fontsize"
                                 ng-model="internalValues.selectedfontsize"
-                                ng-options="fontsize.value for fontsize in fontsizes"
+                                ng-options="fontsize.value as fontsize.label for fontsize in fontsizes"
                                 >
                         </select>
                     </div>
