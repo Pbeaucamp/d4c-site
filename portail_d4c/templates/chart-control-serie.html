@@ -55,7 +55,7 @@ Copyright (c) 2014 - Opendatasoft
     <div class="d4c-chart-controls__configuration-tabs" ng-show="advanced">
         &gt; <span translate="" style="font-weight: bold">Configuration :</span>
 
-        <span ng-show="!singleAxis"><span translate="" ng-click="display=&#39;yaxis&#39;" ng-style="{&#39;font-weight&#39;: display === &#39;yaxis&#39; ? &#39;bold&#39;: &#39;normal&#39;}">Y Axis</span> - </span>
+        <span ng-show="!singleAxis"><span translate="" ng-if="lol" ng-click="display=&#39;yaxis&#39;" ng-style="{&#39;font-weight&#39;: display === &#39;yaxis&#39; ? &#39;bold&#39;: &#39;normal&#39;}">Y Axis</span> - </span>
 
         <span ng-show="serie.type !== &#39;treemap&#39;"><span translate="" ng-click="display=&#39;appearance&#39;" ng-style="{&#39;font-weight&#39;: display === &#39;appearance&#39; ? &#39;bold&#39;: &#39;normal&#39;}">Appearance</span> - </span>
 
@@ -96,7 +96,7 @@ Copyright (c) 2014 - Opendatasoft
                 <input type="checkbox" ng-model="serie.displayValues"> <span translate="">display values on chart</span>
             </label>
         </div>
-        <div class="d4c-chart-controls__controls-group" ng-if="serie.type === &#39;column&#39; || serie.type === &#39;bar&#39;">
+        <div class="d4c-chart-controls__controls-group" ng-if="(serie.type === &#39;column&#39; || serie.type === &#39;bar&#39;) && stacked && breakdown">
             <label>
                 <input type="checkbox" ng-model="serie.displayStackValues"> <span translate="">display stack cumulative value</span>
             </label>
