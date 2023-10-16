@@ -8041,9 +8041,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/textstyle-options.html',
             link: function (scope, element, attrs) {
                 scope.fontfamilies = [
-                    {label:"Arial"},
-                    {label:"Calibri"},
-                    {label:"Times New Roman"}
+                    {label:"Arial",value:"Arial"},
+                    {label:"Calibri",value:"Arial"},
+                    {label:"Times New Roman",value:"Arial"}
                 ]
                 scope.fontsizes = [
                     {label:"8",value:8},
@@ -8090,20 +8090,30 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                 };
                 scope.$watch('internalValues',function(nv,ov){
-                    //console.log(scope.internalValues);
-                    scope.selectedfontfamily = nv.selectedfontfamily;
-                    scope.selectedfontsize = nv.selectedfontsize;
-                    scope.selectedtextcolor = nv.selectedtextcolor;
-
+                    if(nv.selectedfontfamily){
+                        scope.selectedfontfamily = nv.selectedfontfamily;
+                    }
+                    if(nv.selectedfontsize){
+                        scope.selectedfontsize = nv.selectedfontsize;
+                    }
+                    if(nv.selectedtextcolor){
+                        scope.selectedtextcolor = nv.selectedtextcolor;
+                    }
                 },true);
-                scope.$watch('selectedfontfamily',function(){
-                    //console.log(scope.selectedfontfamily);
+                scope.$watch('selectedfontfamily',function(nv, ov){
+                    if(nv){
+                        scope.internalValues.selectedfontfamily = nv;
+                    }
                 },true);
-                scope.$watch('selectedfontsize',function(){
-                    //console.log(scope.selectedfontsize);
+                scope.$watch('selectedfontsize',function(nv, ov){
+                    if(nv){
+                        scope.internalValues.selectedfontsize = nv;
+                    }
                 },true);
-                scope.$watch('selectedtextcolor',function(){
-                    //console.log(scope.selectedtextcolor);
+                scope.$watch('selectedtextcolor',function(nv, ov){
+                    if(nv){
+                        scope.internalValues.selectedtextcolor = nv;
+                    }
                 },true);
             }
         };
@@ -8216,12 +8226,39 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     {label : 'Bottom Right',value : 'bottomRight'}
                 ];
                 scope.$watch('internalValues', function(nv,ov){
-                    scope.height = nv.height;
-                    scope.width = nv.width;
-                    scope.position = nv.position;
-                    scope.imageUrl = nv.imageUrl;
+                    if(nv.height){
+                        scope.height = nv.height;
+                    }
+                    if(nv.width){
+                        scope.width = nv.width;
+                    }
+                    if(nv.position){
+                        scope.position = nv.position;
+                    }
+                    if(nv.imageUrl){
+                        scope.imageUrl = nv.imageUrl;
+                    }
                 }, true);
-
+                scope.$watch('height', function(nv,ov){
+                    if(nv){
+                        scope.internalValues.height = nv;
+                    }
+                }, true);
+                scope.$watch('width', function(nv,ov){
+                    if(nv){
+                        scope.internalValues.width = nv;
+                    }
+                }, true);
+                scope.$watch('position', function(nv,ov){
+                    if(nv){
+                        scope.internalValues.position = nv;
+                    }
+                }, true);
+                scope.$watch('imageUrl', function(nv,ov){
+                    if(nv){
+                        scope.internalValues.imageUrl = nv;
+                    }
+                }, true);
             }
         }
     });
@@ -14187,15 +14224,15 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 title: {
                     text: parameters.textTitle,
                     display: parameters.displayTitle,
-                    fontFamily: angular.isDefined(parameters.titleFontfamily) && parameters.titleFontfamily !== "" ? parameters.titleFontfamily.label : "Arial",
-                    fontSize: angular.isDefined(parameters.titleFontsize) && parameters.titleFontsize !== "" ? parameters.titleFontsize.value : 12,
+                    fontFamily: angular.isDefined(parameters.titleFontfamily) && parameters.titleFontfamily !== "" ? parameters.titleFontfamily : "Arial",
+                    fontSize: angular.isDefined(parameters.titleFontsize) && parameters.titleFontsize !== "" ? parameters.titleFontsize : 12,
                     fontColor: parameters.titleTextcolor,
                 },
                 subtitle: {
                     text: parameters.textSubtitle,
                     display: parameters.displaySubtitle,
-                    fontFamily: angular.isDefined(parameters.subtitleFontfamily) && parameters.subtitleFontfamily !== "" ? parameters.subtitleFontfamily.label : "Arial",
-                    fontSize: angular.isDefined(parameters.subtitleFontsize) && parameters.subtitleFontsize !== "" ? parameters.subtitleFontsize.value : 12,
+                    fontFamily: angular.isDefined(parameters.subtitleFontfamily) && parameters.subtitleFontfamily !== "" ? parameters.subtitleFontfamily : "Arial",
+                    fontSize: angular.isDefined(parameters.subtitleFontsize) && parameters.subtitleFontsize !== "" ? parameters.subtitleFontsize : 12,
                     fontColor: parameters.subtitleTextcolor,
                 },
                 description: {
@@ -14262,8 +14299,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     useHTML: true,
                     rtl: D4CWidgetsConfig.language === 'ar',
                     labels:{
-                        fontFamily: angular.isDefined(parameters.legendFontfamily) && parameters.legendFontfamily !== "" ? parameters.legendFontfamily.label : "Arial",
-                        fontSize: angular.isDefined(parameters.legendFontsize) && parameters.legendFontsize !== "" ? parameters.legendFontsize.value : 12,
+                        fontFamily: angular.isDefined(parameters.legendFontfamily) && parameters.legendFontfamily !== "" ? parameters.legendFontfamily : "Arial",
+                        fontSize: angular.isDefined(parameters.legendFontsize) && parameters.legendFontsize !== "" ? parameters.legendFontsize : 12,
                         fontColor : parameters.legendTextcolor
                     }
                 },

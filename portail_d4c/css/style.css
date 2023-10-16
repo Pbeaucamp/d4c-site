@@ -1183,7 +1183,7 @@
       left: 2px;
   }
 
-.d4c-textstyle-options__style-options{position:absolute;top:0;left:0;margin:0 0 1rem 0;padding:5px;list-style:none;z-index:100;background-color:white;width:330px;height:130px;overflow-y:auto;border:1px solid #000}
+.d4c-textstyle-options__style-options{position:absolute;top:0;left:0;margin:0 0 1rem 0;padding:5px;list-style:none;z-index:100;background-color:white;width:340px;height:160px;overflow-y:auto;border:1px solid #000}
 .d4c-textstyle-options__preview{width:100%;height:1.33rem;margin-bottom:.33rem;cursor:pointer}
 .d4c-textstyle-options__preview:hover{border:1px solid #000}
 .d4c-textstyle-options__preview.d4c-textstyle-options__preview--selected{border:1px solid #000}
