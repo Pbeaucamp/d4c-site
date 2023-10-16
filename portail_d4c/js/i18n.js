@@ -5314,7 +5314,7 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 					"$$noContext": "Tags"
 				},
 				"Take a look at the <a href=\"/d4c/api\" target=\"_blank\"><i class=\"icon-book\"></i> API page</a> to try the other API services!": {
-					"$$noContext": "Jetez un oeil à la <a href=\"/api\" target=\"_blank\"><i class=\"icon-book\"></i> page API</a> pour essayer les autres API !"
+					"$$noContext": "Jetez un oeil à la <a href=\"/d4c/api\" target=\"_blank\"><i class=\"icon-book\"></i> page API</a> pour essayer les autres API !"
 				},
 				"Temperature": {
 					"$$noContext": "Température"
@@ -7203,6 +7203,9 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				},
 				"Subtitle": {
 					"$$noContext": "Sous-titre"
+				},
+				"You can use this API Key to make a request: <b>{{ service.apiKey }}</b>": {
+					"$$noContext": "Vous pouvez utiliser cette clef API pour faire des requêtes: <b>{{ service.apiKey }}</b>"
 				},
 			};
 			var current_language = "fr";
