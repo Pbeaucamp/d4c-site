@@ -7383,34 +7383,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
                 $scope.filters = {};
 
-                var catalog_search = D4CAPI.uniqueCall(D4CAPI.datasets.search);
-                var catalog_search2 = D4CAPI.uniqueCall(D4CAPI.datasets.search2);
-                var context = {domainUrl : ''};
-                var options = {};
-                if($scope.catalogParameters['refine.features'] == 'analyze'){
-                    options['siren'] = '';
-                }
-                else if($scope.catalogParameters['refine.features'] == 'geo'){
-                    options['coordReq'] = '';
-                }
-                catalog_search(context,$scope.catalogParameters).success(function (data) {
-                    var datasets = data.datasets;
-                    catalog_search2(context, options).success(function (data2) {
-                        $scope.filters["organizations"] = data2.all_organizations;
-                        for(var organization of $scope.filters.organizations){
-                            organization["count"] = 0;
-                            organization["css"] = "list-item";
-                            for(var dataset of datasets){
-                                if(dataset["owner_org"] == organization.id){
-                                    organization["count"] ++;
-                                }
-                            }
-                        }
-                        console.log($scope.filters["organizations"])
-                    });
-                });
-
-
                 if ($scope.datasetid) {
                     $scope.exploredDatasetID = $scope.datasetid;
                 }
@@ -11505,6 +11477,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if (apikey) {
                         apikey = $interpolate(apikey)($scope);
                     }
+                    var filters = $attrs[contextName + 'Filters'];
+                    if(filters) {
+                        filters = $interpolate(filters)($scope);
+                    }
                     $scope[contextName] = {
                         'name': contextName,
                         'type': 'catalog',
@@ -11512,6 +11488,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         'domainUrl': D4CAPI.getDomainURL(domain),
                         'apikey': apikey,
                         'parameters': parameters,
+                        'filters' : filters,
                         'toggleRefine': function (facetName, path, replace) {
                             D4C.Context.toggleRefine(this, facetName, path, replace);
                         },
@@ -11543,6 +11520,37 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         }
                         URLSynchronizer.addSynchronizedObject($scope, contextName + '.parameters');
                     }
+
+                    var catalog_search = D4CAPI.uniqueCall(D4CAPI.datasets.search);
+                    var catalog_search2 = D4CAPI.uniqueCall(D4CAPI.datasets.search2);
+
+                    $scope.$watch(contextName, function(nv,ov){
+                        var context = {domainUrl : ''};
+                        var options = {};
+                        if(nv.parameters['refine.features'] == 'analyze'){
+                            options['siren'] = '';
+                        }
+                        else if(nv.parameters['refine.features'] == 'geo'){
+                            options['coordReq'] = '';
+                        }
+                        catalog_search(context,nv.parameters).success(function (data) {
+                            var datasets = data.datasets;
+                            catalog_search2(context, options).success(function (data2) {
+                                nv.filters = {
+                                    "organizations" : data2.all_organizations
+                                };
+                                for(var organization of nv.filters.organizations){
+                                    organization["count"] = 0;
+                                    organization["css"] = "list-item";
+                                    for(var dataset of datasets){
+                                        if(dataset["owner_org"] == organization.id){
+                                            organization["count"] ++;
+                                        }
+                                    }
+                                }
+                            });
+                        });
+                    },true);
                 }
             }]
         };
