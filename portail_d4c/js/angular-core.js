@@ -19124,8 +19124,16 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             placeholder: translate('Find a place...'),
                             errorMessage: translate('Nothing found.'),
                             // By default we use the Nominatim but if we have an API Key for google or mapbox we can uncomment the following code
-                            geocoder: new L.Control.Geocoder.Nominatim({
-                                serviceUrl: "https://nominatim.openstreetmap.org/",
+                            // geocoder: new L.Control.Geocoder.Nominatim({
+                            //     serviceUrl: "https://nominatim.openstreetmap.org/",
+                            //     geocodingQueryParams: {
+                            //         "accept-language": D4CWidgetsConfig.language || 'en',
+                            //         "countrycodes": D4CWidgetsConfig.language,
+                            //         "polygon_geojson": true
+                            //     }
+                            // })
+                            geocoder: new L.Control.Geocoder.Pelias({
+                                serviceUrl: "http://pelias.askem.eu:4000/v1",
                                 geocodingQueryParams: {
                                     "accept-language": D4CWidgetsConfig.language || 'en',
                                     "countrycodes": D4CWidgetsConfig.language,
@@ -19140,7 +19148,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             //         "polygon_geojson": true
                             //     }
                             // })
-                            // geocoder: new L.Control.Geocoder.Mapbox({
+                            // geocoder: new L.Control.Geocoder.Pelias({
                             //     apiKey: 'REPLACE_WITH_API_KEY',
                             //     geocodingQueryParams: {
                             //         "language": D4CWidgetsConfig.language || 'en',
