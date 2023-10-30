@@ -19133,7 +19133,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             //     }
                             // })
                             geocoder: new L.Control.Geocoder.Pelias({
-                                serviceUrl: "http://pelias.askem.eu:4000/v1",
+                                serviceUrl: "https://pelias.askem.eu/v1",
                                 geocodingQueryParams: {
                                     "accept-language": D4CWidgetsConfig.language || 'en',
                                     "countrycodes": D4CWidgetsConfig.language,
