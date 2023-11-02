@@ -87,6 +87,7 @@ html[dir=rtl] .d4cwidget-calendar__tooltip.d4cwidget-calendar__tooltip--increase
 .d4cwidget-dataset-card div.dataset-item,.d4cwidget-multidatasets-card div.dataset-item{position:absolute;top:0;right:0;left:0;bottom:0}
 .d4cwidget-dataset-card div.dataset-item>.d4cwidget,.d4cwidget-dataset-card div.dataset-item>d4c-map .d4cwidget-map,.d4cwidget-multidatasets-card div.dataset-item>.d4cwidget,.d4cwidget-multidatasets-card div.dataset-item>d4c-map .d4cwidget-map{position:relative;height:100%}
 .d4cwidget-dataset-card div.dataset-item>d4c-map,.d4cwidget-multidatasets-card div.dataset-item>d4c-map{display:block}
+#mapemprise{height: 250px;width: 250px;}
 .d4cwidget-facet{margin:1rem 0}
 .d4cwidget-facet__facet-title{margin:0 0 .33rem 0}
 .d4cwidget-facet__date-range{margin-bottom:.33rem;padding-left:.67rem;border-left:solid 3px #d6d6d6}

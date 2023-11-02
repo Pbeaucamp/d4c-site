@@ -11528,7 +11528,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         var context = {domainUrl : ''};
                         var options = {};
                         if(nv.parameters['refine.features'] == 'analyze'){
-                            options['siren'] = '';
+                            options['analyze'] = '';
                         }
                         else if(nv.parameters['refine.features'] == 'geo'){
                             options['coordReq'] = '';
@@ -18792,7 +18792,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 (function () {
     'use strict';
     var mod = angular.module('d4c-widgets');
-    mod.directive('d4cMap', ['URLSynchronizer', 'MapHelper', 'ModuleLazyLoader', 'D4CWidgetsConfig', 'MapLayerRenderer', 'translate', 'translatePlural', '$q', '$timeout', '$location', function (URLSynchronizer, MapHelper, ModuleLazyLoader, D4CWidgetsConfig, MapLayerRenderer, translate, translatePlural, $q, $timeout, $location) {
+    mod.directive('d4cMap', ['$rootScope', 'URLSynchronizer', 'MapHelper', 'ModuleLazyLoader', 'D4CWidgetsConfig', 'MapLayerRenderer', 'translate', 'translatePlural', '$q', '$timeout', '$location', function ($rootScope,URLSynchronizer, MapHelper, ModuleLazyLoader, D4CWidgetsConfig, MapLayerRenderer, translate, translatePlural, $q, $timeout, $location) {
         return {
             restrict: 'EA',
             scope: {
@@ -18812,6 +18812,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 scrollWheelZoom: '@',
                 minZoom: '@',
                 maxZoom: '@',
+                mapEmpriseShape: '@',
+                mapEmpriseCoordinates: '@',
                 displayControl: '=?',
                 displayControlSingleLayer: '=?',
                 searchBox: '=?',
@@ -18834,6 +18836,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 }
                 if (attrs.d4cAutoResize === 'true' || attrs.d4cAutoResize === '') {
                     scope.autoResize = 'true';
+                }
+                if (scope.mapEmpriseShape && scope.mapEmpriseCoordinates) {
+                    scope.mapConfig.drawnArea = {
+                        'shape': scope.mapEmpriseShape,
+                        'coordinates': scope.mapEmpriseCoordinates
+                    }
                 }
                 var isStatic = scope.staticMap && scope.staticMap.toLowerCase() === 'true';
                 var noRefit = scope.noRefit && scope.noRefit.toLowerCase() === 'true';
@@ -19710,6 +19718,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             }
                             var drawn;
                             if (nv) {
+                                scope.mapEmpriseShape = nv.shape;
+                                scope.mapEmpriseCoordinates = nv.coordinates;
+                                $rootScope.$emit('mapEmpriseShapeChange',scope.mapEmpriseShape);
+                                $rootScope.$emit('mapEmpriseCoordinatesChange',scope.mapEmpriseCoordinates);
                                 if (nv.shape === 'polygon') {
                                     var geojson = D4C.GeoFilter.getPolygonParameterAsGeoJSON(nv.coordinates);
                                     var coordinates = geojson.coordinates[0];
@@ -19737,6 +19749,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     scope.drawnItems.addLayer(drawn);
                                     setLayerNonInteractive(scope.drawnItems.getLayers()[0]);
                                 }
+                            }
+                            else{
+                                $rootScope.$emit('mapEmpriseShapeChange',null);
+                                $rootScope.$emit('mapEmpriseCoordinatesChange',null);
                             }
                             angular.forEach(MapHelper.MapConfiguration.getActiveContextList(scope.mapConfig, {
                                 geoOnly: true
@@ -19794,7 +19810,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 distance = null;
                             }
                         }
+
                     });
+
                     if (polygon) {
                         scope.mapConfig.drawnArea = {
                             shape: 'polygon',
@@ -19805,7 +19823,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             shape: 'circle',
                             coordinates: distance
                         };
-                    } else {
+                    } else if (!scope.mapConfig.drawnArea){
                         scope.mapConfig.drawnArea = {};
                     }
                 };
