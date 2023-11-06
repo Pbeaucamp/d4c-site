@@ -7668,6 +7668,26 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/embed_control.html',
             controller: function ($scope, $timeout) {
+                $.ajax({
+                    url: fetchPrefix() + '/d4c/api/license/2.0/list',
+                    success: function (data) {
+                        data = JSON.parse(data);
+                        $scope.licenseOptions = data.result;
+                    },
+                    error: function(error){
+                        console.log("Erreur : ",error);
+                    }
+                });
+                $scope.visibilityOptions = [
+                    {
+                        label:"Publique",
+                        value:false
+                    },
+                    {
+                        label:"Privée",
+                        value:true
+                    }
+                ];
                 $scope.sizes = [{
                     name: 'small',
                     label: '',
@@ -7703,25 +7723,31 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 $scope.mapOptions = {
                     scrollWheelZoom: false
                 };
-                $scope.saveEmbed = function (visualizationName, shareUrl, iframe, widget) {
+                $scope.saveEmbed = function (visualizationName,visualizationLicense,visualizationIsPrivate, shareUrl, iframe, widget) {
                     var saveEmbedAPI = VisualizationAPI.save;
-
                     var data = {
                         'datasetId': $scope.context != undefined ? $scope.context.dataset.datasetid : undefined,
                         'embedType': $scope.embedType,
                         'visualizationName': visualizationName,
+                        'visualizationLicense': visualizationLicense,
+                        'visualizationIsPrivate':visualizationIsPrivate,
                         'shareUrl': shareUrl,
                         'iframe': iframe,
                         'widget': widget,
                     }
 
+                    console.log(data);
+
+
+                    
                     saveEmbedAPI(data).success(function (data) {
                         $scope.saved = true;
                         $scope.visualizationId = data.result.visualizationId;
-
-                        // Encode visualizationName to avoid special characters
-                        visualizationName = encodeURIComponent(visualizationName);
-                        window.location.href = '/databfc/ro/datasets/manage/dataset?data4citizen-type=visualization&entity-id=' + data.result.visualizationId + '&dataset-title=' + visualizationName;
+                        var datasetId = data.result.datasetId;
+                        window.location.href = '/visualisation/?id=' + datasetId;
+                    })
+                    .error(function (error){
+                        console.log(error);
                     });
                 };
                 $scope.updateEmbed = function (visuId, shareUrl, iframe, widget) {
