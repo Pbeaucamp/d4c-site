@@ -4,7 +4,7 @@ MIT Licence
 ods-widgets -- https://github.com/opendatasoft/ods-widgets
 Copyright (c) 2014 - Opendatasoft
 -->
-    <d4c-catalog-context context="catalogcontext" catalogcontext-domain="{{ domainid }}" catalogcontext-parameters="catalogParameters" catalogcontext-apikey="{{ apiKey }}">
+    <d4c-catalog-context context="catalogcontext" catalogcontext-domain="{{ domainid }}" catalogcontext-parameters="catalogParameters" catalogcontext-filters="filters" catalogcontext-apikey="{{ apiKey }}">
         <div class="d4c-dataset-selection-list__catalog" ng-if="!exploredDatasetID">
             <div class="row">
                 <div class="third col-sm-4">
@@ -108,6 +108,15 @@ Copyright (c) 2014 - Opendatasoft
                                         </div>
                                     </div>
                         </d4c-dataset-context></div> -->
+                    </div>
+                    <div class="d4c-dataset-selection-list__filters">
+                        <h4>OBSERVATOIRES</h4>
+                        <ul id="list-observatories" class="list-group">
+                            <li ng-click="toggleOrganizationFilter(organization)" class="{{organization.css}}" ng-repeat="organization in catalogcontext.filters.organizations" data-orga="organization.name">
+                                {{organization.title}}
+                                <span class="number_element">{{organization.count}}</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="two-thirds col-sm-8">

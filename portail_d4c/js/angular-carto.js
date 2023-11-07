@@ -169,6 +169,17 @@ SOFTWARE.
                             return deferred.promise;
                         }
                     },
+                    createNewDataset: function(config){
+                        var deferred = $q.defer();
+                        MapbuilderAPI.create_dataset(slug,config).then(function(response) {
+                            deferred.resolve(response.data);
+                            console.log(response);
+                        }).catch(function(error){
+                            console.log(error);
+                            //window.location.href = '/portail/';
+                        });
+                        return deferred.promise;
+                    },
                     persistStorage: function(config) {
                         var deferred = $q.defer();
                         if (angular.isObject(config)) {
@@ -513,6 +524,26 @@ SOFTWARE.
                 $scope.placeholder = translate('Type your map name here');
                 $scope.visualizationId = $scope.mapObject != null ? $scope.mapObject.visualizationId : null;
                 $scope.publishDatasetId = $scope.mapObject != null ? $scope.mapObject.publishDatasetId : null;
+                $scope.visibilityOptions = [
+                    {
+                        label:"Publique",
+                        value:false
+                    },
+                    {
+                        label:"Privée",
+                        value:true
+                    }
+                ];
+                $.ajax({
+                    url: fetchPrefix() + '/d4c/api/license/2.0/list',
+                    success: function (data) {
+                        data = JSON.parse(data)
+                        $scope.licenseOptions = data.result;
+                    },
+                    error: function(error){
+                        console.log("Erreur : ",error);
+                    }
+                })
                 var mapConfigurationProperties = ['searchBox', 'toolbarFullscreen', 'toolbarGeolocation', 'autoGeolocation', 'layerSelection'];
                 $scope.startMapConfiguration = function(event) {
                     // $scope.mapConfiguration = angular.copy($scope.mapObject.value);
@@ -612,10 +643,25 @@ SOFTWARE.
                     
                     var visualizationId = $scope.visualizationId;
                     var visualizationName = $scope.mapObject.title;
+                    var selectedLicense = $scope.mapObject.license;
+                    var isPrivate = $scope.mapObject.isPrivate;
 
                     // Encode visualizationName to avoid special characters
                     visualizationName = encodeURIComponent(visualizationName);
-                    window.location.href = '/databfc/ro/datasets/manage/dataset?data4citizen-type=visualization&entity-id=' + visualizationId + '&dataset-title=' + visualizationName;
+
+                    var metadatas = {
+                        visualization_id : visualizationId,
+                        title : visualizationName,
+                        license : selectedLicense.title,
+                        is_private : isPrivate
+                    };
+
+
+                    $scope.mapStorage.createNewDataset(metadatas).then(function(data){
+                        console.log(data);
+                        window.location.href = '/visualisation/?id=' + data.dataset_id;
+                    });
+                    //window.location.href = '/databfc/ro/datasets/manage/dataset?data4citizen-type=visualization&entity-id=' + visualizationId + '&dataset-title=' + visualizationName;
                 };
                 $scope.openDataset = function() {
                     var datasetId = $scope.publishDatasetId;
@@ -3638,7 +3684,9 @@ app.config(function(D4CWidgetsConfigProvider) {
         customAPIHeaders: {
             "D4C-API-Analytics-App": "cartograph",
         },
-        mapAppendAttribution: "<a href=\"/terms/terms-and-conditions/\" target=\"_blank\">Conditions d'utilisation</a>" + ' - ' + '<a class="d4c-mapbuilder__language-choice" data-langchoice="en" href="#" title="English">en</a> ' + '<a class="d4c-mapbuilder__language-choice" data-langchoice="fr" href="#" title="Francais">fr</a> ' + ''
+        mapAppendAttribution: "<a href=\"/terms/terms-and-conditions/\" target=\"_blank\">Conditions d'utilisation</a>" + ' - ' + '<a class="d4c-mapbuilder__language-choice" data-langchoice="en" href="#" title="English">en</a> ' + '<a class="d4c-mapbuilder__language-choice" data-langchoice="fr" href="#" title="Francais">fr</a> ' + '',
+        language: 'fr',
+        mapGeobox: true
     });
 });
 app.factory('MapbuilderConfig', [function() {

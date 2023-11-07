@@ -4622,6 +4622,9 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
             create: function (data) {
                 return APIXHRService("POST", API_PATH, data);
             },
+            create_dataset: function (mapId, metadatas) {
+                return APIXHRService("POST", API_PATH + mapId + '/', metadatas);
+            },
             save: function (mapId, data) {
                 return APIXHRService("PUT", API_PATH + mapId + '/', data);
             },
@@ -4659,6 +4662,9 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
             },
             'update': function (data) {
                 return APIXHRService('PUT', API_PATH, data);
+            },
+            'unlock': function (data) {
+                return APIXHRService('POST', API_PATH + 'unlock', data);
             }
         };
     }]);
@@ -4994,6 +5000,87 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     }
                     if (typeof chartConfig.alignMonth !== "undefined") {
                         widgetCode += ' align-month="' + chartConfig.alignMonth + '"';
+                    }
+                    if (chartConfig.displayTitle === true) {
+                        widgetCode += ' display-title="true"';
+                    }
+                    if (chartConfig.textTitle) {
+                        widgetCode += ' text-title="' + chartConfig.textTitle + '"';
+                    }
+                    if(chartConfig.titleFontfamily){
+                        widgetCode += ' title-fontfamily="' + chartConfig.titleFontfamily + '"';
+                    }
+                    if(chartConfig.titleFontsize){
+                        widgetCode += ' title-fontsize="' + chartConfig.titleFontsize + '"';
+                    }
+                    if(chartConfig.titleTextcolor){
+                        widgetCode += ' title-textcolor="' + chartConfig.titleTextcolor + '"';
+                    }
+                    if (chartConfig.displaySubtitle === true) {
+                        widgetCode += ' display-subtitle="true"';
+                    }
+                    if (chartConfig.textSubtitle) {
+                        widgetCode += ' text-subtitle="' + chartConfig.textSubtitle + '"';
+                    }
+                    if(chartConfig.subtitleFontfamily){
+                        widgetCode += ' subtitle-fontfamily="' + chartConfig.subtitleFontfamily + '"';
+                    }
+                    if(chartConfig.subtitleFontsize){
+                        widgetCode += ' subtitle-fontsize="' + chartConfig.subtitleFontsize + '"';
+                    }
+                    if(chartConfig.subtitleTextcolor){
+                        widgetCode += ' subtitle-textcolor="' + chartConfig.subtitleTextcolor + '"';
+                    }
+                    if (chartConfig.displayDescription === true) {
+                        widgetCode += ' display-description="true"';
+                    }
+                    if (chartConfig.textDescription) {
+                        widgetCode += ' text-description="' + chartConfig.textDescription + '"';
+                    }
+                    if (chartConfig.displayLogo === true) {
+                        widgetCode += ' display-logo="true"';
+                    }
+                    if(chartConfig.logoFile){
+                        widgetCode += ' logo-file="' + chartConfig.logoFile + '"';
+                    }
+                    if(chartConfig.logoHeight){
+                        widgetCode += ' logo-height="' + chartConfig.logoHeight + '"';
+                    }
+                    if(chartConfig.logoWidth){
+                        widgetCode += ' logo-width="' + chartConfig.logoWidth + '"';
+                    }
+                    if(chartConfig.logoPosition){
+                        widgetCode += ' logo-position="' + chartConfig.logoPosition + '"';
+                    }
+                    if (chartConfig.backgroundColor) {
+                        widgetCode += ' background-color="' + chartConfig.backgroundColor + '"';
+                    }
+                    if (chartConfig.displayBorder === true) {
+                        widgetCode += ' display-border="true"';
+                    }
+                    if (chartConfig.borderColor) {
+                        widgetCode += ' border-color="' + chartConfig.borderColor + '"';
+                    }
+                    if (chartConfig.borderWidth) {
+                        widgetCode += ' border-width="' + chartConfig.borderWidth + '"';
+                    }
+                    if(chartConfig.legendFontfamily){
+                        widgetCode += ' legend-fontfamily="' + chartConfig.legendFontfamily + '"';
+                    }
+                    if(chartConfig.legendFontsize){
+                        widgetCode += ' legend-fontsize="' + chartConfig.legendFontsize + '"';
+                    }
+                    if(chartConfig.legendTextcolor){
+                        widgetCode += ' legend-textcolor="' + chartConfig.legendTextcolor + '"';
+                    }
+                    if(chartConfig.axesLabelFontfamily){
+                        widgetCode += ' axes-label-fontfamily="' + chartConfig.axesLabelFontfamily + '"';
+                    }
+                    if(chartConfig.axesLabelFontsize){
+                        widgetCode += ' axes-label-fontsize="' + chartConfig.axesLabelFontsize + '"';
+                    }
+                    if(chartConfig.axesLabelTextcolor){
+                        widgetCode += ' axes-label-textcolor="' + chartConfig.axesLabelTextcolor + '"';
                     }
                     widgetCode += '>\n';
                     if (chartConfig.queries) {
@@ -5446,35 +5533,35 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     var queryString = $.param($scope.apiParams.parameters, true);
                     if (queryString) {
                         // For gravitee, taken from Poitiers - To test to activate
-                        // //We have a redirection which makes a error if we go through gravitee if we use ? so we had it only if baseUrl doesn't end with a slash
-                        // if (baseURL.endsWith("/")) {
-                        //     return baseURL + queryString;
-                        // }
-                        // else {
-                        //     return baseURL + '?' + queryString;
-                        // }     
-                        return baseURL + '?' + queryString;
+                        //We have a redirection which makes a error if we go through gravitee if we use ? so we had it only if baseUrl doesn't end with a slash
+                        if (baseURL.endsWith("/")) {
+                            return baseURL + queryString;
+                        }
+                        else {
+                            return baseURL + '?' + queryString;
+                        }     
+                        // return baseURL + '?' + queryString;
                     } else {
                         return baseURL;
                     }
                 };
                 // For gravitee, taken from Poitiers - To test to activate
-                // $scope.getHeaders = function () {
-                //     var options = {};
-                //     if ($scope.service.apiKey) {
-                //         var headerKey = ($scope.service.headerKey ? $scope.service.headerKey : 'X-Gravitee-Api-Key');
-                //         options.headers = {
-                //             [headerKey]: $scope.service.apiKey
-                //         };
+                $scope.getHeaders = function () {
+                    var options = {};
+                    if ($scope.service.apiKey) {
+                        var headerKey = ($scope.service.headerKey ? $scope.service.headerKey : 'X-Gravitee-Api-Key');
+                        options.headers = {
+                            [headerKey]: $scope.service.apiKey
+                        };
 
-                //     }
-                //     return options;
-                // };
+                    }
+                    return options;
+                };
                 $scope.sendCall = function () {
                     // For gravitee, taken from Poitiers - To test to activate
-                    // var queryOptions = $scope.getHeaders();
-                    // $http.get($scope.computeURL(), queryOptions).success(function (data) {
-                    $http.get($scope.computeURL()).success(function (data) {
+                    var queryOptions = $scope.getHeaders();
+                    $http.get($scope.computeURL(), queryOptions).success(function (data) {
+                    // $http.get($scope.computeURL()).success(function (data) {
                         data.parameters["facet"] = $scope.api.parameters["facet"];
                         if (data.parameters["facet"].length <= 0) {
                             data.parameters["facet"] = "Aucun champ";
@@ -7263,7 +7350,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             }
         };
     }]);
-    mod.directive('d4cDatasetSelectionList', ['config', 'D4CWidgetsConfig', 'ManagementAPI', function (config, D4CWidgetsConfig, ManagementAPI) {
+    mod.directive('d4cDatasetSelectionList', ['D4CAPI','config', 'D4CWidgetsConfig', 'ManagementAPI', function (D4CAPI,config, D4CWidgetsConfig, ManagementAPI) {
         return {
             restrict: 'E',
             scope: {
@@ -7272,6 +7359,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 datasetid: '@',
                 catalogParameters: '=',
                 datasetParameters: '=',
+                filters: '=',
                 callback: '&',
                 customSources: '@',
                 apiKey: '@',
@@ -7289,11 +7377,15 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 $scope.HAS_RELATED_DOMAINS = config.HAS_RELATED_DOMAINS;
                 $scope.DOMAIN_ID = config.DOMAIN_ID;
                 $scope.catalogParameters = $scope.catalogParameters ? $scope.catalogParameters : {};
+                $scope.catalogParameters['refine.organization'] = [];
                 $.extend($scope.catalogParameters, {
                     'sort': 'modified'
                 });
                 $scope.presetDatasetParameters = angular.copy($scope.datasetParameters);
                 $scope.presetCatalogParameters = angular.copy($scope.catalogParameters);
+
+                $scope.filters = {};
+
                 if ($scope.datasetid) {
                     $scope.exploredDatasetID = $scope.datasetid;
                 }
@@ -7308,6 +7400,22 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     });
                 }
                 $scope.showMapFilter = false;
+                $scope.toggleOrganizationFilter = function (organization){
+                    var orgFilters = $scope.catalogParameters['refine.organization'] ? $scope.catalogParameters['refine.organization'] : [];
+
+                    var orgIndex = orgFilters.indexOf(organization.name);
+                    if(orgIndex >= 0){
+                        orgFilters.splice(orgIndex,1);
+                        organization.css = "list-item";
+                    }
+                    else{
+                        orgFilters.push(organization.name);
+                        organization.css = "list-item selected";
+                    }
+
+                    $scope.catalogParameters['refine.organization'] = orgFilters;
+                    console.log($scope.catalogParameters['refine.organization'])
+                };
                 $scope.exploreDataset = function (datasetID) {
                     $scope.exploredDatasetID = datasetID;
                 };
@@ -7563,6 +7671,26 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/embed_control.html',
             controller: function ($scope, $timeout) {
+                $.ajax({
+                    url: fetchPrefix() + '/d4c/api/license/2.0/list',
+                    success: function (data) {
+                        data = JSON.parse(data);
+                        $scope.licenseOptions = data.result;
+                    },
+                    error: function(error){
+                        console.log("Erreur : ",error);
+                    }
+                });
+                $scope.visibilityOptions = [
+                    {
+                        label:"Publique",
+                        value:false
+                    },
+                    {
+                        label:"Privée",
+                        value:true
+                    }
+                ];
                 $scope.sizes = [{
                     name: 'small',
                     label: '',
@@ -7598,25 +7726,31 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 $scope.mapOptions = {
                     scrollWheelZoom: false
                 };
-                $scope.saveEmbed = function (visualizationName, shareUrl, iframe, widget) {
+                $scope.saveEmbed = function (visualizationName,visualizationLicense,visualizationIsPrivate, shareUrl, iframe, widget) {
                     var saveEmbedAPI = VisualizationAPI.save;
-
                     var data = {
                         'datasetId': $scope.context != undefined ? $scope.context.dataset.datasetid : undefined,
                         'embedType': $scope.embedType,
                         'visualizationName': visualizationName,
+                        'visualizationLicense': visualizationLicense,
+                        'visualizationIsPrivate':visualizationIsPrivate,
                         'shareUrl': shareUrl,
                         'iframe': iframe,
                         'widget': widget,
                     }
 
+                    console.log(data);
+
+
+                    
                     saveEmbedAPI(data).success(function (data) {
                         $scope.saved = true;
                         $scope.visualizationId = data.result.visualizationId;
-
-                        // Encode visualizationName to avoid special characters
-                        visualizationName = encodeURIComponent(visualizationName);
-                        window.location.href = '/databfc/ro/datasets/manage/dataset?data4citizen-type=visualization&entity-id=' + data.result.visualizationId + '&dataset-title=' + visualizationName;
+                        var datasetId = data.result.datasetId;
+                        window.location.href = '/visualisation/?id=' + datasetId;
+                    })
+                    .error(function (error){
+                        console.log(error);
                     });
                 };
                 $scope.updateEmbed = function (visuId, shareUrl, iframe, widget) {
@@ -7900,6 +8034,95 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             }
         };
     }]);
+    mod.directive('d4cTextstyleOptions', ['$document', function ($document) {
+        return {
+            restrict: 'AE',
+            scope: {
+                selectedfontfamily: '=',
+                selectedfontsize: '=',
+                selectedtextcolor: '='
+            },
+            replace: true,
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/textstyle-options.html',
+            link: function (scope, element, attrs) {
+                scope.fontfamilies = [
+                    {label:"Arial",value:"Arial"},
+                    {label:"Calibri",value:"Arial"},
+                    {label:"Times New Roman",value:"Arial"}
+                ]
+                scope.fontsizes = [
+                    {label:"8",value:8},
+                    {label:"9",value:9},
+                    {label:"10",value:10},
+                    {label:"11",value:11},
+                    {label:"12",value:12},
+                    {label:"14",value:14},
+                    {label:"16",value:16},
+                    {label:"18",value:18},
+                    {label:"20",value:20},
+                    {label:"22",value:22},
+                    {label:"24",value:24},
+                    {label:"26",value:26},
+                    {label:"28",value:28},
+                    {label:"36",value:36},
+                    {label:"48",value:48},
+                    {label:"54",value:54},
+                    {label:"72",value:72}
+                ];               
+                scope.preview = true;
+                scope.internalValues = {};
+                scope.closeSelector = function ($event) {
+                    scope.preview = true;
+                };
+                scope.openSelector = function ($event) {
+                    scope.preview = false;
+                    var documentClickHandler = function ($event) {
+                        if ($($event.target).closest(element).length !== 1) {
+                            scope.closeSelector();
+                            $document.off('click', documentClickHandler);
+                        }
+                        scope.$apply();
+                    };
+                    $document.on('click', documentClickHandler);
+                    $event.stopPropagation();
+                    $event.preventDefault();
+                };
+                scope.toggleSelector = function ($event) {
+                    if (scope.preview) {
+                        scope.openSelector($event);
+                    } else {
+                        scope.closeSelector($event);
+                    }
+                };
+                scope.$watch('internalValues',function(nv,ov){
+                    if(nv.selectedfontfamily){
+                        scope.selectedfontfamily = nv.selectedfontfamily;
+                    }
+                    if(nv.selectedfontsize){
+                        scope.selectedfontsize = nv.selectedfontsize;
+                    }
+                    if(nv.selectedtextcolor){
+                        scope.selectedtextcolor = nv.selectedtextcolor;
+                    }
+                },true);
+                scope.$watch('selectedfontfamily',function(nv, ov){
+                    if(nv){
+                        scope.internalValues.selectedfontfamily = nv;
+                    }
+                },true);
+                scope.$watch('selectedfontsize',function(nv, ov){
+                    if(nv){
+                        scope.internalValues.selectedfontsize = nv;
+                    }
+                },true);
+                scope.$watch('selectedtextcolor',function(nv, ov){
+                    if(nv){
+                        scope.internalValues.selectedtextcolor = nv;
+                    }
+                },true);
+            }
+        };
+    }]);
     mod.directive('d4cColorChooser', ['colorScale', '$document', function (colorScale, $document) {
         return {
             restrict: 'AE',
@@ -7986,6 +8209,64 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             }
         };
     }]);
+    mod.directive('d4cChartControlLogo', function(){
+        return {
+            restrict: 'AE',
+            scope: {
+                height : '=',
+                width : '=',
+                position : '=',
+                imageUrl : '='
+            },
+            replace: true,
+            templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/chart-control-logo.html',
+            link: function (scope, element, attrs) {
+                scope.internalValues = {};
+                scope.positions = [
+                    {label : 'Top Left',value : 'topLeft'},
+                    {label : 'Top Center',value : 'topCenter'},
+                    {label : 'Top Right',value : 'topRight'},
+                    {label : 'Bottom Left',value : 'bottomLeft'},
+                    {label : 'Bottom Center',value : 'bottomCenter'},
+                    {label : 'Bottom Right',value : 'bottomRight'}
+                ];
+                scope.$watch('internalValues', function(nv,ov){
+                    if(nv.height){
+                        scope.height = nv.height;
+                    }
+                    if(nv.width){
+                        scope.width = nv.width;
+                    }
+                    if(nv.position){
+                        scope.position = nv.position;
+                    }
+                    if(nv.imageUrl){
+                        scope.imageUrl = nv.imageUrl;
+                    }
+                }, true);
+                scope.$watch('height', function(nv,ov){
+                    if(nv){
+                        scope.internalValues.height = nv;
+                    }
+                }, true);
+                scope.$watch('width', function(nv,ov){
+                    if(nv){
+                        scope.internalValues.width = nv;
+                    }
+                }, true);
+                scope.$watch('position', function(nv,ov){
+                    if(nv){
+                        scope.internalValues.position = nv;
+                    }
+                }, true);
+                scope.$watch('imageUrl', function(nv,ov){
+                    if(nv){
+                        scope.internalValues.imageUrl = nv;
+                    }
+                }, true);
+            }
+        }
+    });
     mod.directive('d4cMultipleEmails', function () {
         return {
             require: 'ngModel',
@@ -11225,6 +11506,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     if (apikey) {
                         apikey = $interpolate(apikey)($scope);
                     }
+                    var filters = $attrs[contextName + 'Filters'];
+                    if(filters) {
+                        filters = $interpolate(filters)($scope);
+                    }
                     $scope[contextName] = {
                         'name': contextName,
                         'type': 'catalog',
@@ -11232,6 +11517,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         'domainUrl': D4CAPI.getDomainURL(domain),
                         'apikey': apikey,
                         'parameters': parameters,
+                        'filters' : filters,
                         'toggleRefine': function (facetName, path, replace) {
                             D4C.Context.toggleRefine(this, facetName, path, replace);
                         },
@@ -11263,6 +11549,37 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         }
                         URLSynchronizer.addSynchronizedObject($scope, contextName + '.parameters');
                     }
+
+                    var catalog_search = D4CAPI.uniqueCall(D4CAPI.datasets.search);
+                    var catalog_search2 = D4CAPI.uniqueCall(D4CAPI.datasets.search2);
+
+                    $scope.$watch(contextName, function(nv,ov){
+                        var context = {domainUrl : ''};
+                        var options = {};
+                        if(nv.parameters['refine.features'] == 'analyze'){
+                            options['analyze'] = '';
+                        }
+                        else if(nv.parameters['refine.features'] == 'geo'){
+                            options['coordReq'] = '';
+                        }
+                        catalog_search(context,nv.parameters).success(function (data) {
+                            var datasets = data.datasets;
+                            catalog_search2(context, options).success(function (data2) {
+                                nv.filters = {
+                                    "organizations" : data2.all_organizations
+                                };
+                                for(var organization of nv.filters.organizations){
+                                    organization["count"] = 0;
+                                    organization["css"] = "list-item";
+                                    for(var dataset of datasets){
+                                        if(dataset["owner_org"] == organization.id){
+                                            organization["count"] ++;
+                                        }
+                                    }
+                                }
+                            });
+                        });
+                    },true);
                 }
             }]
         };
@@ -13007,7 +13324,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 //         facetsCtrl.setHideColumnsApi(scope.name,false);
                 //     }
 
-                // }
+                // }state
                 scope.displayTimerange = function () {
                     if (!scope.timerangeFilter) {
                         return false;
@@ -13904,6 +14221,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
         var getGlobalOptions = function (parameters, precision, periodic, chartplaceholder, domain) {
             var datasetid;
+            var stacked = false;
             if (parameters.queries.length === 0) {
                 parameters.xLabel = '';
             } else {
@@ -13911,16 +14229,70 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 if (!angular.isDefined(parameters.xLabel)) {
                     parameters.xLabel = ChartHelper.getXLabel(datasetid, parameters.queries[0].xAxis, parameters.timescale);
                 }
+                stacked = parameters.queries[0].stacked == "normal";
             }
+
+            parameters.displayTitle = !(angular.isUndefined(parameters.textTitle) || parameters.textTitle === '');
+            parameters.displaySubtitle = !(angular.isUndefined(parameters.textSubtitle) || parameters.textSubtitle === '');
+            parameters.displayDescription = !(angular.isUndefined(parameters.textDescription) || parameters.textDescription === '');
+            parameters.displayLogo = !(angular.isUndefined(parameters.logoFile) || parameters.logoFile === '');
+            
+            if(angular.isUndefined(parameters.logoHeight)){
+                parameters.logoHeight = 50;
+            }
+            if(angular.isUndefined(parameters.logoWidth)){
+                parameters.logoWidth = 50;
+            }
+            if(angular.isUndefined(parameters.logoPosition)){
+                parameters.logoPosition = 'topLeft';
+            }
+
             if (angular.isUndefined(parameters.displayLegend)) {
                 parameters.displayLegend = true;
             }
+
+            if (angular.isUndefined(parameters.displayBackgroundColor)) {
+                parameters.displayBackgroundColor = true;
+            }
+
             parameters.labelsXLength = parameters.labelsXLength || 12;
             var serieTitle = '<span style="color:{series.color}">{series.name}</span>:';
+            
+            console.log(parameters);
+
             var options = {
                 chart: {},
                 title: {
-                    text: ''
+                    text: parameters.textTitle,
+                    display: parameters.displayTitle,
+                    fontFamily: angular.isDefined(parameters.titleFontfamily) && parameters.titleFontfamily !== "" ? parameters.titleFontfamily : "Arial",
+                    fontSize: angular.isDefined(parameters.titleFontsize) && parameters.titleFontsize !== "" ? parameters.titleFontsize : 12,
+                    fontColor: parameters.titleTextcolor,
+                },
+                subtitle: {
+                    text: parameters.textSubtitle,
+                    display: parameters.displaySubtitle,
+                    fontFamily: angular.isDefined(parameters.subtitleFontfamily) && parameters.subtitleFontfamily !== "" ? parameters.subtitleFontfamily : "Arial",
+                    fontSize: angular.isDefined(parameters.subtitleFontsize) && parameters.subtitleFontsize !== "" ? parameters.subtitleFontsize : 12,
+                    fontColor: parameters.subtitleTextcolor,
+                },
+                description: {
+                    text: parameters.textDescription,
+                    display: parameters.displayDescription,
+                },
+                logo:{
+                    display: parameters.displayLogo,
+                    file: parameters.logoFile,
+                    width: parameters.logoWidth,
+                    height: parameters.logoHeight,
+                    position: parameters.logoPosition,
+                    margin: 10
+                },
+                backgroundColor: parameters.displayBackgroundColor ? parameters.backgroundColor : null,
+                border: {
+                    display: parameters.displayBorder,
+                    color: parameters.borderColor,
+                    width: parameters.borderWidth ? parameters.borderWidth : 1
                 },
                 credits: {
                     enabled: false
@@ -13966,8 +14338,16 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 legend: {
                     enabled: !!parameters.displayLegend,
                     useHTML: true,
-                    rtl: D4CWidgetsConfig.language === 'ar'
+                    rtl: D4CWidgetsConfig.language === 'ar',
+                    labels:{
+                        fontFamily: angular.isDefined(parameters.legendFontfamily) && parameters.legendFontfamily !== "" ? parameters.legendFontfamily : "Arial",
+                        fontSize: angular.isDefined(parameters.legendFontsize) && parameters.legendFontsize !== "" ? parameters.legendFontsize : 12,
+                        fontColor : parameters.legendTextcolor
+                    }
                 },
+                // Add this to increase resolution for image export
+                devicePixelRatio: 4,
+                stacked: stacked,
                 yAxis: [],
                 plotOptions: {
                     series: {
@@ -14251,8 +14631,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 decimals = ChartHelper.getDecimals(datasetid, serie.yAxis);
             }
             if (serie.displayValues) {
+                options.datalabels = {
+                    display : true
+                };
                 options.dataLabels.enabled = true;
-                options.dataLabels.color = 'black';
+                options.dataLabels.color = 'blue';
                 if (serie.type !== 'treemap') {
                     options.dataLabels.formatter = function () {
                         var label;
@@ -14264,6 +14647,14 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         return label;
                     };
                 }
+            }
+            else{
+                options.datalabels = {
+                    display : false
+                };
+            }
+            options.datastacklabels = {
+                display : serie.displayStackValues
             }
             if (serie.displayUnits && unit) {
                 options.tooltip.valueSuffix = ' ' + unit;
@@ -14550,7 +14941,28 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 colors: '=',
                 contexts: '=?'
             },
-            template: '' + '<div class="d4c-chart">' + '   <div class="d4c-chart__loading" ng-show="loading">' + '        <d4c-spinner></d4c-spinner>' + '    </div>' + '    <div class="chartplaceholder" style="display: none;" ></div> ' + '<div class="chartplaceholder"   style="background:white; border-radius: 1em;"></div>' + ' <debug data="chartoptions"></debug>' + '    <ul ng-if="tzsForcedLength > 0" class="chart-timezone-caption">' + '       <li ng-repeat="(datasetId, tz) in tzsForced">' + '           <i class="fa fa-info" aria-hidden="true">{{t}}</i>' + '           <span translate ng-if="hasDatasetWithoutTz || tzsForcedLength > 1">' + '               All dates and times for dataset {{datasetId}} are in {{tz}} time.' + '           </span>' + '           <span translate ng-if="!hasDatasetWithoutTz && tzsForcedLength === 1">' + '               All dates and times are in {{tz}} time.' + '           </span>' + '       </li>' + '    </ul>' + '</div>',
+            template: '' +  '<div class="d4c-chart">' + 
+                            '   <div class="d4c-chart__loading" ng-show="loading">' + 
+                            '        <d4c-spinner></d4c-spinner>' + 
+                            '    </div>' + 
+                            '    <div class="chartplaceholder" style="display: none;" ></div> ' + 
+                            '<div class="chartplaceholder"   style="background:white; border-radius: 1em;"></div>' + 
+                            ' <debug data="chartoptions"></debug>' + 
+                            '    <ul ng-if="tzsForcedLength > 0" class="chart-timezone-caption">' + 
+                            '       <li ng-repeat="(datasetId, tz) in tzsForced">' + 
+                            '           <i class="fa fa-info" aria-hidden="true">{{t}}</i>' + 
+                            '           <span translate ng-if="hasDatasetWithoutTz || tzsForcedLength > 1">' + 
+                            '               All dates and times for dataset {{datasetId}} are in {{tz}} time.' + 
+                            '           </span>' + 
+                            '           <span translate ng-if="!hasDatasetWithoutTz && tzsForcedLength === 1">' + 
+                            '               All dates and times are in {{tz}} time.' + 
+                            '           </span>' + 
+                            '       </li>' + 
+                            '    </ul>' + 
+                            '   <button class="d4c-chart-download" d4c-tooltip="Download chart" translate="d4c-tooltip" d4c-tooltip-direction="left" ng-click="downloadChart()">' + 
+                            '       <i class="fa fa-download"></i>' + 
+                            '   </button>' + 
+                            '</div>',
             controller: ['$scope', '$element', '$attrs', function ($scope) {
                 var timeSerieMode, precision, periodic, yAxisesIndexes, domain, that = this;
                 $scope.$watch('contexts', function (nv, ov) {
@@ -14561,6 +14973,14 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         }
                     }
                 }, true);
+                $scope.downloadChart = function () {
+                    var a = document.createElement('a');
+                    a.href = $scope.chart.toBase64Image();
+                    a.download = 'mon_graphique.png';
+
+                    // Trigger the download
+                    a.click();
+                };
                 this.highchartsLoaded = function (Highcharts, element) {
                     var chartplaceholder = element.find('.chartplaceholder');
                     function formatRowX(value) {
@@ -15089,6 +15509,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 options.time.timezone = $scope.tzsForced[Object.keys($scope.tzsForced)[0]];
                             }
                             try {
+                                if (options.series.length == 0) {
+                                    // Throw new error
+                                    throw new Error(translate("La configuration de votre graphique est incorrecte. Veuillez vérifier vos sélections."));
+                                }
+
                                 if (options.series.length > 500) {
                                     d4cNotificationService.sendNotification(translate("There are too many series to be displayed correctly, try to refine your query a bit."));
                                     options.series = options.series.slice(0, 10);
@@ -15104,34 +15529,39 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     //$('#divChartJs').html('');
                                     //$('#divChartJs').html('<canvas id="myChart"></canvas>');
 
+                                    Chart.plugins.register({PluginSubtitle});
+                                    Chart.plugins.register({PluginDescription});
+                                    Chart.plugins.register({PluginBackground});
+                                    Chart.plugins.register({PluginBorder});
+                                    Chart.plugins.register({PluginLogo});
+                                    Chart.plugins.register({PluginStackDataLabels});
+                                    Chart.plugins.register(ChartDataLabels);
+
                                     if ($scope.chart) {
-
-
-
-
                                         let idChart = $scope.chart.canvas.getContext('2d').canvas.id;
                                         $('#' + idChart).remove();
 
                                         options.chart.renderTo.innerHTML = '<canvas id="' + idChart + '"></canvas>';
                                         var canvas = document.getElementById(idChart);
                                         var ctx = canvas.getContext('2d');
-                                        $scope.chart = new Chart(ctx, chartjs(options));
 
-
+                                        var chartOptions = chartjs(options);
+                                        $scope.chart = new Chart(ctx, chartOptions);
 
                                         //$scope.chart = new Chart($scope.chart.canvas.getContext('2d'), chartjs(options));
-                                    } else {
-
-
+                                    }
+                                    else {
                                         var id = "myChart-" + $('canvas').length;
 
                                         options.chart.renderTo.innerHTML = '<canvas id="' + id + '"></canvas>';
 
                                         var canvas = document.getElementById(id);
                                         var ctx = canvas.getContext('2d');
-                                        $scope.chart = new Chart(ctx, chartjs(options));
-                                    }
 
+                                        var chartOptions = chartjs(options);
+                                        $scope.chart = new Chart(ctx, chartOptions);
+                                    }
+                                    console.log($scope.chart);
                                 }
 
                                 // treemap 
@@ -15167,6 +15597,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         .paddingTop(2)
                                         .paddingRight(2)
                                         .paddingInner(2) // Padding between each rectangle
+                                        
                                         //.paddingOuter(6)
                                         //.padding(20)
                                         (root)
@@ -15256,7 +15687,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
                                     // Try to sort legend but it does not work as is
                                     // Need to modify chart.min.js in lib to add after e.filter on buildLabels e.sort&&(i = i.sort(function(a,b){return e.sort(a,b,t.chart.data)}))
-                                    options.legend.labels = {};
+                                    //options.legend.labels = {};
                                     options.legend.labels.sort = function(a, b) { 
                                         // return b.datasetIndex > a.datasetIndex ? -1 : 1;
                                         return a.text.localeCompare(b.text);
@@ -15430,8 +15861,39 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                                     Array.prototype.push.apply(options.series[i].backgroundColor, options.series[i].backgroundColor);
                                                 }
 
-                                                options.series[i].data = data;
-                                                options.xAxis.categories = labels;
+                                                //options.series[i].data = data;
+                                                //options.xAxis.categories = labels;
+
+                                                if (typeof ((options.series[i].data[0])) === 'object') {
+                                                    let dataNew = [];
+                                                    let AxisX = [];
+                                                    for (let idx = 0; idx < options.series[i].data.length; idx++) {
+                                                        if (options.xAxis.type == "datetime") {
+                                                            dataNew.push({
+                                                                x: /*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/,
+                                                                y: options.series[i].data[idx][1]
+                                                            });
+
+                                                            AxisX.push(/*timeConverter(*/options.series[i].data[idx][0] /** 0.001)*/);
+                                                        } else {
+                                                            dataNew.push(options.series[i].data[idx].y);
+                                                            if (options.series[i].data[idx].color != undefined) {
+                                                                if (!Array.isArray(options.series[i].backgroundColor) || idx==0) {
+                                                                    options.series[i].backgroundColor = [];
+                                                                }
+                                                                options.series[i].backgroundColor.push(options.series[i].data[idx].color);
+                                                            }
+                                                        }
+                                                    }
+
+                                                    options.series[i].data = dataNew;
+                                                    if (AxisX.length > 0) {
+                                                        options.xAxis.categories = AxisX;
+                                                    }
+                
+                                                }
+
+                                                console.log(options.series[i].backgroundColor);
                                             }
                                             else if (options.series[i].type == 'polarArea') {
                                                 mainTypeChart = 'polarArea';
@@ -15455,7 +15917,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                                         } else {
                                                             dataNew.push(options.series[i].data[idx].y);
                                                             if (options.series[i].data[idx].color != undefined) {
-                                                                if (!Array.isArray(options.series[i].backgroundColor)) {
+                                                                if (!Array.isArray(options.series[i].backgroundColor) || idx==0) {
                                                                     options.series[i].backgroundColor = [];
                                                                 }
                                                                 options.series[i].backgroundColor.push(options.series[i].data[idx].color);
@@ -15467,6 +15929,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                                     if (AxisX.length > 0) {
                                                         options.xAxis.categories = AxisX;
                                                     }
+                
                                                 }
                                             }
                                             else if (options.series[i].type == 'funnel') {
@@ -15708,6 +16171,36 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                             }
                                         }
                                         else {
+                                            var scales = {};
+                                            if (options.stacked) {
+                                                scales = {
+                                                    yAxes: [
+                                                        {
+                                                            display: true,
+                                                            ticks: {
+                                                                beginAtZero: true,
+                                                            },
+                                                            stacked: options.stacked
+                                                        }
+                                                    ],
+                                                    xAxes: [{
+                                                        stacked: options.stacked
+                                                    }]
+                                                }
+                                            }
+                                            else {
+                                                scales = {
+                                                    yAxes: [
+                                                        {
+                                                            display: true,
+                                                            ticks: {
+                                                                beginAtZero: true,
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+
                                             datasets = {
                                                 type: mainTypeChart,
                                                 data: {
@@ -15715,16 +16208,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                                     datasets: options.series,
                                                 },
                                                 options: {
-                                                    scales: {
-                                                        yAxes: [
-                                                            {
-                                                                display: true,
-                                                                ticks: {
-                                                                    beginAtZero: true,
-                                                                }
-                                                            }
-                                                        ]
-                                                    },
+                                                    scales: scales,
                                                     tooltips: {
                                                         callbacks: {
                                                             label: function (tooltipItem, data) {
@@ -15802,6 +16286,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                             var yAxis = [];
                                             for (var i = 0; i < options.yAxis.length; i++) {
                                                 options.yAxis[i].display = display;
+                                                options.yAxis[i].stacked = options.stacked;
                                                 options.yAxis[i].id = 'y' + i;
                                                 /*options.yAxis[i].ticks = {
                                                                 beginAtZero: true,
@@ -15816,10 +16301,36 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                             var scales;
                                             if (mainTypeChart == "radar" || mainTypeChart == "polarArea") {
                                                 scales = {};
-                                            } else if (mainTypeChart == "horizontalBar") {
-                                                scales = { xAxes: yAxis };
-                                            } else {
-                                                scales = { yAxes: yAxis };
+                                            }
+                                            else if (mainTypeChart == "horizontalBar") {
+                                                if (options.stacked) {
+                                                    scales = {
+                                                        xAxes: yAxis,
+                                                        yAxis: [{
+                                                            stacked: true,
+                                                        }]
+                                                    };
+                                                }
+                                                else {
+                                                    scales = {
+                                                        xAxes: yAxis
+                                                    };
+                                                }
+                                            }
+                                            else {
+                                                if (options.stacked) {
+                                                    scales = {
+                                                        yAxes: yAxis,
+                                                        xAxes: [{
+                                                            stacked: true,
+                                                        }]
+                                                    };
+                                                }
+                                                else {
+                                                    scales = {
+                                                        yAxes: yAxis
+                                                    };
+                                                }
                                             }
 
                                             datasets = {
@@ -15863,7 +16374,82 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     }
 
                                     datasets.options.legend = options.legend;
+                                    datasets.options.devicePixelRatio = options.devicePixelRatio;
+                                    
+                                    var layoutTop = 0;
+                                    var layoutBottom = 100;
+                                    
+                                    var logoPos = options.logo.position;
 
+                                    if(options.logo.display){
+                                        if(logoPos=='bottomLeft' || logoPos=='bottomCenter' || logoPos=='bottomRight'){
+                                            layoutBottom += options.logo.height + options.logo.margin;
+                                        }
+                                        else{
+                                            layoutTop += options.logo.height + options.logo.margin;
+                                        }
+                                    }
+
+
+                                    datasets.options.layout = {
+                                        padding : {
+                                            top : layoutTop,
+                                            bottom : layoutBottom
+                                        }
+                                    };
+
+                                    datasets.options.title = options.title;
+
+                                    //Check if we can show stacked values for a serie (currently apply to all series)
+                                    //NB : we can't display two series of stack values and there are merged into the same stack instead
+                                    var displayStackValues = false;
+                                    console.log(options);
+                                    if(options.stacked){
+                                        for(const serie of options.series){
+                                            if(serie.datastacklabels.display){
+                                                displayStackValues = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    datasets.options.plugins = {
+                                        datalabels: {
+                                            color: 'black',
+                                            formatter : Math.round
+                                        },
+                                        chartJsPluginStackDataLabels: {
+                                            fontColor: 'red',
+                                            display : displayStackValues
+                                        },
+                                        chartJsPluginSubtitle: {
+                                            display: options.subtitle.display,
+                                            // fontSize: 30,
+                                            // fontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                                            // fontColor: '#888',
+                                            // fontStyle: 'normal',
+                                            // paddingTop: 4,
+                                            text: options.subtitle.text,
+                                            fontFamily: options.subtitle.fontFamily,
+                                            fontSize: options.subtitle.fontSize,
+                                            fontColor: options.subtitle.fontColor
+                                        },
+                                        chartJsPluginDescription: {
+                                            display: options.description.display,
+                                            text: options.description.text,
+                                        },
+                                        chartJsPluginBackground: {
+                                            color: options.backgroundColor,
+                                        },
+                                        chartJsPluginBorder: {
+                                            borderColor: options.border.color,
+                                            borderWidth: options.border.display ? options.border.width : 0,
+                                            borderDash: null,
+                                            borderDashOffset: 0,
+                                        },
+                                        chartJsPluginLogo: options.logo
+                                    };
+                                    
                                     Chart.scaleService.updateScaleDefaults('category', {
                                         ticks: {
                                             callback: function (tick) {
@@ -16136,7 +16722,32 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 labelY: '@',
                 sort: '@',
                 maxpoints: '@',
-                chart: '=?parameters'
+                chart: '=?parameters',
+                textTitle: '@',
+                displayTitle: '@',
+                titleFontfamily: '@',
+                titleFontsize: '@',
+                titleTextcolor: '@',
+                textSubtitle: '@',
+                displaySubtitle: '@',
+                subtitleFontfamily: '@',
+                subtitleFontsize: '@',
+                subtitleTextcolor: '@',
+                textDescription: '@',
+                displayDescription: '@',
+                displayBackgroundColor: '@',
+                backgroundColor: '@',
+                displayBorder: '@',
+                borderColor: '@',
+                borderWidth: '@',
+                legendFontfamily: '@',
+                legendFontsize: '@',
+                legendTextcolor: '@',
+                logoFile: '@',
+                logoHeight: '@',
+                logoWidth: '@',
+                logoPosition: '@',
+                displayLogo: '@'
             },
             replace: true,
             transclude: true,
@@ -16161,6 +16772,34 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         displayLegend: angular.isDefined($scope.displayLegend) && $scope.displayLegend === "false" ? false : true,
                         labelsXLength: angular.isDefined($scope.labelsXLength) && $scope.labelsXLength !== "" ? parseInt($scope.labelsXLength) : undefined,
                         alignMonth: angular.isDefined($scope.alignMonth) && $scope.alignMonth === "false" ? false : true,
+                        displayTitle: angular.isDefined($scope.displayTitle) && $scope.displayTitle === "false" ? false : true,
+                        textTitle: angular.isDefined($scope.textTitle) && $scope.textTitle !== "" ? $scope.textTitle : undefined,
+                        titleFontfamily: angular.isDefined($scope.titleFontfamily) && $scope.titleFontfamily !== "" ? $scope.titleFontfamily : undefined,
+                        titleFontsize: angular.isDefined($scope.titleFontsize) && $scope.titleFontsize !== "" ? $scope.titleFontsize : undefined,
+                        titleTextcolor: angular.isDefined($scope.titleTextcolor) && $scope.titleTextcolor !== "" ? $scope.titleTextcolor : undefined,
+                        displaySubtitle: angular.isDefined($scope.displaySubtitle) && $scope.displaySubtitle === "false" ? false : true,
+                        textSubtitle: angular.isDefined($scope.textSubtitle) && $scope.textSubtitle !== "" ? $scope.textSubtitle : undefined,
+                        subtitleFontfamily: angular.isDefined($scope.subtitleFontfamily) && $scope.subtitleFontfamily !== "" ? $scope.subtitleFontfamily : {label:"Arial"},
+                        subtitleFontsize: angular.isDefined($scope.subtitleFontsize) && $scope.subtitleFontsize !== "" ? $scope.subtitleFontsize : {label:"12",value:12},
+                        subtitleTextcolor: angular.isDefined($scope.subtitleTextcolor) && $scope.subtitleTextcolor !== "" ? $scope.subtitleTextcolor : '#888',
+                        displayDescription: angular.isDefined($scope.displayDescription) && $scope.displayDescription === "false" ? false : true,
+                        textDescription: angular.isDefined($scope.textDescription) && $scope.textDescription !== "" ? $scope.textDescription : undefined,
+                        descriptionFontfamily: angular.isDefined($scope.descriptionFontfamily) && $scope.descriptionFontfamily !== "" ? $scope.descriptionFontfamily : {label:"Arial"},
+                        descriptionFontsize: angular.isDefined($scope.descriptionFontsize) && $scope.descriptionFontsize !== "" ? $scope.descriptionFontsize : {label:"12",value:12},
+                        descriptionTextcolor: angular.isDefined($scope.descriptionTextcolor) && $scope.descriptionTextcolor !== "" ? $scope.descriptionTextcolor : '#888',
+                        displayBackgroundColor: angular.isDefined($scope.displayBackgroundColor) && $scope.displayBackgroundColor === "false" ? false : true,
+                        backgroundColor: angular.isDefined($scope.backgroundColor) && $scope.backgroundColor !== "" ? $scope.backgroundColor : undefined,
+                        displayBorder: angular.isDefined($scope.displayBorder) && $scope.displayBorder === "false" ? false : true,
+                        borderColor: angular.isDefined($scope.borderColor) && $scope.borderColor !== "" ? $scope.borderColor : undefined,
+                        borderWidth: angular.isDefined($scope.borderWidth) && $scope.borderWidth !== "" ? $scope.borderWidth : undefined,
+                        legendFontfamily: angular.isDefined($scope.legendFontfamily) && $scope.legendFontfamily !== "" ? $scope.legendFontfamily : undefined,
+                        legendFontsize: angular.isDefined($scope.legendFontsize) && $scope.legendFontsize !== "" ? $scope.legendFontsize : undefined,
+                        legendTextcolor: angular.isDefined($scope.legendTextcolor) && $scope.legendTextcolor !== "" ? $scope.legendTextcolor : undefined,
+                        logoFile: angular.isDefined($scope.logoFile) && $scope.logoFile !== "" ? $scope.logoFile : undefined,
+                        logoHeight: angular.isDefined($scope.logoHeight) && $scope.logoHeight !== "" ? $scope.logoHeight : undefined,
+                        logoWidth: angular.isDefined($scope.logoWidth) && $scope.logoWidth !== "" ? $scope.logoWidth : undefined,
+                        logoPosition: angular.isDefined($scope.logoPosition) && $scope.logoPosition !== "" ? $scope.logoPosition : undefined,
+                        displayLogo: angular.isDefined($scope.displayLogo) && $scope.displayLogo !== "" ? $scope.displayLogo : undefined
                     };
                 }
                 angular.forEach($scope.chart, function (item, key) {
@@ -16798,11 +17437,19 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                         "polygon_geojson": true
                                     }
                                 })
+                                // geocoder: new L.Control.Geocoder.Mapbox({
+                                //     apiKey: 'REPLACE_WITH_API_KEY',
+                                //     geocodingQueryParams: {
+                                //         "language": D4CWidgetsConfig.language || 'en',
+                                //         "country": D4CWidgetsConfig.language,
+                                //         "routing": true
+                                //     }
+                                // })
                             });
                             geocoder.markGeocode = function (result) {
-                                map.fitBounds(result.bbox);
-                                if (result.properties.geojson) {
-                                    var highlight = L.geoJson(result.properties.geojson, {
+                                map.fitBounds(result.geocode.bbox);
+                                if (result.geocode.properties.geojson) {
+                                    var highlight = L.geoJson(result.geocode.properties.geojson, {
                                         style: function () {
                                             return {
                                                 opacity: 0,
@@ -17644,9 +18291,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                     scope.removeSearchMarkers();
                     var loc = MapHelper.getLocationStructure(mapCtrl.getCurrentPosition());
                     AlgoliaPlaces(userQuery, loc.center.join(',')).then(function success(response) {
+                        console.log(response);
                         scope.selectedIndex = 0;
                         scope.suggestions = response.data.hits;
-                    }, function error(response) { });
+                    }, function error(response) { console.log("error");});
                 };
                 scope.expandSearchBox = function () {
                     scope.expanded = true;
@@ -18173,7 +18821,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 (function () {
     'use strict';
     var mod = angular.module('d4c-widgets');
-    mod.directive('d4cMap', ['URLSynchronizer', 'MapHelper', 'ModuleLazyLoader', 'D4CWidgetsConfig', 'MapLayerRenderer', 'translate', 'translatePlural', '$q', '$timeout', '$location', function (URLSynchronizer, MapHelper, ModuleLazyLoader, D4CWidgetsConfig, MapLayerRenderer, translate, translatePlural, $q, $timeout, $location) {
+    mod.directive('d4cMap', ['$rootScope', 'URLSynchronizer', 'MapHelper', 'ModuleLazyLoader', 'D4CWidgetsConfig', 'MapLayerRenderer', 'translate', 'translatePlural', '$q', '$timeout', '$location', function ($rootScope,URLSynchronizer, MapHelper, ModuleLazyLoader, D4CWidgetsConfig, MapLayerRenderer, translate, translatePlural, $q, $timeout, $location) {
         return {
             restrict: 'EA',
             scope: {
@@ -18193,6 +18841,8 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 scrollWheelZoom: '@',
                 minZoom: '@',
                 maxZoom: '@',
+                mapEmpriseShape: '@',
+                mapEmpriseCoordinates: '@',
                 displayControl: '=?',
                 displayControlSingleLayer: '=?',
                 searchBox: '=?',
@@ -18215,6 +18865,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 }
                 if (attrs.d4cAutoResize === 'true' || attrs.d4cAutoResize === '') {
                     scope.autoResize = 'true';
+                }
+                if (scope.mapEmpriseShape && scope.mapEmpriseCoordinates) {
+                    scope.mapConfig.drawnArea = {
+                        'shape': scope.mapEmpriseShape,
+                        'coordinates': scope.mapEmpriseCoordinates
+                    }
                 }
                 var isStatic = scope.staticMap && scope.staticMap.toLowerCase() === 'true';
                 var noRefit = scope.noRefit && scope.noRefit.toLowerCase() === 'true';
@@ -18396,13 +19052,81 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
 
                     var map = new L.D4CMap(element.children()[0].children[0], mapOptions);
                     map.addControl(new L.Control.Scale());
-                    map.addControl(new L.easyPrint({
+                    // map.addControl(new L.easyPrint({
+                    //     title: 'Exporter la carte',
+                    //     position: 'bottomright',
+                    //     exportOnly: true,
+                    //     filename: 'carte_export',
+                    //     sizeModes: ['A4Portrait', 'A4Landscape']
+                    // }));
+                    // map.addControl(new L.control.browserPrint({
+                    //     title: 'Exporter la carte',
+                    //     position: 'bottomright',
+                    //     printModes: [
+                    //         L.BrowserPrint.Mode.Portrait("A3", {title: "A3", scale: 2}),
+                    //     ]
+                    // }));
+
+                    var customActionToPrint = function(context, mode) {
+                        return function() { 
+                            var node = document.getElementsByClassName("leaflet-map-pane");
+                            // domtoimage.toPng(node[0])
+                            //     .then(function (dataUrl) {
+                            //         var link = document.createElement('a');
+                            //         link.download = map.printControl.options.documentTitle || "exportedMap" + '.png';
+                            //         link.href = dataUrl;
+                            //         link.click();
+                            //     })
+                            //     .catch(function (error) {
+                            //         console.error('oops, something went wrong!', error);
+                            //     });
+
+                            domtoimage.toSvg(node[0])
+                                .then(function (dataUrl) {
+                                    var link = document.createElement('a');
+                                    link.download = map.printControl.options.documentTitle || "exportedMap" + '.svg';
+                                    link.href = dataUrl;
+                                    link.click();
+                                })
+                                .catch(function (error) {
+                                    console.error('oops, something went wrong!', error);
+                                });
+                        }
+                    };
+                    map.addControl(new L.control.browserPrint({
                         title: 'Exporter la carte',
                         position: 'bottomright',
-                        exportOnly: true,
-                        filename: 'carte_export',
-                        sizeModes: ['A4Portrait', 'A4Landscape']
+                        printModes: [
+                            L.browserPrint.mode("Alert", {
+                                title:"User specified print action",
+                                pageSize: "A6", 
+                                action: customActionToPrint, 
+                                invalidateBounds: false
+                            }),
+                        ]
                     }));
+
+                    // Not working anymore  - Dunno why
+                    // var saveAsImage = function () {
+                    //     // return domtoimage.toPng(document.querySelector("#-print")).then(function (dataUrl) {
+                    //     return domtoimage.toPng(document.body).then(function (dataUrl) {
+                    //         var link = document.createElement('a');
+                    //         link.download = map.printControl.options.documentTitle || "exportedMap" + '.png';
+                    //         link.href = dataUrl;
+                    //         link.click();
+                    //     });
+                    // };
+                    // map.addControl(new L.control.browserPrint({
+                    //     // title: 'Exporter la carte',
+                    //     documentTitle: "printImage",
+                    //     printModes: [
+                    //         L.BrowserPrint.Mode.Auto("Exporter la carte"),
+                    //     ],
+                    //     printFunction: saveAsImage
+                    // }));
+                    // L.BrowserPrint.Utils.registerLayer(L.MarkerClusterGroup, 'L.MarkerClusterGroup', function (layer, utils) {
+                    //     return layer;
+                    // });
                     map.addControl(new L.Control.Measure({
                         position: 'bottomright',
                         primaryLengthUnit: 'meters',
@@ -18431,23 +19155,49 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             }
                         } catch (e) { }
                     }
-                    if (D4CWidgetsConfig.mapGeobox && !scope.searchBox && !isStatic) {
+                    
+                    if (D4CWidgetsConfig.mapGeobox && !isStatic) {
                         var geocoder = L.Control.geocoder({
                             placeholder: translate('Find a place...'),
                             errorMessage: translate('Nothing found.'),
-                            geocoder: new L.Control.Geocoder.Nominatim({
-                                serviceUrl: "https://nominatim.openstreetmap.org/",
+                            // By default we use the Nominatim but if we have an API Key for google or mapbox we can uncomment the following code
+                            // geocoder: new L.Control.Geocoder.Nominatim({
+                            //     serviceUrl: "https://nominatim.openstreetmap.org/",
+                            //     geocodingQueryParams: {
+                            //         "accept-language": D4CWidgetsConfig.language || 'en',
+                            //         "countrycodes": D4CWidgetsConfig.language,
+                            //         "polygon_geojson": true
+                            //     }
+                            // })
+                            geocoder: new L.Control.Geocoder.Pelias({
+                                serviceUrl: "https://pelias.askem.eu/v1",
                                 geocodingQueryParams: {
                                     "accept-language": D4CWidgetsConfig.language || 'en',
                                     "countrycodes": D4CWidgetsConfig.language,
                                     "polygon_geojson": true
                                 }
                             })
+                            // geocoder: new L.Control.Geocoder.Google({
+                            //     apiKey: 'XX_API_KEY',
+                            //     geocodingQueryParams: {
+                            //         "accept-language": D4CWidgetsConfig.language || 'en',
+                            //         "countrycodes": D4CWidgetsConfig.language,
+                            //         "polygon_geojson": true
+                            //     }
+                            // })
+                            // geocoder: new L.Control.Geocoder.Pelias({
+                            //     apiKey: 'REPLACE_WITH_API_KEY',
+                            //     geocodingQueryParams: {
+                            //         "language": D4CWidgetsConfig.language || 'en',
+                            //         "country": D4CWidgetsConfig.language,
+                            //         "routing": true
+                            //     }
+                            // })
                         });
                         geocoder.markGeocode = function (result) {
-                            map.fitBounds(result.bbox);
-                            if (result.properties.geojson) {
-                                var highlight = L.geoJson(result.properties.geojson, {
+                            map.fitBounds(result.geocode.bbox);
+                            if (result.geocode.properties.geojson) {
+                                var highlight = L.geoJson(result.geocode.properties.geojson, {
                                     style: function () {
                                         return {
                                             opacity: 0,
@@ -18997,6 +19747,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             }
                             var drawn;
                             if (nv) {
+                                scope.mapEmpriseShape = nv.shape;
+                                scope.mapEmpriseCoordinates = nv.coordinates;
+                                $rootScope.$emit('mapEmpriseShapeChange',scope.mapEmpriseShape);
+                                $rootScope.$emit('mapEmpriseCoordinatesChange',scope.mapEmpriseCoordinates);
                                 if (nv.shape === 'polygon') {
                                     var geojson = D4C.GeoFilter.getPolygonParameterAsGeoJSON(nv.coordinates);
                                     var coordinates = geojson.coordinates[0];
@@ -19024,6 +19778,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                     scope.drawnItems.addLayer(drawn);
                                     setLayerNonInteractive(scope.drawnItems.getLayers()[0]);
                                 }
+                            }
+                            else{
+                                $rootScope.$emit('mapEmpriseShapeChange',null);
+                                $rootScope.$emit('mapEmpriseCoordinatesChange',null);
                             }
                             angular.forEach(MapHelper.MapConfiguration.getActiveContextList(scope.mapConfig, {
                                 geoOnly: true
@@ -19081,7 +19839,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                                 distance = null;
                             }
                         }
+
                     });
+
                     if (polygon) {
                         scope.mapConfig.drawnArea = {
                             shape: 'polygon',
@@ -19092,7 +19852,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             shape: 'circle',
                             coordinates: distance
                         };
-                    } else {
+                    } else if (!scope.mapConfig.drawnArea){
                         scope.mapConfig.drawnArea = {};
                     }
                 };
@@ -20378,13 +21138,15 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             priority: 1001,
             controller: ['$scope', '$attrs', function ($scope, $attrs) {
                 var dataset_search = D4CAPI.uniqueCall(D4CAPI.records.search_simple),
-                    catalog_search = D4CAPI.uniqueCall(D4CAPI.datasets.search);
+                    catalog_search = D4CAPI.uniqueCall(D4CAPI.datasets.search)
                 var loadResults = function (context) {
+                    console.log($attrs.d4cOrganizationFilter);
                     var options = angular.extend({}, context.parameters, {
-                        'rows': $attrs.d4cResultsMax
+                        'rows': $attrs.d4cResultsMax,
                     });
                     var variable = $attrs.d4cResults || 'results';
                     $scope.loading = true;
+
                     if (context.type === 'catalog') {
                         angular.extend(options, {
                             extrametas: 'true',
@@ -20817,7 +21579,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             replace: true,
             transclude: true,
             require: ['?d4cAutoResize', '?autoResize'],
-            template: '<div class="records records-table d4cwidget d4cwidget-table">' + ' <div class="d4cwidget-table__header" ng-show="records.length">' + '     <table class="d4cwidget-table__internal-table">' + '         <thead class="d4cwidget-table__internal-header-table-header">' + '         <tr>' + '             <th class="d4cwidget-table__header-cell d4cwidget-table__header-cell--spinner"><div class="d4cwidget-table__cell-container"><d4c-spinner ng-show="fetching" class="d4cwidget-spinner--large"></d4c-spinner></div></th>' + '             <th class="d4cwidget-table__header-cell" ng-repeat="field in context.dataset.fields|fieldsForVisualization:\'table\'|fieldsFilter:displayedFieldsArray"' + '                 title="{{ field.descriptionlabel }}"' + '                 ng-click="toggleSort(field)"' + '                 >' + '                 <div class="d4cwidget-table__header-cell-container">' + '                     <div class="d4cwidget-table__label" ng-bind="field.label || field.name || field.descriptionlabel" ng-attr-title="{{field.label || field.name || field.descriptionlabel}}"></div>' + '                     <div ng-class="{\'d4cwidget-table__sort-icons\': true, \'d4cwidget-table__sort-icons--active\': field.name == context.parameters.sort || \'-\'+field.name == context.parameters.sort}" ng-show="isFieldSortable(field)" title="sort" translate="title">' + '                         <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in ascending order" tabindex="0" translate="aria-label">' + '                            <i class="fa fa-chevron-up d4cwidget-table__sort-icons__up"  ng-class="{\'d4cwidget-table__sort-icons__up--active\': isDescendingSorted(field)}" aria-hidden="true"></i>' + '                         </button>' + '                         <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in descending order" tabindex="0" translate="aria-label">' + '                            <i class="fa fa-chevron-down d4cwidget-table__sort-icons__down"  ng-class="{\'d4cwidget-table__sort-icons__down--active\': isAscendingSorted(field)}" aria-hidden="true"></i>' + '                         </button>' + '                     </div>' + '                 </div>' + '             </th>' + '         </tr>' + '         </thead>' + '     </table>' + ' </div>' + ' <div class="d4cwidget-table__records">' + '     <table class="d4cwidget-table__internal-table" infinite-scroll="loadMore()" infinite-scroll-distance="1" infinite-scroll-disabled="fetching">' + '         <thead class="d4cwidget-table__internal-table-header">' + '             <tr>' + '                 <th class="d4cwidget-table__header-cell d4cwidget-table__header-cell--spinner"><div class="d4cwidget-table__cell-container"><d4c-spinner ng-show="fetching" class="d4cwidget-spinner--large"></d4c-spinner></div></th>' + '                 <th class="d4cwidget-table__header-cell" ng-repeat="field in context.dataset.fields|fieldsForVisualization:\'table\'|fieldsFilter:displayedFieldsArray"' + '                     title="{{ field.descriptionlabel }}">' + '                     <div class="d4cwidget-table__cell-container">' + '                         <span ng-bind="field.label"></span>' + '                         <div class="d4cwidget-table__sort-icons" ng-show="isFieldSortable(field)" title="sort" translate="title">' + '                             <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in ascending order" tabindex="0" translate="aria-label">' + '                                <i class="fa fa-chevron-up d4cwidget-table__sort-icons__up" aria-hidden="true"></i>' + '                             </button>' + '                             <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in descending order" tabindex="0" translate="aria-label">' + '                                <i class="fa fa-chevron-down d4cwidget-table__sort-icons__down" aria-hidden="true"></i>' + '                             </button>' + '                         </div>' + '                     </div>' + '                 </th>' + '             </tr>' + '         </thead>' + '         <tbody class="d4cwidget-table__records-tbody">' + '         </tbody>' + '     </table>' + ' </div>' + '<div ng-if="forcedTimezone" class="table-timezone-caption">' + '    <i class="fa fa-info" aria-hidden="true"></i>' + '    All dates and times are in {{ forcedTimezone }} time.' + '</div>' + ' <div ng-if="displayDatasetFeedback" class="table-feedback-new"><a d4c-dataset-feedback d4c-dataset-feedback-dataset="context.dataset"><i class="fa fa-comment" aria-hidden="true"></i> <span translate>Suggest a new record</span></a></div>' + ' <div class="d4cwidget-overlay" ng-hide="fetching || records"><span class="d4cwidget-overlay__message" translate>No results</span></div>' + ' <div class="d4cwidget-overlay" ng-hide="(!fetching || records) && !working"><d4c-spinner></d4c-spinner></div>' + '</div>',
+            template: '<div class="records records-table d4cwidget d4cwidget-table">' + ' <div class="d4cwidget-table__header" ng-show="records.length">' + '     <table class="d4cwidget-table__internal-table">' + '         <thead class="d4cwidget-table__internal-header-table-header">' + '         <tr>' + '             <th class="d4cwidget-table__header-cell d4cwidget-table__header-cell--spinner"><div class="d4cwidget-table__cell-container"><d4c-spinner ng-show="fetching" class="d4cwidget-spinner--large"></d4c-spinner></div></th>' + '             <th class="d4cwidget-table__header-cell" ng-repeat="field in context.dataset.fields|fieldsForVisualization:\'table\'|fieldsFilter:displayedFieldsArray"' + '                 title="{{ field.descriptionlabel }}"' + '                 ng-click="toggleSort(field)"' + '                 >' + '                 <div class="d4cwidget-table__header-cell-container">' + '                     <div class="d4cwidget-table__label" ng-bind="field.label || field.name || field.descriptionlabel" ng-attr-title="{{ field.descriptionlabel || field.label || field.name }}"></div>' + '                     <div ng-class="{\'d4cwidget-table__sort-icons\': true, \'d4cwidget-table__sort-icons--active\': field.name == context.parameters.sort || \'-\'+field.name == context.parameters.sort}" ng-show="isFieldSortable(field)" title="sort" translate="title">' + '                         <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in ascending order" tabindex="0" translate="aria-label">' + '                            <i class="fa fa-chevron-up d4cwidget-table__sort-icons__up"  ng-class="{\'d4cwidget-table__sort-icons__up--active\': isDescendingSorted(field)}" aria-hidden="true"></i>' + '                         </button>' + '                         <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in descending order" tabindex="0" translate="aria-label">' + '                            <i class="fa fa-chevron-down d4cwidget-table__sort-icons__down"  ng-class="{\'d4cwidget-table__sort-icons__down--active\': isAscendingSorted(field)}" aria-hidden="true"></i>' + '                         </button>' + '                     </div>' + '                 </div>' + '             </th>' + '         </tr>' + '         </thead>' + '     </table>' + ' </div>' + ' <div class="d4cwidget-table__records">' + '     <table class="d4cwidget-table__internal-table" infinite-scroll="loadMore()" infinite-scroll-distance="1" infinite-scroll-disabled="fetching">' + '         <thead class="d4cwidget-table__internal-table-header">' + '             <tr>' + '                 <th class="d4cwidget-table__header-cell d4cwidget-table__header-cell--spinner"><div class="d4cwidget-table__cell-container"><d4c-spinner ng-show="fetching" class="d4cwidget-spinner--large"></d4c-spinner></div></th>' + '                 <th class="d4cwidget-table__header-cell" ng-repeat="field in context.dataset.fields|fieldsForVisualization:\'table\'|fieldsFilter:displayedFieldsArray"' + '                     title="{{ field.descriptionlabel }}">' + '                     <div class="d4cwidget-table__cell-container">' + '                         <span ng-bind="field.label"></span>' + '                         <div class="d4cwidget-table__sort-icons" ng-show="isFieldSortable(field)" title="sort" translate="title">' + '                             <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in ascending order" tabindex="0" translate="aria-label">' + '                                <i class="fa fa-chevron-up d4cwidget-table__sort-icons__up" aria-hidden="true"></i>' + '                             </button>' + '                             <button class="d4cwidget-table__sort-icon" aria-label="Sort column {{ field.label }} in descending order" tabindex="0" translate="aria-label">' + '                                <i class="fa fa-chevron-down d4cwidget-table__sort-icons__down" aria-hidden="true"></i>' + '                             </button>' + '                         </div>' + '                     </div>' + '                 </th>' + '             </tr>' + '         </thead>' + '         <tbody class="d4cwidget-table__records-tbody">' + '         </tbody>' + '     </table>' + ' </div>' + '<div ng-if="forcedTimezone" class="table-timezone-caption">' + '    <i class="fa fa-info" aria-hidden="true"></i>' + '    All dates and times are in {{ forcedTimezone }} time.' + '</div>' + ' <div ng-if="displayDatasetFeedback" class="table-feedback-new"><a d4c-dataset-feedback d4c-dataset-feedback-dataset="context.dataset"><i class="fa fa-comment" aria-hidden="true"></i> <span translate>Suggest a new record</span></a></div>' + ' <div class="d4cwidget-overlay" ng-hide="fetching || records"><span class="d4cwidget-overlay__message" translate>No results</span></div>' + ' <div class="d4cwidget-overlay" ng-hide="(!fetching || records) && !working"><d4c-spinner></d4c-spinner></div>' + '</div>',
             controller: ['$scope', '$element', '$timeout', '$document', '$window', 'D4CAPI', 'DebugLogger', '$filter', '$http', '$compile', '$transclude', '$q', function ($scope, $element, $timeout, $document, $window, D4CAPI, DebugLogger, $filter, $http, $compile, $transclude, $q) {
                 $scope.displayedFieldsArray = null;
                 $scope.displayDatasetFeedback = false;
@@ -21628,6 +22390,55 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             context.parameters[queryParameter] = contextConfig['field'] + ':"' + $scope.searchExpression + '"';
                         } else {
                             context.parameters[queryParameter] = $scope.searchExpression;
+                        }
+                    });
+                };
+            }]
+        };
+    }]);
+}());;
+(function () {
+    'use strict';
+    var mod = angular.module('d4c-widgets');
+    mod.directive('d4cPass', ['$location', 'translate', 'VisualizationAPI', function ($location, translate, VisualizationAPI) {
+        return {
+            restrict: 'E',
+            replace: true,
+            template: '' + '<div id="d4c-pass-widget" class="d4cwidget d4cwidget-pass">' + 
+            '    <form ng-submit="loadItem()" class="d4cwidget-pass__form">' + 
+            '        <input type="password" id="password" placeholder="Mot de passe" ng-model="password"/>' + 
+            '        <button id="btn-validate-password">Valider</button>' + 
+            '        <label id="error-label" style="color:red; display:none;">Mot de passe incorrect</label>' +
+            '    </form>' +
+            '</div>',
+            scope: {
+                context: '=',
+                visualizationId: '@?'
+            },
+            link: function (scope, element, attrs) {
+                if ('autofocus' in attrs) {
+                    $(element).find('input').focus();
+                }
+            },
+            controller: ['$scope', '$attrs', 'translate', function ($scope, $attrs, translate) {
+                $scope.loadItem = function () {
+                    console.log("Load item ");
+                    var unlockVisu = VisualizationAPI.unlock;
+
+                    var data = {
+                        'datasetId': $scope.context.dataset.metas.id,
+                        'visualizationId': $scope.visualizationId,
+                        'password': $scope.password
+                    }
+
+                    unlockVisu(data).success(function (data) {
+                        console.log("success");
+                        if (data.status == "success") {
+                            $("#d4c-pass-widget").hide();
+                            $("#visualizationFrame").attr("src", data.iframeUrl);
+                        }
+                        else {
+                            $("#error-label").show();
                         }
                     });
                 };
@@ -22526,8 +23337,6 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             'external': externalFunctions,
             'datasets': {
                 'get': function (context, datasetID, parameters, timeout) {
-
-                    console.log((context, fetchPrefix() + '/d4c/api/datasets/1.0/' + datasetID + '/', parameters, timeout));
                     return request(context, fetchPrefix() + '/d4c/api/datasets/1.0/' + datasetID + '/', parameters, timeout);
                 },
                 'search': function (context, parameters, timeout) {
@@ -22538,6 +23347,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         if (context.type == "d4c") { parameters = angular.extend({}, parameters, { resource_id: context.dataset.resourceCSVid }); }
                         return externalFunctions.facets(context, angular.extend({}, { 'type': context.type, 'url': context.url, 'id': context.dataset.datasetid }, parameters), timeout);
                     }
+                },
+                'search2' : function (context, parameters, timeout) {
+                    return request(context, fetchPrefix() + '/d4c/api/datasets/2.0/search/', parameters, timeout);
                 },
                 'facets': function (context, facetName, timeout) {
                     var queryParameters = angular.extend({}, context.parameters, {
@@ -23143,6 +23955,9 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 }
                 if (typeof chart.displayLegend === "undefined") {
                     chart.displayLegend = true;
+                }
+                if (typeof chart.displayBackgroundColor === "undefined") {
+                    chart.displayBackgroundColor = true;
                 }
                 if (typeof chart.alignMonth === "undefined") {
                     chart.alignMonth = true;
@@ -23804,9 +24619,15 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                             interopmetas: true /*,source:sourceParameter*/
                         });
                         loadingSchemas[cacheKey].success(function (data) {
-                            schemaCache[cacheKey] = data;
-                            context.dataset = new D4C.Dataset(data, selectedResourceId);
-                            deferred.resolve(context.dataset);
+                            if (data == null || data == "" || data.length == 0) {
+                                context.error = true;
+                                deferred.reject("Failed to fetch " + contextName + " context.");
+                            }
+                            else {
+                                schemaCache[cacheKey] = data;
+                                context.dataset = new D4C.Dataset(data, selectedResourceId);
+                                deferred.resolve(context.dataset);
+                            }
                         }).error(function (data) {
                             context.error = true;
                             deferred.reject("Failed to fetch " + contextName + " context.");
@@ -25543,7 +26364,16 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             'highcharts': {
                 'css': [],
                 'js': [
-                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs/chart.min.js"],
+                    // Trying bundle but may revert back to chart.min.js if it is not working
+                    // [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs/chart.min.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs/Chart.bundle.min.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-background/Plugin.Background.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-border/Plugin.Border.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-subtitle/Plugin.Subtitle.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-description/Plugin.Description.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-logo/Plugin.Logo.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-datalabels/chartjs-plugin-datalabels.min.js"],
+                    [fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/chartjs-stackdatalabels/Plugin.StackDataLabels.js"],
                     ["https://code.highcharts.com/6.1.4/highcharts.js"],
                     ["https://code.highcharts.com/6.1.4/modules/no-data-to-display.js"],
                     ["https://code.highcharts.com/6.1.4/highcharts-more.js"],
@@ -25553,13 +26383,12 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             'leaflet': {
                 'css': [
-                    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css", 
+                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet/leaflet.css",
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map-fullscreen/map-fullscreen.css", 
-                    "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.css", 
+                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-locatecontrol/L.Control.Locate.css", 
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-control-geocoder/Control.Geocoder.css", 
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/vectormarker/vectormarker.css", 
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/clustermarker/clustermarker.css", 
-                    fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-label/leaflet.label.css", 
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-draw/leaflet.draw.css",
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/MarkerCluster.css",
                     fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/MarkerCluster.Default.css",
@@ -25567,12 +26396,11 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                 ],
                 'js': [
                     [
-                        "L@https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"
+                        "L@" + fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet/leaflet.js"
                     ],
                     [
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map-fullscreen/map-fullscreen.js", 
-                        "L.Control.Locate@https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.js", 
-                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-label/leaflet.label.js", 
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-locatecontrol/L.Control.Locate.min.js", 
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map/map.js", 
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/map/tilelayer.js", 
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-control-geocoder/Control.Geocoder.js", 
@@ -25581,8 +26409,10 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-draw/leaflet.draw.js", 
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-heat/leaflet-heat.js",
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-markercluster/leaflet.markercluster.js",
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-browser-print/leaflet.browser.print.min.js",
                         fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-easyprint/bundle.js",
-                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-measure/leaflet-measure.fr.js"
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/leaflet-measure/leaflet-measure.fr.js",
+                        fetchPrefix() + "/sites/default/files/api/portail_d4c/lib/dom-to-image/dom-to-image.min.js"
                     ],
                     [
                         fetchPrefix() + '/sites/default/files/api/portail_d4c/lib/leaflet-proj4js/GpPluginLeaflet.js'
@@ -33567,7 +34397,7 @@ mod.directive('infiniteScroll', ['$rootScope', '$window', '$timeout', function (
                 }
             };
             var resourceCSVid = -1;
-            if (dataset.metas.resources != undefined) {
+            if (dataset.metas != undefined && dataset.metas.resources != undefined) {
                 if (dataset.metas.resources.length > 0) {
                     var res = dataset.metas.resources.filter(function (r) {
                         if ((r.mimetype == "text/csv" || r.format.toUpperCase() == "CSV") && r.datastore_active == true && (selectedResourceId == null || selectedResourceId == r.id)) {//} || r.mimetype == "application/vnd.ms-excel" || r.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
