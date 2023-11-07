@@ -5934,6 +5934,9 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				"Total number of records": {
 					"$$noContext": "Nombre total d'enregistrements"
 				},
+				"Transform into dataset": {
+					"$$noContext": "Transformer en connaissance"
+				},
 				"Transport networks": {
 					"inspire metadata template": "Réseaux de transport"
 				},
@@ -6029,6 +6032,9 @@ d4c.run(['gettextCatalog', 'DebugLogger', '$http', function (gettextCatalog, Deb
 				},
 				"Update my filters list": {
 					"$$noContext": "Mettre à jour ma liste de filtres"
+				},
+				"Update the dataset": {
+					"$$noContext": "Mettre à jour la connaissance"
 				},
 				"Upload a file": {
 					"$$noContext": "Ajouter un fichier"
