@@ -4622,6 +4622,9 @@ angular.module('d4c.core').factory('d4cReactComponentFactory', function reactCom
             create: function (data) {
                 return APIXHRService("POST", API_PATH, data);
             },
+            create_dataset: function (mapId, metadatas) {
+                return APIXHRService("POST", API_PATH + mapId + '/', metadatas);
+            },
             save: function (mapId, data) {
                 return APIXHRService("PUT", API_PATH + mapId + '/', data);
             },
