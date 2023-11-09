@@ -7671,6 +7671,7 @@ angular.module('d4c.core').factory('d4cVueComponentFactory', function vueCompone
             },
             templateUrl: fetchPrefix() + '/sites/default/files/api/portail_d4c/templates/embed_control.html',
             controller: function ($scope, $timeout) {
+                $scope.defaultTab = $scope.loggedIn && $scope.visualizationId ? 'update-the-dataset' : 'share';
                 $.ajax({
                     url: fetchPrefix() + '/d4c/api/license/2.0/list',
                     success: function (data) {
