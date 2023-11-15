@@ -11,11 +11,13 @@ Copyright (c) 2014 - Opendatasoft
         </button>
     </div>   
 
-    <d4c-tabs sync-to-url="false" layout="simple-nav" collapsible="defaultCollapse == 'true'" default-collapsed="defaultCollapse == 'true'">
+    <d4c-tabs sync-to-url="false" layout="simple-nav" collapsible="defaultCollapse == 'true'" default-collapsed="defaultCollapse == 'true'" default-tab="{{ defaultTab }}">
 
-        <d4c-pane title="Transform into dataset" translate="title" ng-if="loggedIn && !visualizationId">
+        <d4c-pane title="Transform into dataset" translate="title" ng-show="loggedIn && !visualizationId">
             <div class="row">
-                <input ng-model="visualizationName" type="text" translate="placeholder" placeholder="Nom de la visualisation">
+                <label for="metadata-name">Nom de la connaissance : </label>
+                <br/>
+                <input style="width:90% !important;" id="metadata-name" ng-model="visualizationName" type="text">
             </div>
             <br/>
             <div class="row">
@@ -38,7 +40,7 @@ Copyright (c) 2014 - Opendatasoft
             </button>
         </d4c-pane>
 
-        <d4c-pane title="Update the dataset" translate="title" ng-if="loggedIn && visualizationId">
+        <d4c-pane title="Update the dataset" translate="title" ng-show="loggedIn && visualizationId">
             <span translate>La visualisation est en cours d'édition</span>
             <button class="d4c-button d4c-modal__action"
                     ng-click="updateEmbed(visualizationId, share_url, '&lt;iframe src=&quot;' + embed_url + '&quot; width=&quot;' + size.width + '&quot; height=&quot;' + size.height + '&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;', widgetCode)"

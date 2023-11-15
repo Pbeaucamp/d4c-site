@@ -74,37 +74,47 @@ Copyright (c) 2014 - Opendatasoft
     </div>
 
     <div class="d4c-mapbuilder__main-panel__button-bar">
-        <button class="d4c-mapbuilder__main-panel__button d4c-mapbuilder__main-panel__button--flexible"
-        ng-click="createDataset()"
-        d4c-tooltip="last {{ lastModified|timesince }}"
-        d4c-tooltip-disabled="!mapStorage.isPersisted() || !dirty || !lastModified"
-        ng-disabled="!(visualizationId && mapObject.license && mapObject.isPrivate!=null)"
-        ng-show="!publishDatasetId"
-        translate="d4c-disabled-tooltip-text">
-            <i class="d4cui-save" aria-hidden="true"></i>
-            <span translate>Créer une connaissance</span>
-        </button>
+        <div ng-show="loading">
+            <d4c-spinner></d4c-spinner>
+        </div>
 
         <button class="d4c-mapbuilder__main-panel__button d4c-mapbuilder__main-panel__button--flexible"
-                ng-click="openDataset()"
-                d4c-tooltip="last {{ lastModified|timesince }}"
-                d4c-tooltip-disabled="!mapStorage.isPersisted() || !dirty || !lastModified"
-                ng-show="publishDatasetId"
-                translate="d4c-disabled-tooltip-text">
+            ng-click="createDataset()"
+            d4c-tooltip="last {{ lastModified|timesince }}"
+            d4c-tooltip-disabled="!mapStorage.isPersisted() || !dirty || !lastModified"
+            ng-disabled="!(visualizationId && mapObject.license && mapObject.isPrivate!=null)"
+            ng-show="!publishDatasetId && !loading"
+            translate="d4c-disabled-tooltip-text">
+                <i class="d4cui-save" aria-hidden="true"></i>
+                <span translate>Créer une connaissance</span>
+        </button>
+    
+        <button class="d4c-mapbuilder__main-panel__button d4c-mapbuilder__main-panel__button--flexible"
+            ng-click="openDataset()"
+            d4c-tooltip="last {{ lastModified|timesince }}"
+            d4c-tooltip-disabled="!mapStorage.isPersisted() || !dirty || !lastModified"
+            ng-show="publishDatasetId && !loading"
+            translate="d4c-disabled-tooltip-text">
             <i class="d4cui-save" aria-hidden="true"></i>
             <span translate>Ouvrir la connaissance</span>
         </button>
+
     </div>
 
+
+</div>
+
+<div class="d4c-mapbuilder__main-panel-modals">
     <d4c-mapbuilder-modal-share></d4c-mapbuilder-modal-share>
     <d4c-mapbuilder-modal-groups></d4c-mapbuilder-modal-groups>
     <d4c-mapbuilder-modal-configuration></d4c-mapbuilder-modal-configuration>
     <d4c-modal name="selectorModal"
-               title="{{ 'My maps'|translate }}"
-               title-icon="d4cui-maps_empty">
+            title="{{ 'My maps'|translate }}"
+            title-icon="d4cui-maps_empty">
         <d4c-modal-body>
             <d4c-mapbuilder-modal-selector></d4c-mapbuilder-modal-selector>
         </d4c-modal-body>
     </d4c-modal>
     <d4c-mapbuilder-modal-signup></d4c-mapbuilder-modal-signup>
 </div>
+

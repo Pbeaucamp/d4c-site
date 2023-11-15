@@ -519,6 +519,7 @@ SOFTWARE.
                 mapStorage: '='
             },
             controller: ['$scope', '$location', 'WidgetCodeBuilder', 'MapbuilderHelper', function($scope, $location, WidgetCodeBuilder, MapbuilderHelper) {
+                $scope.loading = false; //used when creating dataset
                 $scope.working = false;
                 $scope.interfaceMode = 'edition';
                 $scope.placeholder = translate('Type your map name here');
@@ -639,15 +640,13 @@ SOFTWARE.
                     }
                 };
                 $scope.createDataset = function() {
+                    $scope.loading = true;
                     $scope.saveMap();
                     
                     var visualizationId = $scope.visualizationId;
                     var visualizationName = $scope.mapObject.title;
                     var selectedLicense = $scope.mapObject.license;
                     var isPrivate = $scope.mapObject.isPrivate;
-
-                    // Encode visualizationName to avoid special characters
-                    visualizationName = encodeURIComponent(visualizationName);
 
                     var metadatas = {
                         visualization_id : visualizationId,
@@ -661,7 +660,6 @@ SOFTWARE.
                         console.log(data);
                         window.location.href = '/visualisation/?id=' + data.dataset_id;
                     });
-                    //window.location.href = '/databfc/ro/datasets/manage/dataset?data4citizen-type=visualization&entity-id=' + visualizationId + '&dataset-title=' + visualizationName;
                 };
                 $scope.openDataset = function() {
                     var datasetId = $scope.publishDatasetId;
