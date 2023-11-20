@@ -173,9 +173,9 @@ function loadDatasets() {
 
 			$('#input-producteur').val(filtreProducteur.join(";"));
 		}
-		else if (typeof $(this).parent().data("themes") != "undefined") {
+		else if (typeof $(this).parent().data("theme") != "undefined") {
 			for (var j = 0; j < filtreTheme.length; j++) {
-				if (filtreTheme[j] == $(this).parent().data('themes')) {
+				if (filtreTheme[j] == $(this).parent().data('theme')) {
 					filtreTheme.splice(j, 1);
 				}
 			}
